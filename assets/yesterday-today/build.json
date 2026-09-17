@@ -1,0 +1,63 @@
+{
+  "version": "0.9.0",
+  "renderedAt": "2026-09-17T15:03:59.721942+00:00",
+  "sourceHashes": {
+    "src/yesterday-today/model.js": "fa07fa10f2048631475aa56469b8797770413488d12a97a9a12e17fda7a6ce75",
+    "src/yesterday-today/textures.js": "7423bfcdb986dbdc2c57750cc9ea53bfc2a43f3c9ce587f4ee8bfbe76dfc8b67",
+    "src/yesterday-today/viewer.js": "2a19b89cfa3ba31007d2effa0e75073738bc49dd641e1e80cdda25e9a943abc4",
+    "src/yesterday-today-page.js": "d4619d12de6a81233733f956c388f573f8ba04edabc2a260c896cee0743aabc7",
+    "yesterday-today.html": "c85d76a38ec4384030eeef0b1bb8a71b484fb31c485bfbeb396bfbc22e32620d",
+    "yesterday-today.css": "b7c7c99e9c438c7780897484b7d25a70b71730e1e7946bba0fbec0b834588857",
+    "assets/yesterday-today/title-glyphs.json": "95994c1541307f5fdbaca25e6f505d8bf13ad01f1740de9b7538df0778b16d3d",
+    "assets/yesterday-today/title.svg": "04071bfe444c30b898cb6bf674d90eb25ca92656f1ab9ae5bfbe6eafa96a6214",
+    "assets/yesterday-today/yesterday.svg": "50a25d81f76ab2e69db406a466f1cfd5bd29ae13a623fe7452f336a2929230df",
+    "assets/yesterday-today/today.svg": "bce3ca4de826c16c676883763d23891f560c1628218e4046f2208c50308ee470"
+  },
+  "artifacts": {
+    "poster.webp": {
+      "sha256": "8392d0cf43254251a0f8ae3d9e00eee1165c35458410546c0c8ba1a25d5dceeb",
+      "bytes": 266846
+    },
+    "cover.webp": {
+      "sha256": "5f0e508d523b5fd9f16512e090ef5e8666fcb4531f959b373d8388254d1a05f6",
+      "bytes": 247288
+    },
+    "detail-record.webp": {
+      "sha256": "04960117969d6d2d7fa2a9dc51a6f133ccbc2fb43ae469f30b184a9ec3cc7b40",
+      "bytes": 241940
+    },
+    "yesterday.svg": {
+      "sha256": "50a25d81f76ab2e69db406a466f1cfd5bd29ae13a623fe7452f336a2929230df",
+      "bytes": 883
+    },
+    "title.svg": {
+      "sha256": "04071bfe444c30b898cb6bf674d90eb25ca92656f1ab9ae5bfbe6eafa96a6214",
+      "bytes": 1616
+    },
+    "back.webp": {
+      "sha256": "5c28f87a472fc6058f3b1f08a61b33a793069bcb908daf742d3e2dd42c1f9b0a",
+      "bytes": 147266
+    },
+    "today.svg": {
+      "sha256": "bce3ca4de826c16c676883763d23891f560c1628218e4046f2208c50308ee470",
+      "bytes": 778
+    },
+    "side.webp": {
+      "sha256": "295e424eb21e9d21102a7217f9f1e974c33a69cacf1dcd95c77d02ddf7f62de1",
+      "bytes": 144438
+    },
+    "detail-conduit.webp": {
+      "sha256": "4b99be8dac0210e176fb666864ef2f6452b3b6139a605d0fe9c028b6c9e2dfc7",
+      "bytes": 201186
+    },
+    "yesterday-today.glb": {
+      "sha256": "79eac8f6ac5348aa9658f15bda017fe0ee43db6acce3f942af6bfcf689238da9",
+      "bytes": 17329540
+    },
+    "detail-feather.webp": {
+      "sha256": "4c4897bf9ca88a9402fe012c8ab02964378925f33adb4dcaa6de247147b4a7d3",
+      "bytes": 254532
+    }
+  },
+  "method": "Same live scene for front, profile, verso, three independently framed macros, poster and GLB. No generated reference pixels used."
+}

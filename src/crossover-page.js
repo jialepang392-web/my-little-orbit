@@ -6,7 +6,7 @@ function message(text){status.textContent=text;}
 function fail(){stage.classList.remove('is-ready');stage.setAttribute('aria-busy','false');message('三维加载暂不可用；这里保留了同一模型的静态概念图。');for(const b of document.querySelectorAll('[data-scene-action]'))b.disabled=true;}
 function save(blob,name){if(!blob)return;const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}
 try{
-  const modulePromise=import('./crossover/viewer.js?v=081');
+  const modulePromise=import('./crossover/viewer.js?v=090');
   const glyphPromise=fetch('./assets/crossover/title-glyphs.json').then(r=>{if(!r.ok)throw new Error('Title asset unavailable');return r.json();}).then(d=>d.glyphs).catch(()=>({}));
   let timeout;const [{createCrossoverViewer},glyphs]=await Promise.race([Promise.all([modulePromise,glyphPromise]),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D loading timeout')),18000);})]).finally(()=>clearTimeout(timeout));
   viewer=createCrossoverViewer(canvas,{glyphs,onReady(){stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');for(const button of document.querySelectorAll('[data-scene-action]'))button.disabled=false;message('真实三维 · 拖动旋转 / 滚轮缩放');},onError:fail});

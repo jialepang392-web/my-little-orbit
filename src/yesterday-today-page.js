@@ -7,7 +7,7 @@ function sync(){for(const [id,value,text,onText] of [['rotate-toggle',turn,'缓�
 try{
   let timer;
   const [{createYesterdayViewer},data]=await Promise.race([
-    Promise.all([import('./yesterday-today/viewer.js?v=081'),fetch('./assets/yesterday-today/title-glyphs.json').then(r=>{if(!r.ok)throw new Error('Title unavailable');return r.json();})]),
+    Promise.all([import('./yesterday-today/viewer.js?v=090'),fetch('./assets/yesterday-today/title-glyphs.json?v=090').then(r=>{if(!r.ok)throw new Error('Title unavailable');return r.json();})]),
     new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Viewer loading timed out')),22000);})
   ]).finally(()=>clearTimeout(timer));
   viewer=createYesterdayViewer(canvas,{glyphs:data.glyphs,onReady(){stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');buttons.forEach(b=>b.disabled=false);status.textContent='真实三维 · 拖动旋转，滚轮靠近，方向键查看';},onError:fail});
