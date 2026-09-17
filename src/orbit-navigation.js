@@ -10,7 +10,9 @@ if(picker){
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&picker.open){picker.open=false;summary.focus();}});
   document.addEventListener('pointerdown',event=>{if(picker.open&&!picker.contains(event.target))picker.open=false;});
   picker.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{picker.open=false;}));
-  window.addEventListener('pageshow',()=>{picker.open=false;sync();});
+  // Only reset a restored back/forward page. An initial pageshow may arrive
+  // after a visitor opens the menu while large artwork images are still loading.
+  window.addEventListener('pageshow',event=>{if(event.persisted)picker.open=false;sync();});
 }
 // A named gallery anchor restores the visitor to the work they just left.
 if(!document.body.dataset.orbitWorld&&location.hash.startsWith('#world-')){
