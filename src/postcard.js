@@ -8,7 +8,7 @@ export function postcardSvg(item, imageData='') {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
 <defs><clipPath id="art"><rect x="48" y="130" width="565" height="542" rx="9"/></clipPath></defs>
 <rect width="1200" height="800" fill="#f7edda"/><rect x="23" y="23" width="1154" height="754" rx="9" fill="none" stroke="#b3baa0" stroke-width="2"/>
-<text x="52" y="85" fill="#4f6a52" font-size="18" font-family="sans-serif" letter-spacing="4">MY LITTLE ORBIT / A SOUVENIR</text>
+<text x="52" y="85" fill="#334b42" font-size="22" font-family="serif" letter-spacing="4">思念若是一首诗 / 一页拾藏</text>
 <path d="M640 134V672" stroke="#aebb9b" stroke-dasharray="5 8"/>
 <g clip-path="url(#art)"><rect x="48" y="130" width="565" height="542" fill="#dfd9be"/>${safeImage?`<image href="${safeImage}" x="-60" y="130" width="780" height="542" preserveAspectRatio="xMidYMid slice"/>`:`<g transform="translate(130 245)">${postcardMiniature(item.id)}</g>`}</g>
 <g transform="translate(1080 179) rotate(12)"><circle r="47" fill="none" stroke="#b18559" stroke-width="2" stroke-dasharray="3 5"/><text text-anchor="middle" y="6" fill="#927348" font-family="serif" font-size="23">✦</text></g>
@@ -17,7 +17,7 @@ export function postcardSvg(item, imageData='') {
 ${lines.map((line,i)=>`<text x="690" y="${405+i*38}" fill="#687259" font-size="22" font-family="sans-serif">${xml(line)}</text>`).join('')}
 <path d="M690 534H1100M690 569H1100" stroke="#d8d1b8"/>
 <text x="690" y="626" fill="#97754c" font-size="20" font-family="sans-serif">旅途收藏 · ${xml(item.treasure)}</text>
-<text x="53" y="722" fill="#778566" font-size="15" font-family="sans-serif" letter-spacing="3">FOREST EDITION / THANK YOU FOR WANDERING</text>
+<text x="53" y="722" fill="#778566" font-size="15" font-family="sans-serif" letter-spacing="3">IF LONGING WERE A POEM / 2026</text>
 <text x="1133" y="722" text-anchor="end" fill="#b47c4c" font-family="serif" font-size="21">WORLD 001</text></svg>`;
 }
 export async function downloadPostcard(item) {

@@ -5,7 +5,8 @@ import { LANDMARKS } from './data.js';
 import { ART_EDITION, artImage, artModel } from './art-paths.js';
 import { PALETTE, makeArtLandmark, makeArtAvatar, makeArtGuide, makeArtTree, makeTreasure, makeMeadow, cyl, mergeStatic } from './art-models.js';
 
-const assetDefinitions=[...LANDMARKS.map(item=>({id:item.id,name:item.name,kind:'landmark'})),{id:'traveller',name:'林间旅行者',kind:'character'},{id:'guide-sprout',name:'芽芽 · 森林向导',kind:'guide'},{id:'guide-petal',name:'花花 · 花园住客',kind:'guide'},{id:'guide-ember',name:'暖暖 · 灯塔住客',kind:'guide'},{id:'guide-droplet',name:'点点 · 观测站住客',kind:'guide'},...LANDMARKS.map(item=>({id:`treasure-${item.id}`,name:item.treasure,kind:'collectible'}))];
+const legacyNames={home:'关于小屋',journal:'文字花园',studio:'创作工坊',lab:'实验灯塔',library:'灵感书屋',observatory:'远方观测站',mail:'来信邮局',camp:'慢生活营地'};
+const assetDefinitions=[...LANDMARKS.map(item=>({id:item.id,name:legacyNames[item.id],kind:'landmark'})),{id:'traveller',name:'林间旅行者',kind:'character'},{id:'guide-sprout',name:'芽芽 · 森林向导',kind:'guide'},{id:'guide-petal',name:'花花 · 花园住客',kind:'guide'},{id:'guide-ember',name:'暖暖 · 灯塔住客',kind:'guide'},{id:'guide-droplet',name:'点点 · 观测站住客',kind:'guide'},...LANDMARKS.map(item=>({id:`treasure-${item.id}`,name:item.treasure,kind:'collectible'}))];
 const bgColors=['#eee4cf','#f2e2d9','#ece5c9','#dce7e0','#e1e7d3','#dce3e9','#ede0d5','#e9dfca'];
 function makeAsset(id){const definition=assetDefinitions.find(a=>a.id===id);if(!definition)throw new Error('Unknown art asset');const item=LANDMARKS.find(a=>a.id===id);let model,clips=[];
   if(item)model=makeArtLandmark(item).root;
@@ -38,5 +39,6 @@ async function build(id){
 }
 window.artStudio={definitions:assetDefinitions,build};
 const gallery=document.querySelector('#asset-gallery');
+const archiveNote=document.createElement('p');archiveNote.className='note';archiveNote.textContent='v0.3 历史资产存档：这里展示并下载的是上一版森林模型。当前「思念若是一首诗」采用新的实时园林几何，未包含在这些 Blender 工程中。';document.querySelector('.studio-main').prepend(archiveNote);
 for(const a of assetDefinitions){const card=document.createElement('article');card.className='asset-card';const image=document.createElement('img');image.src=artImage(a.id);image.alt=a.name;image.loading='lazy';image.width=960;image.height=720;card.append(image);const title=document.createElement('h2');title.textContent=a.name;card.append(title);const link=document.createElement('a');link.href=artModel(a.id);link.download=`${a.id}.glb`;link.textContent='下载 GLB 模型 ↗';card.append(link);gallery.append(card);}
 document.querySelector('#studio-status').textContent=`${assetDefinitions.length} 件原创模型 · ${ART_EDITION==='blender'?'Blender 精修、骨骼绑定与 Cycles 渲染':'v0.2 原始程序化资产'}`;

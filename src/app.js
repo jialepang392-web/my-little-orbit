@@ -46,7 +46,7 @@ function actionButton(text,handler,style='outline'){
 }
 function postcardPanel(item){
   const panel=document.createElement('section');panel.className='postcard';
-  panel.innerHTML=`<img class="postcard-art" src="${artImage(item.id)}" width="960" height="720" alt="${escapeHtml(item.name)}的三维手作场景"><span class="stamp" aria-hidden="true">✦</span><small>POSTCARD NO. ${String(LANDMARKS.indexOf(item)+1).padStart(2,'0')}</small><h3>${escapeHtml(item.treasure)}</h3><p>${escapeHtml(item.message)}</p>`;
+  panel.innerHTML=`<img class="postcard-art" src="${artImage(item.id)}" width="960" height="720" alt="${escapeHtml(item.name)}的园林场景"><span class="stamp" aria-hidden="true">山水</span><small>POSTCARD NO. ${String(LANDMARKS.indexOf(item)+1).padStart(2,'0')}</small><h3>${escapeHtml(item.treasure)}</h3><p>${escapeHtml(item.message)}</p>`;
   panel.append(actionButton('下载这张明信片 ↓',()=>downloadPostcard(item)));return panel;
 }
 async function openLocation(id,arrived=false){
@@ -58,7 +58,7 @@ async function openLocation(id,arrived=false){
   const cover=document.createElement('div');cover.className='article-cover';const image=document.createElement('img');image.src=artImage(item.id);image.alt=`${item.name} · 原创三维场景`;image.width=960;image.height=720;image.addEventListener('error',()=>cover.remove());cover.append(image);body.append(cover);
   const article=document.createElement('article');article.innerHTML='<p>正在展开这页故事…</p>';body.append(article);
   const actions=document.createElement('div');actions.className='dialog-actions';
-  if(!arrived&&!reading&&world)actions.append(actionButton('让小精灵带我去 ↗',()=>{closeDialog();navigate(id);},'primary'));
+  if(!arrived&&!reading&&world)actions.append(actionButton('随纸鹤去这里 ↗',()=>{closeDialog();navigate(id);},'primary'));
   if(!progress.visited.includes(id)){
     const note=document.createElement('p');note.className='note';note.textContent='这是内容预览。到星球上的这个地标走一走，才能解锁收藏和明信片。';body.append(note);
   }else body.append(postcardPanel(item));
@@ -72,21 +72,21 @@ async function openLocation(id,arrived=false){
 }
 
 function showCollection(){
-  openDialog('把沿途的发现，装进口袋。','COLLECTION / 我的旅行收藏');
+  openDialog('沿途拾藏。','COLLECTION / 游园拾记');
   const intro=document.createElement('p');intro.textContent=`已发现 ${progress.visited.length} / 8 个地标。${saveWarning?'当前浏览器无法保存进度，本次会话内仍然有效。':'探索进度只保存在这个浏览器，不上传服务器，也不跨设备同步。'}`;body.append(intro);
   const grid=document.createElement('div');grid.className='collection-grid';
   for(const item of LANDMARKS){const unlocked=progress.visited.includes(item.id);const card=document.createElement('div');card.className=`collection-item${unlocked?'':' locked'}`;card.innerHTML=`<img src="${artImage(`treasure-${item.id}`)}" width="960" height="720" alt="${unlocked?escapeHtml(item.treasure):'未解锁的收藏品'}"><strong>${unlocked?escapeHtml(item.treasure):'尚未发现'}</strong><small>${escapeHtml(item.name)}</small>`;if(unlocked)card.append(actionButton('明信片 ↓',()=>downloadPostcard(item)));grid.append(card);}
   body.append(grid);
 }
 function showGuide(){
-  openDialog('今天，想去哪里？','LITTLE GUIDE / 小精灵导航');
-  const intro=document.createElement('p');intro.textContent='选一站，我会沿着星球表面带你过去。途中按任意方向键，可以取消带路、自由漫游。';body.append(intro);
+  openDialog('随纸鹤，赴一处风景。','A PAPER CRANE / 园中引路');
+  const intro=document.createElement('p');intro.textContent='八处风景分布在星球各面。选一处，纸鹤会沿球面带你走过去；途中按 WASD、方向键或触屏方向按钮，即可取消目标、自由行走。';body.append(intro);
   const actions=document.createElement('div');actions.className='dialog-actions';
   for(const item of LANDMARKS)actions.append(actionButton(`${item.icon} ${item.name}`,()=>{closeDialog();navigate(item.id);}));body.append(actions);
 }
 function showHelp(){
-  openDialog('慢慢探索，就很好。','HOW TO WANDER / 操作说明');
-  body.innerHTML='<p><strong>移动：</strong>WASD 或方向键；手机使用左下角方向按钮。点画布后再操作，可以避免浏览器抢占键盘。</p><p><strong>视角：</strong>在画布上左右拖动调整方向，上下拖动调整俯视角，滚轮缩放。</p><p><strong>互动：</strong>走近地标，按 E 或点击绿色提示。底部地标按钮和场景标签会让小精灵带路，不是直接瞬移。</p><p><strong>阅读：</strong>右上角可切到纯阅读模式。阅读不会自动获得探索收藏。</p><p><strong>收藏：</strong>到达地标后获得纪念物，并可下载含 Blender 渲染图的 SVG 明信片。进度保存在当前浏览器。</p><p><strong>美术：</strong>右下角可切换日光与黄昏。美术资产室提供 .blend 工程、完整资产包和骨骼动作预览。</p><p class="note">v0.3 Blender 开发版：旅行者采用 16 骨加权蒙皮，支持 Idle / Walk / Wave；小精灵支持 Float。原始造型保留为模型加载失败时的回退。尚无复杂碰撞、账号或留言上传。</p>';
+  openDialog('一份游园说明。','HOW TO WANDER / 操作说明');
+  body.innerHTML='<p><strong>点一处，走过去：</strong>点击星球表面，旅人会沿球面走到那里。WASD、方向键和场景下方的触屏方向按钮均可自由移动，也会取消当前行走目标。</p><p><strong>看看另一面：</strong>在画布上向任意方向拖动，转动完整星球；滚轮调整远近。拖动不会触发行走。按「回到起点」恢复初始位置与视角。</p><p><strong>随纸鹤赴约：</strong>点击场景标签或「园中八景」中的地标，纸鹤会沿途引路。走近后按 E 或点击互动提示，可以打开故事并收下纪念物。</p><p><strong>坐下读一页：</strong>右上角可进入纯阅读。直接阅读文章不会增加探索收藏。</p><p><strong>带走一张明信片：</strong>抵达地标后可以下载含场景封面的 SVG 明信片。探索进度保存在当前浏览器。</p><p><strong>光线与画质：</strong>场景下方可切换日光、黄昏及轻量画质。低画质保留完整移动和内容功能。</p><p class="note">v0.4 园林版使用实时几何造型与关节动画。页脚的 v0.3 Blender 工程、模型与骨骼预览是旧版资产存档，不代表本版园林模型的源工程。当前尚无复杂碰撞、地形脚部 IK、账号或留言上传。</p>';
 }
 
 function setNearby(id){nearby=id;const item=landmarkById(id);$('#nearby-prompt').hidden=!item;if(item)$('#nearby-name').textContent=`探索${item.name}`;for(const button of document.querySelectorAll('[data-destination]'))button.classList.toggle('active',button.dataset.destination===id);}
@@ -97,6 +97,8 @@ function navigate(id){
   if(reading){void openLocation(id);return;}
   if(!world){toast(worldState==='failed'?'3D 场景未就绪，已为你打开文章。':'小星球正在加载，可以先阅读文章。');void openLocation(id);return;}
   world.navigateTo(id);
+  const stage=$('#world-stage'),rect=stage.getBoundingClientRect();
+  if(rect.bottom<0||rect.top>innerHeight*.65)stage.scrollIntoView({behavior:reducedMotion?'instant':'smooth',block:'center'});
 }
 
 function setReading(value){
@@ -123,6 +125,9 @@ async function bootWorld(){
 for(const item of LANDMARKS){
   const button=document.createElement('button');button.className='destination';button.dataset.destination=item.id;button.innerHTML=`<span class="destination-icon">${iconSvg(item.id)}</span><span><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.english)}</small></span>`;button.addEventListener('click',()=>navigate(item.id));$('#destinations').append(button);
   const card=document.createElement('button');card.className='reading-card';card.innerHTML=`<img class="card-art" src="${artImage(item.id)}" width="960" height="720" alt="" loading="lazy"><span class="card-number">${String(LANDMARKS.indexOf(item)+1).padStart(2,'0')}</span><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.summary)}</p><small>${escapeHtml(item.english)} <span aria-hidden="true">↗</span></small>`;card.addEventListener('click',()=>{void openLocation(item.id);});$('#reading-cards').append(card);
+  if(['journal','studio','library'].includes(item.id)){
+    const preview=document.createElement('button');preview.className='journal-preview-card';preview.innerHTML=`<span class="journal-category">${escapeHtml(item.english)}</span><h3>${escapeHtml(item.name)} <span aria-hidden="true">↗</span></h3><p>${escapeHtml(item.summary)}</p>`;preview.addEventListener('click',()=>{void openLocation(item.id);});$('#journal-preview-cards').append(preview);
+  }
 }
 for(const button of document.querySelectorAll('[data-open]'))button.addEventListener('click',()=>{void openLocation(button.dataset.open);});
 for(const button of document.querySelectorAll('[data-move]')){
@@ -130,6 +135,7 @@ for(const button of document.querySelectorAll('[data-move]')){
   for(const eventName of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(eventName,()=>world?.setDirection(button.dataset.move,false));
 }
 $('#reading-toggle').addEventListener('click',()=>setReading(!reading));
+$('#browse-stories').addEventListener('click',()=>{setReading(true);$('#reading-title').scrollIntoView({behavior:reducedMotion?'instant':'smooth',block:'start'});});
 $('#guide-button').addEventListener('click',showGuide);$('#collection-button').addEventListener('click',showCollection);$('#help-button').addEventListener('click',showHelp);
 $('#meet-guide').addEventListener('click',showGuide);
 $('#theme-toggle').innerHTML=`${iconSvg('moon')} 黄昏`;
