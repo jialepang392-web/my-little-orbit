@@ -7,6 +7,7 @@ import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide,
 import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js';
 import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js';
 import { AssetSlots, disposeTree } from './assets.js';
+import { makeCollageLight } from './collage-light.js';
 
 const R=5.4,UP=new T.Vector3(0,1,0);
 const initialNormal=new T.Vector3(...fromLatLon(38,90));
@@ -23,14 +24,17 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(43,1,.1,180);
-  const hemisphere=new T.HemisphereLight('#f2f6ef','#81958b',1.7);scene.add(hemisphere);
-  const sun=new T.DirectionalLight('#fffdf4',2.4);sun.position.set(-8,14,10);sun.castShadow=true;
+  const studioLight=makeCollageLight(renderer);scene.environment=studioLight.texture;scene.environmentIntensity=.42;
+  const hemisphere=new T.HemisphereLight('#eef3e5','#53675b',1.3);scene.add(hemisphere);
+  const sun=new T.DirectionalLight('#fff8e5',2.65);sun.position.set(-8,14,10);sun.castShadow=true;
   sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-8;sun.shadow.camera.right=8;sun.shadow.camera.top=8;sun.shadow.camera.bottom=-8;sun.shadow.normalBias=.035;
-  scene.add(sun,new T.AmbientLight('#edf3ed',.42));
+  scene.add(sun,new T.AmbientLight('#edf3ed',.2));
   const random=seededRandom(9162026);
   const stars=new Stars({particleCount:180,minimumDistance:13,maximumDistance:36,size:.045,seed:916});stars.visible=false;scene.add(stars);
   const normals=new Map(LANDMARKS.map((item)=>[item.id,new T.Vector3(...fromLatLon(item.lat,item.lon))]));
   const landscape=makeLandscape(normals);scene.add(landscape.root);
+  canvas.dataset.botanicalClumps=String(landscape.root.userData.botanicalClumps??0);
+  canvas.dataset.collageLayers=String(landscape.root.getObjectByName('layered-paper-foil-and-lace')?.userData.patchCount??0);
   let dusk=false;
   const landmarks=[],labels=[],slots={};
   for(const item of LANDMARKS){
@@ -115,8 +119,8 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   function navigateTo(id){if(!normals.has(id)||disposed)return false;target={id,kind:'landmark',normal:normals.get(id)};clearInput();followTraveller=true;focusTraveller();onNotice(`纸鹤正在带你前往${landmarkById(id).name}，按方向键可取消。`);return true;}
   function reset(){normal.copy(initialNormal);forward.copy(UP).addScaledVector(normal,-UP.dot(normal)).normalize();target=null;zoom=1;orbit=initialOrbit;followTraveller=true;clearInput();nearbyId=null;onNearby(null);}
   function setPaused(value){paused=Boolean(value);clearInput();if(paused){cancelAnimationFrame(frame);frame=0;}else{lastTime=performance.now();schedule();}}
-  function setLowPower(value){renderer.setPixelRatio(value?1:Math.min(devicePixelRatio,1.5));renderer.shadowMap.enabled=!value;clouds.visible=historicalEdition&&!value;resize();}
-  function setDusk(value){dusk=Boolean(value);sun.color.set(dusk?'#edc9ad':'#fffdf4');sun.intensity=dusk?1.5:2.4;hemisphere.color.set(dusk?'#bac8d2':'#f2f6ef');hemisphere.intensity=dusk?1.0:1.7;stars.visible=dusk;canvas.dataset.dusk=String(dusk);}
+  function setLowPower(value){renderer.setPixelRatio(value?1:Math.min(devicePixelRatio,1.5));renderer.shadowMap.enabled=!value;clouds.visible=historicalEdition&&!value;landscape.setLowPower?.(value);resize();}
+  function setDusk(value){dusk=Boolean(value);sun.color.set(dusk?'#edc9ad':'#fff8e5');sun.intensity=dusk?1.5:2.65;hemisphere.color.set(dusk?'#bac8d2':'#eef3e5');hemisphere.intensity=dusk?.9:1.3;stars.visible=dusk;canvas.dataset.dusk=String(dusk);}
   function schedule(){if(!frame&&!disposed&&!paused&&!document.hidden)frame=requestAnimationFrame(animate);}
   function animate(now){
     frame=0;if(disposed||paused||document.hidden)return;
@@ -174,6 +178,6 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   schedule();
   return { navigateTo,setDirection,reset,setPaused,setLowPower,setDusk,
     getNearby:()=>nearbyId,
-    dispose(){disposed=true;cancelAnimationFrame(frame);abort.abort();observer.disconnect();assets.dispose();disposeTree(scene);labels.forEach((label)=>label.element.remove());renderer.dispose();}
+    dispose(){disposed=true;cancelAnimationFrame(frame);abort.abort();observer.disconnect();assets.dispose();disposeTree(scene);studioLight.dispose();labels.forEach((label)=>label.element.remove());renderer.dispose();}
   };
 }

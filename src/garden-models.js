@@ -75,29 +75,141 @@ function teacup(g,x,y,z,size=.035){
   g.add(cyl(size,size*.64,size*.9,P.celadon,[x,y+size*.45,z],12),cyl(size*.78,size*.78,.003,P.ink,[x,y+size*.91,z],12));
 }
 
-/** Expressive Taihu-style stones; their bottom rests at Y=0. */
+/** Rounded, perforated scholar stones with pale mineral seams and soft moss. */
 export function makeRock(size=1,variant=0){
-  const g=new T.Group();g.name='garden-scholar-rock';
-  for(let i=0;i<4;i++){
-    const color=[P.slate,P.stone,P.stoneLight,P.slate][(i+variant)%4];
-    const stone=part(new T.DodecahedronGeometry(.17,0),color,[(i%2-.5)*.14,.12+i*.10,Math.sin(i*2.1+variant)*.07]);
-    stone.scale.set(1.05-i*.1,.95+(i%2)*.3,.6+(i%3)*.12);stone.rotation.set(i*.3,variant+i*.7,i%2?.28:-.25);g.add(stone);
+  const g=new T.Group();g.name='garden-scholar-rock';const phase=variant*.71;
+  // The open arch is geometry, so it remains a hole when viewed from behind.
+  const archGeometry=new T.TorusGeometry(.148,.075,8,28),position=archGeometry.attributes.position;
+  for(let i=0;i<position.count;i++){
+    const x=position.getX(i),y=position.getY(i),z=position.getZ(i),a=Math.atan2(y,x);
+    const wave=1+.105*Math.sin(a*3+phase)+.055*Math.cos(a*7-phase);
+    position.setXYZ(i,x*wave,Math.max(-.205,y*wave*1.30),z*(.80+.09*Math.sin(a*4)));
   }
-  for(let i=0;i<3;i++)g.add(ball(.075,i%2?P.moss:P.mossDark,[(i-1)*.12,.027,Math.sin(i+variant)*.09],[1,.35,1]));
+  archGeometry.computeVertexNormals();const arch=part(archGeometry,P.stone,[.005,.265,0]);arch.rotation.z=.16*Math.sin(phase);g.add(arch);
+  const lobes=[[-.12,.083,.005,.13,1.02,.58,.84],[.12,.076,.024,.12,1.06,.63,.83],[-.095,.43,.015,.10,.91,.74,.78],[.075,.477,.027,.10,.84,.68,.79]];
+  lobes.forEach(([x,y,z,r,sx,sy,sz],i)=>{
+    const geometry=new T.SphereGeometry(r,12,8),p=geometry.attributes.position;
+    for(let j=0;j<p.count;j++){
+      const px=p.getX(j),py=p.getY(j),pz=p.getZ(j),ripple=1+.065*Math.sin(px*38+phase)*Math.cos(py*33-i)+.035*Math.sin(pz*49+py*21);
+      p.setXYZ(j,px*ripple,py*ripple,pz*ripple);
+    }
+    geometry.computeVertexNormals();const stone=part(geometry,i===2?P.stoneLight:P.stone,[x,y,z]);stone.scale.set(sx,sy,sz);g.add(stone);
+  });
+  for(const side of [-1,1]){
+    g.add(tube([[side*.102,.112,-.055],[side*.183,.185,-.055],[side*.192,.297,-.051],[side*.135,.381,-.056]],.0045,P.stoneLight,12));
+    g.add(tube([[side*.125,.138,-.061],[side*.195,.214,-.047],[side*.181,.299,-.057]],.0025,P.slate,9));
+  }
+  for(let i=0;i<9;i++){
+    const angle=i*2.399+phase,r=.08+(i%3)*.044;
+    const moss=part(new T.IcosahedronGeometry(.044+(i%2)*.013,0),i%3?P.moss:P.mossDark,[Math.cos(angle)*r,.025+((i+1)%3)*.007,Math.sin(angle)*r*.63]);
+    moss.scale.set(1,.24,.79);g.add(moss);
+  }
+  for(let i=0;i<5;i++)g.add(part(new T.OctahedronGeometry(.008,0),P.paperShade,[-.17+i*.076,.045,-.081-Math.sin(i+phase)*.01]));
   const result=mergeStatic(g);result.scale.setScalar(size);return result;
 }
-/** Sculpted pines with irregular horizontal needle pads and an exposed trunk. */
+/** Layered cloud pines: curved wood, needle pads, then fine folded needle fans. */
 export function makePine(size=1,variant=0){
   const g=new T.Group();g.name='garden-cloud-pine';const lean=(variant%3-1)*.055;
-  g.add(tube([[0,0,0],[-.035,.23,.01],[.035+lean,.46,0],[lean,.75,.015]],.038,P.ink));
+  g.add(tube([[0,0,0],[-.035,.23,.01],[.035+lean,.46,0],[lean,.75,.015]],.034,P.ink));
+  g.add(tube([[-.019,.05,-.029],[-.053,.23,-.017],[.019+lean,.44,-.022],[lean-.01,.65,-.018]],.006,P.wood,12));
+  for(const angle of [0,2.1,4.4])g.add(rod([0,.07,0],[Math.cos(angle)*.09,.011,Math.sin(angle)*.07],.016,P.ink,6));
   const branches=[[-.23,.40,-.025],[.25,.54,.025],[-.12,.70,.055],[.045,.86,0]];
   branches.forEach(([x,y,z],i)=>{
-    g.add(rod([lean*.7,y-.16,0],[x,y-.018,z],.018,P.wood));
+    g.add(tube([[lean*.7,y-.16,0],[x*.48,y-.048,z*.5],[x,y-.023,z]],.014,P.wood,8));
     for(let j=0;j<3;j++){
-      const pad=part(new T.IcosahedronGeometry(.17,1),i%2?P.pineLight:P.pine,[x+(j-1)*.065,y+(j%2)*.021,z+Math.sin(j*2+variant)*.045]);
-      pad.scale.set(1.1,.29,.8);pad.rotation.y=i+j*.65;g.add(pad);
+      const px=x+(j-1)*.068,py=y+(j%2)*.025,pz=z+Math.sin(j*2+variant)*.048;
+      const pad=part(new T.IcosahedronGeometry(.13,1),i%2?P.pineLight:P.pine,[px,py,pz]);
+      pad.scale.set(1.06,.23,.80);pad.rotation.y=i+j*.65;g.add(pad);
+      const needles=[];
+      for(let fan=0;fan<10;fan++){
+        const a=fan*2.399+i+j+variant*.4,r=.048+((fan+j)%3)*.025,cx=px+Math.cos(a)*r,cz=pz+Math.sin(a)*r*.75,cy=py+.01+(fan%3)*.004;
+        for(let needle=-1;needle<=1;needle++){
+          const direction=a+needle*.42,length=.047+(fan%3)*.009;
+          needles.push([cx-.004*Math.sin(direction),cy,cz+.004*Math.cos(direction)],[cx+Math.cos(direction)*length,cy+.042+needle*.007,cz+Math.sin(direction)*length],[cx+.004*Math.sin(direction),cy,cz-.004*Math.cos(direction)]);
+        }
+      }
+      g.add(fold(needles,j%2?P.pineLight:P.pine));
     }
   });
+  const result=mergeStatic(g);result.scale.setScalar(size);return result;
+}
+
+/** A folded, gently cupped leaf; shared construction keeps each leaflet tiny. */
+function leaflet(g,start,end,width,color){
+  const a=new T.Vector3(...start),b=new T.Vector3(...end),delta=b.clone().sub(a),side=new T.Vector3(-delta.z,0,delta.x).normalize().multiplyScalar(width);
+  const mid=a.clone().lerp(b,.43),ridge=mid.clone();ridge.y+=width*.43;
+  g.add(fold([a.toArray(),mid.clone().add(side).toArray(),ridge.toArray(),a.toArray(),ridge.toArray(),mid.clone().sub(side).toArray(),b.toArray(),ridge.toArray(),mid.clone().add(side).toArray(),b.toArray(),mid.clone().sub(side).toArray(),ridge.toArray()],color));
+}
+
+/** Seven arched fronds with alternating paired pinnae, suitable for moss banks. */
+export function makeFern(size=1,variant=0){
+  const g=new T.Group();g.name='garden-fern';
+  for(let frond=0;frond<7;frond++){
+    const angle=frond*2.399+variant*.62,length=.22+(frond%3)*.07,dx=Math.cos(angle),dz=Math.sin(angle);
+    const point=t=>[dx*length*t*t,.018+length*(1.20*t-.72*t*t),dz*length*t*t];
+    g.add(tube([point(0),point(.32),point(.67),point(1)],.0035,P.bamboo,8));
+    for(let pair=0;pair<7;pair++){
+      const t=.18+pair*.112,p=point(t),span=length*.27*Math.sin(Math.PI*(.10+t*.89));
+      for(const side of [-1,1]){
+        const end=[p[0]+dx*.024-dz*side*span,p[1]+.013-span*.18,p[2]+dz*.024+dx*side*span];
+        leaflet(g,p,end,span*.23,(pair+frond)%3?P.pineLight:P.moss);
+      }
+    }
+    leaflet(g,point(.90),point(1.11),.011,P.pineLight);
+  }
+  const result=mergeStatic(g);result.scale.setScalar(size);return result;
+}
+
+/** Slender waterside reeds with ribbon leaves and warm, dry seed heads. */
+export function makeReeds(size=1,variant=0){
+  const g=new T.Group();g.name='garden-reeds';
+  for(let stem=0;stem<7;stem++){
+    const angle=stem*2.399+variant*.47,r=.024+(stem%3)*.029,x=Math.cos(angle)*r,z=Math.sin(angle)*r,h=.35+(stem%4)*.064,lean=Math.sin(stem+variant)*.055;
+    g.add(tube([[x,0,z],[x+lean*.18,h*.4,z],[x+lean,h,z+.016]],.004,P.bamboo,7));
+    for(let leaf=0;leaf<2;leaf++){
+      const y=h*(.24+leaf*.23),side=(stem+leaf)%2?1:-1;
+      leaflet(g,[x+lean*y/h,y,z],[x+side*(.10+leaf*.035),y+.11-leaf*.075,z+Math.cos(angle)*.048],.012,P.pineLight);
+    }
+    if(stem%3!==1){
+      const head=part(new T.SphereGeometry(.018,6,5),stem%2?P.gold:P.paperShade,[x+lean,h+.027,z+.016]);head.scale.set(1,2.7,1);head.rotation.z=-lean;g.add(head);
+      g.add(rod([x+lean,h+.044,z+.016],[x+lean*1.12,h+.109,z+.016],.0018,P.wood,4));
+    }
+  }
+  const result=mergeStatic(g);result.scale.setScalar(size);return result;
+}
+
+/** Low meadows of cupped five-petal flowers, with small folded basal leaves. */
+export function makeFlowerCluster(size=1,variant=0){
+  const g=new T.Group();g.name='garden-meadow-flowers';
+  const petals=[P.paperLight,'#d9b9a7','#b85f50'];
+  for(let bloom=0;bloom<7;bloom++){
+    const angle=bloom*2.399+variant*.43,r=.025+Math.sqrt(bloom)*.038,x=Math.cos(angle)*r,z=Math.sin(angle)*r,y=.10+(bloom%3)*.043;
+    g.add(rod([x,.008,z],[x,y,z],.0035,P.pineLight,5));
+    for(const side of [-1,1])leaflet(g,[x,y*.30,z],[x+side*.057,y*.48,z+.029],.016,side>0?P.moss:P.pineLight);
+    for(let petal=0;petal<5;petal++){
+      const a=petal*Math.PI*.4+bloom*.19,dx=Math.cos(a),dz=Math.sin(a),color=petals[(variant+(bloom%4===0?1:0))%petals.length];
+      const inner=[x+dx*.006,y+.002,z+dz*.006],mid=[x+dx*.028,y-.002,z+dz*.028],tip=[x+dx*.045,y+.012,z+dz*.045];
+      g.add(fold([inner,[mid[0]-dz*.017,mid[1]+.005,mid[2]+dx*.017],mid,inner,mid,[mid[0]+dz*.017,mid[1]+.005,mid[2]-dx*.017],tip,mid,[mid[0]-dz*.017,mid[1]+.005,mid[2]+dx*.017],tip,[mid[0]+dz*.017,mid[1]+.005,mid[2]-dx*.017],mid],color));
+    }
+    const center=part(new T.OctahedronGeometry(.009),bloom%2?P.gold:P.red,[x,y+.008,z]);center.scale.y=.65;g.add(center);
+  }
+  const result=mergeStatic(g);result.scale.setScalar(size);return result;
+}
+
+/** A trio of tilted lotus seed pods, with recessed dark seeds and dry leaves. */
+export function makeSeedPod(size=1,variant=0){
+  const g=new T.Group();g.name='garden-lotus-seed-pods';
+  for(let seed=0;seed<3;seed++){
+    const x=(seed-1)*.087,z=Math.sin(seed*2+variant)*.05,h=.21+seed*.068,lean=(seed-1)*.044;
+    g.add(tube([[x,0,z],[x-lean*.3,h*.50,z+.012],[x+lean,h,z]],.005,P.wood,8));
+    const head=new T.Group();head.add(cyl(.057,.025,.042,P.bamboo,[0,0,0],10),cyl(.054,.054,.004,P.paperShade,[0,.023,0],10));
+    for(let spot=0;spot<7;spot++){
+      const a=spot*2.399,r=spot===0?0:.029;
+      head.add(cyl(.0055,.0048,.003,P.ink,[Math.cos(a)*r,.026,Math.sin(a)*r],6));
+    }
+    head.position.set(x+lean,h,z);head.rotation.set(.18*Math.sin(seed+variant),0,(seed-1)*.28);g.add(head);
+    if(seed!==1)leaflet(g,[x,h*.39,z],[x+Math.cos(seed+variant)*.13,h*.27,z+.09],.034,P.paperShade);
+  }
   const result=mergeStatic(g);result.scale.setScalar(size);return result;
 }
 /** Bamboo stalks carry narrow folded leaves, rather than broad sphere foliage. */
