@@ -1,7 +1,8 @@
 {
-  "version": "0.6.1",
+  "version": "0.7.0",
   "worlds": [
     {"id":"poem","title":"思念若是一首诗","english":"IF LONGING WERE A POEM","page":"poem.html","cover":"assets/review/current.webp","status":"published","interaction":"exploration"},
-    {"id":"crossover","title":"删了一百遍","english":"DELETED A HUNDRED TIMES","page":"crossover.html","cover":"assets/crossover/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":false}
+    {"id":"crossover","title":"删了一百遍","english":"DELETED A HUNDRED TIMES","page":"crossover.html","cover":"assets/crossover/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":false},
+    {"id":"rain-finale","title":"雨终曲","english":"RAIN FINALE","page":"rain-finale.html","cover":"assets/rain-finale/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":false}
   ]
 }
