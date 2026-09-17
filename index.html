@@ -4,16 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#b9c5b1">
+  <meta name="orbit-version" content="0.5.0">
   <meta name="description" content="思念若是一首诗。把信笺、文字与一方山水安放在可以走遍的小星球上，随纸鹤去读一页故事。">
   <title>思念若是一首诗 · 我的小宇宙</title>
   <link rel="icon" href="./assets/illustrations/orbit-emblem.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./art.css">
-  <link rel="stylesheet" href="./garden.css">
+  <link rel="stylesheet" href="./styles.css?v=050">
+  <link rel="stylesheet" href="./art.css?v=050">
+  <link rel="stylesheet" href="./garden.css?v=050">
+  <link rel="stylesheet" href="./exhibition.css?v=050">
   <script type="importmap">
   {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}
   </script>
-  <script type="module" src="./src/app.js"></script>
+  <script type="module" src="./src/app.js?v=050"></script>
 </head>
 <body>
   <a class="skip-link" href="#destinations">跳到内容导航</a>
@@ -34,7 +36,7 @@
     <main class="universe" id="main">
       <section class="intro" aria-labelledby="hero-title">
         <div class="eyebrow"><span class="chapter-mark">肆</span> 我的小宇宙 / 游园手札</div>
-        <h1 id="hero-title"><span>思念若是</span><em>一首诗</em></h1>
+        <h1 id="hero-title"><img class="calligraphy-title" src="./assets/illustrations/title-calligraphy.svg" width="212" height="420" alt="思念若是一首诗"></h1>
         <p class="intro-copy">把未说完的话，安放在一方山水里。<br>点一处风景，走过去，读一页。</p>
         <div class="hero-actions">
           <button class="button primary" id="start-explore">入园走走 <span>↗</span></button>
@@ -50,18 +52,24 @@
       </section>
 
       <div class="world-panel">
-      <div class="world-heading"><span>转过这一面，还有一页故事。</span><span class="world-edition">ORBIT / 04</span></div>
+      <div class="world-heading"><span>纸上有山水，心里有回声。</span><span class="world-edition">PAPER GARDEN / 05</span></div>
       <section class="world-stage" id="world-stage" aria-label="可以点击行走、向任意方向转动的三维园林星球">
         <div class="world-halo" aria-hidden="true"></div>
         <div class="orbit-label" aria-hidden="true">若思念<br><strong>有形</strong></div>
         <canvas id="world-canvas" tabindex="0" aria-label="园林漫游：点击地面行走，拖动转动完整星球，WASD 或方向键移动，E 与附近地标互动"></canvas>
-        <div id="landmark-labels" class="landmark-labels"></div>
+        <div id="landmark-labels" class="landmark-labels" inert aria-hidden="true"></div>
         <div class="scene-status" id="scene-status" role="status"><span class="loading-dot"></span> 正在展开这一方山水…</div>
         <button class="nearby-prompt" id="nearby-prompt" hidden><kbd>E</kbd> <span id="nearby-name">探索附近地标</span> <span>↗</span></button>
       </section>
+      <div class="journey-status" id="journey-status" data-state="idle">
+        <span id="journey-description" role="status" aria-live="polite">点一处风景，让旅人走过去。</span>
+        <progress id="journey-progress" max="100" value="0" aria-label="到达进度"></progress>
+        <button id="journey-cancel" class="tool-button" disabled>停在这里</button>
+      </div>
       <div class="scene-caption"><span>点地面 · 去那里</span><span>拖动 · 看每一面</span><span>滚轮 · 看远近</span></div>
       <div class="world-controls">
       <div class="scene-toolbar">
+        <button id="labels-toggle" class="tool-button" aria-pressed="false">显示八景</button>
         <button id="theme-toggle" class="tool-button theme-toggle" aria-pressed="false" aria-label="切换黄昏光线">☾ 黄昏</button>
         <button id="quality-toggle" class="tool-button" aria-pressed="false">轻量画质</button>
         <button id="reset-view" class="tool-button">回到起点 ↺</button>
@@ -93,7 +101,7 @@
       <nav class="destinations" id="destinations" aria-label="星球地标"></nav>
       <div class="keyboard-hint"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移动</span><span><kbd>E</kbd> 互动</span></div>
     </footer>
-    <div class="colophon"><span>思念若是一首诗<small>MY LITTLE ORBIT · 2026</small></span><a href="./art-studio.html">v0.3 旧版资产存档 ↗</a></div>
+    <div class="colophon"><span>思念若是一首诗<small>MY LITTLE ORBIT · 2026</small></span><a href="./art-review.html">参考与本轮实景 ↗</a><a href="./art-studio.html">v0.3 旧版资产存档 ↗</a></div>
   </div>
 
   <dialog class="content-dialog" id="content-dialog" aria-labelledby="dialog-title">

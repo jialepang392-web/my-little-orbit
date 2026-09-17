@@ -1,9 +1,9 @@
 import * as T from 'three';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { LANDMARKS } from './data.js';
-import { ART_EDITION, artImage, artModel } from './art-paths.js';
-import { PALETTE, makeArtLandmark, makeArtAvatar, makeArtGuide, makeArtTree, makeTreasure, makeMeadow, cyl, mergeStatic } from './art-models.js';
+import { LANDMARKS } from './data.js?v=050';
+import { ART_EDITION, artImage, artModel } from './art-paths.js?v=050';
+import { PALETTE, makeArtLandmark, makeArtAvatar, makeArtGuide, makeArtTree, makeTreasure, makeMeadow, cyl, mergeStatic } from './art-models.js?v=050';
 
 const legacyNames={home:'关于小屋',journal:'文字花园',studio:'创作工坊',lab:'实验灯塔',library:'灵感书屋',observatory:'远方观测站',mail:'来信邮局',camp:'慢生活营地'};
 const assetDefinitions=[...LANDMARKS.map(item=>({id:item.id,name:legacyNames[item.id],kind:'landmark'})),{id:'traveller',name:'林间旅行者',kind:'character'},{id:'guide-sprout',name:'芽芽 · 森林向导',kind:'guide'},{id:'guide-petal',name:'花花 · 花园住客',kind:'guide'},{id:'guide-ember',name:'暖暖 · 灯塔住客',kind:'guide'},{id:'guide-droplet',name:'点点 · 观测站住客',kind:'guide'},...LANDMARKS.map(item=>({id:`treasure-${item.id}`,name:item.treasure,kind:'collectible'}))];

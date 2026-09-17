@@ -1,8 +1,9 @@
 /** A full spherical assemblage of paper, pewter water, moss and orchid leaves. */
 import * as T from 'three';
-import { fromLatLon, clamp, seededRandom } from './math.js';
-import { part, box, ball, cyl, mergeStatic, makePine, makeBamboo, makeRock, makeInkstone, makePlum, makeOrchid, makeFern, makeReeds, makeFlowerCluster, makeSeedPod } from './garden-models.js';
-import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache } from './collage-layers.js';
+import { fromLatLon, clamp, seededRandom } from './math.js?v=050';
+import { part, box, ball, cyl, mergeStatic, makePine, makeBamboo, makeRock, makeInkstone, makePlum, makeOrchid, makeFern, makeReeds, makeFlowerCluster, makeSeedPod } from './garden-models.js?v=050';
+import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache, collageTextureReady, attachStoneTexture } from './collage-layers.js?v=050';
+import { makeReferenceAccents } from './reference-art.js?v=050';
 export const PLANET_RADIUS=5.4;
 const UP=new T.Vector3(0,1,0),WATER=5.425;
 const paperDecks=[[[17,103],2.4,2.8,-.32],[[35,83],1.1,.85,.35],[[-19,-108],2,2.6,.4]].map(([ll,w,h,angle])=>{
@@ -10,7 +11,12 @@ const paperDecks=[[[17,103],2.4,2.8,-.32],[[35,83],1.1,.85,.35],[[-19,-108],2,2.
   q.multiply(new T.Quaternion().setFromAxisAngle(new T.Vector3(0,0,1),angle));return {inverse:q.invert(),w,h};
 });
 const edges=[['home','journal'],['home','studio'],['journal','lab'],['studio','lab'],['journal','library'],['studio','observatory'],['library','camp'],['camp','mail'],['mail','observatory'],['mail','lab'],['camp','home']];
-function waterField(n){return Math.abs(n.y*.71+n.x*.28+Math.sin(n.z*4+n.x*2)*.19);}
+function waterField(n){
+  const rear=Math.abs(n.y*.71+n.x*.28+Math.sin(n.z*4+n.x*2)*.19);
+  const front=n.y>.12?.28:Math.abs(n.x+.23-.10*Math.sin(n.y*7))*.72;
+  const blend=clamp((n.z-.30)/.30,0,1);
+  return rear*(1-blend)+front*blend;
+}
 function terrainRadius(n){const river=waterField(n),hill=Math.sin(n.x*9+n.z*3)*Math.cos(n.y*7-1)*.035+Math.sin(n.z*17+n.y*5)*.015;return PLANET_RADIUS+.075+hill-.11*(1-clamp((river-.055)/.065,0,1));}
 export function lakeDistance(n){return waterField(n)/.085;}
 export function surfaceRadius(n){
@@ -33,7 +39,7 @@ export function makeLandscape(normals){
   clearCollageMaterialCache();
   const root=new T.Group();root.name='longing-poem-sphere';const random=seededRandom(404917);
   const geometry=new T.SphereGeometry(PLANET_RADIUS,144,96),p=geometry.attributes.position,colors=new Float32Array(p.count*3),n=new T.Vector3();
-  const stone=new T.Color('#8e9d92'),moss=new T.Color('#68814d'),ink=new T.Color('#57635f'),shore=new T.Color('#babba4');
+  const stone=new T.Color('#81867b'),moss=new T.Color('#617040'),ink=new T.Color('#484d48'),shore=new T.Color('#a7a693');
   for(let i=0;i<p.count;i++){
     n.fromBufferAttribute(p,i).normalize();const river=waterField(n),vein=Math.sin(n.x*21+n.y*17+Math.sin(n.z*11)*2);
     const field=Math.sin(n.x*5+n.z*4)*Math.cos(n.y*8)+Math.sin(n.z*9+n.x*4)*.3;
@@ -43,15 +49,23 @@ export function makeLandscape(normals){
   }
   geometry.setAttribute('color',new T.BufferAttribute(colors,3));geometry.computeVertexNormals();
   const groundMaterial=new T.MeshStandardMaterial({vertexColors:true,roughness:.96});
+  attachStoneTexture(groundMaterial);
   groundMaterial.onBeforeCompile=shader=>{
     shader.vertexShader='varying vec3 poemSurface;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\npoemSurface=position;');
-    shader.fragmentShader='varying vec3 poemSurface;\n'+shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+    shader.fragmentShader='varying vec3 poemSurface;\n'+shader.fragmentShader.replace('#include <map_fragment>',`#ifdef USE_MAP
+      vec3 w=pow(abs(normalize(poemSurface)),vec3(4.));w/=w.x+w.y+w.z;
+      vec3 tx=texture2D(map,vec2(.507,.507)+fract(poemSurface.yz*.31)*.486).rgb;
+      vec3 ty=texture2D(map,vec2(.507,.507)+fract(poemSurface.xz*.31)*.486).rgb;
+      vec3 tz=texture2D(map,vec2(.507,.507)+fract(poemSurface.xy*.31)*.486).rgb;
+      vec3 mineral=tx*w.x+ty*w.y+tz*w.z;
+      diffuseColor.rgb*=mix(vec3(.92),mineral*1.8,.42);
+    #endif`).replace('#include <color_fragment>',`#include <color_fragment>
       float grain=fract(sin(dot(floor(poemSurface*230.),vec3(12.9898,78.233,45.164)))*43758.5453);
       float vein=sin(poemSurface.y*26.+sin(poemSurface.x*7.)*2.+sin(poemSurface.z*13.)*1.7);
       diffuseColor.rgb*=.9+grain*.14+smoothstep(.84,1.,vein)*.075;`);
   };
   const ground=new T.Mesh(geometry,groundMaterial);ground.name='garden-ground';ground.receiveShadow=true;root.add(ground);
-  const water=part(new T.SphereGeometry(WATER,128,80),'#507e88',[0,0,0],{roughness:.23,metalness:.48});water.name='continuous-jade-water';water.castShadow=false;root.add(water);
+  const water=part(new T.SphereGeometry(WATER,128,80),'#7099a3',[0,0,0],{roughness:.20,metalness:.38});water.name='continuous-jade-water';water.castShadow=false;root.add(water);
   let waterShader;water.material.onBeforeCompile=shader=>{waterShader=shader;shader.uniforms.poemTime={value:0};shader.vertexShader='varying vec3 waterPoint;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nwaterPoint=position;');shader.fragmentShader='varying vec3 waterPoint; uniform float poemTime;\n'+shader.fragmentShader.replace('#include <normal_fragment_begin>',`#include <normal_fragment_begin>
     normal=normalize(normal+vec3(sin(waterPoint.x*65.+waterPoint.y*39.+poemTime)*.035,cos(waterPoint.z*73.-poemTime*.7)*.026,0.));`);};
   const paths=new T.Group(),sampled=[];
@@ -59,7 +73,7 @@ export function makeLandscape(normals){
     for(let i=1;i<steps;i++){const nn=slerp(aa,bb,i/steps);sampled.push(nn);if([...normals.values()].some(o=>o.dot(nn)>.989))continue;
       const step=box(.185,.035,.11,i%7===0?'#aea896':'#dad8c1',[0,0,0],.018);placeSurface(step,nn,.018);step.rotateY(i*.19);paths.add(step);
     }
-    for(let i=2;i<steps-2;i++){const nn=slerp(aa,bb,i/steps);if(waterField(nn)>.065)continue;
+    for(let i=2;i<steps-2;i++){const nn=slerp(aa,bb,i/steps);if(waterField(nn)>.065||nn.z>.35)continue;
       const tangent=slerp(aa,bb,(i+1)/steps).sub(nn).normalize(),side=new T.Vector3().crossVectors(nn,tangent).normalize();
       for(const sign of [-1,1]){const railN=nn.clone().addScaledVector(side,sign*.024).normalize();const post=cyl(.014,.018,.16,'#a94d3b',[0,0,0],6);placeSurface(post,railN,.1);paths.add(post);
         const next=slerp(aa,bb,(i+1)/steps).addScaledVector(side,sign*.024).normalize();paths.add(tube([railN.clone().multiplyScalar(surfaceRadius(railN)+.18),next.clone().multiplyScalar(surfaceRadius(next)+.18)],.012,'#a94d3b'));
@@ -72,7 +86,7 @@ export function makeLandscape(normals){
   for(let i=0;i<440;i++){
     const y=1-2*(i+.5)/440,az=i*2.3999632297,nn=new T.Vector3(Math.cos(az)*Math.sqrt(1-y*y),y,Math.sin(az)*Math.sqrt(1-y*y));
     const proximity=[...normals.values()].some(o=>o.dot(nn)>.976),onPath=sampled.some(o=>o.dot(nn)>.9987);
-    if(waterField(nn)<.14||proximity||onPath||collageSurface(nn)>=5.6)continue;
+    if(waterField(nn)<.14||proximity||onPath||collageSurface(nn)>=5.6||nn.z>.67)continue;
     if(i%4===0){const plant=(i%12===0?bambooTemplates[i%3]:pineTemplates[i%5]).clone();plant.scale.multiplyScalar(.62+random()*.55);placeSurface(plant,nn,-.015);plant.rotateY(random()*6.28);flora.add(plant);}
     else if(i%4===1){const rock=makeRock(.45+random()*.6,i%7);rock.traverse(o=>{if(o.isMesh&&['9aa49a','c3c8b8'].includes(o.material.color.getHexString()))o.material=texturedStoneMaterial();});placeSurface(rock,nn,-.03);rock.rotateY(i);stonework.add(rock);}
     else{const patch=i%2?makeFern(.53,i%3):makeFlowerCluster(.58,i%4);placeSurface(patch,nn,.012);patch.rotateY(i);details.add(patch);}
@@ -104,6 +118,10 @@ export function makeLandscape(normals){
   for(let i=0;i<210;i++){const nn=new T.Vector3(random()-.5,random()-.5,random()-.5).normalize();if(waterField(nn)>.065)continue;const tangent=new T.Vector3().crossVectors(nn,UP).normalize(),points=[];
     for(let j=0;j<7;j++)points.push(nn.clone().addScaledVector(tangent,(j-3)*.003).normalize().multiplyScalar(WATER+.008));const line=tube(points,.004,'#c5d5ce');line.castShadow=false;glints.add(line);
   }root.add(mergeStatic(glints));
+  // The v0.4 assemblage remains in the source for historical builds; the current
+  // foreground is deliberately composed from reference objects rather than the
+  // former thin flute, flat inkstone and scattered grass-ball decorations.
+  if(new URLSearchParams(location.search).get('art')==='legacy'){
   // Paper and vermilion fragments follow the globe's curvature instead of hiding it.
   const collage=new T.Group();collage.add(paperPatch([17,103],2.4,2.8,-.32,'#e8e2d2',true),paperPatch([35,83],1.1,.85,.35,'#b73529'),paperPatch([-19,-108],2.0,2.6,.4,'#dedac9',true));
   root.add(mergeStatic(collage));
@@ -146,8 +164,11 @@ export function makeLandscape(normals){
     const pts=[];for(let i=0;i<=60;i++){const a=-2.2+i/60*3.6,r=PLANET_RADIUS+.07+k*.028;pts.push(new T.Vector3(Math.cos(a)*r,Math.sin(a)*r,.65+Math.sin(a*5+k)*.035));}
     pewter.add(tube(pts,.045,'#a5b2ad',{roughness:.24,metalness:.52}));
   }root.add(mergeStatic(pewter));
+  } else {
+    root.add(makeCollageLayers(),makeReferenceAccents());
+  }
   const fireflyPositions=[];for(let i=0;i<45;i++){const q=new T.Vector3(random()-.5,random()-.5,random()-.5).normalize();fireflyPositions.push(...q.multiplyScalar(PLANET_RADIUS+.4+random()*.6).toArray());}
   const fireflyGeo=new T.BufferGeometry();fireflyGeo.setAttribute('position',new T.Float32BufferAttribute(fireflyPositions,3));const fireflies=new T.Points(fireflyGeo,new T.PointsMaterial({color:'#f6d28e',size:.035,transparent:true,opacity:0,depthWrite:false}));root.add(fireflies);
   root.userData.botanicalClumps=botanicalClumps;
-  return {root,ground,surface:ground,setLowPower(value){fineDetail.visible=!value;},animate(t,reduced,dusk){fireflies.material.opacity=dusk?.75:0;if(!reduced){fireflies.rotation.y=t*.009;if(waterShader)waterShader.uniforms.poemTime.value=t;}}};
+  return {root,ground,surface:ground,ready:collageTextureReady(),setLowPower(value){fineDetail.visible=!value;},animate(t,reduced,dusk){fireflies.material.opacity=dusk?.75:0;if(!reduced){fireflies.rotation.y=t*.009;if(waterShader)waterShader.uniforms.poemTime.value=t;}}};
 }

@@ -5,7 +5,7 @@
  * Changes: TS -> ES module, seeded random, configurable color/size, explicit disposal.
  */
 import * as THREE from 'three';
-import { seededRandom } from '../math.js';
+import { seededRandom } from '../math.js?v=050';
 
 export class Stars extends THREE.Group {
   constructor(opts = {}) {

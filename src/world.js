@@ -1,18 +1,19 @@
 import * as T from 'three';
-import { LANDMARKS, landmarkById } from './data.js';
-import { fromLatLon, seededRandom, clamp } from './math.js';
-import { orbitFrame, dragOrbit, surfaceStep } from './navigation.js';
-import { Stars } from './vendor/stars.js';
-import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js';
-import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js';
-import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js';
-import { AssetSlots, disposeTree } from './assets.js';
-import { makeCollageLight } from './collage-light.js';
+import { LANDMARKS, landmarkById } from './data.js?v=050';
+import { fromLatLon, seededRandom, clamp } from './math.js?v=050';
+import { orbitFrame, dragOrbit, surfaceStep } from './navigation.js?v=050';
+import { frameSeconds, shouldAnimate } from './runtime.js?v=050';
+import { Stars } from './vendor/stars.js?v=050';
+import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=050';
+import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=050';
+import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=050';
+import { AssetSlots, disposeTree } from './assets.js?v=050';
+import { makeCollageLight } from './collage-light.js?v=050';
 
 const R=5.4,UP=new T.Vector3(0,1,0);
-const initialNormal=new T.Vector3(...fromLatLon(38,90));
+const initialNormal=new T.Vector3(...fromLatLon(-24,84));
 function placeOnSurface(object,normal,height=R){object.position.copy(normal).multiplyScalar(height);object.quaternion.setFromUnitVectors(UP,normal);}
-export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},onError=()=>{},onNotice=()=>{},reducedMotion=false}) {
+export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},onError=()=>{},onNotice=()=>{},onNavigation=()=>{},reducedMotion=false}) {
   const parameters=new URLSearchParams(location.search),blenderEdition=parameters.get('edition')==='blender',originalEdition=parameters.get('assets')==='original';
   const historicalEdition=blenderEdition||originalEdition;
   const makeAvatar=historicalEdition?makeOriginalAvatar:makeGardenAvatar,makeGuide=historicalEdition?makeOriginalGuide:makeGardenGuide,makeLandmark=historicalEdition?makeOriginalLandmark:makeGardenLandmark;
@@ -21,12 +22,12 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   catch(error){throw new Error('此浏览器无法启动 WebGL2。纯阅读模式仍可使用。',{cause:error});}
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
   renderer.setClearColor(0xdde6dd,0);renderer.outputColorSpace=T.SRGBColorSpace;
-  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;
+  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.06;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(43,1,.1,180);
-  const studioLight=makeCollageLight(renderer);scene.environment=studioLight.texture;scene.environmentIntensity=.42;
-  const hemisphere=new T.HemisphereLight('#eef3e5','#53675b',1.3);scene.add(hemisphere);
-  const sun=new T.DirectionalLight('#fff8e5',2.65);sun.position.set(-8,14,10);sun.castShadow=true;
+  const studioLight=makeCollageLight(renderer);scene.environment=studioLight.texture;scene.environmentIntensity=.67;
+  const hemisphere=new T.HemisphereLight('#f0efe3','#414b3a',1.15);scene.add(hemisphere);
+  const sun=new T.DirectionalLight('#fff5df',2.75);sun.position.set(-9,11,12);sun.castShadow=true;
   sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-8;sun.shadow.camera.right=8;sun.shadow.camera.top=8;sun.shadow.camera.bottom=-8;sun.shadow.normalBias=.035;
   scene.add(sun,new T.AmbientLight('#edf3ed',.2));
   const random=seededRandom(9162026);
@@ -55,13 +56,17 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   for(const [i,id] of ['journal','lab','observatory','camp'].entries()){const pet=makeGuide(['petal','ember','droplet','sprout'][i]);const petN=normals.get(id).clone().add(new T.Vector3(.045,0,.035)).normalize();placeSurface(pet.root,petN,.26);pet.root.rotateY(Math.PI);pet.root.scale.setScalar(.8);scene.add(pet.root);slots[`resident-${id}`]={parent:pet.root,placeholder:pet.visual};residents.push({pet,base:pet.root.position.clone(),normal:petN});}
   const assets=new AssetSlots(onNotice);
   canvas.dataset.edition=originalEdition?'original':blenderEdition?'blender':'garden';canvas.dataset.assetsExpected=blenderEdition&&!originalEdition?'14':'0';canvas.dataset.assetsLoaded='0';canvas.dataset.assetFailures='';
-  if(blenderEdition&&!originalEdition)void assets.load(slots).then(()=>{canvas.dataset.assetsLoaded=String(assets.entries.length);canvas.dataset.assetFailures=assets.failures.join(',');});
+  if(blenderEdition&&!originalEdition)void assets.load(slots).then(()=>{if(disposed)return;canvas.dataset.assetsLoaded=String(assets.entries.length);canvas.dataset.assetFailures=assets.failures.join(',');invalidate();});
   let normal=initialNormal.clone(),forward=UP.clone().addScaledVector(normal,-UP.dot(normal)).normalize();
   let target=null,nearbyId=null,paused=false,disposed=false,frame=0,lastTime=performance.now(),elapsed=0,zoom=1,width=1,height=1,followTraveller=true;
-  const initialOrbit=orbitFrame(normal.clone().multiplyScalar(R+9.7).addScaledVector(forward,-10.5).toArray(),normal.toArray());
+  let inViewport=true,dirty=true,renderedFrames=0,navigationKey='';
+  canvas.dataset.textureStatus='loading';
+  void landscape.ready.then(loaded=>{if(disposed)return;canvas.dataset.textureStatus=loaded?'ready':'fallback';if(!loaded)onNotice('纸石纹理暂未加载，已保留园林造型和全部游园功能。');invalidate();});
+  // Art-directed front view is independent of where the traveller starts.
+  const initialOrbit=orbitFrame([0,.055589,.998454],[0,.998454,-.055589]);
   let orbit=initialOrbit;
   const cameraOutward=new T.Vector3(...orbit.outward),cameraUp=new T.Vector3(...orbit.up);
-  const cameraDistance=Math.hypot(R+9.7,10.5),raycaster=new T.Raycaster(),pointer=new T.Vector2();
+  const cameraDistance=22,raycaster=new T.Raycaster(),pointer=new T.Vector2();
   const ground=landscape.ground??landscape.surface??landscape.root.children.find(object=>object.isMesh);
   const targetMarker=new T.Mesh(new T.TorusGeometry(.19,.015,6,36),new T.MeshBasicMaterial({color:'#a53d36',depthWrite:false}));
   targetMarker.geometry.rotateX(Math.PI/2);targetMarker.visible=false;targetMarker.renderOrder=2;scene.add(targetMarker);
@@ -75,37 +80,38 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   const keyMap={KeyW:'up',ArrowUp:'up',KeyS:'down',ArrowDown:'down',KeyA:'left',ArrowLeft:'left',KeyD:'right',ArrowRight:'right'};
   on(window,'keydown',(event)=>{
     if(paused||event.altKey||event.ctrlKey||event.metaKey||event.target?.closest('input,textarea,select,[contenteditable="true"]'))return;
-    const key=keyMap[event.code];if(key){event.preventDefault();if(!input[key])startManualMovement();input[key]=true;target=null;}
+    const key=keyMap[event.code];if(key){event.preventDefault();if(!input[key])startManualMovement();input[key]=true;target=null;invalidate();}
   });
-  on(window,'keyup',(event)=>{const key=keyMap[event.code];if(key)input[key]=false;});
-  on(window,'blur',clearInput);
+  on(window,'keyup',(event)=>{const key=keyMap[event.code];if(key){input[key]=false;invalidate();}});
+  on(window,'blur',()=>{clearInput();invalidate();});
   on(document,'visibilitychange',()=>{clearInput();if(!document.hidden&&!paused&&!disposed){lastTime=performance.now();schedule();}});
   on(canvas,'pointerdown',(event)=>{if(event.button!==0||paused||drag)return;drag={id:event.pointerId,startX:event.clientX,startY:event.clientY,x:event.clientX,y:event.clientY,moved:false};canvas.setPointerCapture(event.pointerId);canvas.focus({preventScroll:true});});
   on(canvas,'pointermove',(event)=>{
     if(!drag||drag.id!==event.pointerId||paused)return;
     if(!drag.moved&&Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)<6)return;
     if(!drag.moved){drag.moved=true;orbitDrags++;}
-    orbit=dragOrbit(orbit,event.clientX-drag.x,event.clientY-drag.y);drag.x=event.clientX;drag.y=event.clientY;followTraveller=false;
+    orbit=dragOrbit(orbit,event.clientX-drag.x,event.clientY-drag.y);drag.x=event.clientX;drag.y=event.clientY;followTraveller=false;invalidate();
   });
   on(canvas,'pointerup',(event)=>{
     if(!drag||drag.id!==event.pointerId)return;
     const clicked=!drag.moved&&Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)<6;drag=null;
     if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);
-    if(clicked&&!paused)navigateToSurface(event.clientX,event.clientY);
+    if(clicked&&!paused)navigateToSurface(event.clientX,event.clientY);else invalidate();
   });
   for(const type of ['pointercancel','lostpointercapture'])on(canvas,type,()=>{drag=null;});
-  on(canvas,'wheel',(event)=>{if(paused)return;event.preventDefault();zoom=clamp(zoom+event.deltaY*.0006,.8,1.4);},{passive:false});
+  on(canvas,'wheel',(event)=>{if(paused)return;event.preventDefault();zoom=clamp(zoom+event.deltaY*.0006,.8,1.4);invalidate();},{passive:false});
   on(canvas,'webglcontextlost',(event)=>{event.preventDefault();setPaused(true);onError('3D 图形上下文已丢失。可以继续阅读文章，刷新页面可重试场景。');});
   for(const label of labels)on(label.element,'click',()=>navigateTo(label.id));
 
-  function resize(){const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;width=rect.width;height=rect.height;renderer.setSize(width,height,false);camera.aspect=width/height;camera.fov=width/height<.9?50:43;camera.updateProjectionMatrix();}
+  function resize(){const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;width=rect.width;height=rect.height;renderer.setSize(width,height,false);camera.aspect=width/height;camera.fov=width/height<.9?43:34.5;camera.updateProjectionMatrix();invalidate();}
   const observer=new ResizeObserver(resize);observer.observe(canvas);resize();
+  const visibilityObserver=new IntersectionObserver(([entry])=>{inViewport=entry.isIntersecting;canvas.dataset.inViewport=String(inViewport);invalidate();});visibilityObserver.observe(canvas);
   function focusTraveller(){
     const view=new T.Vector3(...orbit.outward);
     if(view.dot(normal)<.3)orbit=orbitFrame(normal.clone().multiplyScalar(R+9.7).addScaledVector(forward,-10.5).toArray(),normal.toArray());
   }
   function startManualMovement(){target=null;followTraveller=true;focusTraveller();}
-  function setDirection(direction,active){if(direction in input){if(active&&!input[direction])startManualMovement();input[direction]=active;}}
+  function setDirection(direction,active){if(direction in input){if(active&&!input[direction])startManualMovement();input[direction]=active;invalidate();}}
   function navigateToSurface(clientX,clientY){
     if(!ground||disposed)return false;
     const rect=canvas.getBoundingClientRect();pointer.set((clientX-rect.left)/rect.width*2-1,-(clientY-rect.top)/rect.height*2+1);
@@ -113,18 +119,24 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
     const hit=raycaster.intersectObject(ground,true)[0];
     if(!hit)return false;
     const destination=hit.point.clone().normalize();clearInput();target={id:null,kind:'surface',normal:destination};followTraveller=false;surfaceClicks++;
+    target.startAngle=Math.acos(clamp(normal.dot(destination),-1,1));invalidate();
     canvas.dataset.lastSurfaceClick=destination.toArray().map(value=>value.toFixed(6)).join(',');
     onNotice('已选好落脚处，旅人正沿球面前往。按方向键可取消。');return true;
   }
-  function navigateTo(id){if(!normals.has(id)||disposed)return false;target={id,kind:'landmark',normal:normals.get(id)};clearInput();followTraveller=true;focusTraveller();onNotice(`纸鹤正在带你前往${landmarkById(id).name}，按方向键可取消。`);return true;}
-  function reset(){normal.copy(initialNormal);forward.copy(UP).addScaledVector(normal,-UP.dot(normal)).normalize();target=null;zoom=1;orbit=initialOrbit;followTraveller=true;clearInput();nearbyId=null;onNearby(null);}
-  function setPaused(value){paused=Boolean(value);clearInput();if(paused){cancelAnimationFrame(frame);frame=0;}else{lastTime=performance.now();schedule();}}
+  function navigateTo(id){if(!normals.has(id)||disposed)return false;target={id,kind:'landmark',normal:normals.get(id)};target.startAngle=Math.acos(clamp(normal.dot(target.normal),-1,1));clearInput();followTraveller=true;focusTraveller();invalidate();onNotice(`纸鹤正在带你前往${landmarkById(id).name}，按方向键可取消。`);return true;}
+  function cancelNavigation(){target=null;clearInput();targetMarker.visible=false;invalidate();}
+  function reset(){normal.copy(initialNormal);forward.copy(UP).addScaledVector(normal,-UP.dot(normal)).normalize();target=null;zoom=1;orbit=initialOrbit;followTraveller=true;clearInput();nearbyId=null;onNearby(null);invalidate();}
+  function setPaused(value){paused=Boolean(value);clearInput();canvas.dataset.paused=String(paused);if(paused){cancelAnimationFrame(frame);frame=0;}else{lastTime=performance.now();invalidate();}}
   function setLowPower(value){renderer.setPixelRatio(value?1:Math.min(devicePixelRatio,1.5));renderer.shadowMap.enabled=!value;clouds.visible=historicalEdition&&!value;landscape.setLowPower?.(value);resize();}
-  function setDusk(value){dusk=Boolean(value);sun.color.set(dusk?'#edc9ad':'#fff8e5');sun.intensity=dusk?1.5:2.65;hemisphere.color.set(dusk?'#bac8d2':'#eef3e5');hemisphere.intensity=dusk?.9:1.3;stars.visible=dusk;canvas.dataset.dusk=String(dusk);}
-  function schedule(){if(!frame&&!disposed&&!paused&&!document.hidden)frame=requestAnimationFrame(animate);}
+  function setDusk(value){dusk=Boolean(value);sun.color.set(dusk?'#edc9ad':'#fff8e5');sun.intensity=dusk?1.5:2.65;hemisphere.color.set(dusk?'#bac8d2':'#eef3e5');hemisphere.intensity=dusk?.9:1.3;stars.visible=dusk;canvas.dataset.dusk=String(dusk);invalidate();}
+  function invalidate(){dirty=true;if(!frame)lastTime=performance.now();schedule();}
+  function schedule(){
+    const active=Boolean(target||drag||Object.values(input).some(Boolean));
+    if(!frame&&!disposed&&shouldAnimate({paused,hidden:document.hidden,inViewport:inViewport||renderedFrames===0,reducedMotion,active,dirty}))frame=requestAnimationFrame(animate);
+  }
   function animate(now){
     frame=0;if(disposed||paused||document.hidden)return;
-    const delta=clamp((now-lastTime)/1000,0,.05);lastTime=now;elapsed+=delta;
+    const delta=frameSeconds(now,lastTime);lastTime=now;elapsed+=delta;dirty=false;
     cameraOutward.fromArray(orbit.outward);cameraUp.fromArray(orbit.up);
     right.crossVectors(forward,normal).normalize();movement.set(0,0,0);
     const x=Number(input.right)-Number(input.left),y=Number(input.up)-Number(input.down);
@@ -164,8 +176,13 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
     let closest=null,distance=.215;
     for(const landmark of landmarks){const angle=Math.acos(clamp(normal.dot(landmark.normal),-1,1));if(angle<distance){distance=angle;closest=landmark.item.id;}if(!reducedMotion){landmark.ornament.rotation.y=elapsed*.75;landmark.ornament.position.y=.3+Math.sin(elapsed*2+landmark.item.lon)*.025;}}
     if(closest!==nearbyId){nearbyId=closest;onNearby(closest);}
+    const remaining=target?Math.acos(clamp(normal.dot(target.normal),-1,1)):0;
+    const completion=target?Math.round(clamp(1-Math.max(0,remaining-(target.kind==='landmark'?.13:.008))/Math.max(.001,target.startAngle-(target.kind==='landmark'?.13:.008)),0,1)*100):0;
+    const nextKey=target?`${target.kind}/${target.id}/${completion}`:'idle';
+    if(nextKey!==navigationKey){navigationKey=nextKey;onNavigation(target?{id:target.id,kind:target.kind,completion}:null);}
     if(!reducedMotion)clouds.rotation.y=elapsed*.008;
     renderer.render(scene,camera);
+    canvas.dataset.frame=String(++renderedFrames);
     canvas.dataset.drawCalls=String(renderer.info.render.calls);canvas.dataset.triangles=String(renderer.info.render.triangles);
     canvas.dataset.avatarAction=assets.entries.find(a=>a.id==='avatar')?.active?.getClip().name??(moving?'Walk':'Idle');
     canvas.dataset.ready='true';canvas.dataset.position=normal.toArray().map((v)=>v.toFixed(4)).join(',');
@@ -176,8 +193,8 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
     schedule();
   }
   schedule();
-  return { navigateTo,setDirection,reset,setPaused,setLowPower,setDusk,
+  return { navigateTo,cancelNavigation,setDirection,reset,setPaused,setLowPower,setDusk,
     getNearby:()=>nearbyId,
-    dispose(){disposed=true;cancelAnimationFrame(frame);abort.abort();observer.disconnect();assets.dispose();disposeTree(scene);studioLight.dispose();labels.forEach((label)=>label.element.remove());renderer.dispose();}
+    dispose(){disposed=true;cancelAnimationFrame(frame);abort.abort();observer.disconnect();visibilityObserver.disconnect();assets.dispose();disposeTree(scene);studioLight.dispose();labels.forEach((label)=>label.element.remove());renderer.dispose();}
   };
 }

@@ -4,7 +4,7 @@
 import * as T from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { seededRandom } from './math.js';
+import { seededRandom } from './math.js?v=050';
 export const PALETTE=Object.freeze({cream:'#f9ebcc',wall:'#efce95',wood:'#795140',bark:'#654b37',roof:'#c26148',roofLight:'#df8b60',green:'#365d4c',mint:'#719e79',leaf:'#73a062',lime:'#b7c573',gold:'#e7b958',glass:'#a7d7c8',ink:'#233b35',blue:'#6197a5',pink:'#e9aaa2'});
 const materials=new Map(),shapes=new Map();
 export function mat(color,extra={}){const key=color+JSON.stringify(extra);if(!materials.has(key))materials.set(key,new T.MeshStandardMaterial({color,roughness:.8,...extra}));return materials.get(key);}
@@ -19,9 +19,25 @@ function rod(a,b,r,color){const av=new T.Vector3(...a),bv=new T.Vector3(...b),v=
 function curve(points,r,color){return part(new T.TubeGeometry(new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p))),22,r,5,false),color);}
 export function mergeStatic(group){
   group.updateMatrixWorld(true);const buckets=new Map();
-  group.traverse(node=>{if(!node.isMesh)return;const key=node.material.uuid;if(!buckets.has(key))buckets.set(key,{material:node.material,geometries:[]});let geom=node.geometry.clone();if(geom.index){const non=geom.toNonIndexed();geom.dispose();geom=non;}geom.applyMatrix4(node.matrixWorld);for(const attr of Object.keys(geom.attributes))if(!['position','normal','uv'].includes(attr))geom.deleteAttribute(attr);if(!geom.getAttribute('uv'))geom.setAttribute('uv',new T.Float32BufferAttribute(new Float32Array(geom.getAttribute('position').count*2),2));buckets.get(key).geometries.push(geom);});
+  group.traverse(node=>{
+    if(!node.isMesh)return;
+    const key=`${node.material.uuid}/${node.castShadow}/${node.receiveShadow}`;
+    if(!buckets.has(key))buckets.set(key,{material:node.material,cast:node.castShadow,receive:node.receiveShadow,geometries:[]});
+    const geom=node.geometry.clone();
+    // Preserve indexed vertices: expanding every leaf/sphere into independent
+    // triangles used ~76 MB for the landscape alone. Non-indexed shapes receive
+    // identity indices; triangle order, seams, UVs and normals are unchanged.
+    if(!geom.index){
+      const count=geom.attributes.position.count,ArrayType=count>65535?Uint32Array:Uint16Array;
+      geom.setIndex(new T.BufferAttribute(ArrayType.from({length:count},(_,i)=>i),1));
+    }
+    geom.applyMatrix4(node.matrixWorld);
+    for(const attr of Object.keys(geom.attributes))if(!['position','normal','uv'].includes(attr))geom.deleteAttribute(attr);
+    if(!geom.getAttribute('uv'))geom.setAttribute('uv',new T.Float32BufferAttribute(new Float32Array(geom.getAttribute('position').count*2),2));
+    buckets.get(key).geometries.push(geom);
+  });
   const result=new T.Group();result.name=group.name;
-  for(const {material,geometries} of buckets.values()){const geometry=mergeGeometries(geometries,false);geometries.forEach(g=>g.dispose());if(!geometry)throw new Error('Cannot merge art geometry');const m=new T.Mesh(geometry,material);m.castShadow=true;m.receiveShadow=true;result.add(m);}
+  for(const {material,cast,receive,geometries} of buckets.values()){const geometry=mergeGeometries(geometries,false);geometries.forEach(g=>g.dispose());if(!geometry)throw new Error('Cannot merge art geometry');const m=new T.Mesh(geometry,material);m.castShadow=cast;m.receiveShadow=receive;result.add(m);}
   return result;
 }
 function windowAt(g,x,y,z,r=.12){

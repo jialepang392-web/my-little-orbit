@@ -1,21 +1,24 @@
-import { LANDMARKS, landmarkById } from './data.js';
-import { addDiscovery, readProgress, writeProgress } from './storage.js';
-import { escapeHtml, renderMarkdown } from './markdown.js';
-import { downloadPostcard } from './postcard.js';
-import { artImage } from './art-paths.js';
-import { iconSvg } from './illustrations.js';
+import { LANDMARKS, landmarkById } from './data.js?v=050';
+import { addDiscovery, readProgress, writeProgress } from './storage.js?v=050';
+import { escapeHtml, renderMarkdown } from './markdown.js?v=050';
+import { downloadPostcard } from './postcard.js?v=050';
+import { artImage } from './art-paths.js?v=050';
+import { iconSvg } from './illustrations.js?v=050';
 
 const $=(selector)=>document.querySelector(selector);
 let storage=null;try{storage=window.localStorage;}catch{/* Private/blocked storage: session-only progress. */}
 let progress=readProgress(storage),world=null,reading=false,worldState='idle',nearby=null,contentRequest=null,toastTimer=0,saveWarning=false;
+let pendingDestination=null,lastJourney='';
 const dialog=$('#content-dialog'),body=$('#dialog-content'),canvas=$('#world-canvas');
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function setLabels(value){$('#world-stage').classList.toggle('show-landmarks',value);$('#landmark-labels').inert=!value;$('#landmark-labels').setAttribute('aria-hidden',String(!value));$('#labels-toggle').setAttribute('aria-pressed',String(value));$('#labels-toggle').textContent=value?'收起八景':'显示八景';}
+$('#labels-toggle').addEventListener('click',()=>setLabels($('#labels-toggle').getAttribute('aria-pressed')!=='true'));
 
 function toast(message){clearTimeout(toastTimer);$('#toast').textContent=message;$('#toast').hidden=false;toastTimer=setTimeout(()=>{$('#toast').hidden=true;},4200);}
 function pauseWorld(){world?.setPaused(reading||dialog.open||document.hidden);}
 function openDialog(title,kicker='EXPLORER’S JOURNAL'){
   contentRequest?.abort();contentRequest=null;$('#dialog-title').textContent=title;$('#dialog-kicker').textContent=kicker;body.replaceChildren();
-  if(!dialog.open)dialog.showModal();pauseWorld();$('#close-dialog').focus({preventScroll:true});
+  if(!dialog.open)dialog.showModal();dialog.scrollTop=0;pauseWorld();$('#close-dialog').focus({preventScroll:true});
 }
 function closeDialog(){
   // Clear the deep link synchronously: the native 'close' event is queued and
@@ -26,7 +29,7 @@ function closeDialog(){
 $('#close-dialog').addEventListener('click',closeDialog);
 dialog.addEventListener('cancel',(event)=>{event.preventDefault();closeDialog();});
 dialog.addEventListener('click',(event)=>{if(event.target===dialog){const rect=dialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)closeDialog();}});
-dialog.addEventListener('close',()=>{contentRequest?.abort();contentRequest=null;pauseWorld();if(location.hash.startsWith('#post/'))history.replaceState(null,'',location.pathname+location.search);});
+dialog.addEventListener('close',()=>{if(dialog.open)return;contentRequest?.abort();contentRequest=null;pauseWorld();if(location.hash.startsWith('#post/'))history.replaceState(null,'',location.pathname+location.search);});
 document.addEventListener('visibilitychange',pauseWorld);
 
 function renderProgress(){
@@ -94,8 +97,13 @@ function interact(){if(!dialog.open&&!reading&&nearby)void openLocation(nearby,t
 window.addEventListener('keydown',(event)=>{if(event.code==='KeyE'&&!event.repeat&&!event.altKey&&!event.ctrlKey&&!event.metaKey&&!event.target?.closest('input,textarea,select,[contenteditable="true"]'))interact();});
 $('#nearby-prompt').addEventListener('click',interact);
 function navigate(id){
+  setLabels(true);
   if(reading){void openLocation(id);return;}
-  if(!world){toast(worldState==='failed'?'3D 场景未就绪，已为你打开文章。':'小星球正在加载，可以先阅读文章。');void openLocation(id);return;}
+  if(!world){
+    if(worldState==='failed'){toast('3D 场景未就绪，已为你打开文章。');void openLocation(id);}
+    else{pendingDestination=id;toast('已记下目的地，场景展开后纸鹤就会带路。');if(worldState==='idle')void bootWorld();}
+    return;
+  }
   world.navigateTo(id);
   const stage=$('#world-stage'),rect=stage.getBoundingClientRect();
   if(rect.bottom<0||rect.top>innerHeight*.65)stage.scrollIntoView({behavior:reducedMotion?'instant':'smooth',block:'center'});
@@ -103,6 +111,8 @@ function navigate(id){
 
 function setReading(value){
   reading=value;$('#app-shell').classList.toggle('reading',reading);$('#reading-shelf').hidden=!reading;
+  const url=new URL(location.href);if(reading){url.searchParams.set('mode','read');pendingDestination=null;}else url.searchParams.delete('mode');
+  history.replaceState(null,'',url.pathname+url.search+url.hash);
   $('#reading-toggle').setAttribute('aria-pressed',String(reading));$('#reading-toggle').innerHTML=reading?'返回星球漫游 <span>↗</span>':'纯阅读模式 <span>↗</span>';
   pauseWorld();if(!reading&&worldState==='idle')void bootWorld();
   if(!reading&&worldState==='failed'){$('#scene-status').hidden=false;}
@@ -110,14 +120,16 @@ function setReading(value){
 async function bootWorld(){
   if(worldState!=='idle')return;worldState='loading';let timeout;
   try{
-    const module=await Promise.race([import('./world.js'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
+    const module=await Promise.race([import('./world.js?v=050'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
     world=module.createWorld({canvas,labelLayer:$('#landmark-labels'),reducedMotion,onNearby:setNearby,onNotice:toast,
+      onNavigation:updateJourney,
       onArrival:(id)=>{void openLocation(id,true);},
       onError:(message)=>{worldState='failed';world?.dispose();world=null;setNearby(null);toast(message);setReading(true);}
     });
     worldState='ready';$('#scene-status').hidden=true;world.setDusk(document.documentElement.dataset.dusk==='true');
     if(matchMedia('(max-width: 720px)').matches){world.setLowPower(true);$('#quality-toggle').setAttribute('aria-pressed','true');}
     pauseWorld();
+    if(pendingDestination&&!reading&&!dialog.open){const id=pendingDestination;pendingDestination=null;navigate(id);}
   }catch(error){worldState='failed';$('#scene-status').classList.add('error');$('#scene-status').textContent=error.message||'3D 场景加载失败，请使用纯阅读模式。';toast('星球场景未能加载，已切换到仍可使用的文章列表。');setReading(true);}
   finally{clearTimeout(timeout);}
 }
@@ -139,11 +151,22 @@ $('#browse-stories').addEventListener('click',()=>{setReading(true);$('#reading-
 $('#guide-button').addEventListener('click',showGuide);$('#collection-button').addEventListener('click',showCollection);$('#help-button').addEventListener('click',showHelp);
 $('#meet-guide').addEventListener('click',showGuide);
 $('#theme-toggle').innerHTML=`${iconSvg('moon')} 黄昏`;
-$('#theme-toggle').addEventListener('click',()=>{const enabled=$('#theme-toggle').getAttribute('aria-pressed')!=='true';$('#theme-toggle').setAttribute('aria-pressed',String(enabled));$('#theme-toggle').innerHTML=`${iconSvg(enabled?'sun':'moon')} ${enabled?'日光':'黄昏'}`;document.documentElement.dataset.dusk=String(enabled);world?.setDusk(enabled);});
+$('#theme-toggle').addEventListener('click',()=>{const enabled=$('#theme-toggle').getAttribute('aria-pressed')!=='true';$('#theme-toggle').setAttribute('aria-pressed',String(enabled));$('#theme-toggle').setAttribute('aria-label',enabled?'切换日光光线':'切换黄昏光线');$('#theme-toggle').innerHTML=`${iconSvg(enabled?'sun':'moon')} ${enabled?'日光':'黄昏'}`;document.documentElement.dataset.dusk=String(enabled);world?.setDusk(enabled);});
 $('#start-explore').addEventListener('click',()=>{setReading(false);navigate('home');});
 $('#reset-view').addEventListener('click',()=>{world?.reset();toast('已回到起点，已获得的收藏不会丢失。');});
 $('#quality-toggle').addEventListener('click',()=>{const enabled=$('#quality-toggle').getAttribute('aria-pressed')!=='true';$('#quality-toggle').setAttribute('aria-pressed',String(enabled));world?.setLowPower(enabled);});
-window.addEventListener('pagehide',()=>{world?.dispose();contentRequest?.abort();});
+function updateJourney(journey){
+  $('#journey-status').dataset.state=journey?'travelling':'idle';$('#journey-cancel').disabled=!journey;
+  if(!journey){lastJourney='';$('#journey-description').textContent='点一处风景，让旅人走过去。';$('#journey-progress').value=0;return;}
+  const key=journey.id??'surface';
+  if(key!==lastJourney){lastJourney=key;$('#journey-description').textContent=journey.id?`随纸鹤前往 · ${landmarkById(journey.id).name}`:'正走向你选中的风景';}
+  $('#journey-progress').value=journey.completion;
+}
+$('#journey-cancel').addEventListener('click',()=>{pendingDestination=null;world?.cancelNavigation();updateJourney(null);toast('已停在这里，可以继续散步。');});
+// Preserve the live scene when the browser caches this document for Back/Forward.
+// Disposing a cached renderer would restore a permanently frozen planet.
+window.addEventListener('pagehide',(event)=>{if(event.persisted)world?.setPaused(true);else{world?.dispose();contentRequest?.abort();clearTimeout(toastTimer);}});
+window.addEventListener('pageshow',(event)=>{if(event.persisted)pauseWorld();});
 function openHash(){const id=location.hash.startsWith('#post/')?location.hash.slice(6):null;if(landmarkById(id))void openLocation(id);}
 window.addEventListener('hashchange',openHash);
 renderProgress();

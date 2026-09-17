@@ -1,7 +1,7 @@
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { disposeTree } from './assets.js';
+import { disposeTree } from './assets.js?v=050';
 
 const canvas=document.querySelector('#rig-canvas'),status=document.querySelector('#rig-status');
 const renderer=new T.WebGLRenderer({canvas,antialias:true});

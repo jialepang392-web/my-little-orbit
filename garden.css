@@ -126,4 +126,14 @@ html[data-dusk=true]{--paper:#adb8ad;--ink:#202a28}html[data-dusk=true] .world-s
 }
 @media(max-width:720px){.tool-button{min-height:41px}}
 @media(max-width:360px){.mobile-controls{gap:3px}.mobile-controls div{gap:3px}.tool-button{font-size:8px;min-height:41px}.world-controls{gap:12px}}
+.journey-status{display:flex;align-items:center;gap:16px;min-width:0;padding:10px 0;border-bottom:1px solid #85947b66;font-size:12px;color:var(--ink)}
+.journey-status>span{flex:1;min-width:0;line-height:1.8}
+.journey-status progress{appearance:none;width:100px;height:3px;border:0;background:#8b9c7c44;accent-color:var(--orange)}
+.journey-status progress::-webkit-progress-bar{background:#8b9c7c44}
+.journey-status progress::-webkit-progress-value{background:var(--orange)}
+.journey-status progress::-moz-progress-bar{background:var(--orange)}
+.journey-status button{flex-shrink:0;min-height:40px}
+.journey-status[data-state=idle] progress{visibility:hidden}
+.journey-status[data-state=idle]>span{color:#52634b}
+@media(max-width:720px){.journey-status{gap:10px;font-size:11px}.journey-status progress{width:45px}.journey-status button{padding:8px 10px;font-size:11px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
