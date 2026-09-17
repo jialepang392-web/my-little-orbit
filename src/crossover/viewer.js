@@ -1,42 +1,43 @@
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { makeCrossover } from './model.js?v=060';
+import { makeCrossover } from './model.js?v=061';
 
 function studioEnvironment(renderer){
   const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=512;const c=canvas.getContext('2d');
-  const fill=c.createLinearGradient(0,0,0,512);fill.addColorStop(0,'#e1dfd9');fill.addColorStop(.45,'#8a8790');fill.addColorStop(.51,'#302e32');fill.addColorStop(1,'#65636a');c.fillStyle=fill;c.fillRect(0,0,1024,512);
-  for(const [x,y,w,h] of [[110,36,100,207],[560,83,210,118],[900,31,30,248]]){c.fillStyle='#f6f4e9';c.fillRect(x,y,w,h);}
+  const fill=c.createLinearGradient(0,0,0,512);fill.addColorStop(0,'#f1f1f3');fill.addColorStop(.45,'#73727d');fill.addColorStop(.51,'#24222a');fill.addColorStop(1,'#666471');c.fillStyle=fill;c.fillRect(0,0,1024,512);
+  for(const [x,y,w,h] of [[70,25,155,220],[535,55,190,175],[882,23,46,250]]){c.fillStyle='#fffefd';c.fillRect(x,y,w,h);}
   const tex=new T.CanvasTexture(canvas);tex.colorSpace=T.SRGBColorSpace;tex.mapping=T.EquirectangularReflectionMapping;
   const pmrem=new T.PMREMGenerator(renderer),target=pmrem.fromEquirectangular(tex);tex.dispose();pmrem.dispose();return target;
 }
 
-export function createCrossoverViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
+export function createCrossoverViewer(canvas,{onReady=()=>{},onError=()=>{},glyphs={}}={}){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power',preserveDrawingBuffer:false});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor(0xe8e6e0,0);renderer.outputColorSpace=T.SRGBColorSpace;
-  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
-  const scene=new T.Scene(),camera=new T.PerspectiveCamera(38,1,.1,80);camera.position.set(.0,.24,17.2);
-  const world=makeCrossover();scene.add(world.root);
-  const environment=studioEnvironment(renderer);scene.environment=environment.texture;scene.environmentIntensity=.72;
-  scene.add(new T.HemisphereLight('#f3efe5','#46444b',1.65));
-  const key=new T.DirectionalLight('#fff7e8',3.3);key.position.set(-6,8,10);key.castShadow=true;key.shadow.mapSize.set(1536,1536);key.shadow.camera.left=-6;key.shadow.camera.right=6;key.shadow.camera.top=6;key.shadow.camera.bottom=-6;key.shadow.camera.near=1;key.shadow.camera.far=30;key.shadow.normalBias=.025;scene.add(key);
-  const rim=new T.DirectionalLight('#d6deef',1.15);rim.position.set(6,-1,-4);scene.add(rim);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setClearColor(0xe4e3e0,0);renderer.outputColorSpace=T.SRGBColorSpace;
+  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+  const scene=new T.Scene(),camera=new T.PerspectiveCamera(38,1,.1,80);camera.position.set(.0,.24,16.6);
+  const world=makeCrossover({glyphs});scene.add(world.root);
+  const environment=studioEnvironment(renderer);scene.environment=environment.texture;scene.environmentIntensity=1.0;
+  const ambient=new T.HemisphereLight('#f0eff3','#35333b',1.20);scene.add(ambient);
+  const key=new T.DirectionalLight('#fffaf4',3.7);key.position.set(-6,8,10);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.camera.left=-6;key.shadow.camera.right=6;key.shadow.camera.top=6;key.shadow.camera.bottom=-6;key.shadow.camera.near=1;key.shadow.camera.far=30;key.shadow.normalBias=.013;scene.add(key);
+  const rim=new T.DirectionalLight('#dce3f5',1.45);rim.position.set(6,-1,-4);scene.add(rim);
   const control=new OrbitControls(camera,canvas);control.target.set(0,.15,0);control.enablePan=false;control.enableDamping=!reduced;control.dampingFactor=.09;control.minDistance=10;control.maxDistance=25;control.rotateSpeed=.62;
-  let frame=0,disposed=false,turn=false,separated=false,inView=true,renderCount=0,frameTime=performance.now(),lastAngle=0,settle=0;
+  let frame=0,disposed=false,lost=false,suspended=false,turn=false,separated=false,separation=0,cold=false,inView=true,renderCount=0,frameTime=performance.now(),settle=0;
   const signal=new AbortController();
   function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.fov=camera.aspect<.83?48:38;camera.updateProjectionMatrix();invalidate();}
-  function metrics(){canvas.dataset.ready='true';canvas.dataset.frames=String(++renderCount);canvas.dataset.triangles=String(renderer.info.render.triangles);canvas.dataset.drawCalls=String(renderer.info.render.calls);canvas.dataset.layers=String(world.root.userData.layers);canvas.dataset.autoRotate=String(turn);canvas.dataset.separated=String(separated);canvas.dataset.camera=camera.position.toArray().map(n=>n.toFixed(4)).join(',');}
-  function render(now){frame=0;if(disposed||document.hidden)return;const dt=Math.min((now-frameTime)/1000,.1);frameTime=now;
-    if(turn){world.root.rotation.y+=dt*.13;lastAngle=world.root.rotation.y;}
+  function metrics(){canvas.dataset.ready='true';canvas.dataset.title='删了一百遍';canvas.dataset.frames=String(++renderCount);canvas.dataset.triangles=String(renderer.info.render.triangles);canvas.dataset.drawCalls=String(renderer.info.render.calls);canvas.dataset.layers=String(world.root.userData.layers);canvas.dataset.autoRotate=String(turn);canvas.dataset.separated=String(separated);canvas.dataset.separation=separation.toFixed(3);canvas.dataset.light=cold?'cool':'studio';canvas.dataset.camera=camera.position.toArray().map(n=>n.toFixed(4)).join(',');}
+  function render(now){frame=0;if(disposed||lost||suspended||document.hidden)return;const dt=Math.min((now-frameTime)/1000,.2);frameTime=now;
+    if(turn&&inView)world.root.rotation.y+=dt*.13;
+    const goal=Number(separated);separation=reduced?goal:T.MathUtils.damp(separation,goal,8,dt);if(Math.abs(separation-goal)<.002)separation=goal;world.setSeparated(separation);
     control.update();renderer.render(scene,camera);metrics();
-    if((turn&&inView)||settle-->0)invalidate(false);
+    if((turn&&inView)||separation!==goal||settle-->0)invalidate(false);
   }
-  function invalidate(restart=false){if(disposed)return;if(restart)settle=30;if(!frame&&!document.hidden){frameTime=performance.now();frame=requestAnimationFrame(render);}}
+  function invalidate(restart=false){if(disposed||lost||suspended)return;if(restart)settle=30;if(!frame&&!document.hidden){frameTime=performance.now();frame=requestAnimationFrame(render);}}
   control.addEventListener('change',()=>invalidate());control.addEventListener('start',()=>{settle=30;});control.addEventListener('end',()=>{settle=reduced?1:30;invalidate();});
   const sizeObserver=new ResizeObserver(resize);sizeObserver.observe(canvas);
   const visibility=new IntersectionObserver(([e])=>{inView=e.isIntersecting;if(inView)invalidate();});visibility.observe(canvas);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)invalidate();},{signal:signal.signal});
-  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();onError('三维画面暂时不可用，已保留概念实景图。');},{signal:signal.signal});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else invalidate();},{signal:signal.signal});
+  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();lost=true;cancelAnimationFrame(frame);frame=0;control.enabled=false;onError('三维画面暂时不可用，已保留概念实景图。');},{signal:signal.signal});
   canvas.addEventListener('keydown',e=>{
     if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.code))return;e.preventDefault();
     const spherical=new T.Spherical().setFromVector3(camera.position.clone().sub(control.target));
@@ -46,10 +47,12 @@ export function createCrossoverViewer(canvas,{onReady=()=>{},onError=()=>{}}={})
   resize();renderer.render(scene,camera);metrics();onReady();
   return {
     setTurn(value){turn=Boolean(value);settle=1;invalidate();},
-    setSeparated(value){separated=Boolean(value);world.setSeparated(separated);settle=1;invalidate();},
-    setView(kind){world.root.rotation.set(0,0,0);turn=false;control.target.set(0,.15,0);camera.position.set(...(kind==='back'?[0,.24,-17.2]:kind==='side'?[12,2,12]:[0,.24,17.2]));control.update();settle=reduced?1:30;invalidate();},
-    async exportGLB(){const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');return await new GLTFExporter().parseAsync(world.root,{binary:true,onlyVisible:true});},
-    async capture(){renderer.render(scene,camera);return await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));},
+    setSeparated(value){separated=Boolean(value);settle=1;invalidate();},
+    setLight(value){cold=Boolean(value);key.color.set(cold?'#d6e2ff':'#fffaf4');rim.color.set(cold?'#ffd9d9':'#dce3f5');scene.environmentIntensity=cold?1.18:1.0;invalidate();},
+    setView(kind){world.root.rotation.set(0,0,0);turn=false;control.target.set(0,.15,0);camera.position.set(...(kind==='back'?[0,.24,-16.6]:kind==='side'?[12,2,12]:[0,.24,16.6]));control.update();settle=reduced?1:30;invalidate();},
+    suspend(value){suspended=Boolean(value);if(suspended){cancelAnimationFrame(frame);frame=0;}else invalidate();},
+    async exportGLB(){const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');const rotation=world.root.rotation.clone();try{world.root.rotation.set(0,0,0);world.setSeparated(0);world.root.updateMatrixWorld(true);return await new GLTFExporter().parseAsync(world.root,{binary:true,onlyVisible:true,maxTextureSize:1024});}finally{world.root.rotation.copy(rotation);world.setSeparated(separation);invalidate();}},
+    async capture({background=false}={}){if(disposed||lost)throw new Error('Renderer unavailable');renderer.render(scene,camera);let output=canvas;if(background){output=document.createElement('canvas');output.width=canvas.width;output.height=canvas.height;const ctx=output.getContext('2d');ctx.fillStyle='#e4e3e0';ctx.fillRect(0,0,output.width,output.height);ctx.drawImage(canvas,0,0);}return await new Promise((resolve,reject)=>output.toBlob(b=>b?resolve(b):reject(new Error('Image export failed')),'image/png'));},
     stats(){return {...canvas.dataset};},
     dispose(){disposed=true;cancelAnimationFrame(frame);signal.abort();sizeObserver.disconnect();visibility.disconnect();control.dispose();world.dispose();environment.dispose();renderer.dispose();}
   };

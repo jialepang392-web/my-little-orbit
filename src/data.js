@@ -1,4 +1,4 @@
-export const SITE = Object.freeze({ title: '思念若是一首诗', version: '0.6.0', storageKey: 'little-orbit.exploration.v1' });
+export const SITE = Object.freeze({ title: '思念若是一首诗', version: '0.6.1', storageKey: 'little-orbit.exploration.v1' });
 // Coordinates and writing below are editable prototype content, not personal biography.
 export const LANDMARKS = Object.freeze([
   { id: 'home', name: '月洞门', english: 'MOON GATE', icon: '⌂', color: '#a4b5a2', lat: 60, lon: 82, model: 'house', article: 'welcome.md', treasure: '初见的钥匙', message: '世界很大，先从认识自己开始。', summary: '关于这颗星球，以及它还没有写完的自我介绍。' },

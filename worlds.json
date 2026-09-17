@@ -1,7 +1,7 @@
 {
-  "version": "0.6.0",
+  "version": "0.6.1",
   "worlds": [
     {"id":"poem","title":"思念若是一首诗","english":"IF LONGING WERE A POEM","page":"poem.html","cover":"assets/review/current.webp","status":"published","interaction":"exploration"},
-    {"id":"crossover","title":"错频","english":"CROSSOVER 02","page":"crossover.html","cover":"assets/crossover/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":true}
+    {"id":"crossover","title":"删了一百遍","english":"DELETED A HUNDRED TIMES","page":"crossover.html","cover":"assets/crossover/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":false}
   ]
 }

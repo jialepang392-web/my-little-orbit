@@ -1,9 +1,9 @@
-import { LANDMARKS, landmarkById } from './data.js?v=060';
-import { addDiscovery, readProgress, writeProgress } from './storage.js?v=060';
-import { escapeHtml, renderMarkdown } from './markdown.js?v=060';
-import { downloadPostcard } from './postcard.js?v=060';
-import { artImage } from './art-paths.js?v=060';
-import { iconSvg } from './illustrations.js?v=060';
+import { LANDMARKS, landmarkById } from './data.js?v=061';
+import { addDiscovery, readProgress, writeProgress } from './storage.js?v=061';
+import { escapeHtml, renderMarkdown } from './markdown.js?v=061';
+import { downloadPostcard } from './postcard.js?v=061';
+import { artImage } from './art-paths.js?v=061';
+import { iconSvg } from './illustrations.js?v=061';
 
 const $=(selector)=>document.querySelector(selector);
 let storage=null;try{storage=window.localStorage;}catch{/* Private/blocked storage: session-only progress. */}
@@ -120,7 +120,7 @@ function setReading(value){
 async function bootWorld(){
   if(worldState!=='idle')return;worldState='loading';let timeout;
   try{
-    const module=await Promise.race([import('./world.js?v=060'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
+    const module=await Promise.race([import('./world.js?v=061'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
     world=module.createWorld({canvas,labelLayer:$('#landmark-labels'),reducedMotion,onNearby:setNearby,onNotice:toast,
       onNavigation:updateJourney,
       onArrival:(id)=>{void openLocation(id,true);},
