@@ -1,6 +1,6 @@
-import { escapeHtml as xml } from './markdown.js?v=090';
-import { artImage } from './art-paths.js?v=090';
-import { postcardMiniature } from './illustrations.js?v=090';
+import { escapeHtml as xml } from './markdown.js?v=091';
+import { artImage } from './art-paths.js?v=091';
+import { postcardMiniature } from './illustrations.js?v=091';
 export function postcardSvg(item, imageData='') {
   const characters=Array.from(item.message),lines=[];
   for(let i=0;i<characters.length;i+=18)lines.push(characters.slice(i,i+18).join(''));

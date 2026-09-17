@@ -1,9 +1,9 @@
 /** A full spherical assemblage of paper, pewter water, moss and orchid leaves. */
 import * as T from 'three';
-import { fromLatLon, clamp, seededRandom } from './math.js?v=090';
-import { part, box, ball, cyl, mergeStatic, makePine, makeBamboo, makeRock, makeInkstone, makePlum, makeOrchid, makeFern, makeReeds, makeFlowerCluster, makeSeedPod } from './garden-models.js?v=090';
-import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache, collageTextureReady, attachStoneTexture } from './collage-layers.js?v=090';
-import { makeReferenceAccents } from './reference-art.js?v=090';
+import { fromLatLon, clamp, seededRandom } from './math.js?v=091';
+import { part, box, ball, cyl, mergeStatic, makePine, makeBamboo, makeRock, makeInkstone, makePlum, makeOrchid, makeFern, makeReeds, makeFlowerCluster, makeSeedPod } from './garden-models.js?v=091';
+import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache, collageTextureReady, attachStoneTexture } from './collage-layers.js?v=091';
+import { makeReferenceAccents } from './reference-art.js?v=091';
 export const PLANET_RADIUS=5.4;
 const UP=new T.Vector3(0,1,0),WATER=5.425;
 const paperDecks=[[[17,103],2.4,2.8,-.32],[[35,83],1.1,.85,.35],[[-19,-108],2,2.6,.4]].map(([ll,w,h,angle])=>{
