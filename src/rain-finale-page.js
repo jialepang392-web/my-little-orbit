@@ -6,7 +6,7 @@ function fail(){stage.classList.remove('is-ready');stage.setAttribute('aria-busy
 function toggle(id,value,active,inactive){const b=document.querySelector(id);b.setAttribute('aria-pressed',String(value));b.textContent=value?active:inactive;}
 try{
   let timeout;
-  const load=Promise.all([import('./rain-finale/viewer.js?v=070'),fetch('./assets/rain-finale/title-glyphs.json').then(r=>{if(!r.ok)throw new Error('Title outlines missing');return r.json();})]);
+  const load=Promise.all([import('./rain-finale/viewer.js?v=081'),fetch('./assets/rain-finale/title-glyphs.json').then(r=>{if(!r.ok)throw new Error('Title outlines missing');return r.json();})]);
   const [{createRainViewer},title]=await Promise.race([load,new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('Scene load timeout')),25000);})]).finally(()=>clearTimeout(timeout));
   viewer=createRainViewer(canvas,{glyphs:title.glyphs,onReady(){stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');buttons.forEach(b=>b.disabled=false);status.textContent='真实三维 / 拖动旋转 · 滚轮缩放 · 方向键亦可';},onError:fail});
   document.querySelector('#rotate-toggle').addEventListener('click',()=>{turn=!turn;viewer.setTurn(turn);toggle('#rotate-toggle',turn,'停止转动','缓慢转动');});

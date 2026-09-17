@@ -1,4 +1,18 @@
-# 我的小宇宙 · A Collection of Worlds
+# 我的小宇宙 · A Collection of Worlds — v0.8.1
+
+Current exhibition order: **昨天，今天 / Yesterday, Today → 删了一百遍 / Deleted a Hundred Times → 思念若是一首诗 / If Longing Were a Poem → 雨终曲 / Rain Finale**.
+
+The four worlds preserve their independent artwork. A shared, theme-aware native thumbnail picker indicates the current world; adjacent-work previews link the full exhibition into a loop. Returning to the collection lands at the current work's card. Navigation remains usable without JavaScript or the 3D engine. The gallery only loads static covers, not four WebGL scenes.
+
+Collection: https://jialepang392-web.github.io/my-little-orbit/?v=081
+
+Yesterday, Today: https://jialepang392-web.github.io/my-little-orbit/yesterday-today.html?v=081
+
+Yesterday, Today includes eleven authored layers of pearlescent film, red corrugated conduit, a record label, glass lenses, blossoms and feather barbs. Its covers, details and downloadable GLB come from the actual scene. No reference photograph, performer credit, watermark, audio, lyrics or font file is included.
+
+Version 0.8.1 adds shared wayfinding without changing the original models, material maps or artwork styles. Third-party license information below continues to apply.
+
+## Historical v0.7 notes
 
 Three independently authored worlds: 思念若是一首诗 / the accepted Paper Garden; 删了一百遍 / DELETED A HUNDRED TIMES, a monochrome paper/foil/type sculpture; and 雨终曲 / RAIN FINALE, a nocturnal assemblage of graphite, cobalt light, silver gauze and torn typography.
 

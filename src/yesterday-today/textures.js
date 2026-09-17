@@ -1,6 +1,6 @@
 /** Authored, deterministic print and pearlescent materials. No photo projection. */
 import * as T from 'three';
-import { seededRandom } from '../math.js?v=070';
+import { seededRandom } from '../math.js?v=081';
 
 const makeCanvas = (n=1024) => {const c=document.createElement('canvas');c.width=c.height=n;return c;};
 function tex(c,data=false){const t=new T.CanvasTexture(c);t.colorSpace=data?T.NoColorSpace:T.SRGBColorSpace;t.anisotropy=4;return t;}
@@ -16,7 +16,7 @@ export function makeYesterdayTextures(glyphs={}){
   }
   function label(back=false){
     const c=makeCanvas(),x=c.getContext('2d');
-    const fill=x.createLinearGradient(30,70,940,1000);fill.addColorStop(0,'#dddae7');fill.addColorStop(.36,'#ede7df');fill.addColorStop(.7,'#f1ccd2');fill.addColorStop(1,'#dddae5');x.fillStyle=fill;x.fillRect(0,0,1024,1024);
+    const fill=x.createLinearGradient(30,70,940,1000);fill.addColorStop(0,'#c4bfd9');fill.addColorStop(.36,'#e5dcd5');fill.addColorStop(.7,'#e7b3c3');fill.addColorStop(1,'#c8bfd8');x.fillStyle=fill;x.fillRect(0,0,1024,1024);
     x.strokeStyle='#a18c9a';x.lineWidth=1.5;for(const radius of [445,463,472]){x.beginPath();x.arc(512,512,radius,0,Math.PI*2);x.stroke();}
     x.fillStyle='#483747';x.textAlign='center';x.font='bold 43px Georgia,serif';x.fillText(back?'The other side':'Yesterday',512,233);
     x.save();x.translate(500,508);x.rotate(-.06);
