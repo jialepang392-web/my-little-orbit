@@ -1,0 +1,207 @@
+{
+  "version": "0.3.0",
+  "method": "Blender 4.5.10 weighted rigging and Cycles CPU rendering; v0.2 original geometry retained",
+  "assets": [
+    {
+      "id": "traveller",
+      "bytes": 454428,
+      "sha256": "23e13f74c8d08df9946aa2bf846f4f842501b697ff3ce75bf0825f8897818963",
+      "animations": [
+        "Idle",
+        "Walk",
+        "Wave"
+      ],
+      "skins": 1,
+      "triangles": 4656,
+      "renderBytes": 11722
+    },
+    {
+      "id": "guide-sprout",
+      "bytes": 114684,
+      "sha256": "df9f7e02b0c2ecfba1732a80048d2552c5d720c9fe01d492ba2514b07947046a",
+      "animations": [
+        "Float"
+      ],
+      "skins": 1,
+      "triangles": 2436,
+      "renderBytes": 8244
+    },
+    {
+      "id": "home",
+      "bytes": 1996936,
+      "sha256": "d8f211817f203ec2176b82d3e503764d66fd1c74449d626970207780906a7d59",
+      "animations": [],
+      "skins": 0,
+      "triangles": 19708,
+      "renderBytes": 18308
+    },
+    {
+      "id": "journal",
+      "bytes": 3462124,
+      "sha256": "e1539af1e3cccf6efd4d4804093360a6e181f21e7b3fc351b3c1ceeaef082643",
+      "animations": [],
+      "skins": 0,
+      "triangles": 34208,
+      "renderBytes": 18414
+    },
+    {
+      "id": "studio",
+      "bytes": 2146048,
+      "sha256": "c755310c0a68f564f7c11b09bbf62da9f3da8a068b37cffcd9f91a92b10d825f",
+      "animations": [],
+      "skins": 0,
+      "triangles": 21116,
+      "renderBytes": 18072
+    },
+    {
+      "id": "lab",
+      "bytes": 543164,
+      "sha256": "4a25ff65ba2c5c4b47ebc57ccb5fa91c83111eed3f3ac1499fe3b7c86022608a",
+      "animations": [],
+      "skins": 0,
+      "triangles": 5352,
+      "renderBytes": 11462
+    },
+    {
+      "id": "library",
+      "bytes": 2119236,
+      "sha256": "0429b12d38d65be0f46b2d0697f90d2c7a5ab0216eb442ca53f9042406d23813",
+      "animations": [],
+      "skins": 0,
+      "triangles": 20896,
+      "renderBytes": 20464
+    },
+    {
+      "id": "observatory",
+      "bytes": 606056,
+      "sha256": "3c4ba36b58651153e0730cdc3146ae7f5dcb9d9bf47b100624af8a1db23b0d48",
+      "animations": [],
+      "skins": 0,
+      "triangles": 5984,
+      "renderBytes": 14922
+    },
+    {
+      "id": "mail",
+      "bytes": 2092140,
+      "sha256": "c9b8c608cd4befeaf6e50e4eea08f0094925d86b017142df6202c8e47d681e50",
+      "animations": [],
+      "skins": 0,
+      "triangles": 20620,
+      "renderBytes": 21318
+    },
+    {
+      "id": "camp",
+      "bytes": 524772,
+      "sha256": "9b582bc673498e98cd78353c22d7d4c212b820552f0ddcb73f23366eaa7d53ba",
+      "animations": [],
+      "skins": 0,
+      "triangles": 5279,
+      "renderBytes": 15260
+    },
+    {
+      "id": "guide-petal",
+      "bytes": 116760,
+      "sha256": "f2bcd0c4d9b1fe82211a17e07eafc0d5daf961b09d40ba3c6538764ee4e09c29",
+      "animations": [
+        "Float"
+      ],
+      "skins": 1,
+      "triangles": 2436,
+      "renderBytes": 6976
+    },
+    {
+      "id": "guide-ember",
+      "bytes": 114676,
+      "sha256": "ff010e3b7a1d6fb3b1dbc883a63f98d195ec5918f02b6f5f1218a7ae38a71bcd",
+      "animations": [
+        "Float"
+      ],
+      "skins": 1,
+      "triangles": 2436,
+      "renderBytes": 8716
+    },
+    {
+      "id": "guide-droplet",
+      "bytes": 114684,
+      "sha256": "ce21c7e4ea5f2ecc8b41ce970ec5bf13f6e4508e085e1f4249ee8f6a6f6a256e",
+      "animations": [
+        "Float"
+      ],
+      "skins": 1,
+      "triangles": 2436,
+      "renderBytes": 8818
+    },
+    {
+      "id": "treasure-home",
+      "bytes": 58920,
+      "sha256": "e16615d87452017d80a9495a63e2c9d4a87c426b010b00adcd270a0e40c1e70a",
+      "animations": [],
+      "skins": 0,
+      "triangles": 564,
+      "renderBytes": 6902
+    },
+    {
+      "id": "treasure-journal",
+      "bytes": 105720,
+      "sha256": "8e49250661e0a2ae26a1541ec0194399ee122e4db44418cbb053325cbdba737e",
+      "animations": [],
+      "skins": 0,
+      "triangles": 1000,
+      "renderBytes": 5076
+    },
+    {
+      "id": "treasure-studio",
+      "bytes": 114012,
+      "sha256": "55ae6c3cecae7869046bfc71da94d43fc268565500f4a893a643dfd82b3f3c90",
+      "animations": [],
+      "skins": 0,
+      "triangles": 1104,
+      "renderBytes": 9100
+    },
+    {
+      "id": "treasure-lab",
+      "bytes": 46264,
+      "sha256": "f4ba4d13780724b3c9352214802ee45a76c82c070f224370030bcc435446b170",
+      "animations": [],
+      "skins": 0,
+      "triangles": 420,
+      "renderBytes": 8336
+    },
+    {
+      "id": "treasure-library",
+      "bytes": 34912,
+      "sha256": "8c48bf00918e7b52930b175b00b17029028aa8be0a674ead156d9cb1be5b9a4b",
+      "animations": [],
+      "skins": 0,
+      "triangles": 324,
+      "renderBytes": 6756
+    },
+    {
+      "id": "treasure-observatory",
+      "bytes": 27716,
+      "sha256": "27cde06af15ab31683783e4d98d75da8e928a5a7f8e7f0e7eef4c8a320797919",
+      "animations": [],
+      "skins": 0,
+      "triangles": 248,
+      "renderBytes": 10186
+    },
+    {
+      "id": "treasure-mail",
+      "bytes": 31192,
+      "sha256": "44cd0b4706a0c375df96aa5b3a92b92cdd24eb71529d49fd8bcc6f5b5820162a",
+      "animations": [],
+      "skins": 0,
+      "triangles": 280,
+      "renderBytes": 3612
+    },
+    {
+      "id": "treasure-camp",
+      "bytes": 453868,
+      "sha256": "2295742f4d3a0aa50bddc3719a6737a78e82b3b8408847236f0e2aeb4f377ed3",
+      "animations": [],
+      "skins": 0,
+      "triangles": 4416,
+      "renderBytes": 12366
+    }
+  ]
+}
