@@ -1,9 +1,9 @@
-import { LANDMARKS, landmarkById } from './data.js?v=050';
-import { addDiscovery, readProgress, writeProgress } from './storage.js?v=050';
-import { escapeHtml, renderMarkdown } from './markdown.js?v=050';
-import { downloadPostcard } from './postcard.js?v=050';
-import { artImage } from './art-paths.js?v=050';
-import { iconSvg } from './illustrations.js?v=050';
+import { LANDMARKS, landmarkById } from './data.js?v=060';
+import { addDiscovery, readProgress, writeProgress } from './storage.js?v=060';
+import { escapeHtml, renderMarkdown } from './markdown.js?v=060';
+import { downloadPostcard } from './postcard.js?v=060';
+import { artImage } from './art-paths.js?v=060';
+import { iconSvg } from './illustrations.js?v=060';
 
 const $=(selector)=>document.querySelector(selector);
 let storage=null;try{storage=window.localStorage;}catch{/* Private/blocked storage: session-only progress. */}
@@ -89,7 +89,7 @@ function showGuide(){
 }
 function showHelp(){
   openDialog('一份游园说明。','HOW TO WANDER / 操作说明');
-  body.innerHTML='<p><strong>点一处，走过去：</strong>点击星球表面，旅人会沿球面走到那里。WASD、方向键和场景下方的触屏方向按钮均可自由移动，也会取消当前行走目标。</p><p><strong>看看另一面：</strong>在画布上向任意方向拖动，转动完整星球；滚轮调整远近。拖动不会触发行走。按「回到起点」恢复初始位置与视角。</p><p><strong>随纸鹤赴约：</strong>点击场景标签或「园中八景」中的地标，纸鹤会沿途引路。走近后按 E 或点击互动提示，可以打开故事并收下纪念物。</p><p><strong>坐下读一页：</strong>右上角可进入纯阅读。直接阅读文章不会增加探索收藏。</p><p><strong>带走一张明信片：</strong>抵达地标后可以下载含场景封面的 SVG 明信片。探索进度保存在当前浏览器。</p><p><strong>光线与画质：</strong>场景下方可切换日光、黄昏及轻量画质。低画质保留完整移动和内容功能。</p><p class="note">v0.4 园林版使用实时几何造型与关节动画。页脚的 v0.3 Blender 工程、模型与骨骼预览是旧版资产存档，不代表本版园林模型的源工程。当前尚无复杂碰撞、地形脚部 IK、账号或留言上传。</p>';
+  body.innerHTML='<p><strong>点一处，走过去：</strong>点击星球表面，旅人会沿球面走到那里。WASD、方向键和场景下方的触屏按钮可以自由移动，也会取消当前目标。</p><p><strong>看看另一面：</strong>拖动转动完整星球，滚轮调整远近；拖动不会触发行走。按「回到起点」恢复位置与视角。</p><p><strong>随纸鹤赴约：</strong>点击「显示八景」或底部地标，纸鹤会沿途引路。走近后按 E 或点击互动提示，可以阅读并收下纪念物。</p><p><strong>坐下读一页：</strong>右上角可进入纯阅读，直接阅读不增加探索收藏。到达地标后，可以下载场景明信片。</p><p><strong>其他星球：</strong>点击页首的「全部星球」返回作品集。每一颗保留独立的美术风格。</p><p class="note">本园林使用实时几何与关节动画。当前尚无复杂碰撞、地形脚部 IK、账号或留言上传。</p>';
 }
 
 function setNearby(id){nearby=id;const item=landmarkById(id);$('#nearby-prompt').hidden=!item;if(item)$('#nearby-name').textContent=`探索${item.name}`;for(const button of document.querySelectorAll('[data-destination]'))button.classList.toggle('active',button.dataset.destination===id);}
@@ -120,7 +120,7 @@ function setReading(value){
 async function bootWorld(){
   if(worldState!=='idle')return;worldState='loading';let timeout;
   try{
-    const module=await Promise.race([import('./world.js?v=050'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
+    const module=await Promise.race([import('./world.js?v=060'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
     world=module.createWorld({canvas,labelLayer:$('#landmark-labels'),reducedMotion,onNearby:setNearby,onNotice:toast,
       onNavigation:updateJourney,
       onArrival:(id)=>{void openLocation(id,true);},

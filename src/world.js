@@ -1,20 +1,21 @@
 import * as T from 'three';
-import { LANDMARKS, landmarkById } from './data.js?v=050';
-import { fromLatLon, seededRandom, clamp } from './math.js?v=050';
-import { orbitFrame, dragOrbit, surfaceStep } from './navigation.js?v=050';
-import { frameSeconds, shouldAnimate } from './runtime.js?v=050';
-import { Stars } from './vendor/stars.js?v=050';
-import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=050';
-import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=050';
-import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=050';
-import { AssetSlots, disposeTree } from './assets.js?v=050';
-import { makeCollageLight } from './collage-light.js?v=050';
+import { LANDMARKS, landmarkById } from './data.js?v=060';
+import { fromLatLon, seededRandom, clamp } from './math.js?v=060';
+import { orbitFrame, dragOrbit, surfaceStep } from './navigation.js?v=060';
+import { frameSeconds, shouldAnimate } from './runtime.js?v=060';
+import { Stars } from './vendor/stars.js?v=060';
+import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=060';
+import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=060';
+import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=060';
+import { AssetSlots, disposeTree } from './assets.js?v=060';
+import { makeCollageLight } from './collage-light.js?v=060';
 
 const R=5.4,UP=new T.Vector3(0,1,0);
 const initialNormal=new T.Vector3(...fromLatLon(-24,84));
 function placeOnSurface(object,normal,height=R){object.position.copy(normal).multiplyScalar(height);object.quaternion.setFromUnitVectors(UP,normal);}
 export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},onError=()=>{},onNotice=()=>{},onNavigation=()=>{},reducedMotion=false}) {
-  const parameters=new URLSearchParams(location.search),blenderEdition=parameters.get('edition')==='blender',originalEdition=parameters.get('assets')==='original';
+  // Forest is archived, not an undocumented public query-parameter mode.
+  const blenderEdition=false,originalEdition=false;
   const historicalEdition=blenderEdition||originalEdition;
   const makeAvatar=historicalEdition?makeOriginalAvatar:makeGardenAvatar,makeGuide=historicalEdition?makeOriginalGuide:makeGardenGuide,makeLandmark=historicalEdition?makeOriginalLandmark:makeGardenLandmark;
   let renderer;

@@ -1,4 +1,4 @@
-import { LANDMARKS, SITE } from './data.js?v=050';
+import { LANDMARKS, SITE } from './data.js?v=060';
 const validIds = new Set(LANDMARKS.map((item) => item.id));
 export function cleanProgress(value) {
   if (!value || value.version !== 1 || !Array.isArray(value.visited)) return { version: 1, visited: [] };
