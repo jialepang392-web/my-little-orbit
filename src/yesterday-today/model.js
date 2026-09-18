@@ -4,8 +4,8 @@
  */
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { seededRandom } from '../math.js?v=0120';
-import { makeYesterdayTextures } from './textures.js?v=0120';
+import { seededRandom } from '../math.js?v=0121';
+import { makeYesterdayTextures } from './textures.js?v=0121';
 const Z=new T.Vector3(0,0,1),Y=new T.Vector3(0,1,0),TAU=Math.PI*2;
 const v=p=>new T.Vector3(...p);
 
@@ -111,6 +111,30 @@ export function makeYesterdayToday(){
   // Keep the optical centre uninterrupted: attachment points live on the rim.
   record.add(ball([-.63,.61,.208],.021,steel,[1,1,.54]));
   record.add(ball([.49,-.50,.255],.045,rose,[.86,1.13,.67]));
+  // v0.12.1 / a quiet conservation edge, confined to the existing lens.
+  // Keep the botanical exposure, optical material and clear centre unchanged.
+  // No seeded random calls here: every other authored layer stays identical.
+  const etching=mat({color:'#eee5f2',roughness:.46,metalness:.18,
+    transmission:.12,thickness:.003,ior:1.24,iridescence:.28,clearcoat:.24});
+  for(const [r,start,sweep,z] of [[.850,.18,1.10,.207],[.865,.40,.43,.203],[.850,1.48,.24,.207]]){
+    const trace=mesh(new T.TorusGeometry(r,.0018,5,64,sweep),etching,[.02,.012,z]);
+    trace.rotation.z=start;trace.castShadow=false;record.add(trace);
+  }
+  // A short, open crescent of seed pearls; deliberately not a full necklace.
+  for(let i=0;i<15;i++){
+    const a=.27+i*.070,r=.882,size=.0057+.0011*Math.sin(i*.86)**2;
+    const bead=ball([.02+Math.cos(a)*r,.012+Math.sin(a)*r,.198],size,pearl,[1,1,.65]);
+    bead.castShadow=false;record.add(bead);
+  }
+  // Two almost-clear sleeve keepers cross the rim, with tiny silver pinheads.
+  for(const a of [.11,1.31]){
+    const x=.02+Math.cos(a)*.928,y=.012+Math.sin(a)*.928;
+    const keeper=inlay(.052,.118,[x,y,.218],a-Math.PI/2,glass,.016);
+    keeper.castShadow=false;record.add(keeper);
+    record.add(ball([.02+Math.cos(a)*.968,.012+Math.sin(a)*.968,.226],.009,steel,[1,1,.43]));
+  }
+  record.userData.refinement={edition:'0.12.1',etchedArcs:3,microPearls:15,
+    clearKeepers:2,zone:'rim only; botanical centre unchanged',hasText:false};
   // The first visual review rejected a broad, flat C-shaped frame. A narrow
   // bent bridge now connects two folds without becoming a second front plate.
   films.add(ribbon([[-1.34,1.15,1.60],[-.72,1.46,2.13],[.10,1.31,2.30],[.66,.73,2.09]],.12,lilac,1.3));
@@ -232,6 +256,6 @@ export function makeYesterdayToday(){
   for(const g of groups){const inv=g.matrixWorld.clone().invert(),buckets=new Map();g.traverse(o=>{if(!o.isMesh)return;originals.add(o.geometry);const geo=o.geometry.clone();geo.applyMatrix4(inv.clone().multiply(o.matrixWorld));if(!geo.index)geo.setIndex(Array.from({length:geo.attributes.position.count},(_,i)=>i));if(!geo.attributes.uv)geo.setAttribute('uv',new T.Float32BufferAttribute(new Float32Array(geo.attributes.position.count*2),2));const key=o.material.uuid;if(!buckets.has(key))buckets.set(key,{m:o.material,geos:[]});buckets.get(key).geos.push(geo);});g.clear();for(const {m,geos} of buckets.values()){const merged=mergeGeometries(geos,false);geos.forEach(g=>g.dispose());if(!merged)throw new Error('Artwork geometry merge failed');g.add(mesh(merged,m));}}
   originals.forEach(g=>g.dispose());
   const positions=groups.map(g=>g.position.clone());
-  root.userData={title:'昨天，今天',english:'Yesterday, Today',version:'0.12.0',layers:groups.length,coreAxes:[3.88,4.01,3.88],labelRadius:.894*1.09,centerTreatment:'text-free memory lens',centerHasText:false,wrapTreatment:'thin lilac and blue cellophane; no corrugated hose',provenance:'Original botanical memory exposure under convex glass; unequal hydrangea clusters, translucent sleeves and feather veils. Outer page title retained. No reference pixels, artist credits, watermark or font file.'};
+  root.userData={title:'昨天，今天',english:'Yesterday, Today',version:'0.12.1',layers:groups.length,coreAxes:[3.88,4.01,3.88],labelRadius:.894*1.09,centerTreatment:'text-free memory lens',centerHasText:false,wrapTreatment:'thin lilac and blue cellophane; no corrugated hose',provenance:'Original botanical memory exposure under convex glass; unequal hydrangea clusters, translucent sleeves and feather veils. Outer page title retained. No reference pixels, artist credits, watermark or font file.'};
   return {root,groups,setSeparated(value){const t=T.MathUtils.clamp(Number(value),0,1);groups.forEach((g,i)=>{g.position.copy(positions[i]);if(i){g.position.z+=(i%2?1:-1)*(.11+i*.023)*t;g.position.x+=(i%3-1)*.07*t;}});},dispose(){const gs=new Set(),ms=new Set(),ts=new Set(Object.values(maps));root.traverse(o=>{if(o.geometry)gs.add(o.geometry);if(o.material)ms.add(o.material);});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());ts.forEach(t=>t.dispose());}};
 }

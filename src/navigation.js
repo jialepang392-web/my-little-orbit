@@ -1,4 +1,4 @@
-import { clamp, cross, dot, normalize, tangentToward } from './math.js?v=0120';
+import { clamp, cross, dot, normalize, tangentToward } from './math.js?v=0121';
 
 const rotate = (vector, axis, angle) => {
   const c = Math.cos(angle), s = Math.sin(angle), crossed = cross(axis, vector), along = dot(axis, vector) * (1 - c);

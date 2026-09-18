@@ -1,15 +1,15 @@
 {
   "status": "passed",
   "exported": true,
-  "version": "0.12.0",
-  "sceneVersion": "0.12.0",
-  "renderedAt": "2026-09-18T11:29:33.148911+00:00",
+  "version": "0.12.1",
+  "sceneVersion": "0.12.1",
+  "renderedAt": "2026-09-18T12:22:41.015411+00:00",
   "sourceHashes": {
-    "src/yesterday-today/model.js": "4f556151ea7196bd78fa6ee3754aee690a304e886eb05033c0f318512d723665",
+    "src/yesterday-today/model.js": "194a114fe758a29bba8769ea4eb6a24d2b7edab8077930f38401a811e0647322",
     "src/yesterday-today/textures.js": "07c0d77f24883d1af3797f412dd0fde53fa5d9cdc206450b11d293220fd73eb2",
     "src/yesterday-today/viewer.js": "12823a0102ea62d752abdfa5e80bd47369aab29109f1c5a82771ac432cccdb96",
     "src/yesterday-today-page.js": "2ffcc79a2d31806ed98fc05b0f2485c8200bf5e22abc5881ac7df534b1ef0a17",
-    "yesterday-today.html": "164d6763fb8bbde313115ab5aefd8a78d12795910ff6efc9883cfa36b87e9c60",
+    "yesterday-today.html": "5faddeeb9d2e232321c32baed235a00694c3da2d3d9af9db343909376df8d12c",
     "yesterday-today.css": "4fab9f2afe6dafbe3e5a5d377a5c33d11619a4d12bbfca19fc1dfbb50e2400bb",
     "assets/yesterday-today/title-glyphs.json": "95994c1541307f5fdbaca25e6f505d8bf13ad01f1740de9b7538df0778b16d3d",
     "assets/yesterday-today/title.svg": "04071bfe444c30b898cb6bf674d90eb25ca92656f1ab9ae5bfbe6eafa96a6214",
@@ -17,20 +17,20 @@
     "assets/yesterday-today/today.svg": "bce3ca4de826c16c676883763d23891f560c1628218e4046f2208c50308ee470"
   },
   "generatorHashes": {
-    "scripts/build_yesterday.py": "fe2382bff9776ff35ff86deac88d118c0f3720e8a93871f9124bdc9b14f7337d"
+    "scripts/build_yesterday.py": "7dd831f418468edb80e01c83a1888a2df185cc8c7dbc4da065721e994e23cc3a"
   },
   "artifacts": {
     "poster.webp": {
-      "sha256": "c41bae941418e0582b214df0191d954a42ae15dd6a7ae73daa6e91b815748f44",
-      "bytes": 202290
+      "sha256": "3bd0ec79db8b9d409a131755abcf5817813d171ae4c925971f23226de68ac356",
+      "bytes": 203568
     },
     "cover.webp": {
-      "sha256": "fe529a99e764a8be6e1f0269fd587e321272bac08eb5fbba67e719a9cf752ce9",
-      "bytes": 185360
+      "sha256": "c35e15a600b498c2cf820de3d7121e6bbcf809eebaa7afafbaf73b706d35ee53",
+      "bytes": 186386
     },
     "detail-record.webp": {
-      "sha256": "ae12261444c369882209af9b89e4b260bbfe1f753629ee25b94a57b4dd9d5a91",
-      "bytes": 175682
+      "sha256": "f1795baa55ba4489053a5b2d54c671a01a90d7fb5d9af52e79f3dd22f6d65b99",
+      "bytes": 177898
     },
     "yesterday.svg": {
       "sha256": "50a25d81f76ab2e69db406a466f1cfd5bd29ae13a623fe7452f336a2929230df",
@@ -49,16 +49,16 @@
       "bytes": 778
     },
     "side.webp": {
-      "sha256": "27963a7b5ccc631ab53603619ad5a927615e1de5eb3b7d64c46414dfc3dae8ce",
-      "bytes": 108770
+      "sha256": "a73f7ea112ef9a85560ccd2fd494b6fcf28eb154ce8934f16d22841db1aeef27",
+      "bytes": 109198
     },
     "detail-conduit.webp": {
-      "sha256": "000be8812abd2198e16369646cde640a5eb409f684830bbb637bb84673c2bdb9",
-      "bytes": 141566
+      "sha256": "1a4d0dc5579726afd09436afb7e5e4e54e5a32330bd6418b1e930e2d36e5ea1c",
+      "bytes": 144204
     },
     "yesterday-today.glb": {
-      "sha256": "44d29721c2c7c7add79c45b4be5b799d4982ab2bfbdd17604b3bb649f3600fc2",
-      "bytes": 21361264
+      "sha256": "00348e88d8e9da30bffa138c9e14ca0e39f2494d301df9e435c69998579a22cc",
+      "bytes": 21657340
     },
     "detail-feather.webp": {
       "sha256": "f48ce41525f0ccd6cb6253245a1a93a57fe7e44fe654ed29cc0653eacf8de675",
@@ -70,14 +70,14 @@
       "engine": "three.js r180",
       "ready": "true",
       "title": "\u6628\u5929\uff0c\u4eca\u5929",
-      "version": "0.12.0",
+      "version": "0.12.1",
       "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
       "centerTreatment": "text-free memory lens",
       "centerHasText": "false",
       "frames": "3",
       "layers": "14",
-      "drawCalls": "133",
-      "triangles": "801608",
+      "drawCalls": "135",
+      "triangles": "824856",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
@@ -90,14 +90,14 @@
       "engine": "three.js r180",
       "ready": "true",
       "title": "\u6628\u5929\uff0c\u4eca\u5929",
-      "version": "0.12.0",
+      "version": "0.12.1",
       "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
       "centerTreatment": "text-free memory lens",
       "centerHasText": "false",
       "frames": "4",
       "layers": "14",
-      "drawCalls": "131",
-      "triangles": "800568",
+      "drawCalls": "133",
+      "triangles": "823816",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
@@ -110,14 +110,14 @@
       "engine": "three.js r180",
       "ready": "true",
       "title": "\u6628\u5929\uff0c\u4eca\u5929",
-      "version": "0.12.0",
+      "version": "0.12.1",
       "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
       "centerTreatment": "text-free memory lens",
       "centerHasText": "false",
       "frames": "5",
       "layers": "14",
-      "drawCalls": "129",
-      "triangles": "799704",
+      "drawCalls": "131",
+      "triangles": "822952",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
@@ -130,14 +130,14 @@
       "engine": "three.js r180",
       "ready": "true",
       "title": "\u6628\u5929\uff0c\u4eca\u5929",
-      "version": "0.12.0",
+      "version": "0.12.1",
       "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
       "centerTreatment": "text-free memory lens",
       "centerHasText": "false",
       "frames": "6",
       "layers": "14",
       "drawCalls": "119",
-      "triangles": "791160",
+      "triangles": "810568",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
@@ -150,14 +150,14 @@
       "engine": "three.js r180",
       "ready": "true",
       "title": "\u6628\u5929\uff0c\u4eca\u5929",
-      "version": "0.12.0",
+      "version": "0.12.1",
       "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
       "centerTreatment": "text-free memory lens",
       "centerHasText": "false",
       "frames": "7",
       "layers": "14",
-      "drawCalls": "133",
-      "triangles": "801608",
+      "drawCalls": "135",
+      "triangles": "824856",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
@@ -170,14 +170,14 @@
       "engine": "three.js r180",
       "ready": "true",
       "title": "\u6628\u5929\uff0c\u4eca\u5929",
-      "version": "0.12.0",
+      "version": "0.12.1",
       "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
       "centerTreatment": "text-free memory lens",
       "centerHasText": "false",
       "frames": "8",
       "layers": "14",
-      "drawCalls": "133",
-      "triangles": "801608",
+      "drawCalls": "135",
+      "triangles": "824856",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
@@ -188,9 +188,9 @@
     }
   },
   "glbReload": {
-    "meshes": 67,
-    "transmission": 39,
-    "iridescence": 39,
+    "meshes": 68,
+    "transmission": 40,
+    "iridescence": 40,
     "layers": [
       "01__FOLDED_PEARLESCENT_MEMORY_CORE",
       "02__CURVED_MEMBRANES_&_SILVER_SEAMS",
@@ -207,9 +207,17 @@
       "13__OVERLAPPING_ARCHIVAL_SLEEVES",
       "14__PEARL_TRACES_&_FEATHER_VEILS"
     ],
-    "sceneVersion": "0.12.0",
+    "sceneVersion": "0.12.1",
     "centerHasText": false,
     "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
+    "lensRefinement": {
+      "edition": "0.12.1",
+      "etchedArcs": 3,
+      "microPearls": 15,
+      "clearKeepers": 2,
+      "zone": "rim only; botanical centre unchanged",
+      "hasText": false
+    },
     "size": [
       5.6439526081085205,
       5.576745510101318,

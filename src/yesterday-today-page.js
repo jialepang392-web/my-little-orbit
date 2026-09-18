@@ -1,4 +1,4 @@
-import { waitForLiveView } from './exhibition-state.js?v=0120';
+import { waitForLiveView } from './exhibition-state.js?v=0121';
 const canvas=document.querySelector('#yesterday-canvas'),stage=document.querySelector('#yesterday-stage'),status=document.querySelector('#model-status');
 const buttons=[...document.querySelectorAll('[data-scene-action]')];
 let viewer=null,turn=false,separated=false,cool=false;
@@ -10,7 +10,7 @@ await waitForLiveView(stage);
 try{
   let timer;
   const {createYesterdayViewer}=await Promise.race([
-    import('./yesterday-today/viewer.js?v=0120'),
+    import('./yesterday-today/viewer.js?v=0121'),
     new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Viewer loading timed out')),22000);})
   ]).finally(()=>clearTimeout(timer));
   viewer=createYesterdayViewer(canvas,{onReady(){stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');buttons.forEach(b=>b.disabled=false);status.textContent='真实三维 · 拖动旋转，滚轮靠近，方向键查看';},onError:fail});

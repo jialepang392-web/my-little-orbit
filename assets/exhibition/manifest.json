@@ -1,31 +1,31 @@
 {
-  "version": "0.12.0",
-  "builtAt": "2026-09-18T11:30:34.594424+00:00",
+  "version": "0.12.1",
+  "builtAt": "2026-09-18T12:22:55.034012+00:00",
   "method": "Responsive sizes from the current verified real-scene covers. No recolouring or separate cover-only geometry.",
   "sourceHashes": {
-    "assets/yesterday-today/cover.webp": "fe529a99e764a8be6e1f0269fd587e321272bac08eb5fbba67e719a9cf752ce9",
+    "assets/yesterday-today/cover.webp": "c35e15a600b498c2cf820de3d7121e6bbcf809eebaa7afafbaf73b706d35ee53",
     "assets/crossover/cover.webp": "39be149bcdf489357b48f7335689f65e4cfee2e005086c8fe86d2947e7b69a7a",
     "assets/poem/cover.webp": "5b75a6f893f6786ddb22827469235cc855e2ac6c65ed3cb5b0da1ee02fee397b",
     "assets/rain-finale/cover.webp": "b9dc0354f6afa680ab528d2db48c4e1382f3abee988673baf2ae343922bba2f7"
   },
   "artifacts": {
     "yesterday-today-192.webp": {
-      "bytes": 4412,
+      "bytes": 4424,
       "width": 192,
       "height": 192,
-      "sha256": "30ec03848940cb3ce5dc31c42d19c2ec61c49e8383d4f5d6ba7d15f90b6efc06"
+      "sha256": "9f797a6c4b2b18808194cf8d46b15ba84859958cd325815758cf0cf43afa9118"
     },
     "yesterday-today-480.webp": {
-      "bytes": 18628,
+      "bytes": 18610,
       "width": 480,
       "height": 480,
-      "sha256": "4e9cc8dbb08d8b17b1285949ed44d86e0759bce1fdb3bda33ff560d3c1fd8450"
+      "sha256": "e5c785ad82c848984706609db109656b989413d13f48e641751a7f4d23b67f56"
     },
     "yesterday-today-800.webp": {
-      "bytes": 57804,
+      "bytes": 57988,
       "width": 800,
       "height": 800,
-      "sha256": "01b3b01d01dd247eae8d3792f5fdb9c63eb72961c807e9e249032a858f487479"
+      "sha256": "923677e97cea096c35f03279ae1d202c06df7c1b8d65b8b5618ffbae5bb5cd43"
     },
     "crossover-192.webp": {
       "bytes": 7572,
