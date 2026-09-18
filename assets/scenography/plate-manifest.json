@@ -1,0 +1,31 @@
+{
+  "version": "0.13.0",
+  "inheritedSceneVersion": "0.12.3",
+  "status": "passed",
+  "builtAt": "2026-09-18T16:53:52.491542+00:00",
+  "sourceHashes": {
+    "assets/crossover/cover.webp": "2a281ae53e520d283568052310a1b53d3a793c7c08f95e19887f163487e973a9",
+    "assets/crossover/build.json": "202acb353b81456db559316a5f73ac7dd0eebb4d503437fa8afb5e6678135f3a"
+  },
+  "artifacts": {
+    "crossover-plate.webp": {
+      "sha256": "d01c7b6b77a37ac0c54df33f6af3597d003fd98de325a6a5a4759bf11dacce47",
+      "bytes": 395786,
+      "width": 1600,
+      "height": 1600,
+      "alpha": true
+    }
+  },
+  "proofs": {
+    "crossover": {
+      "reproducedOriginalCoverSha256": "2a281ae53e520d283568052310a1b53d3a793c7c08f95e19887f163487e973a9",
+      "nativeCaptureSha256": "b89fe871efba6c2f40defbaa7e59c8400d512187d43fc0ef5c52b18852372b14",
+      "sceneVersion": "0.12.3",
+      "unchangedOriginalManifestSha256": "202acb353b81456db559316a5f73ac7dd0eebb4d503437fa8afb5e6678135f3a"
+    }
+  },
+  "generatorHashes": {
+    "scripts/build_inherited_stage_plates.py": "e290da0654ace27fa6bbc4414e48e9463f9ca0d70ecd5231756cfc3f4784010e"
+  },
+  "method": "Transparent, identically framed photographs; source cover reconstruction verified byte for byte. No new geometry, recolouring or external image content."
+}

@@ -1,10 +1,10 @@
-import { LANDMARKS, landmarkById } from './data.js?v=0123';
-import { addDiscovery, readProgress, writeProgress } from './storage.js?v=0123';
-import { escapeHtml, renderMarkdown } from './markdown.js?v=0123';
-import { downloadPostcard } from './postcard.js?v=0123';
-import { artImage } from './art-paths.js?v=0123';
-import { iconSvg } from './illustrations.js?v=0123';
-import { waitForLiveView } from './exhibition-state.js?v=0123';
+import { LANDMARKS, landmarkById } from './data.js?v=0130';
+import { addDiscovery, readProgress, writeProgress } from './storage.js?v=0130';
+import { escapeHtml, renderMarkdown } from './markdown.js?v=0130';
+import { downloadPostcard } from './postcard.js?v=0130';
+import { artImage } from './art-paths.js?v=0130';
+import { iconSvg } from './illustrations.js?v=0130';
+import { waitForLiveView } from './exhibition-state.js?v=0130';
 
 const $=(selector)=>document.querySelector(selector);
 let storage=null;try{storage=window.localStorage;}catch{/* Private/blocked storage: session-only progress. */}
@@ -101,6 +101,7 @@ $('#nearby-prompt').addEventListener('click',interact);
 function navigate(id){
   setLabels(true);
   if(reading){void openLocation(id);return;}
+  document.dispatchEvent(new Event('orbit:explore'));
   if(!world){
     if(worldState==='failed'){toast('3D 场景未就绪，已为你打开文章。');void openLocation(id);}
     else{pendingDestination=id;toast('已记下目的地，场景展开后纸鹤就会带路。');if(worldState==='idle')void bootWorld();}
@@ -122,7 +123,7 @@ function setReading(value){
 async function bootWorld(){
   if(worldState!=='idle')return;worldState='loading';let timeout;
   try{
-    const module=await Promise.race([import('./world.js?v=0123'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
+    const module=await Promise.race([import('./world.js?v=0130'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
     world=module.createWorld({canvas,labelLayer:$('#landmark-labels'),reducedMotion,onNearby:setNearby,onNotice:toast,
       onNavigation:updateJourney,
       onArrival:(id)=>{void openLocation(id,true);},

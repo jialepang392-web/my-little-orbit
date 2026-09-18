@@ -3,7 +3,7 @@
  * These are authored abstractions, not photographs of an actual relationship.
  */
 import * as T from 'three';
-import {seededRandom} from './math.js?v=0123';
+import {seededRandom} from './math.js?v=0130';
 
 export function exposureTexture({chroma=0,night=false,crop=0}={}){
   const c=document.createElement('canvas');c.width=c.height=768;

@@ -3,10 +3,10 @@
  * cable loops and floating type tiles. No terrain, trees or reused garden models.
  */
 import * as T from 'three';
-import { seededRandom } from '../math.js?v=0123';
-import { makePressTextures } from './textures.js?v=0123';
+import { seededRandom } from '../math.js?v=0130';
+import { makePressTextures } from './textures.js?v=0130';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import {exposureTexture,emulsionPaper} from '../song-surfaces.js?v=0123';
+import {exposureTexture,emulsionPaper} from '../song-surfaces.js?v=0130';
 const Z=new T.Vector3(0,0,1),Y=new T.Vector3(0,1,0),R=3.02;
 
 export function makeCrossover({glyphs={}}={}){

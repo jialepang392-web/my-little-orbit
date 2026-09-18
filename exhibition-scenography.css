@@ -1,0 +1,165 @@
+/* 0.13 — four authored rooms. Scenery is noninteractive and independent of 3D. */
+body[data-orbit-world]{position:relative;isolation:isolate}
+body[data-orbit-world]::before{opacity:.12;pointer-events:none}
+.exhibition-atmosphere{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;contain:paint}
+.exhibition-atmosphere picture{display:block;position:absolute;width:100%;left:0}
+.exhibition-atmosphere img{display:block;width:100%;height:100%;object-fit:fill}
+.atmosphere-opening{top:100px;height:clamp(820px,76vw,1240px)}
+.atmosphere-passage{top:1180px;bottom:0;min-height:2200px}
+body[data-orbit-world] :is(.time-stage,.concept-stage,.rain-stage,.world-stage){background:transparent}
+body[data-orbit-world] :is(.time-stage,.concept-stage,.rain-stage)::before{opacity:.25}
+body[data-orbit-world] :is(.time-statement,.concept-notes,.rain-story){position:relative}
+body[data-orbit-world] :is(.statement-copy,.concept-notes>div:last-child,.story-copy){background:color-mix(in srgb,var(--exhibit-surface) 75%,transparent);padding:20px 24px;margin:-20px -24px;border-radius:1px}
+body[data-orbit-world] .orbit-picker-panel{background:var(--exhibit-surface)}
+.scenography-register{display:flex;justify-content:space-between;align-items:center;gap:20px;border-top:1px solid var(--exhibit-rule);padding:18px 0 5px;margin-top:22px;color:var(--exhibit-text);font:10px/1.8 monospace;letter-spacing:.07em}
+.scenography-register p{margin:0;font:13px/1.8 'Songti SC','STSong',serif;letter-spacing:.03em}
+/* Actual alpha photographs let the room pass behind the object, never over it.
+   Rain keeps its original opaque bloom/print grade; only its outer empty corners soften. */
+body[data-orbit-world] :is(.concept-poster,.time-poster,.garden-poster){mask-image:none}
+body[data-orbit-world="rain-finale"] :is(.rain-poster,#rain-canvas){mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 76%,transparent 100%)}
+.exhibit-dialog :is(.time-poster,.concept-poster,.rain-poster,.garden-poster){mask-image:none!important}
+.exhibit-immersive #rain-canvas{mask-image:none!important}
+/* POEM — a hanging album leaf, with the garden as the primary exhibit. */
+body[data-orbit-world="poem"]{--paper:#eeeee5;--exhibit-surface:#eeeee5;--exhibit-text:#455447;--exhibit-rule:#b9bfae;--way-ground:#eeeee5;--way-line:#b9bfae;background:#eeeee5;color:#293d33}
+body[data-orbit-world="poem"] .app-shell{border:0;max-width:1600px;overflow:visible}
+body[data-orbit-world="poem"] .topbar{min-height:88px;padding:19px 0}
+body[data-orbit-world="poem"] .brand{font-size:16px;letter-spacing:.04em}
+body[data-orbit-world="poem"] .garden-seal{border-color:#9a6a56;color:#9a6a56;width:31px;height:37px;font-size:13px;opacity:.8}
+body[data-orbit-world="poem"] .topnav [data-open]{display:none}
+body[data-orbit-world="poem"] .universe{grid-template-columns:minmax(240px,.77fr) minmax(0,1.95fr);gap:0 3%;padding-top:35px}
+body[data-orbit-world="poem"] .intro{padding:25px 0 30px;align-self:start;z-index:2}
+body[data-orbit-world="poem"] .intro .eyebrow{font:10px/1.8 monospace;letter-spacing:.08em;color:#6e7764}
+body[data-orbit-world="poem"] .chapter-mark{font:italic 18px Georgia,serif;color:#9a6a56;border:0;padding-right:6px;margin:0}
+body[data-orbit-world="poem"] .intro h1{height:330px;width:170px;writing-mode:initial;margin:35px 0 28px;border:0;padding:0;display:block}
+body[data-orbit-world="poem"] .intro h1::before,body[data-orbit-world="poem"] .intro h1::after{display:none}
+body[data-orbit-world="poem"] .calligraphy-title{display:block;width:167px;height:330px;object-fit:contain;filter:none}
+body[data-orbit-world="poem"] .intro-copy{font:14px/2.15 var(--serif);letter-spacing:.04em;color:#475849;max-width:18em;margin:0}
+body[data-orbit-world="poem"] .hero-actions{margin:22px 0 0;display:flex;gap:18px}
+.poem-to-studies{font:12px/1.8 var(--serif);padding:9px 0;min-height:44px;border-bottom:1px solid #8b9986;display:inline-flex;align-items:center;gap:23px}
+body[data-orbit-world="poem"] .intro-foot{margin-top:24px;font:9px/1.9 monospace;display:block;letter-spacing:.04em;max-width:210px}
+body[data-orbit-world="poem"] .intro-foot span{display:block;margin-top:3px}
+body[data-orbit-world="poem"] .world-panel{align-self:start;padding-top:9px}
+body[data-orbit-world="poem"] .world-heading{font:10px/1.8 monospace;letter-spacing:.07em;border:0;padding:10px 0;color:#667360}
+body[data-orbit-world="poem"] .world-stage{height:clamp(580px,calc(100svh - 240px),790px);width:100%;margin:0;overflow:visible}
+body[data-orbit-world="poem"] .world-stage::before{display:none}
+body[data-orbit-world="poem"] .garden-poster{mask-image:none}
+body[data-orbit-world="poem"] .orbit-label{font:11px/1.8 var(--serif);border:0;right:0;top:24px;opacity:.55}
+body[data-orbit-world="poem"] .scene-caption{display:none}
+body[data-orbit-world="poem"] .journey-status[data-state="idle"]{display:none}
+body[data-orbit-world="poem"] .exhibit-options{border-top:1px solid var(--exhibit-rule);padding-top:14px}
+body[data-orbit-world="poem"] .world-controls{padding-bottom:20px}
+.poem-album-index{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:25px;padding:32px 0 39px;margin-top:30px;border-top:1px solid var(--exhibit-rule);border-bottom:1px solid var(--exhibit-rule)}
+.poem-album-index a{min-height:44px;display:flex;align-items:baseline;gap:13px;padding:6px 0}
+.poem-album-index i{font:italic 20px Georgia,serif;color:#7b8976}
+.poem-album-index strong{font:400 17px/1.8 var(--serif)}
+.poem-album-index small{display:block;font:9px/1.8 monospace;color:#737e6b;letter-spacing:.05em;margin-top:3px}
+body[data-orbit-world="poem"] .garden-statement{border:0;padding:55px 0 40px;grid-template-columns:1fr 1.05fr;gap:12%}
+body[data-orbit-world="poem"] .garden-statement h2{font:400 clamp(31px,3.4vw,47px)/1.7 var(--serif);letter-spacing:.05em;margin:23px 0 18px}
+.poem-margin-note{font:11px/2 var(--serif);color:#75816f;max-width:24em;margin:18px 0}
+body[data-orbit-world="poem"] .garden-statement>div:last-child{align-self:center;padding:16px 22px;background:#eeeee5cb}
+body[data-orbit-world="poem"] .garden-details{padding-top:26px;margin-top:0}
+body[data-orbit-world="poem"] .garden-details-heading{border-top:1px solid var(--exhibit-rule);padding:24px 0 19px;margin:0;align-items:center}
+body[data-orbit-world="poem"] .garden-details-heading h2{font:400 28px/1.7 var(--serif);letter-spacing:.03em}
+body[data-orbit-world="poem"] .garden-details-heading p{font:10px/1.8 monospace}
+body[data-orbit-world="poem"] .garden-detail-grid{display:grid;grid-template-columns:1.12fr 1fr;gap:64px 9%;padding:15px 0 35px}
+body[data-orbit-world="poem"] .garden-detail-grid figure{position:relative}
+body[data-orbit-world="poem"] .garden-detail-grid figure:nth-child(2){padding-top:114px}
+body[data-orbit-world="poem"] .garden-detail-grid figure:nth-child(3){display:grid;grid-template-columns:1.12fr 1fr;grid-column:1/-1;gap:9%;align-items:center;padding-top:0}
+body[data-orbit-world="poem"] .garden-detail-grid figure::before{content:'';position:absolute;left:8px;top:8px;width:calc(100% - 10px);aspect-ratio:1;background:#dedfd1;border:1px solid #c4c9b6;transform:rotate(-1.6deg);z-index:-1}
+body[data-orbit-world="poem"] .garden-detail-grid figure:nth-child(2)::before{top:122px;transform:rotate(1.4deg)}
+body[data-orbit-world="poem"] .garden-detail-grid figure:nth-child(3)::before{width:49%;transform:rotate(-.8deg)}
+body[data-orbit-world="poem"] .garden-detail-grid .detail-open{box-shadow:0 11px 28px #2e3e3010;outline:1px solid #bac1ae33;outline-offset:-1px}
+body[data-orbit-world="poem"] .garden-detail-grid figcaption{padding-top:23px;font-size:13px;line-height:2;color:#51604d;max-width:36em}
+body[data-orbit-world="poem"] .garden-detail-grid figcaption span{font:10px/1.8 monospace;color:#7a8472;letter-spacing:.05em}
+body[data-orbit-world="poem"] .garden-detail-grid figcaption strong{font:400 25px/1.8 var(--serif);color:#2e4337;letter-spacing:.03em;margin:10px 0}
+body[data-orbit-world="poem"] .garden-edition .exhibit-verso{grid-template-columns:1.3fr 1fr;gap:9%;padding-top:42px}
+body[data-orbit-world="poem"] .garden-edition .exhibit-verso-views{gap:16px;align-items:start}
+body[data-orbit-world="poem"] .garden-edition .exhibit-verso-views figure:nth-child(2){margin-top:70px}
+body[data-orbit-world="poem"] .garden-edition .exhibit-verso h2{font-size:34px;letter-spacing:.04em;line-height:1.8}
+body[data-orbit-world="poem"] .edition-poster{max-width:260px;margin:30px 0 0!important;transform:rotate(-1deg)}
+.poem-explore-heading{grid-column:1/-1;border-top:1px solid var(--exhibit-rule);display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:26px;margin-top:30px}
+.poem-explore-heading h2{font:400 29px/1.8 var(--serif);margin:0}
+.poem-explore-heading p{font:12px/1.9 var(--serif);color:#6a7a62;margin:7px 0 0}
+.poem-explore-heading .hero-actions{margin:0!important;align-items:center}
+body[data-orbit-world="poem"] .garden-visit-tools{margin-top:20px;border-top:0;padding-top:12px}
+body[data-orbit-world="poem"] .journal-preview{border-color:var(--exhibit-rule);margin-top:34px}
+body[data-orbit-world="poem"] .journal-preview-card{background:#f4f4eacc;border:0;border-top:1px solid #b9c1ac;padding:25px 18px;box-shadow:4px 7px 0 #aab39712}
+body[data-orbit-world="poem"] .bottom-bar{border-color:var(--exhibit-rule);margin-top:20px}
+body[data-orbit-world="poem"] .colophon{padding-bottom:35px}
+.reading .poem-album-index,.reading .poem-explore-heading{display:none}
+.reading .intro,.reading .world-panel{display:none!important}
+@media(min-width:1600px){.atmosphere-opening{height:1240px}.atmosphere-passage{top:1240px}}
+@media(max-width:1000px){
+ body[data-orbit-world="poem"] .universe{display:grid;grid-template-columns:minmax(190px,.7fr) minmax(0,1.5fr);gap:0 20px;padding-top:24px}
+ body[data-orbit-world="poem"] .intro{display:block;padding-top:15px}
+ body[data-orbit-world="poem"] .intro h1{width:140px;height:277px;margin:25px 0}
+ body[data-orbit-world="poem"] .calligraphy-title{width:140px;height:277px}
+ body[data-orbit-world="poem"] .intro-copy{font-size:12px}
+ body[data-orbit-world="poem"] .world-stage{height:550px}
+ body[data-orbit-world="poem"] .world-heading{font-size:8px}
+ .poem-album-index{gap:15px}.poem-album-index a{gap:10px}.poem-album-index strong{font-size:15px}
+ body[data-orbit-world="poem"] .garden-statement{gap:7%;padding-top:40px}
+ body[data-orbit-world="poem"] .garden-edition .exhibit-verso{grid-template-columns:1fr}
+ body[data-orbit-world="poem"] .garden-detail-grid{gap:46px 7%}
+}
+@media(max-width:720px){
+ .atmosphere-opening{top:76px;height:970px}.atmosphere-passage{top:940px;min-height:2000px;opacity:.8}
+ body[data-orbit-world] :is(.statement-copy,.concept-notes>div:last-child,.story-copy){margin:0;padding:14px 12px}
+ .scenography-register{font-size:8px;gap:14px;padding-top:14px}.scenography-register p{font-size:11px;text-align:right}
+ body[data-orbit-world="poem"] .app-shell{padding-inline:20px}
+ body[data-orbit-world="poem"] .topbar{min-height:73px;padding-block:14px}
+ body[data-orbit-world="poem"] .brand{font-size:13px}.brand small{font-size:6px}
+ body[data-orbit-world="poem"] .garden-seal{width:26px;height:31px;font-size:11px}
+ body[data-orbit-world="poem"] .universe{display:flex;flex-direction:column;gap:0;padding-top:23px}
+ body[data-orbit-world="poem"] .intro{display:grid;grid-template-columns:106px minmax(0,1fr);gap:0 23px;padding:0 0 6px;align-items:start}
+ body[data-orbit-world="poem"] .intro .eyebrow{grid-column:1/-1;font-size:8px;line-height:1.8;margin-bottom:17px}
+ body[data-orbit-world="poem"] .chapter-mark{font-size:15px}
+ body[data-orbit-world="poem"] .intro h1{grid-column:1;grid-row:2/4;width:95px;height:188px;margin:0}
+ body[data-orbit-world="poem"] .calligraphy-title{width:95px;height:188px}
+ body[data-orbit-world="poem"] .intro-copy{grid-column:2;grid-row:2;margin:12px 0 0;font-size:12px;line-height:2.1;max-width:19em;letter-spacing:.04em}
+ body[data-orbit-world="poem"] .intro-copy br{display:none}
+ body[data-orbit-world="poem"] .intro .hero-actions{grid-column:2;grid-row:3;margin:13px 0 0;display:block}
+ .poem-to-studies{font-size:11px;min-height:38px;padding:6px 0;gap:17px}
+ body[data-orbit-world="poem"] .intro-foot{display:none}
+ body[data-orbit-world="poem"] .world-panel{width:100%;padding-top:8px}
+ body[data-orbit-world="poem"] .world-heading{padding:7px 0 0;font-size:8px;letter-spacing:.02em}
+ body[data-orbit-world="poem"] .world-heading .world-edition{font-size:7px}
+ body[data-orbit-world="poem"] .world-stage{width:calc(100% + 20px);margin-left:-10px;height:auto;aspect-ratio:1;min-height:320px}
+ body[data-orbit-world="poem"] .orbit-label{font-size:9px;right:4px;top:18px}
+ body[data-orbit-world="poem"] .hero-inspect{padding-bottom:7px;font-size:10px}
+ body[data-orbit-world="poem"] .exhibit-options{border:0;padding-top:9px}
+ .poem-album-index{grid-template-columns:1fr 1fr;gap:12px 16px;margin-top:16px;padding:21px 0}
+ .poem-album-index a{gap:12px;padding:2px 0}.poem-album-index strong{font-size:16px}.poem-album-index small{font-size:8px}
+ body[data-orbit-world="poem"] .garden-statement{grid-template-columns:1fr;gap:6px;padding:35px 0 25px}
+ body[data-orbit-world="poem"] .garden-statement h2{font-size:31px;line-height:1.75;margin:20px 0}
+ body[data-orbit-world="poem"] .garden-statement>div:last-child{padding:10px 12px}
+ body[data-orbit-world="poem"] .garden-details{padding-top:15px}
+ body[data-orbit-world="poem"] .garden-details-heading{padding:23px 0 18px}
+ body[data-orbit-world="poem"] .garden-details-heading h2{font-size:25px}.garden-details-heading p{margin:8px 0 0}
+ body[data-orbit-world="poem"] .garden-detail-grid{display:block;padding-top:7px}
+ body[data-orbit-world="poem"] .garden-detail-grid figure:nth-child(n){display:block;padding:0;width:100%;margin:0 0 40px}
+ body[data-orbit-world="poem"] .garden-detail-grid figure:nth-child(2){width:91%;margin-left:9%}
+ body[data-orbit-world="poem"] .garden-detail-grid figure:nth-child(3){width:96%}
+ body[data-orbit-world="poem"] .garden-detail-grid figure:nth-child(n)::before{top:7px;width:calc(100% - 8px)}
+ body[data-orbit-world="poem"] .garden-detail-grid figcaption{font-size:12px;padding-top:19px}
+ body[data-orbit-world="poem"] .garden-detail-grid figcaption strong{font-size:23px}
+ body[data-orbit-world="poem"] .garden-detail-grid figcaption span{font-size:9px}
+ body[data-orbit-world="poem"] .garden-edition .exhibit-verso{padding-top:27px;gap:28px;margin-top:0}
+ body[data-orbit-world="poem"] .garden-edition .exhibit-verso-views{gap:11px}
+ body[data-orbit-world="poem"] .garden-edition .exhibit-verso-views figure:nth-child(2){margin-top:46px}
+ body[data-orbit-world="poem"] .garden-edition .exhibit-verso h2{font-size:30px}
+ body[data-orbit-world="poem"] .edition-poster{max-width:215px;margin-left:auto!important;margin-right:18px!important}
+ .poem-explore-heading{display:block;padding-top:24px}.poem-explore-heading h2{font-size:27px}.poem-explore-heading p{font-size:12px}
+ .poem-explore-heading .hero-actions{display:flex!important;align-items:center;gap:25px!important;padding-top:18px}
+ body[data-orbit-world="poem"] .garden-visit-tools{margin-top:8px}
+}
+@media(max-width:359px){
+ body[data-orbit-world="poem"] .app-shell{padding-inline:16px}
+ body[data-orbit-world="poem"] .intro{grid-template-columns:83px 1fr;gap:0 16px}
+ body[data-orbit-world="poem"] .intro h1,body[data-orbit-world="poem"] .calligraphy-title{width:80px;height:158px}
+ body[data-orbit-world="poem"] .intro-copy{font-size:11px;margin-top:4px}
+ body[data-orbit-world="poem"] .intro .hero-actions{margin-top:6px}
+ body[data-orbit-world="poem"] .world-stage{min-height:288px}
+ body[data-orbit-world="poem"] .brand{font-size:12px}.poem-album-index strong{font-size:14px}
+}
+@media(prefers-reduced-motion:reduce){.exhibition-atmosphere *{animation:none;transition:none}}

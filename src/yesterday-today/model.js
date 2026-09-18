@@ -4,8 +4,8 @@
  */
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { seededRandom } from '../math.js?v=0123';
-import { makeYesterdayTextures } from './textures.js?v=0123';
+import { seededRandom } from '../math.js?v=0130';
+import { makeYesterdayTextures } from './textures.js?v=0130';
 const Z=new T.Vector3(0,0,1),Y=new T.Vector3(0,1,0),TAU=Math.PI*2;
 const v=p=>new T.Vector3(...p);
 

@@ -1,6 +1,6 @@
 /** Common exhibition tools. Native navigation and images remain usable without JS. */
-import { initialStillView } from './exhibition-state.js?v=0123';
-import { createImageZoom } from './exhibition-zoom.js?v=0123';
+import { initialStillView } from './exhibition-state.js?v=0130';
+import { createImageZoom } from './exhibition-zoom.js?v=0130';
 const world=document.body.dataset.orbitWorld;
 const names={'yesterday-today':'昨天，今天',crossover:'删了一百遍',poem:'思念若是一首诗','rain-finale':'雨终曲'};
 const stage=document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage');
@@ -40,6 +40,9 @@ if(stage&&controls){
   const heroInspect=button('点按放大 · 高清图版',()=>openItem(0,heroInspect),'hero-inspect');
   heroInspect.setAttribute('aria-label','放大查看'+names[world]+'高清完整作品');stage.append(heroInspect);
   if(still)setStill(true,{updateURL:false});
+  // Garden navigation may be requested from the art-first section below the
+  // photographs. Starting a route must reveal the live scene, not run it hidden.
+  document.addEventListener('orbit:explore',()=>{if(still)setStill(false);});
   const canvas=stage.querySelector('canvas');
   if(world==='poem'&&canvas){const observer=new MutationObserver(()=>{if(canvas.dataset.ready==='true')stage.classList.add('is-ready');});observer.observe(canvas,{attributes:true,attributeFilter:['data-ready']});if(canvas.dataset.ready==='true')stage.classList.add('is-ready');}
   // Actions always return to the real scene, keeping native button state intact.

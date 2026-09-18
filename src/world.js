@@ -1,14 +1,14 @@
 import * as T from 'three';
-import { LANDMARKS, landmarkById } from './data.js?v=0123';
-import { fromLatLon, seededRandom, clamp } from './math.js?v=0123';
-import { orbitFrame, dragOrbit, surfaceStep } from './navigation.js?v=0123';
-import { frameSeconds, shouldAnimate } from './runtime.js?v=0123';
-import { Stars } from './vendor/stars.js?v=0123';
-import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=0123';
-import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=0123';
-import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=0123';
-import { AssetSlots, disposeTree } from './assets.js?v=0123';
-import { makeCollageLight } from './collage-light.js?v=0123';
+import { LANDMARKS, landmarkById } from './data.js?v=0130';
+import { fromLatLon, seededRandom, clamp } from './math.js?v=0130';
+import { orbitFrame, dragOrbit, surfaceStep } from './navigation.js?v=0130';
+import { frameSeconds, shouldAnimate } from './runtime.js?v=0130';
+import { Stars } from './vendor/stars.js?v=0130';
+import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=0130';
+import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=0130';
+import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=0130';
+import { AssetSlots, disposeTree } from './assets.js?v=0130';
+import { makeCollageLight } from './collage-light.js?v=0130';
 
 const R=5.4,UP=new T.Vector3(0,1,0);
 const initialNormal=new T.Vector3(...fromLatLon(-24,84));
@@ -206,13 +206,13 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   schedule();
   return { navigateTo,cancelNavigation,setDirection,reset,setPaused,setLowPower,setDusk,setView,setDetail,
     ready:landscape.ready,
-    stats(){return {...canvas.dataset,sceneVersion:'0.12.3',cameraPosition:camera.position.toArray(),cameraTarget:inspection?.target??[0,0,0],cameraFov:camera.fov};},
+    stats(){return {...canvas.dataset,sceneVersion:'0.13.0',cameraPosition:camera.position.toArray(),cameraTarget:inspection?.target??[0,0,0],cameraFov:camera.fov};},
     async capture(){await landscape.ready;applyCamera();renderer.render(scene,camera);return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Garden capture failed')),'image/png'));},
     async exportGLB(){
       await landscape.ready;
       const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');
       const sculpture=new T.Group();sculpture.name='IF-LONGING-WERE-A-POEM';
-      sculpture.userData={title:'思念若是一首诗',sceneVersion:'0.12.3',landmarks:8,edition:'Static sculpture snapshot; no walking, lights or animated water. Ground uses authored vertex colours without the browser-only triplanar grain shader.'};
+      sculpture.userData={title:'思念若是一首诗',sceneVersion:'0.13.0',landmarks:8,edition:'Static sculpture snapshot; no walking, lights or animated water. Ground uses authored vertex colours without the browser-only triplanar grain shader.'};
       for(const child of scene.children){
         if(!child.visible||child.isLight||child.isCamera||child===stars||child===clouds||child===targetMarker)continue;
         sculpture.add(child.clone(true));

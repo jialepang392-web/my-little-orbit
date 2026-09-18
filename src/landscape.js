@@ -1,9 +1,10 @@
 /** A full spherical assemblage of paper, pewter water, moss and orchid leaves. */
 import * as T from 'three';
-import { fromLatLon, clamp, seededRandom } from './math.js?v=0123';
-import { part, box, ball, cyl, mergeStatic, makePine, makeBamboo, makeRock, makeInkstone, makePlum, makeOrchid, makeFern, makeReeds, makeFlowerCluster, makeSeedPod } from './garden-models.js?v=0123';
-import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache, collageTextureReady, attachStoneTexture } from './collage-layers.js?v=0123';
-import { makeReferenceAccents } from './reference-art.js?v=0123';
+import { fromLatLon, clamp, seededRandom } from './math.js?v=0130';
+import { part, box, ball, cyl, mergeStatic, makePine, makeBamboo, makeRock, makeInkstone, makePlum, makeOrchid, makeFern, makeReeds, makeFlowerCluster, makeSeedPod } from './garden-models.js?v=0130';
+import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache, collageTextureReady, attachStoneTexture } from './collage-layers.js?v=0130';
+import { makeReferenceAccents } from './reference-art.js?v=0130';
+import { albumSurface } from './poem-album.js?v=0130';
 export const PLANET_RADIUS=5.4;
 const UP=new T.Vector3(0,1,0),WATER=5.425;
 const paperDecks=[[[17,103],2.4,2.8,-.32],[[35,83],1.1,.85,.35],[[-19,-108],2,2.6,.4]].map(([ll,w,h,angle])=>{
@@ -23,7 +24,7 @@ function inInstrumentClearance(n){return n.z>.79&&n.y>-.22&&n.y<.62&&n.x>-.30&&n
 function terrainRadius(n){const river=waterField(n),hill=Math.sin(n.x*9+n.z*3)*Math.cos(n.y*7-1)*.035+Math.sin(n.z*17+n.y*5)*.015;return PLANET_RADIUS+.075+hill-.11*(1-clamp((river-.055)/.065,0,1));}
 export function lakeDistance(n){return waterField(n)/.085;}
 export function surfaceRadius(n){
-  let height=Math.max(terrainRadius(n),WATER+.015,collageSurface(n));
+  let height=Math.max(terrainRadius(n),WATER+.015,collageSurface(n),albumSurface(n));
   for(const deck of paperDecks){const local=n.clone().applyQuaternion(deck.inverse),x=local.x*(PLANET_RADIUS+.12),y=local.y*(PLANET_RADIUS+.12);
     if(local.z>.9&&Math.abs(x)<deck.w/2&&Math.abs(y)<deck.h/2)height=Math.max(height,PLANET_RADIUS+.13+.028*Math.sin(y*3+x));
   }return height;
@@ -42,7 +43,7 @@ export function makeLandscape(normals){
   clearCollageMaterialCache();
   const root=new T.Group();root.name='longing-poem-sphere';const random=seededRandom(404917);
   const geometry=new T.SphereGeometry(PLANET_RADIUS,144,96),p=geometry.attributes.position,colors=new Float32Array(p.count*3),n=new T.Vector3();
-  const stone=new T.Color('#94978b'),moss=new T.Color('#6d7956'),ink=new T.Color('#585c51'),shore=new T.Color('#b2b19e');
+  const stone=new T.Color('#989c90'),moss=new T.Color('#76816b'),ink=new T.Color('#646d63'),shore=new T.Color('#b6b6a3');
   for(let i=0;i<p.count;i++){
     n.fromBufferAttribute(p,i).normalize();const river=waterField(n),vein=Math.sin(n.x*21+n.y*17+Math.sin(n.z*11)*2);
     const field=Math.sin(n.x*5+n.z*4)*Math.cos(n.y*8)+Math.sin(n.z*9+n.x*4)*.3;
@@ -68,13 +69,13 @@ export function makeLandscape(normals){
       diffuseColor.rgb*=.9+grain*.14+smoothstep(.84,1.,vein)*.075;`);
   };
   const ground=new T.Mesh(geometry,groundMaterial);ground.name='garden-ground';ground.receiveShadow=true;root.add(ground);
-  const water=part(new T.SphereGeometry(WATER,128,80),'#7099a3',[0,0,0],{roughness:.20,metalness:.38});water.name='continuous-jade-water';water.castShadow=false;root.add(water);
+  const water=part(new T.SphereGeometry(WATER,128,80),'#779e9f',[0,0,0],{roughness:.24,metalness:.34});water.name='continuous-jade-water';water.castShadow=false;root.add(water);
   let waterShader;water.material.onBeforeCompile=shader=>{waterShader=shader;shader.uniforms.poemTime={value:0};shader.vertexShader='varying vec3 waterPoint;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nwaterPoint=position;');shader.fragmentShader='varying vec3 waterPoint; uniform float poemTime;\n'+shader.fragmentShader.replace('#include <normal_fragment_begin>',`#include <normal_fragment_begin>
     normal=normalize(normal+vec3(sin(waterPoint.x*65.+waterPoint.y*39.+poemTime)*.035,cos(waterPoint.z*73.-poemTime*.7)*.026,0.));`);};
   const paths=new T.Group(),sampled=[];
   for(const [a,b] of edges){const aa=normals.get(a),bb=normals.get(b),angle=Math.acos(clamp(aa.dot(bb),-1,1)),steps=Math.ceil(angle*PLANET_RADIUS/.19);
     for(let i=1;i<steps;i++){const nn=slerp(aa,bb,i/steps);sampled.push(nn);if([...normals.values()].some(o=>o.dot(nn)>.989))continue;
-      const step=box(.185,.035,.11,i%7===0?'#aea896':'#dad8c1',[0,0,0],.018);placeSurface(step,nn,.018);step.rotateY(i*.19);paths.add(step);
+      const step=box(.145+(i%4)*.012,.031,.084+(i%3)*.009,i%7===0?'#a4aa96':'#bbc1ac',[0,0,0],.024);placeSurface(step,nn,.018);step.rotateY(i*.27);paths.add(step);
     }
     for(let i=2;i<steps-2;i++){const nn=slerp(aa,bb,i/steps);if(waterField(nn)>.065||nn.z>.35)continue;
       const tangent=slerp(aa,bb,(i+1)/steps).sub(nn).normalize(),side=new T.Vector3().crossVectors(nn,tangent).normalize();

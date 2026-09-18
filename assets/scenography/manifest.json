@@ -1,0 +1,75 @@
+{
+  "version": "0.13.0",
+  "status": "passed",
+  "builtAt": "2026-09-18T16:46:38.280909+00:00",
+  "method": "Original vector scenography with distinct opening/passage and mobile framing. No reference-photo pixels, private photographs, font files, or sculpture substitutions.",
+  "generatorHashes": {
+    "scripts/build_scenography.py": "04497b82a253d783d216a508a6cfb967549824d48c6e046623d829bfba5f8e15"
+  },
+  "artifacts": {
+    "yesterday-today-opening.svg": {
+      "bytes": 4706,
+      "sha256": "2abbba2130fc9e2c3ded3208d724febbc2768b25624f2b04accc26d27157f485"
+    },
+    "yesterday-today-opening-mobile.svg": {
+      "bytes": 7650,
+      "sha256": "1d51bbbcd20fb22161189dabedbab6c7b4104cee5a4f5d91ec7772a831c68db6"
+    },
+    "yesterday-today-passage.svg": {
+      "bytes": 3693,
+      "sha256": "47e2efe1a22381a61af2ac983ab9b2ca7309b3b0f78f7c278aa909fddc3d66f3"
+    },
+    "yesterday-today-passage-mobile.svg": {
+      "bytes": 5624,
+      "sha256": "1707b75508145a7fe0cf9636e423ea26e8d08eaac1f2903f2a7769b51605626a"
+    },
+    "crossover-opening.svg": {
+      "bytes": 5707,
+      "sha256": "60c5331418884ab76c697e1a66a5c6ab56dbc37ef7a1539ad77cb031a181f46e"
+    },
+    "crossover-opening-mobile.svg": {
+      "bytes": 9652,
+      "sha256": "bc1f501cf565998ff36f12fd82d07aae68f85d20d7804a876be76b59b639c820"
+    },
+    "crossover-passage.svg": {
+      "bytes": 6314,
+      "sha256": "9f270870b0104f9930dabc0d7416dae16ce13f7f0bdc8363f59f6dc98b5985f9"
+    },
+    "crossover-passage-mobile.svg": {
+      "bytes": 10866,
+      "sha256": "69ba6a84ae54c555776fcf9b0896abc6231842f9b35767aa88e244f27a85007a"
+    },
+    "poem-opening.svg": {
+      "bytes": 5848,
+      "sha256": "dafc5f5c7e5ecb6870d1e4293b140c9df52133969a6984a90131ec2e64d33fe6"
+    },
+    "poem-opening-mobile.svg": {
+      "bytes": 9934,
+      "sha256": "c3236ed05f79fec9f90d392196578a446a6f8ea6a0ca66ef7f842a2922bc01a3"
+    },
+    "poem-passage.svg": {
+      "bytes": 8903,
+      "sha256": "31c10d8a59586dfcb7e8602b1923b9405f82063c99384fcbce01832eaed65b86"
+    },
+    "poem-passage-mobile.svg": {
+      "bytes": 16044,
+      "sha256": "024fa62fdfcacc6ade66c78179c957a84601396fd18ca0b30cd29d88db646b6e"
+    },
+    "rain-finale-opening.svg": {
+      "bytes": 18862,
+      "sha256": "195127110953a1044e46a51ad4e3689704d4cede0442013a9528e01f8edb5c29"
+    },
+    "rain-finale-opening-mobile.svg": {
+      "bytes": 35962,
+      "sha256": "ac02884e26a6e57867ebdc19cd159b0b6974d4c7ef1ac90c0df6b83971bac019"
+    },
+    "rain-finale-passage.svg": {
+      "bytes": 20238,
+      "sha256": "1310940450ef215ddfc27de5a19611a41f1589e2076ae8f79854e004d2293fc5"
+    },
+    "rain-finale-passage-mobile.svg": {
+      "bytes": 38714,
+      "sha256": "d455224e1d5a44a6b40017ae4da753f5ca7158941d08028a452d83e7a5b3bdd2"
+    }
+  }
+}

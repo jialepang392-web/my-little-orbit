@@ -1,17 +1,18 @@
 {
-  "version":"0.12.3",
+  "version":"0.13.0",
   "edition":"the-shape-of-what-remains",
   "exhibitionTitle":"留下的形状",
-  "date":"2026-09-18",
+  "date":"2026-09-19",
   "worlds":["yesterday-today","crossover","poem","rain-finale"],
   "worldTitles":["昨天，今天","删了一百遍","思念若是一首诗","雨终曲"],
   "archived":["forest"],
-  "sceneVersion":"0.12.3",
-  "sceneVersions":{"yesterday-today":"0.12.3","crossover":"0.12.3","poem":"0.12.3","rain-finale":"0.12.3"},
-  "scope":"Song-semantic refinement of the verified v0.12.2 exhibition. Four independent material languages, four ways of keeping a memory: approach, undo, longing and aftersound. No audio or long lyric quotations.",
-  "presentation":"The existing sculptural cores remain. Yesterday, Today keeps its exterior title, unlettered botanical lens and v0.12.1 pearl rim; new almost-meeting sleeves carry autumn impressions. Deleted develops one original room exposure from red-blue to monochrome. Poem connects its river, moonlit margin and unwritten folio. Rain holds wet photographs and a split instant behind the original silver veil. No red hose.",
-  "images":"Four same-scene editions: 1600px covers, posters, three independent material cameras, profile, verso and reloaded GLB per work. Yesterday, Today additionally has newly photographed 2048px mobile plates. Exact provenance and output hashes are recorded in each build.json.",
+  "sceneVersion":"mixed-see-sceneVersions",
+  "contentVersion":"0.12.3",
+  "sceneVersions":{"yesterday-today":"0.12.3","crossover":"0.12.3","poem":"0.13.0","rain-finale":"0.12.3"},
+  "scope":"Continue verified v0.12.3 / 5b6d9a0. Four complete authored exhibition surroundings and an expanded physical paper-album edition of Poem. The other three sculptures and their original published editions are preserved byte for byte. No audio or lyric quotations.",
+  "presentation":"Each room extends its work: transparent sleeves and autumn impressions; darkroom proof sheets and erasure; opened folios and moonlit river margins; a rain window and a private unlit room. The paper garden gains ten lifted, deckled physical sheets, bookbinding, refined celadon, smaller muted correspondence, quieter paths and river reflections. Its artwork precedes optional exploration. Yesterday, Today retains exterior titles, unlettered lens, pearl rim and no red hose.",
+  "images":"Poem is rephotographed from its 0.13.0 live scene: 1600px cover, three independent 1200px studies, 1200px profile and verso, 1600x2000 poster, reloaded GLB. The other three original 0.12.3 bundles and Yesterday, Today's 2048px mobile plates remain unchanged. Separate background SVGs belong to the exhibition room, not the sculptures. Exact provenance is recorded in the respective manifests.",
   "modelLimitations":"GLB omits web lighting, bloom, rain animation and interaction. Garden is a static snapshot; its mineral ground uses authored vertex colours rather than the browser-only grain shader.",
   "navigation":"Unchanged four-world order, native picker and contextual gallery return",
-  "mobilePresentation":"The v0.12.2 viewing system is preserved: touch devices up to 900 CSS pixels enter with high-resolution still plates and opt into the full live scenes. New same-scene photographs replace the previous art edition. Native 1200/2048px entry, 2048px Yesterday, Today inspection, pinch/pan/double-tap, native scrolling and safe-area-aware controls are retained."
+  "mobilePresentation":"The v0.12.2 viewing system is preserved: touch devices up to 900 CSS pixels enter with high-resolution still plates and opt into the full live scenes. Poem uses its new same-scene photographs. Native 1200/2048px Yesterday, Today entry and inspection, pinch/pan/double-tap, native scrolling and safe-area-aware controls are retained. Each room has a separately reframed mobile background."
 }
