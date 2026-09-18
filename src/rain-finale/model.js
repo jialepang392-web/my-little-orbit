@@ -4,8 +4,8 @@
  */
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { seededRandom } from '../math.js?v=0100';
-import { makeRainTextures } from './textures.js?v=0100';
+import { seededRandom } from '../math.js?v=0120';
+import { makeRainTextures } from './textures.js?v=0120';
 
 const Z=new T.Vector3(0,0,1),Y=new T.Vector3(0,1,0),R=2.63;
 const V=a=>new T.Vector3(...a);
@@ -29,7 +29,7 @@ export function makeRainFinale({glyphs={}}={}) {
   const blackPrint=new T.MeshStandardMaterial({map:maps.blackPrint,roughness:.79,side:T.DoubleSide});
   const paperEdge=new T.MeshStandardMaterial({color:'#c4c2cc',roughness:1,side:T.DoubleSide});
   const fabric=material('#999eb1',.27,.79,{map:maps.gauze,alphaTest:.18,alphaToCoverage:true});
-  const lightMats=['#1763ff','#39afff','#cbdfff'].map(color=>material('#b6d2ff',.15,.23,{emissive:color,emissiveIntensity:8}));
+  const lightMats=['#1763ff','#39afff','#cbdfff'].map(color=>material('#b6d2ff',.15,.23,{emissive:color,emissiveIntensity:3.4}));
   function mesh(geo,mat,pos=[0,0,0]){const m=new T.Mesh(geo,mat);m.position.set(...pos);m.castShadow=true;m.receiveShadow=true;return m;}
   function aim(m,n,angle=0){m.quaternion.setFromUnitVectors(Z,n);m.rotateZ(angle);return m;}
   function tube(points,width,mat,segments=80,closed=false){
@@ -154,6 +154,12 @@ export function makeRainFinale({glyphs={}}={}) {
     }
     threads.add(tube(new T.CatmullRomCurve3(points),.0035+random()*.003,i%5===0?turquoise:i%3===0?fineSilver:wireIce,88));
   }
+  // Fine rain-bearing tails start at the actual fabric edge and enter its shadow.
+  for(let i=0;i<13;i++){
+    const u=i/12,x=1.56+u*.60,y=.98-u*1.76,z=2.29-u*.14,length=.26+(i%4)*.105;
+    threads.add(tube([[x,y,z],[x-.035,y-length*.55,z+.035],[x-.15,y-length,z+.01]],.0038+i%3*.0012,i%4===0?wireDark:fineSilver,20));
+    const bead=mesh(new T.SphereGeometry(1,9,7),glass,[x-.15,y-length-.029,z+.01]);bead.scale.set(.013,.042,.013);threads.add(bead);
+  }
   // Wandering cables, not equidistant science-fiction rings.
   const wires=group('08 / WANDERING LIGHT CABLES');
   const cablePaths=[
@@ -166,21 +172,26 @@ export function makeRainFinale({glyphs={}}={}) {
   cablePaths.forEach((ps,i)=>{
     const path=new T.CatmullRomCurve3(ps.map(V),true,'catmullrom',.4);
     wires.add(tube(path,i===0?.013:.0085,i===0?wireDark:wireIce,210,true));
-    const count=[9,7,5][i];
+    const count=[5,3,3][i];
     for(let j=0;j<count;j++){
       const t=(j+.12+random()*.47)/count,p=path.getPointAt(t),tangent=path.getTangentAt(t),light=i===0?j%3:(j%5===0?2:0);
       const cap=mesh(new T.CylinderGeometry(.024,.027,.1,8),fineSilver);cap.position.copy(p);cap.quaternion.setFromUnitVectors(Y,tangent);bulbs.add(cap);
       const lamp=mesh(new T.SphereGeometry(.028,10,8),lightMats[light]);lamp.position.copy(p.clone().addScaledVector(tangent,.059));bulbs.add(lamp);emitterPoints.push(lamp.position.clone());
     }
   });
-  const leftSpark=[[-1.91,.27,2.50],[-2.06,-.42,2.38],[-1.60,-1.26,2.16],[-.98,.89,2.60],[-2.40,-.89,1.75],[-1.89,1.25,2.04],[-.99,-1.93,1.9],[1.54,-1.91,1.84]];
+  const leftSpark=[[-1.91,.27,2.50],[-2.06,-.42,2.38],[-1.60,-1.26,2.16],[-.98,.89,2.60],[-1.89,1.25,2.04]];
   leftSpark.forEach((p,i)=>{bulbs.add(mesh(new T.SphereGeometry(.036,10,8),lightMats[i%3===0?1:0],p));emitterPoints.push(V(p));});
-  for(let i=0;i<19;i++){
+  for(let i=0;i<7;i++){
     const x=-.75-random()*1.50,y=(random()-.5)*3.4,z=Math.sqrt(Math.max(.45,R*R-x*x-y*y)),n=new T.Vector3(x,y,z).normalize();
     const p=n.multiplyScalar(R+.22+random()*.08);bulbs.add(mesh(new T.SphereGeometry(.024+random()*.017,10,8),lightMats[i%4===0?1:0],p.toArray()));emitterPoints.push(p);
   }
 
   const jewels=group('10 / PEARLS AND SILVER CHAINS');
+  for(let i=0;i<5;i++){
+    const offset=(i-2)*.058;
+    jewels.add(tube([[.48+offset,-2.24,1.72],[.33+offset,-2.61,1.62],[.17+offset*.3,-2.93,1.44],[.13,-3.13,1.40]],.0055,i%2?fineSilver:wireDark,34));
+  }
+  const lastDrop=mesh(new T.SphereGeometry(1,18,14),pearl,[.13,-3.22,1.40]);lastDrop.scale.set(.042,.11,.042);jewels.add(lastDrop);
   const beadGeo=new T.SphereGeometry(1,12,9),linkGeo=new T.TorusGeometry(.027,.0065,4,10);
   for(let i=0;i<160;i++){
     const n=direction(i,160),m=mesh(beadGeo,i%5?pearl:silver);m.position.copy(n.multiplyScalar(R+.12+random()*.17));m.scale.setScalar(.019+Math.pow(random(),2)*.065);jewels.add(m);
@@ -214,7 +225,7 @@ export function makeRainFinale({glyphs={}}={}) {
   const letterMat=new T.MeshStandardMaterial({map:maps.letters,roughness:.62,metalness:.25,alphaTest:.3,side:T.DoubleSide});
   const floatingInfo=[[-2.88,2.10,.2,0,.34],[.08,3.29,-.31,1,-.3],[1.18,3.19,.16,2,.31],[2.43,2.4,.4,3,-.4],[3.2,1.5,.3,4,.6],[-3.10,-.53,.8,10,-.4],[2.91,-1.95,.2,11,.31],[-1.72,-3.07,.1,7,.52]];
   floatingInfo.forEach(([x,y,z,id,a],i)=>{
-    const g=new T.PlaneGeometry(.40,.53),uv=g.attributes.uv;
+    const g=new T.PlaneGeometry(.31,.42),uv=g.attributes.uv;
     for(let j=0;j<uv.count;j++)uv.setXY(j,uv.getX(j)*.25+(id%4)*.25,uv.getY(j)*.25+1-(Math.floor(id/4)+1)*.25);
     const m=mesh(g,letterMat,[x,y,z]);m.rotation.set(.1*(i-3),.09*(i-2),a);floating.add(m);
   });
@@ -245,6 +256,7 @@ export function makeRainFinale({glyphs={}}={}) {
   originals.forEach(g=>g.dispose());
   const separations=Object.values(groups).map((g,i)=>({g,base:g.position.clone(),offset:new T.Vector3((i%3-1)*.16,(i%2-.5)*.10,i*.052)}));
   root.userData={title:'雨终曲',english:'RAIN FINALE',layers:Object.keys(groups).length,reference:'Original 3D interpretation of the user-provided black/silver, blue-light and gauze collage. No original photograph, watermark, performer credits or lyrics are embedded.',back:'Authored continuation; not an inferred photograph of the original back.'};
+  root.userData.sceneVersion='0.11.0';root.userData.structure='Concentrated left-hand light, silver veil, rain-bearing fringe and a converging lower coda.';
   return {
     root,groups,emitterPoints,
     setSeparated(amount){const a=T.MathUtils.clamp(Number(amount),0,1);for(const {g,base,offset} of separations)g.position.copy(base).addScaledVector(offset,a);},

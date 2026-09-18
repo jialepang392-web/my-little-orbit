@@ -1,14 +1,14 @@
 import * as T from 'three';
-import { LANDMARKS, landmarkById } from './data.js?v=0100';
-import { fromLatLon, seededRandom, clamp } from './math.js?v=0100';
-import { orbitFrame, dragOrbit, surfaceStep } from './navigation.js?v=0100';
-import { frameSeconds, shouldAnimate } from './runtime.js?v=0100';
-import { Stars } from './vendor/stars.js?v=0100';
-import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=0100';
-import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=0100';
-import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=0100';
-import { AssetSlots, disposeTree } from './assets.js?v=0100';
-import { makeCollageLight } from './collage-light.js?v=0100';
+import { LANDMARKS, landmarkById } from './data.js?v=0120';
+import { fromLatLon, seededRandom, clamp } from './math.js?v=0120';
+import { orbitFrame, dragOrbit, surfaceStep } from './navigation.js?v=0120';
+import { frameSeconds, shouldAnimate } from './runtime.js?v=0120';
+import { Stars } from './vendor/stars.js?v=0120';
+import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=0120';
+import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=0120';
+import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=0120';
+import { AssetSlots, disposeTree } from './assets.js?v=0120';
+import { makeCollageLight } from './collage-light.js?v=0120';
 
 const R=5.4,UP=new T.Vector3(0,1,0);
 const initialNormal=new T.Vector3(...fromLatLon(-24,84));
@@ -58,7 +58,7 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   const assets=new AssetSlots(onNotice);
   canvas.dataset.edition=originalEdition?'original':blenderEdition?'blender':'garden';canvas.dataset.assetsExpected=blenderEdition&&!originalEdition?'14':'0';canvas.dataset.assetsLoaded='0';canvas.dataset.assetFailures='';
   if(blenderEdition&&!originalEdition)void assets.load(slots).then(()=>{if(disposed)return;canvas.dataset.assetsLoaded=String(assets.entries.length);canvas.dataset.assetFailures=assets.failures.join(',');invalidate();});
-  let normal=initialNormal.clone(),forward=UP.clone().addScaledVector(normal,-UP.dot(normal)).normalize();
+  let normal=initialNormal.clone(),forward=UP.clone().addScaledVector(normal,-UP.dot(normal)).normalize(),inspection=null;
   let target=null,nearbyId=null,paused=false,disposed=false,frame=0,lastTime=performance.now(),elapsed=0,zoom=1,width=1,height=1,followTraveller=true;
   let inViewport=true,dirty=true,renderedFrames=0,navigationKey='';
   canvas.dataset.textureStatus='loading';
@@ -67,7 +67,7 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   const initialOrbit=orbitFrame([0,.055589,.998454],[0,.998454,-.055589]);
   let orbit=initialOrbit;
   const cameraOutward=new T.Vector3(...orbit.outward),cameraUp=new T.Vector3(...orbit.up);
-  const cameraDistance=22,raycaster=new T.Raycaster(),pointer=new T.Vector2();
+  const cameraDistance=24.0,raycaster=new T.Raycaster(),pointer=new T.Vector2();
   const ground=landscape.ground??landscape.surface??landscape.root.children.find(object=>object.isMesh);
   const targetMarker=new T.Mesh(new T.TorusGeometry(.19,.015,6,36),new T.MeshBasicMaterial({color:'#a53d36',depthWrite:false}));
   targetMarker.geometry.rotateX(Math.PI/2);targetMarker.visible=false;targetMarker.renderOrder=2;scene.add(targetMarker);
@@ -104,7 +104,7 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   on(canvas,'webglcontextlost',(event)=>{event.preventDefault();setPaused(true);onError('3D 图形上下文已丢失。可以继续阅读文章，刷新页面可重试场景。');});
   for(const label of labels)on(label.element,'click',()=>navigateTo(label.id));
 
-  function resize(){const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;width=rect.width;height=rect.height;renderer.setSize(width,height,false);camera.aspect=width/height;camera.fov=width/height<.9?43:34.5;camera.updateProjectionMatrix();invalidate();}
+  function resize(){const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;width=rect.width;height=rect.height;renderer.setSize(width,height,false);camera.aspect=width/height;camera.fov=inspection?.fov??(width/height<.9?43:34.5);camera.updateProjectionMatrix();invalidate();}
   const observer=new ResizeObserver(resize);observer.observe(canvas);resize();
   const visibilityObserver=new IntersectionObserver(([entry])=>{inViewport=entry.isIntersecting;canvas.dataset.inViewport=String(inViewport);invalidate();});visibilityObserver.observe(canvas);
   function focusTraveller(){
@@ -126,7 +126,17 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   }
   function navigateTo(id){if(!normals.has(id)||disposed)return false;target={id,kind:'landmark',normal:normals.get(id)};target.startAngle=Math.acos(clamp(normal.dot(target.normal),-1,1));clearInput();followTraveller=true;focusTraveller();invalidate();onNotice(`纸鹤正在带你前往${landmarkById(id).name}，按方向键可取消。`);return true;}
   function cancelNavigation(){target=null;clearInput();targetMarker.visible=false;invalidate();}
-  function reset(){normal.copy(initialNormal);forward.copy(UP).addScaledVector(normal,-UP.dot(normal)).normalize();target=null;zoom=1;orbit=initialOrbit;followTraveller=true;clearInput();nearbyId=null;onNearby(null);invalidate();}
+  function reset(){inspection=null;normal.copy(initialNormal);forward.copy(UP).addScaledVector(normal,-UP.dot(normal)).normalize();target=null;zoom=1;orbit=initialOrbit;followTraveller=true;clearInput();nearbyId=null;onNearby(null);resize();invalidate();}
+  function setView(kind){inspection=null;target=null;clearInput();zoom=1;followTraveller=false;orbit=kind==='side'?orbitFrame([1,.04,0],[0,1,0]):kind==='back'?orbitFrame([0,.055,-.998],[0,1,0]):initialOrbit;resize();invalidate();}
+  function setDetail(kind){
+    const views={inkstone:{target:[.55,3.9,4.6],position:[2.5,5.4,10.8],fov:23},flute:{target:[.68,.28,6.54],position:[4.2,1.55,11.34],fov:30},bank:{target:[-1.7,-1.72,5.0],position:[-5.65,-1.2,10.4],fov:30}};
+    if(!views[kind])throw new Error('Unknown garden study');target=null;clearInput();followTraveller=false;inspection=views[kind];resize();invalidate();
+  }
+  function applyCamera(){
+    if(inspection){camera.position.set(...inspection.position);camera.up.set(0,1,0);camera.lookAt(...inspection.target);}
+    else{camera.position.fromArray(orbit.outward).multiplyScalar(cameraDistance*zoom);camera.up.fromArray(orbit.up);camera.lookAt(0,0,0);}
+    camera.updateMatrixWorld();
+  }
   function setPaused(value){paused=Boolean(value);clearInput();canvas.dataset.paused=String(paused);if(paused){cancelAnimationFrame(frame);frame=0;}else{lastTime=performance.now();invalidate();}}
   function setLowPower(value){renderer.setPixelRatio(value?1:Math.min(devicePixelRatio,1.5));renderer.shadowMap.enabled=!value;clouds.visible=historicalEdition&&!value;landscape.setLowPower?.(value);resize();}
   function setDusk(value){dusk=Boolean(value);sun.color.set(dusk?'#edc9ad':'#fff8e5');sun.intensity=dusk?1.5:2.65;hemisphere.color.set(dusk?'#bac8d2':'#eef3e5');hemisphere.intensity=dusk?.9:1.3;stars.visible=dusk;canvas.dataset.dusk=String(dusk);invalidate();}
@@ -164,7 +174,7 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
     guide.root.quaternion.copy(avatar.root.quaternion);
     guide.animate?.(elapsed,reducedMotion);landscape.animate(elapsed,reducedMotion,dusk);
     for(const [i,resident] of residents.entries()){resident.pet.animate?.(elapsed+i,reducedMotion);resident.pet.root.position.copy(resident.base).addScaledVector(resident.normal,reducedMotion?0:Math.sin(elapsed*2+i)*.035);}
-    camera.position.fromArray(orbit.outward).multiplyScalar(cameraDistance*zoom);camera.up.fromArray(orbit.up);camera.lookAt(0,0,0);camera.updateMatrixWorld();
+    applyCamera();
     targetMarker.visible=target?.kind==='surface';
     if(targetMarker.visible){placeSurface(targetMarker,target.normal,.055);targetMarker.scale.setScalar(reducedMotion?1:1+Math.sin(elapsed*4)*.08);}
     for(const label of labels){
@@ -194,7 +204,25 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
     schedule();
   }
   schedule();
-  return { navigateTo,cancelNavigation,setDirection,reset,setPaused,setLowPower,setDusk,
+  return { navigateTo,cancelNavigation,setDirection,reset,setPaused,setLowPower,setDusk,setView,setDetail,
+    ready:landscape.ready,
+    stats(){return {...canvas.dataset,sceneVersion:'0.11.0',cameraPosition:camera.position.toArray(),cameraTarget:inspection?.target??[0,0,0],cameraFov:camera.fov};},
+    async capture(){await landscape.ready;applyCamera();renderer.render(scene,camera);return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Garden capture failed')),'image/png'));},
+    async exportGLB(){
+      await landscape.ready;
+      const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');
+      const sculpture=new T.Group();sculpture.name='IF-LONGING-WERE-A-POEM';
+      sculpture.userData={title:'思念若是一首诗',sceneVersion:'0.11.0',landmarks:8,edition:'Static sculpture snapshot; no walking, lights or animated water. Ground uses authored vertex colours without the browser-only triplanar grain shader.'};
+      for(const child of scene.children){
+        if(!child.visible||child.isLight||child.isCamera||child===stars||child===clouds||child===targetMarker)continue;
+        sculpture.add(child.clone(true));
+      }
+      const exportedMaterials=[];
+      sculpture.traverse(o=>{if(o.name==='garden-ground'&&o.material){o.material=o.material.clone();o.material.map=null;exportedMaterials.push(o.material);}});
+      sculpture.updateMatrixWorld(true);
+      try{return await new GLTFExporter().parseAsync(sculpture,{binary:true,onlyVisible:true,maxTextureSize:1024});}
+      finally{exportedMaterials.forEach(m=>m.dispose());}
+    },
     getNearby:()=>nearbyId,
     dispose(){disposed=true;cancelAnimationFrame(frame);abort.abort();observer.disconnect();visibilityObserver.disconnect();assets.dispose();disposeTree(scene);studioLight.dispose();labels.forEach((label)=>label.element.remove());renderer.dispose();}
   };

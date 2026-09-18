@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { makeCrossover } from './model.js?v=0100';
+import { makeCrossover } from './model.js?v=0120';
 
 function studioEnvironment(renderer){
   const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=512;const c=canvas.getContext('2d');
@@ -22,9 +22,9 @@ export function createCrossoverViewer(canvas,{onReady=()=>{},onError=()=>{},glyp
   const key=new T.DirectionalLight('#fffaf4',3.7);key.position.set(-6,8,10);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.camera.left=-6;key.shadow.camera.right=6;key.shadow.camera.top=6;key.shadow.camera.bottom=-6;key.shadow.camera.near=1;key.shadow.camera.far=30;key.shadow.normalBias=.013;scene.add(key);
   const rim=new T.DirectionalLight('#dce3f5',1.45);rim.position.set(6,-1,-4);scene.add(rim);
   const control=new OrbitControls(camera,canvas);control.target.set(0,.15,0);control.enablePan=false;control.enableDamping=!reduced;control.dampingFactor=.09;control.minDistance=10;control.maxDistance=25;control.rotateSpeed=.62;
-  let frame=0,disposed=false,lost=false,suspended=false,turn=false,separated=false,separation=0,cold=false,inView=true,renderCount=0,frameTime=performance.now(),settle=0;
+  let frame=0,disposed=false,lost=false,suspended=false,turn=false,separated=false,separation=0,cold=false,inView=true,renderCount=0,frameTime=performance.now(),settle=0,detailFov=null;
   const signal=new AbortController();
-  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.fov=camera.aspect<.83?48:38;camera.updateProjectionMatrix();invalidate();}
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.fov=detailFov??(camera.aspect<.83?48:38);camera.updateProjectionMatrix();invalidate();}
   function metrics(){canvas.dataset.ready='true';canvas.dataset.title='删了一百遍';canvas.dataset.frames=String(++renderCount);canvas.dataset.triangles=String(renderer.info.render.triangles);canvas.dataset.drawCalls=String(renderer.info.render.calls);canvas.dataset.layers=String(world.root.userData.layers);canvas.dataset.autoRotate=String(turn);canvas.dataset.separated=String(separated);canvas.dataset.separation=separation.toFixed(3);canvas.dataset.light=cold?'cool':'studio';canvas.dataset.camera=camera.position.toArray().map(n=>n.toFixed(4)).join(',');}
   function render(now){frame=0;if(disposed||lost||suspended||document.hidden)return;const dt=Math.min((now-frameTime)/1000,.2);frameTime=now;
     if(turn&&inView)world.root.rotation.y+=dt*.13;
@@ -49,11 +49,15 @@ export function createCrossoverViewer(canvas,{onReady=()=>{},onError=()=>{},glyp
     setTurn(value){turn=Boolean(value);settle=1;invalidate();},
     setSeparated(value){separated=Boolean(value);settle=1;invalidate();},
     setLight(value){cold=Boolean(value);key.color.set(cold?'#d6e2ff':'#fffaf4');rim.color.set(cold?'#ffd9d9':'#dce3f5');scene.environmentIntensity=cold?1.18:1.0;invalidate();},
-    setView(kind){world.root.rotation.set(0,0,0);turn=false;control.target.set(0,.15,0);camera.position.set(...(kind==='back'?[0,.24,-16.6]:kind==='side'?[12,2,12]:[0,.24,16.6]));control.update();settle=reduced?1:30;invalidate();},
+    setView(kind){world.root.rotation.set(0,0,0);turn=false;detailFov=null;control.minDistance=10;control.target.set(0,.15,0);camera.position.set(...(kind==='back'?[0,.24,-16.6]:kind==='side'?[16.6,1.1,.35]:[0,.24,16.6]));resize();control.update();settle=reduced?1:30;invalidate();},
+    setDetail(kind){
+      const views={disc:{target:[.1,-.25,3.36],position:[1.8,1.25,8.0],fov:28},wire:{target:[1.75,1.3,2.93],position:[6.1,3.0,6.6],fov:26},proof:{target:[-.2,-1.10,3.40],position:[-3.2,-2.7,6.8],fov:27}};
+      const view=views[kind];if(!view)throw new Error('Unknown material study');turn=false;world.root.rotation.set(0,0,0);control.minDistance=1;control.target.set(...view.target);camera.position.set(...view.position);detailFov=view.fov;resize();control.update();settle=1;invalidate();
+    },
     suspend(value){suspended=Boolean(value);if(suspended){cancelAnimationFrame(frame);frame=0;}else invalidate();},
     async exportGLB(){const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');const rotation=world.root.rotation.clone();try{world.root.rotation.set(0,0,0);world.setSeparated(0);world.root.updateMatrixWorld(true);return await new GLTFExporter().parseAsync(world.root,{binary:true,onlyVisible:true,maxTextureSize:1024});}finally{world.root.rotation.copy(rotation);world.setSeparated(separation);invalidate();}},
     async capture({background=false}={}){if(disposed||lost)throw new Error('Renderer unavailable');renderer.render(scene,camera);let output=canvas;if(background){output=document.createElement('canvas');output.width=canvas.width;output.height=canvas.height;const ctx=output.getContext('2d');ctx.fillStyle='#e4e3e0';ctx.fillRect(0,0,output.width,output.height);ctx.drawImage(canvas,0,0);}return await new Promise((resolve,reject)=>output.toBlob(b=>b?resolve(b):reject(new Error('Image export failed')),'image/png'));},
-    stats(){return {...canvas.dataset};},
+    stats(){return {...canvas.dataset,sceneVersion:world.root.userData.sceneVersion,cameraTarget:control.target.toArray(),cameraFov:camera.fov};},
     dispose(){disposed=true;cancelAnimationFrame(frame);signal.abort();sizeObserver.disconnect();visibility.disconnect();control.dispose();world.dispose();environment.dispose();renderer.dispose();}
   };
 }

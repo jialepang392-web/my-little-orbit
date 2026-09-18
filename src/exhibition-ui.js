@@ -3,6 +3,7 @@ const world=document.body.dataset.orbitWorld;
 const names={'yesterday-today':'昨天，今天',crossover:'删了一百遍',poem:'思念若是一首诗','rain-finale':'雨终曲'};
 const stage=document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage');
 const controls=document.querySelector('.time-controls,.model-controls,.world-controls,.rain-controls');
+const edition=(document.querySelector('meta[name="orbit-version"]')?.content||'0.12.0').replaceAll('.','');
 if(world==='poem'){
   const target=document.querySelector('.garden-visit-tools');
   if(target)for(const node of document.querySelectorAll('.intro .guide-teaser,.intro .travel-log'))target.append(node);
@@ -28,8 +29,16 @@ if(stage&&controls){
   if(world==='poem'&&canvas){const observer=new MutationObserver(()=>{if(canvas.dataset.ready==='true')stage.classList.add('is-ready');});observer.observe(canvas,{attributes:true,attributeFilter:['data-ready']});if(canvas.dataset.ready==='true')stage.classList.add('is-ready');}
   // Actions always return to the real scene, keeping native button state intact.
   controls.addEventListener('click',event=>{if(still&&event.target.closest('button'))setStill(false);},true);
+  // Garden rendering correctly sleeps offscreen. A profile/verso command
+  // below the artwork must bring that artwork back into view, so its pending
+  // camera update is actually visible rather than waiting for a manual scroll.
+  controls.addEventListener('click',event=>{
+    if(event.target.closest('[data-garden-view],#reset-view')&&!immersive?.open){
+      requestAnimationFrame(()=>canvas?.scrollIntoView({block:'center',behavior:'instant'}));
+    }
+  });
 }
-const figures=[...document.querySelectorAll('.time-details figure,.time-verso figure,.detail-strip figure,.rain-details figure,.garden-detail-grid figure')];
+const figures=[...document.querySelectorAll('.time-details figure,.time-verso figure,.detail-strip figure,.rain-details figure,.garden-detail-grid figure,.exhibit-verso figure')];
 const items=figures.map(figure=>({figure,img:figure.querySelector('img'),caption:figure.querySelector('figcaption')?.textContent?.trim()||''})).filter(x=>x.img);
 let lightbox,current=0,trigger=null;
 function displayItem(i){current=(i+items.length)%items.length;const item=items[current];const target=lightbox.querySelector('.exhibit-image-main img');target.src=item.img.dataset.originalSrc||item.img.src;target.alt=item.img.alt;lightbox.querySelector('.exhibit-image-footer p').textContent=`${String(current+1).padStart(2,'0')} / ${String(items.length).padStart(2,'0')} — ${item.caption}`;lightbox.querySelector('.exhibit-image-footer a').href=target.src;}
@@ -39,9 +48,8 @@ function openItem(i,opener){
 }
 items.forEach((item,i)=>{const open=button('',()=>openItem(i,open),'detail-open');open.setAttribute('aria-label','放大查看：'+(item.caption||item.img.alt));item.img.before(open);open.append(item.img);});
 // Hidden navigation gets genuinely small thumbnails instead of 1600px covers.
-const coverPaths={'yesterday-today':'yesterday-today/cover.webp',crossover:'crossover/cover.webp',poem:'review/current.webp','rain-finale':'rain-finale/cover.webp'};
 for(const image of document.querySelectorAll('.orbit-choice img,.orbit-neighbour img')){
-  const id=Object.keys(coverPaths).find(key=>image.getAttribute('src').includes(coverPaths[key]));
-  if(id){image.src=`./assets/exhibition/${id}-192.webp`;image.srcset=`./assets/exhibition/${id}-192.webp 192w, ./assets/exhibition/${id}-480.webp 480w`;image.sizes='(max-width:700px) 125px, 155px';image.decoding='async';}
+  const link=image.closest('a'),id=link?.dataset.orbitChoice||link?.dataset.orbitNext||link?.dataset.orbitPrev;
+  if(names[id]){image.src=`./assets/exhibition/${id}-192.webp?v=${edition}`;image.srcset=`./assets/exhibition/${id}-192.webp?v=${edition} 192w, ./assets/exhibition/${id}-480.webp?v=${edition} 480w`;image.sizes='(max-width:700px) 125px, 155px';image.decoding='async';}
 }
 window.addEventListener('pageshow',()=>{document.dispatchEvent(new CustomEvent('orbit:pause',{detail:{paused:reasons.size>0}}));});

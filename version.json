@@ -1,1 +1,16 @@
-{"version":"0.10.0","edition":"four-world-exhibition-polish","date":"2026-09-18","worlds":["yesterday-today","crossover","poem","rain-finale"],"worldTitles":["昨天，今天","删了一百遍","思念若是一首诗","雨终曲"],"archived":["forest"],"sceneVersion":"0.9.2","sceneVersions":{"yesterday-today":"0.9.2","crossover":"0.6.1","poem":"0.5.0","rain-finale":"0.7.0"},"scope":"All four pages, gallery, mobile exhibition hierarchy, image inspection, immersive view and explicit static viewing. Original model, material, lighting and camera sources preserved.","presentation":"Yesterday, Today retains its outer Chinese title and text-free inner lens. Each work retains its independent palette and typography.","images":"Original verified scene renders and GLBs retained byte-for-byte; responsive derivatives in assets/exhibition/manifest.json","navigation":"Unchanged four-world order, native picker and contextual gallery return"}
+{
+  "version":"0.12.0",
+  "edition":"the-shape-of-what-remains",
+  "exhibitionTitle":"留下的形状",
+  "date":"2026-09-18",
+  "worlds":["yesterday-today","crossover","poem","rain-finale"],
+  "worldTitles":["昨天，今天","删了一百遍","思念若是一首诗","雨终曲"],
+  "archived":["forest"],
+  "sceneVersion":"0.12.0",
+  "sceneVersions":{"yesterday-today":"0.12.0","crossover":"0.11.0","poem":"0.11.0","rain-finale":"0.11.0"},
+  "scope":"Curated two-act gallery, four independent artwork pages, material studies and same-scene editions. Crossover has overprinted and lifted proofs; garden has quieter framing and reduced peripheral density; rain has a concentrated light mass, silver fringe and lower coda.",
+  "presentation":"Yesterday, Today: a translucent time specimen with lilac cellophane replacing the corrugated hose, unequal pink hydrangea clusters, pearl contact sheets and feather veils. Outer Chinese title and text-free inner memory lens retained. All four scenes keep native navigation, static mode and single-canvas immersive viewing.",
+  "images":"Three revised artworks each have a 1600px cover, three independent 1200px material-camera studies, profile, verso, 1600x2000 print and reloaded GLB. Per-work build.json and responsive manifest hold exact hashes.",
+  "modelLimitations":"GLB omits web lighting, bloom, rain animation and interaction. Garden is a static snapshot; its mineral ground uses authored vertex colours rather than the browser-only grain shader.",
+  "navigation":"Unchanged four-world order, native picker and contextual gallery return"
+}

@@ -1,85 +1,85 @@
 {
-  "version": "0.10.0",
-  "builtAt": "2026-09-18T08:36:14.330326+00:00",
-  "method": "Responsive sizes from the unchanged, verified real-scene renders. No recolouring, AI images or new model exports.",
+  "version": "0.12.0",
+  "builtAt": "2026-09-18T11:30:34.594424+00:00",
+  "method": "Responsive sizes from the current verified real-scene covers. No recolouring or separate cover-only geometry.",
   "sourceHashes": {
-    "assets/yesterday-today/cover.webp": "499cd3bb71f8859f1e5d1da6ba4495d4f5b9436cdebb4465c32316351c5e3359",
-    "assets/crossover/cover.webp": "f44fbaabe5eb1343d36c8dd99aa3786585e428cad9cf52508815b7d5a07b6269",
-    "assets/review/current.webp": "30f6706a45c61e742edf9773bf3a4e2e30ea91058fafab03b0f4757eea0e8e79",
-    "assets/rain-finale/cover.webp": "a5f3771a1cabea7cc2d690e058ec22969c39c70e095f17a561f90c028a820af5"
+    "assets/yesterday-today/cover.webp": "fe529a99e764a8be6e1f0269fd587e321272bac08eb5fbba67e719a9cf752ce9",
+    "assets/crossover/cover.webp": "39be149bcdf489357b48f7335689f65e4cfee2e005086c8fe86d2947e7b69a7a",
+    "assets/poem/cover.webp": "5b75a6f893f6786ddb22827469235cc855e2ac6c65ed3cb5b0da1ee02fee397b",
+    "assets/rain-finale/cover.webp": "b9dc0354f6afa680ab528d2db48c4e1382f3abee988673baf2ae343922bba2f7"
   },
   "artifacts": {
     "yesterday-today-192.webp": {
-      "bytes": 5876,
+      "bytes": 4412,
       "width": 192,
       "height": 192,
-      "sha256": "c1abe4f824fe4a0159ef56e0b4a65438e7fc9bbf4cc4afe76368731169180e14"
+      "sha256": "30ec03848940cb3ce5dc31c42d19c2ec61c49e8383d4f5d6ba7d15f90b6efc06"
     },
     "yesterday-today-480.webp": {
-      "bytes": 25452,
+      "bytes": 18628,
       "width": 480,
       "height": 480,
-      "sha256": "95b87d530f900ea6bf8d4ffdb8fdc10a4f6bc303c935c9ce979f49084ce79416"
+      "sha256": "4e9cc8dbb08d8b17b1285949ed44d86e0759bce1fdb3bda33ff560d3c1fd8450"
     },
     "yesterday-today-800.webp": {
-      "bytes": 75322,
+      "bytes": 57804,
       "width": 800,
       "height": 800,
-      "sha256": "b1f83227fee8e60e457926c0e8420f01d44efbd5b462d658816195fef763dd37"
+      "sha256": "01b3b01d01dd247eae8d3792f5fdb9c63eb72961c807e9e249032a858f487479"
     },
     "crossover-192.webp": {
-      "bytes": 6872,
+      "bytes": 7572,
       "width": 192,
       "height": 192,
-      "sha256": "0e55de31662140b26abc2c8726c2ab0c3431bd0950fb194f13f0556c68f2955c"
+      "sha256": "0448b93a263f14b789cd5da07f445b6b8bf8831e8fa329c484f04cff9e364d98"
     },
     "crossover-480.webp": {
-      "bytes": 28480,
+      "bytes": 31760,
       "width": 480,
       "height": 480,
-      "sha256": "113e5c15f3bb76e34a1dec5ee70d1f3ffdc9f71f70942c7b63e4467ee953e494"
+      "sha256": "3611ec3e323376bf3a249e41a71232f9d276b596fc62526076b7fa711875ed5b"
     },
     "crossover-800.webp": {
-      "bytes": 80342,
+      "bytes": 91150,
       "width": 800,
       "height": 800,
-      "sha256": "281bf566ea851f0dbae34fe754e8e8f450db9b8d4f5895986bfaced11028b7b9"
+      "sha256": "7c79ce696018d697f8f529253c717edc11e7496926c7bc4dedffef68d414484c"
     },
     "poem-192.webp": {
-      "bytes": 11868,
+      "bytes": 8340,
       "width": 192,
       "height": 192,
-      "sha256": "2d93cd3aba1aea7b7dfb4d474177e16c0e9263ac150df8ae74bbfe062e0dd06b"
+      "sha256": "246c90152d72ebd4b82e7f2a64277080cd31eef35bb039a00be1b5bbb463679e"
     },
     "poem-480.webp": {
-      "bytes": 58780,
+      "bytes": 41866,
       "width": 480,
       "height": 480,
-      "sha256": "44375c1bb05135f5150422c2475ee5404d56d0a8a8d7748450a7285511ef2217"
+      "sha256": "d459dde980f1d18d71a64d48eb623251ba7973fefb555cf31ff535dbee20dd3e"
     },
     "poem-800.webp": {
-      "bytes": 158466,
-      "width": 710,
-      "height": 710,
-      "sha256": "cbaf696a28bb8c861bfb81457a114543dc80c9e5630ab07a5d57b379c8b0534a"
-    },
-    "rain-finale-192.webp": {
-      "bytes": 8538,
-      "width": 192,
-      "height": 192,
-      "sha256": "48d023d19cd51fb399fd06447fa16ce38b351c1c72163c76d47484b260875d56"
-    },
-    "rain-finale-480.webp": {
-      "bytes": 41580,
-      "width": 480,
-      "height": 480,
-      "sha256": "c6c1b77e9156a6840785ee4695d5b432ca75c8375b75345aa8229366e43a423c"
-    },
-    "rain-finale-800.webp": {
-      "bytes": 128906,
+      "bytes": 135342,
       "width": 800,
       "height": 800,
-      "sha256": "483a6f3010a4edb1c429468b3e15ad9e8eeb7592ee561d9c3ec0f839f44f2b33"
+      "sha256": "987e7a547d7020b9e1a7a63b26befb6bf89daa005fe67cb72b87f6c69c3498a9"
+    },
+    "rain-finale-192.webp": {
+      "bytes": 8318,
+      "width": 192,
+      "height": 192,
+      "sha256": "3c8ed56e53cccc19b2da53aa03d0e58f4c252b0a3c83284482bd66400e374b7b"
+    },
+    "rain-finale-480.webp": {
+      "bytes": 42314,
+      "width": 480,
+      "height": 480,
+      "sha256": "6e14743e1459d3e740d59f2431badb8a9e81e6e35dba675d3a6e2e0dbfb00434"
+    },
+    "rain-finale-800.webp": {
+      "bytes": 132034,
+      "width": 800,
+      "height": 800,
+      "sha256": "7066b00b2e8c5d4c827cbf30009652c8faca4e5478769525e1ac37b70bcb1112"
     }
   }
 }

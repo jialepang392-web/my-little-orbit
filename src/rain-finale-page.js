@@ -1,4 +1,4 @@
-import { waitForLiveView } from './exhibition-state.js?v=0100';
+import { waitForLiveView } from './exhibition-state.js?v=0120';
 const canvas=document.querySelector('#rain-canvas'),stage=document.querySelector('#rain-stage'),status=document.querySelector('#model-status');
 const buttons=[...document.querySelectorAll('[data-scene-action]')];
 let viewer=null,turn=false,rain=false,separated=false,silver=false;
@@ -9,7 +9,7 @@ document.addEventListener('orbit:pause',e=>viewer?.suspend(Boolean(e.detail.paus
 await waitForLiveView(stage);
 try{
   let timeout;
-  const load=Promise.all([import('./rain-finale/viewer.js?v=0100'),fetch('./assets/rain-finale/title-glyphs.json').then(r=>{if(!r.ok)throw new Error('Title outlines missing');return r.json();})]);
+  const load=Promise.all([import('./rain-finale/viewer.js?v=0120'),fetch('./assets/rain-finale/title-glyphs.json').then(r=>{if(!r.ok)throw new Error('Title outlines missing');return r.json();})]);
   const [{createRainViewer},title]=await Promise.race([load,new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('Scene load timeout')),25000);})]).finally(()=>clearTimeout(timeout));
   viewer=createRainViewer(canvas,{glyphs:title.glyphs,onReady(){stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');buttons.forEach(b=>b.disabled=false);status.textContent='真实三维 / 拖动旋转 · 滚轮缩放 · 方向键亦可';},onError:fail});
   document.querySelector('#rotate-toggle').addEventListener('click',()=>{turn=!turn;viewer.setTurn(turn);toggle('#rotate-toggle',turn,'停止转动','缓慢转动');});

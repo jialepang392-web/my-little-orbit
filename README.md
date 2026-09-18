@@ -1,4 +1,14 @@
-# 我的小宇宙 · A Collection of Worlds — v0.8.1
+# 我的小宇宙 · 留下的形状 — v0.11.0
+
+Exhibition 01 / **The Shape of What Remains**. A two-act collection of four independently authored digital sculptures, in the fixed order Yesterday, Today → Deleted a Hundred Times → If Longing Were a Poem → Rain Finale.
+
+This edition adds a curated gallery, revised material relationships and a complete set of same-scene images for the three later works: cover, three independently positioned material-study cameras, true profile and verso, editorial print and downloadable GLB. Yesterday, Today retains its accepted v0.9.2 geometry, outer title and text-free memory lens.
+
+The native picker and adjacent-work navigation remain usable without WebGL. Explicit `?view=still` does not fetch the engine until the visitor chooses live interaction. Immersive viewing moves the original canvas rather than creating another renderer. The garden retains all eight destinations, walking and reading.
+
+Each revised artwork includes an `assets/<work>/build.json` source/output manifest. GLBs are static snapshots: web lighting, postprocessing, rain animation and interaction are omitted. The garden ground uses authored vertex colours without the browser-only triplanar mineral-grain shader. The current website uses Three.js r180; licensing below remains applicable. No font files or original reference photographs are distributed.
+
+## Historical v0.8.1 navigation edition
 
 Current exhibition order: **昨天，今天 / Yesterday, Today → 删了一百遍 / Deleted a Hundred Times → 思念若是一首诗 / If Longing Were a Poem → 雨终曲 / Rain Finale**.
 

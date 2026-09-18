@@ -5,8 +5,8 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { seededRandom } from '../math.js?v=0100';
-import { makeRainFinale } from './model.js?v=0100';
+import { seededRandom } from '../math.js?v=0120';
+import { makeRainFinale } from './model.js?v=0120';
 
 function studio(renderer){
   const c=Object.assign(document.createElement('canvas'),{width:1024,height:512}),ctx=c.getContext('2d');
@@ -30,24 +30,24 @@ export function createRainViewer(canvas,{glyphs={},onReady=()=>{},onError=()=>{}
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.info.autoReset=false;
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(35,1,.1,70);camera.position.set(0,.22,13.2);
   const world=makeRainFinale({glyphs});scene.add(world.root);
-  const env=studio(renderer);scene.environment=env.texture;scene.environmentIntensity=.78;
+  const env=studio(renderer);scene.environment=env.texture;scene.environmentIntensity=.88;
   const haze=atmosphere();scene.add(haze);
   const ambient=new T.HemisphereLight('#a6b1db','#171727',.95);scene.add(ambient);
-  const key=new T.DirectionalLight('#e2e8ff',2.15);key.position.set(-5,7,9);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-5,right:5,top:5,bottom:-5,near:1,far:30});key.shadow.normalBias=.018;key.shadow.bias=-.0001;scene.add(key);
-  const rim=new T.DirectionalLight('#5b7bdb',2.1);rim.position.set(5,2,-5);scene.add(rim);
-  const fill=new T.DirectionalLight('#b6bdde',.65);fill.position.set(1,-3,7);scene.add(fill);
-  const blue=new T.PointLight('#124cff',28,10,2);blue.position.set(-2.1,.2,3.9);scene.add(blue);
-  const ice=new T.PointLight('#2589ff',17,9,2);ice.position.set(-1.4,-1.5,3.5);scene.add(ice);
-  const composer=new EffectComposer(renderer),renderPass=new RenderPass(scene,camera),bloom=new UnrealBloomPass(new T.Vector2(800,800),.63,.39,1.9),output=new OutputPass();composer.addPass(renderPass);composer.addPass(bloom);composer.addPass(output);
+  const key=new T.DirectionalLight('#e2e8ff',2.55);key.position.set(-5,7,9);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-5,right:5,top:5,bottom:-5,near:1,far:30});key.shadow.normalBias=.018;key.shadow.bias=-.0001;scene.add(key);
+  const rim=new T.DirectionalLight('#b2c0df',.95);rim.position.set(5,2,-5);scene.add(rim);
+  const fill=new T.DirectionalLight('#b6bdde',.90);fill.position.set(1,-3,7);scene.add(fill);
+  const blue=new T.PointLight('#124cff',16,10,2);blue.position.set(-2.1,.2,3.9);scene.add(blue);
+  const ice=new T.PointLight('#2589ff',8,9,2);ice.position.set(-1.4,-1.5,3.5);scene.add(ice);
+  const composer=new EffectComposer(renderer),renderPass=new RenderPass(scene,camera),bloom=new UnrealBloomPass(new T.Vector2(800,800),.38,.33,2.0),output=new OutputPass();composer.addPass(renderPass);composer.addPass(bloom);composer.addPass(output);
   // A restrained print grade is part of the live viewer, including screenshots:
   // charcoal blacks, cool silver highlights and fixed fine grain, no flicker.
-  const grade=new ShaderPass({uniforms:{tDiffuse:{value:null}},vertexShader:'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'uniform sampler2D tDiffuse; varying vec2 vUv; void main(){vec3 c=texture2D(tDiffuse,vUv).rgb;vec3 black=vec3(.10,.13,.18);c=max((c-black)/(vec3(1.)-black),vec3(0.));float vignette=1.-.11*pow(length((vUv-.5)*1.4),2.);float grain=(fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453)-.5)*.008;c=c*vignette+grain;gl_FragColor=vec4(clamp(c,0.,1.),1.);}'});composer.addPass(grade);
+  const grade=new ShaderPass({uniforms:{tDiffuse:{value:null}},vertexShader:'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'uniform sampler2D tDiffuse; varying vec2 vUv; void main(){vec3 c=texture2D(tDiffuse,vUv).rgb;vec3 black=vec3(.055,.070,.10);c=max((c-black)/(vec3(1.)-black),vec3(0.));float vignette=1.-.11*pow(length((vUv-.5)*1.4),2.);float grain=(fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453)-.5)*.006;c=c*vignette+grain;gl_FragColor=vec4(clamp(c,0.,1.),1.);}'});composer.addPass(grade);
   const control=new OrbitControls(camera,canvas);control.target.set(0,.1,0);control.enablePan=false;control.enableDamping=!reduced;control.dampingFactor=.09;control.rotateSpeed=.57;control.minDistance=8.0;control.maxDistance=22;
   const random=seededRandom(307),rainPositions=new Float32Array(96*6),rainSeeds=[];
   for(let i=0;i<96;i++)rainSeeds.push({x:(random()-.5)*15,y:(random()-.5)*12,z:-4+random()*8,length:.13+random()*.45,speed:.35+random()*.45});
   const rainGeo=new T.BufferGeometry();rainGeo.setAttribute('position',new T.BufferAttribute(rainPositions,3));
   const rain=new T.LineSegments(rainGeo,new T.LineBasicMaterial({color:'#7b8ba9',transparent:true,opacity:.3,depthWrite:false}));rain.visible=false;scene.add(rain);
-  let animationTime=0,turn=false,raining=false,separated=false,separation=0,lightMode='blue',frame=0,last=performance.now(),disposed=false,lost=false,suspended=false,inView=true,settle=0,renderCount=0;
+  let animationTime=0,turn=false,raining=false,separated=false,separation=0,lightMode='blue',frame=0,last=performance.now(),disposed=false,lost=false,suspended=false,inView=true,settle=0,renderCount=0,detailFov=null;
   const signals=new AbortController();
   const geometryStats={triangles:0,meshes:0};world.root.traverse(o=>{if(o.isMesh){geometryStats.meshes++;geometryStats.triangles+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3;}});
   function updateRain(time){
@@ -67,7 +67,7 @@ export function createRainViewer(canvas,{glyphs={},onReady=()=>{},onError=()=>{}
     control.update();draw();
     if(((turn||raining)&&inView)||separation!==target||settle-->0)invalidate();
   }
-  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);composer.setSize(r.width,r.height);camera.aspect=r.width/r.height;camera.fov=camera.aspect<.85?49:35;camera.updateProjectionMatrix();invalidate();}
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);composer.setSize(r.width,r.height);camera.aspect=r.width/r.height;camera.fov=detailFov??(camera.aspect<.85?49:35);camera.updateProjectionMatrix();invalidate();}
   control.addEventListener('change',invalidate);control.addEventListener('start',()=>{settle=20;last=performance.now();});control.addEventListener('end',()=>{settle=reduced?1:24;invalidate();});
   const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(canvas);
   const visibility=new IntersectionObserver(([entry])=>{inView=entry.isIntersecting;if(inView){last=performance.now();invalidate();}});visibility.observe(canvas);
@@ -85,8 +85,12 @@ export function createRainViewer(canvas,{glyphs={},onReady=()=>{},onError=()=>{}
     setTurn(value){turn=Boolean(value);last=performance.now();invalidate();},
     setRain(value){raining=Boolean(value);rain.visible=raining;last=performance.now();invalidate();},
     setSeparated(value){separated=Boolean(value);last=performance.now();settle=2;invalidate();},
-    setLight(value){lightMode=value==='silver'?'silver':'blue';const silver=lightMode==='silver';blue.intensity=silver?3:28;ice.intensity=silver?2:17;key.color.set(silver?'#f0eeed':'#e2e8ff');rim.color.set(silver?'#acb4c9':'#5b7bdb');scene.environmentIntensity=silver?1.02:.78;bloom.strength=silver?.30:.63;invalidate();},
-    setView(kind){turn=false;world.root.rotation.set(0,0,0);control.target.set(0,.1,0);camera.position.set(...(kind==='back'?[0,.22,-13.2]:kind==='side'?[10.5,1.4,8.7]:kind==='detail'?[-2.0,.2,8.1]:[0,.22,13.2]));control.update();settle=reduced?1:24;invalidate();},
+    setLight(value){lightMode=value==='silver'?'silver':'blue';const silver=lightMode==='silver';blue.intensity=silver?3:16;ice.intensity=silver?2:8;key.color.set(silver?'#f0eeed':'#e2e8ff');rim.color.set(silver?'#acb4c9':'#b2c0df');scene.environmentIntensity=silver?1.02:.88;bloom.strength=silver?.20:.38;invalidate();},
+    setView(kind){turn=false;world.root.rotation.set(0,0,0);detailFov=null;control.minDistance=8;control.target.set(0,.1,0);camera.position.set(...(kind==='back'?[0,.22,-13.2]:kind==='side'?[13.2,.7,.2]:kind==='detail'?[-2.0,.2,8.1]:[0,.22,13.2]));resize();control.update();settle=reduced?1:24;invalidate();},
+    setDetail(kind){
+      const views={light:{target:[-1.6,-.1,2.4],position:[-5.2,.85,7.4],fov:28},veil:{target:[1.75,.67,2.20],position:[5.7,2.4,6.7],fov:27},coda:{target:[.26,-2.45,1.9],position:[1.9,-4.3,6.4],fov:27}};
+      const view=views[kind];if(!view)throw new Error('Unknown rain study');turn=false;world.root.rotation.set(0,0,0);control.minDistance=1;control.target.set(...view.target);camera.position.set(...view.position);detailFov=view.fov;resize();control.update();settle=1;invalidate();
+    },
     suspend(value){suspended=Boolean(value);if(suspended){cancelAnimationFrame(frame);frame=0;}else{last=performance.now();invalidate();}},
     async capture(){if(disposed||lost)throw new Error('Viewer unavailable');draw();return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('PNG capture failed')),'image/png'));},
     async exportGLB(){
@@ -94,7 +98,7 @@ export function createRainViewer(canvas,{glyphs={},onReady=()=>{},onError=()=>{}
       try{world.root.rotation.set(0,0,0);world.setSeparated(0);world.root.updateMatrixWorld(true);return await new GLTFExporter().parseAsync(world.root,{binary:true,onlyVisible:true,maxTextureSize:1024});}
       finally{world.root.rotation.copy(rotation);world.setSeparated(separation);invalidate();}
     },
-    stats(){return {...canvas.dataset};},
+    stats(){return {...canvas.dataset,sceneVersion:world.root.userData.sceneVersion,cameraTarget:control.target.toArray(),cameraFov:camera.fov};},
     dispose(){disposed=true;cancelAnimationFrame(frame);signals.abort();resizeObserver.disconnect();visibility.disconnect();control.dispose();world.dispose();env.dispose();haze.geometry.dispose();haze.material.map.dispose();haze.material.dispose();rainGeo.dispose();rain.material.dispose();bloom.dispose();output.dispose();grade.dispose();composer.dispose();renderer.dispose();}
   };
 }

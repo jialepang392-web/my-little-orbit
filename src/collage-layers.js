@@ -1,7 +1,7 @@
 /** Curved, layered physical collage. Generated imagery is used only as material texture. */
 import * as T from 'three';
-import { fromLatLon, seededRandom } from './math.js?v=0100';
-import { part, ball, mergeStatic } from './garden-models.js?v=0100';
+import { fromLatLon, seededRandom } from './math.js?v=0120';
+import { part, ball, mergeStatic } from './garden-models.js?v=0120';
 const R=5.4,Z=new T.Vector3(0,0,1),atlasUrl=new URL('../assets/textures/collage-atlas.webp',import.meta.url).href;
 const supportLayers=[
   [17,71,4.3,4.2,-.24,5.57],[18,122,2.5,2.9,.16,5.57],[-30,58,2.7,3.0,-.30,5.57],[-19,-108,3.0,3.4,.4,5.57],[28,-55,2.3,2.8,-.30,5.57],
@@ -46,7 +46,8 @@ function patch(w,h,radius,kind,seed,ragged=true){
   for(let i=0;i<pos.count;i++){
     const row=Math.floor(i/nx),col=i%nx;let x=pos.getX(i),y=pos.getY(i);
     if(ragged){x+=col<3?left[row]*(1-col/3)*2.7:col>33?-right[row]*(col-33)/3*2.7:0;y+=row<3?-top[col]*(1-row/3)*2.5:row>39?bottom[col]*(row-39)/3*2.5:0;}
-    const n=new T.Vector3(x,y,R).normalize(),curl=(kind==='paper'?.008:.012)*Math.sin(x*6+seed)*Math.sin(y*7);
+    const foldedCorner=kind==='paper'?.085*Math.pow(Math.max(0,x/(w/2)),7)*Math.pow(Math.max(0,y/(h/2)+.12),3):0;
+    const n=new T.Vector3(x,y,R).normalize(),curl=(kind==='paper'?.008:.012)*Math.sin(x*6+seed)*Math.sin(y*7)+foldedCorner;
     pos.setXYZ(i,...n.multiplyScalar(radius+curl).toArray());
   }geo.computeVertexNormals();const m=new T.Mesh(geo,material(kind));m.castShadow=true;m.receiveShadow=true;return m;
 }
@@ -78,7 +79,7 @@ export function makeCollageLayers(){
   // Wider-spaced manuscript rules belong to each paper, not to a single oversized front rectangle.
   // Embroidered wire mesh uses tiny crossings and bead accents instead of a solid ring.
   const lace=new T.Group();
-  for(const [lat,lon,angle] of [[42,94,-.3],[-46,75,.25],[7,-118,.5]]){
+  for(const [lat,lon,angle] of [[51,120,-.3],[-46,75,.25],[7,-118,.5]]){
     const panel=new T.Group();
     for(const slope of [-1,1])for(let row=-13;row<=13;row++){
       const pts=[];for(let j=0;j<=24;j++){const x=-1.55+j/24*3.1,y=row*.092+slope*x*.20;if(Math.abs(y)>.28)continue;pts.push(new T.Vector3(x,y,R).normalize().multiplyScalar(5.69+.02*Math.sin(x*8+row)));}

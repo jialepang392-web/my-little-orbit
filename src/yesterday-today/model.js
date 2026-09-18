@@ -1,11 +1,11 @@
-/** v0.9 — folded time specimen. Authored all around an unflattened volume.
+/** v0.12 — a translucent time specimen. Authored around an unflattened volume.
  * Printed fragments, attachment points and front/back passages are geometry.
  * No generated cover is projected onto the sculpture; exports use this scene.
  */
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { seededRandom } from '../math.js?v=0100';
-import { makeYesterdayTextures } from './textures.js?v=0100';
+import { seededRandom } from '../math.js?v=0120';
+import { makeYesterdayTextures } from './textures.js?v=0120';
 const Z=new T.Vector3(0,0,1),Y=new T.Vector3(0,1,0),TAU=Math.PI*2;
 const v=p=>new T.Vector3(...p);
 
@@ -14,21 +14,21 @@ export function makeYesterdayToday(){
   const groups=[],maps=makeYesterdayTextures(),random=seededRandom(26091809);
   const layer=name=>{const g=new T.Group();g.name=name;root.add(g);groups.push(g);return g;};
   const mat=o=>new T.MeshPhysicalMaterial({side:T.DoubleSide,...o});
-  const pearl=mat({color:'#e0cfdb',map:maps.membrane,roughness:.39,metalness:.24,iridescence:.68,iridescenceIOR:1.34,iridescenceThicknessRange:[180,570],clearcoat:.48,bumpMap:maps.folds,bumpScale:.035});
-  const depth=mat({color:'#50374f',roughness:.51,metalness:.25,bumpMap:maps.folds,bumpScale:.052});
-  const violet=mat({color:'#716096',roughness:.31,metalness:.59,iridescence:.47,clearcoat:.4,bumpMap:maps.folds,bumpScale:.022});
-  const silver=mat({color:'#e0dce2',roughness:.30,metalness:.96,bumpMap:maps.folds,bumpScale:.046});
-  const white=mat({color:'#eee4da',roughness:.68,metalness:.02});
-  const red=mat({color:'#e40824',roughness:.27,metalness:.04,clearcoat:.63,clearcoatRoughness:.25});
-  const redDark=mat({color:'#891b35',roughness:.38,metalness:.23});
-  const glass=mat({color:'#f6edf3',roughness:.09,metalness:0,transmission:.90,thickness:.14,ior:1.44,iridescence:.56,clearcoat:.65,iridescenceThicknessRange:[180,460]});
-  const rose=mat({color:'#d9a5c6',roughness:.22,transmission:.57,thickness:.11,ior:1.37,iridescence:.5,clearcoat:.5});
-  const wine=mat({color:'#b72960',roughness:.28,metalness:.35,iridescence:.18});
-  const pink=mat({color:'#f3c7d2',map:maps.petal,roughness:.62,sheen:.7,sheenColor:'#f5c8d6',sheenRoughness:.7});
+  const pearl=mat({color:'#f2e6ef',map:maps.membrane,roughness:.24,metalness:.06,transmission:.32,thickness:.025,ior:1.29,iridescence:.57,iridescenceIOR:1.28,iridescenceThicknessRange:[210,460],clearcoat:.6,bumpMap:maps.folds,bumpScale:.012});
+  const depth=mat({color:'#897896',roughness:.48,metalness:.06,bumpMap:maps.folds,bumpScale:.024});
+  const violet=mat({color:'#a7a4d1',roughness:.24,metalness:.18,transmission:.28,thickness:.035,ior:1.32,iridescence:.43,clearcoat:.55,bumpMap:maps.folds,bumpScale:.011});
+  const silver=mat({color:'#e8e4ec',roughness:.31,metalness:.88,bumpMap:maps.folds,bumpScale:.019});
+  const white=mat({color:'#f2eaf0',roughness:.73,metalness:0});
+  const lilac=mat({color:'#bba6d8',roughness:.18,transmission:.62,thickness:.025,ior:1.28,iridescence:.5,clearcoat:.58});
+  const stem=mat({color:'#ad83a4',roughness:.6,metalness:.03});
+  const glass=mat({color:'#faf6ff',roughness:.075,metalness:0,transmission:.94,thickness:.028,ior:1.32,iridescence:.42,clearcoat:.52,iridescenceThicknessRange:[220,420]});
+  const rose=mat({color:'#e9bfd7',roughness:.17,transmission:.71,thickness:.032,ior:1.27,iridescence:.47,clearcoat:.46});
+  const mistBlue=mat({color:'#b9cfed',roughness:.18,transmission:.67,thickness:.025,ior:1.28,iridescence:.48,clearcoat:.48});
+  const pink=mat({color:'#ffe3ec',map:maps.petal,roughness:.64,sheen:.7,sheenColor:'#f5d5e5',sheenRoughness:.7});
   const pale=mat({color:'#fff1e8',map:maps.petal,roughness:.70,sheen:.55,sheenColor:'#e6c0d4'});
-  const fiber=mat({color:'#f3d4df',roughness:.87,sheen:.8,sheenColor:'#f2b5d0'});
-  const fiberDark=mat({color:'#ce86a7',roughness:.82});
-  const wire=mat({color:'#b775a8',metalness:.77,roughness:.3});
+  const fiber=mat({color:'#fff1f4',roughness:.89,sheen:.8,sheenColor:'#f6dbe9'});
+  const fiberDark=mat({color:'#d9b7cd',roughness:.84});
+  const wire=mat({color:'#b6a2d3',metalness:.48,roughness:.34});
   const steel=mat({color:'#bfc0cc',metalness:.94,roughness:.23});
   const inkPaper=[maps.paperA,maps.paperB,maps.paperC].map(map=>mat({map,color:'#fff9f0',roughness:.95,metalness:0,bumpMap:maps.paperGrain,bumpScale:.011}));
   function mesh(geo,m,p=[0,0,0]){const o=new T.Mesh(geo,m);o.position.set(...p);o.castShadow=!(m.transmission>0||m.transparent);o.receiveShadow=true;return o;}
@@ -50,23 +50,24 @@ export function makeYesterdayToday(){
   function sheet(w,h,normal,radius,m,spin=0,seed=1,curl=.18){
     const geo=new T.PlaneGeometry(w,h,30,24),p=geo.attributes.position;
     for(let i=0;i<p.count;i++){let x=p.getX(i),y=p.getY(i);const u=x/w*2,t=y/h*2,edge=Math.max(Math.abs(u),Math.abs(t));
-      x+=Math.pow(Math.abs(t),18)*(.038*Math.sin(u*49+seed)+.018*Math.sin(u*93));
-      y+=Math.pow(Math.abs(u),18)*(.035*Math.sin(t*38+seed)+.013*Math.sin(t*87));
+      const torn=m.transmission>0?.18:.60;
+      x+=torn*Math.pow(Math.abs(t),18)*(.038*Math.sin(u*49+seed)+.018*Math.sin(u*93));
+      y+=torn*Math.pow(Math.abs(u),18)*(.035*Math.sin(t*38+seed)+.013*Math.sin(t*87));
       const n=new T.Vector3(x,y,2.25).normalize();
-      const fold=(m.metalness>.15?.065:.018)*Math.sin(u*12+t*5+seed)+.013*Math.sin(t*28+u*7);
+      const fold=(m.metalness>.5?.030:.013)*Math.sin(u*12+t*5+seed)+.008*Math.sin(t*28+u*7);
       n.multiplyScalar(radius+fold+Math.pow(edge,4)*curl*(.6+.4*Math.sin(u*4+t*3+seed)));
       p.setXYZ(i,n.x,n.y,n.z);
     }geo.computeVertexNormals();return orient(mesh(geo,m),normal,spin);
   }
   const skins=layer('02 / CURVED MEMBRANES & SILVER SEAMS');
   const skinspec=[
-    [2.6,1.9,[-.46,.73,.51],2.22,pearl,-.6],[2.8,1.6,[.43,.83,.19],2.21,wine,.5],
-    [1.8,2.8,[.85,.14,.45],2.22,violet,-.3],[2.1,2.6,[-.84,.16,.3],2.20,silver,.6],
+    [2.6,1.9,[-.46,.73,.51],2.22,pearl,-.6],[2.8,1.6,[.43,.83,.19],2.21,lilac,.5],
+    [1.8,2.8,[.85,.14,.45],2.22,mistBlue,-.3],[1.7,2.1,[-.84,.16,.3],2.20,pearl,.6],
     [3.0,1.6,[.2,-.85,.36],2.24,pearl,.25],[1.6,2.3,[-.57,-.58,.55],2.25,rose,-.8],
     [2.5,2.0,[.18,.65,-.8],2.24,pearl,.6],[2.1,2.3,[-.79,.12,-.59],2.21,violet,-.5],
-    [2.5,2.2,[.64,-.21,-.72],2.24,silver,.55],[2.5,1.8,[-.1,-.81,-.52],2.20,wine,-.3],
+    [2.5,2.2,[.64,-.21,-.72],2.24,pearl,.55],[2.5,1.8,[-.1,-.81,-.52],2.20,lilac,-.3],
     [1.3,2.3,[.12,.13,-1],2.27,rose,.1],[1.65,1.7,[-.47,-.71,-.62],2.30,pearl,.6],
-    [1.45,1.14,[-.30,.48,.85],2.18,pearl,-.4],[1.36,.68,[-.06,-.60,.82],2.18,silver,.3]
+    [1.45,1.14,[-.30,.48,.85],2.18,rose,-.4],[1.36,.68,[-.06,-.60,.82],2.18,pearl,.3]
   ];
   skinspec.forEach(([w,h,n,r,m,s],i)=>skins.add(sheet(w,h,n,r,m,s,10+i,.24)));
 
@@ -83,13 +84,13 @@ export function makeYesterdayToday(){
   for(let i=0;i<5;i++)films.add(ribbon([[-1.8,-1.2,1.2],[-.7,-2.03-i*.03,1.5],[.95,-2.29+i*.06,.94],[1.84,-1.65,.67]],.04+i*.014,i%2?pearl:silver,.9));
 
   const record=layer('04 / MEMORY LENS — NO PRINTED TITLE');
-  record.position.set(.28,-.12,2.02);record.rotation.set(.10,-.19,-.105);
+  record.position.set(.17,-.035,2.05);record.rotation.set(.065,-.09,-.105);record.scale.setScalar(1.09);
   const disc=mesh(new T.CylinderGeometry(1.07,1.03,.10,100),depth);disc.rotation.x=Math.PI/2;record.add(disc);
   // The broad printed label is gone. A narrow interrupted rim holds a
   // convex coloured memory window with physical inlays underneath.
   record.add(mesh(new T.RingGeometry(.885,1.068,120,1,.06,Math.PI*1.72),violet,[0,0,.058]));
-  for(let i=0;i<10;i++)record.add(mesh(new T.TorusGeometry(.925+i*.012,.0018,3,100,Math.PI*1.55),i%3?steel:pearl,[0,0,.064]));
-  const memoryMat=mat({map:maps.memory,color:'#ded0e8',roughness:.86,metalness:0,clearcoat:0});
+  for(let i=0;i<6;i++)record.add(mesh(new T.TorusGeometry(.928+i*.019,.0015,3,100,Math.PI*1.55),i%3?steel:pearl,[0,0,.064]));
+  const memoryMat=mat({map:maps.memory,color:'#fff5ff',roughness:.79,metalness:0,clearcoat:.10});
   record.add(mesh(new T.CircleGeometry(.894,112),memoryMat,[0,0,.073]));
   function inlay(w,h,p,angle,m,curl=.08){
     const geo=new T.PlaneGeometry(w,h,18,12),a=geo.attributes.position;
@@ -97,7 +98,7 @@ export function makeYesterdayToday(){
       a.setXYZ(i,x+Math.pow(Math.abs(t),18)*.012*Math.sin(u*34),y+Math.pow(Math.abs(u),18)*.014*Math.sin(t*29),curl*(u*u*.65+t*t*.24)+.009*Math.sin(u*8+t*5));}
     geo.computeVertexNormals();const o=mesh(geo,m,p);o.rotation.z=angle;return o;
   }
-  record.add(inlay(.49,.75,[-.40,.09,.095],-.37,inkPaper[1],.045));
+  record.add(inlay(.26,.53,[-.55,.02,.095],-.37,inkPaper[1],.045));
   record.add(inlay(.74,.33,[.10,-.49,.104],.24,memoryMat,.07));
   const lensMat=mat({side:T.FrontSide,color:'#fff9fc',roughness:.025,metalness:0,transmission:.97,thickness:.035,ior:1.18,clearcoat:.25,iridescence:.18,iridescenceThicknessRange:[170,390]});
   const optical=mesh(new T.SphereGeometry(.91,64,40),lensMat,[.02,.012,.165]);optical.scale.z=.115;record.add(optical);
@@ -107,23 +108,24 @@ export function makeYesterdayToday(){
   record.add(inlay(.34,.64,[-.76,.36,.20],-.51,inkPaper[0],.12));
   record.add(inlay(.52,.22,[.54,-.57,.22],.38,pearl,.16));
   record.add(inlay(.15,.32,[.74,-.48,.21],.32,silver,.06));
-  record.add(ball([.07,-.035,.289],.066,steel,[1,1,.54]));
-  record.add(ball([.49,-.50,.255],.051,red,[.86,1.13,.67]));
+  // Keep the optical centre uninterrupted: attachment points live on the rim.
+  record.add(ball([-.63,.61,.208],.021,steel,[1,1,.54]));
+  record.add(ball([.49,-.50,.255],.045,rose,[.86,1.13,.67]));
   // The first visual review rejected a broad, flat C-shaped frame. A narrow
   // bent bridge now connects two folds without becoming a second front plate.
-  films.add(ribbon([[-1.34,1.15,1.60],[-.72,1.46,2.13],[.10,1.31,2.30],[.66,.73,2.09]],.12,steel,.5));
+  films.add(ribbon([[-1.34,1.15,1.60],[-.72,1.46,2.13],[.10,1.31,2.30],[.66,.73,2.09]],.12,lilac,1.3));
   films.add(ribbon([[1.15,.39,2.0],[1.31,-.03,1.93],[1.28,-.48,1.76]],.073,silver,.4));
   films.add(ribbon([[-1.0,.81,1.9],[-.65,.62,2.25],[-.56,.14,2.41],[-.04,-.81,2.28],[.79,-1.01,1.85]],.105,glass,1.35));
   films.add(ribbon([[.98,1.10,1.70],[1.24,.73,2.04],[1.32,.12,2.07],[1.05,-.32,2.02]],.24,glass,.9));
 
-  const conduit=layer('05 / RED CORRUGATED CONDUIT');
-  const hose=curve([[-1.1,1.16,-1.80],[-1.0,2.18,-.73],[-.63,2.39,.70],[.3,2.02,1.70],[1.35,1.39,1.94],[2.15,.52,1.24],[2.30,-.52,.14],[1.72,-1.54,-.86],[.44,-2.06,-1.04]]);
-  const seg=1160,sides=14,frames=hose.computeFrenetFrames(seg,false),hp=[],hu=[],hi=[];
-  for(let i=0;i<=seg;i++){const t=i/seg,c=hose.getPointAt(t),r=.105+.038*Math.pow(.5+.5*Math.cos(t*TAU*116),.65);for(let j=0;j<=sides;j++){const a=j/sides*TAU,p=c.clone().addScaledVector(frames.normals[i],Math.cos(a)*r).addScaledVector(frames.binormals[i],Math.sin(a)*r);hp.push(...p.toArray());hu.push(t*20,j/sides);if(i<seg&&j<sides){const k=i*(sides+1)+j,b=k+sides+1;hi.push(k,b,k+1,b,b+1,k+1);}}}
-  const hg=new T.BufferGeometry();hg.setAttribute('position',new T.Float32BufferAttribute(hp,3));hg.setAttribute('uv',new T.Float32BufferAttribute(hu,2));hg.setIndex(hi);hg.computeVertexNormals();conduit.add(mesh(hg,red));
-  for(const t of [0,.20,.62,1]){const c=mesh(new T.CylinderGeometry(.143,.143,t===0||t===1?.19:.048,24),steel);c.position.copy(hose.getPointAt(t));c.quaternion.setFromUnitVectors(Y,hose.getTangentAt(t));conduit.add(c);}
-  // Thin return line ties the lower foreground back to the larger red device.
-  conduit.add(tube(curve([[-2.1,.48,-1.1],[-2.43,-.51,.32],[-1.42,-1.18,2.15],[.46,-1.4,2.15],[1.64,-.79,1.76],[2.22,.38,.8]]),.027,redDark,150,7));
+  // The former corrugated device is completely absent. Three continuous,
+  // thin sheets cross at different depths; small folds replace heavy fittings.
+  const wraps=layer('05 / LILAC CELLOPHANE — RECTO TO VERSO');
+  wraps.add(ribbon([[-1.1,1.16,-1.80],[-1.0,2.18,-.73],[-.63,2.43,.70],[.3,2.08,1.70],[1.35,1.46,1.98],[2.18,.52,1.24],[2.30,-.52,.14],[1.72,-1.54,-.86],[.44,-2.06,-1.04]],.34,lilac,2.8));
+  wraps.add(ribbon([[-1.45,1.73,.52],[-.28,2.54,1.13],[1.23,2.32,.43],[2.37,1.12,.72],[2.36,-.16,1.33],[1.60,-1.15,1.77],[.71,-1.48,1.56]],.19,mistBlue,3.3));
+  wraps.add(ribbon([[-2.1,.48,-1.1],[-2.47,-.51,.32],[-1.42,-1.18,2.28],[.46,-1.39,2.39],[1.64,-.79,1.88],[2.22,.38,.8]],.14,rose,2.0));
+  wraps.add(ribbon([[-2.48,.31,1.07],[-2.57,1.44,.59],[-1.59,2.10,1.04],[-.71,1.75,1.91]],.22,glass,3.7));
+  wraps.add(tube(curve([[-2.24,-.79,.33],[-1.6,-1.54,2.03],[.30,-1.53,2.45],[1.64,-.69,1.98]]),.006,wire,120,5));
 
   const orbits=layer('06 / ORBITAL ATTACHMENTS');
   const paths=[
@@ -131,7 +133,7 @@ export function makeYesterdayToday(){
     curve([[-2.58,-1.37,.05],[-2.16,-.04,1.89],[-.69,1.55,2.05],[1.22,2.50,.64],[2.29,1.20,-1.31],[1.14,-1.71,-2.12],[-.63,-2.58,-.71]],true),
     curve([[-2.36,.50,-1.13],[-1.55,-.33,-2.23],[.89,.43,-2.40],[2.54,.50,-.43],[2.14,-.32,1.83],[.28,-.87,2.55],[-1.88,-.24,1.89]],true)
   ];
-  paths.forEach((p,i)=>orbits.add(tube(p,i===0?.014:.010,i===1?steel:wire,180,6)));
+  paths.forEach((p,i)=>orbits.add(tube(p,i===0?.009:.006,i===1?steel:wire,180,5)));
   for(const [index,t] of [[0,.02],[0,.40],[0,.71],[1,.18],[1,.57],[2,.23],[2,.82]]){const point=paths[index].getPoint(t);orbits.add(ball(point.toArray(),.052,steel));const clasp=mesh(new T.TorusGeometry(.068,.009,5,20),steel,point.toArray());orient(clasp,paths[index].getTangent(t).toArray());orbits.add(clasp);}
 
   const lenses=layer('07 / GLASS MEMORY WINDOWS');
@@ -140,17 +142,21 @@ export function makeYesterdayToday(){
   });
 
   const nearLens=new T.Group();nearLens.position.set(-1.13,.92,2.04);nearLens.rotation.set(.16,.36,-.32);
-  const celadon=mat({color:'#d3dfb9',roughness:.13,transmission:.77,thickness:.09,ior:1.36,iridescence:.55});
-  nearLens.add(ball([0,0,0],.31,celadon,[1,1.12,.13]));nearLens.add(mesh(new T.TorusGeometry(.31,.006,5,64),steel));lenses.add(nearLens);
+  nearLens.add(ball([0,0,0],.31,mistBlue,[1,1.12,.10]));nearLens.add(mesh(new T.TorusGeometry(.31,.004,5,64),pearl));lenses.add(nearLens);
+  // Small translucent contact sheets continue the colour across the outline.
+  [[-2.36,1.47,.50,.24],[-1.75,2.12,1.02,.31],[-2.49,-.77,1.09,.32],[-1.89,-2.11,.96,.25],[1.67,1.91,.85,.26],[2.47,.58,.88,.31],[2.26,-1.32,.89,.21],[.22,2.40,1.20,.27],[1.43,-2.03,1.25,.20]].forEach(([x,y,z,r],i)=>{
+    const disk=ball([x,y,z],r,[rose,mistBlue,glass,lilac][i%4],[1,1+(i%3)*.11,.075]);
+    disk.rotation.set(.16+i*.17,(i%2?1:-1)*.38,i*.71);lenses.add(disk);
+  });
 
   const blooms=layer('08 / BLOSSOMS THROUGH THE SEAM');
-  function petal(length,width,seed){const p=[],uv=[],idx=[],rows=16,cols=8;for(let i=0;i<=rows;i++)for(let j=0;j<=cols;j++){const t=i/rows,u=j/cols*2-1,w=width*Math.pow(Math.sin(Math.PI*t),.58)*(1+.1*Math.sin(t*19+seed)),z=length*(.28*Math.sin(t*2.8)+u*u*.20*Math.sin(t*Math.PI))+.009*Math.sin(t*28+u*4+seed);p.push(u*w,t*length,z);uv.push(j/cols,t);if(i<rows&&j<cols){const a=i*(cols+1)+j,b=a+cols+1;idx.push(a,b,a+1,b,b+1,a+1);}}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g;}
+  function petal(length,width,seed){const p=[],uv=[],idx=[],rows=18,cols=10;for(let i=0;i<=rows;i++)for(let j=0;j<=cols;j++){const t=i/rows,u=j/cols*2-1,w=width*Math.pow(Math.sin(Math.PI*t),.58)*(1+.06*Math.sin(t*12+seed)),z=length*(.23*Math.sin(t*2.8)+u*u*.16*Math.sin(t*Math.PI))+.006*length*Math.sin(t*18+u*3+seed);p.push(u*w,t*length,z);uv.push(j/cols,t);if(i<rows&&j<cols){const a=i*(cols+1)+j,b=a+cols+1;idx.push(a,b,a+1,b,b+1,a+1);}}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g;}
   const pg=petal(.39,.18,91);
   [[-1.08,.92,1.86,.85],[-1.55,.56,1.60,.75],[-1.27,.15,1.97,1.06],[-1.63,-.14,1.67,.63],[-1.02,-.42,2.11,.68],[-.83,-1.17,1.85,.70],[-1.39,1.23,1.33,.56],[-1.97,.80,.76,.54],[-.76,-.71,-2.12,.78],[-1.16,-.25,-1.88,.63],[-.48,-.91,2.16,.69],[-.66,-.59,2.21,.49],[.96,-.80,1.96,.44]].forEach(([x,y,z,s],i)=>{
     const flower=new T.Group();flower.position.set(x,y,z);flower.scale.setScalar(s);orient(flower,[x*.19,y*.18,z>0?1:-1],i*1.67);
     for(let k=0;k<7;k++){const p=mesh(pg,i%3?pink:pale);p.rotation.set((random()-.5)*.38,0,k*TAU/7);flower.add(p);}
     for(let k=0;k<7;k++){const a=k*TAU/7;flower.add(ball([Math.cos(a)*.05,Math.sin(a)*.05,.10+random()*.025],.014,white));}
-    const anchor=v([x*.82,y*.86,z*.86]);blooms.add(tube(new T.QuadraticBezierCurve3(anchor,anchor.clone().lerp(flower.position,.6).add(v([-.05,.08,.07])),flower.position),.017,redDark,20,5));blooms.add(flower);
+    const anchor=v([x*.82,y*.86,z*.86]);blooms.add(tube(new T.QuadraticBezierCurve3(anchor,anchor.clone().lerp(flower.position,.6).add(v([-.05,.08,.07])),flower.position),.010,stem,20,5));blooms.add(flower);
   });
   for(const [p,s,a] of [[[-1.96,1.07,1.16],.54,.8],[[.88,-1.82,1.39],.46,-.5],[[-2.32,-.29,.94],.42,-.8]]){const o=mesh(pg,pale,p);o.scale.setScalar(s);o.rotation.set(.6,.3,a);blooms.add(o);}
 
@@ -162,7 +168,7 @@ export function makeYesterdayToday(){
 
   const details=layer('10 / PEARLS & FIXINGS');
   [[-1.93,-1.1,1.14,.15],[-.66,1.77,1.55,.11],[1.07,-1.57,1.72,.17],[1.72,.86,1.40,.12],[-2.01,1.30,.76,.11],[.51,.91,-2.28,.13],[-1.83,-.68,-1.4,.12]].forEach(([x,y,z,r],i)=>details.add(ball([x,y,z],r,i%3===0?rose:i%3===1?pearl:glass)));
-  for(const [p,r,m] of [[[1.47,-.69,1.88],.07,red],[[-1.7,1.96,.85],.065,violet],[[.06,-2.1,-1.36],.085,red]])details.add(ball(p,r,m));
+  for(const [p,r,m] of [[[1.47,-.69,1.88],.055,rose],[[-1.7,1.96,.85],.055,violet],[[.06,-2.1,-1.36],.065,lilac]])details.add(ball(p,r,m));
   const papers=layer('11 / PRINTED MEMORY — RECTO & VERSO');
   const paperSpec=[
     [1.48,1.20,[-.69,.42,.7],2.35,-.40,0],[1.26,1.64,[-.82,-.40,.51],2.37,.38,1],
@@ -175,19 +181,57 @@ export function makeYesterdayToday(){
     [1.31,1.75,[.36,-.49,-.8],2.42,-.3,2],[1.20,1.2,[-.6,-.41,-.72],2.38,.25,1]
   ];
   paperSpec.forEach(([w,h,n,r,s,k],i)=>{
-    const backing=sheet(w+.025,h+.025,n,r-.016,white,s,310+i,.26);papers.add(backing);
-    papers.add(sheet(w,h,n,r,inkPaper[k],s,310+i,.26));
+    const scale=n[2]>0?.68:.86;
+    const backing=sheet(w*scale+.012,h*scale+.012,n,r-.010,white,s,310+i,.18);papers.add(backing);
+    papers.add(sheet(w*scale,h*scale,n,r,inkPaper[k],s,310+i,.18));
     // Small wire staples actually bridge paper and substrate.
     const pin=orient(new T.Group(),n,s);pin.add(tube(curve([[-w*.25,h*.28,r-.08],[-w*.25,h*.28,r+.05],[-w*.12,h*.28,r+.07],[-w*.12,h*.28,r-.08]]),.009,steel,20,5));papers.add(pin);
   });
   // Back has a distinct open seam and an inset glass window, not another label.
   papers.add(tube(curve([[-.47,.43,-2.18],[-.33,.66,-2.37],[.16,.54,-2.46],[.31,.05,-2.34]]),.015,steel,70,7));
 
+  const florets=layer('12 / PRESSED HYDRANGEA — UNEQUAL CLUSTERS');
+  const smallPetal=petal(.21,.088,317);
+  // Five unequal clusters: the left seam carries the main bloom; the right
+  // and back carry quieter echoes rather than an evenly decorated wreath.
+  [[-1.30,.87,2.05,12,.40],[-1.51,-.48,1.91,8,.31],[-.68,-1.35,2.0,6,.25],[1.53,-.37,1.70,5,.22],[-.87,.45,-2.1,7,.31]].forEach(([x,y,z,n,spread],cluster)=>{
+    for(let i=0;i<n;i++){
+      const a=i*2.399+cluster*.73,r=spread*Math.sqrt((i+.4)/n),f=new T.Group();
+      f.position.set(x+Math.cos(a)*r,y+Math.sin(a)*r,z+(random()-.3)*.19);
+      f.scale.setScalar(.55+random()*.46);orient(f,[x*.12,y*.13,z>0?1:-1],a);
+      for(let k=0;k<5;k++){const p=mesh(smallPetal,(i+cluster)%4===0?pale:pink);p.rotation.set(.05+random()*.18,0,k*TAU/5+.1*random());p.scale.set(1,.90+random()*.18,1);f.add(p);}
+      f.add(ball([0,0,.045],.016,pearl));florets.add(f);
+    }
+  });
+
+  const sleeves=layer('13 / OVERLAPPING ARCHIVAL SLEEVES');
+  sleeves.add(ribbon([[-1.98,1.33,.75],[-1.46,1.70,1.86],[-.51,1.56,2.41],[.23,1.10,2.39],[.96,.87,2.17]],.31,glass,2.5));
+  sleeves.add(ribbon([[.77,1.12,1.92],[1.44,.99,2.04],[1.82,.10,1.92],[1.37,-.77,2.16],[.37,-1.12,2.45]],.37,mistBlue,2.7));
+  sleeves.add(ribbon([[-2.13,-.86,.87],[-1.09,-1.50,2.15],[.01,-1.55,2.46],[1.05,-1.16,2.31]],.23,rose,3.1));
+  sleeves.add(ribbon([[-.52,1.61,-1.84],[.62,1.38,-2.14],[1.38,.49,-2.09],[.96,-.57,-2.24]],.32,lilac,2.4));
+  for(const [x,y,z,a] of [[-1.91,-1.04,1.44,.7],[1.80,.64,1.48,-.5],[.63,1.93,1.09,.3]]){
+    const tab=inlay(.23,.38,[x,y,z],a,inkPaper[2],.10);sleeves.add(tab);
+    sleeves.add(ball([x,y+.13,z+.12],.025,steel));
+  }
+
+  const dust=layer('14 / PEARL TRACES & FEATHER VEILS');
+  for(let i=0;i<58;i++){
+    const a=i*2.399,r=1.77+random()*.79;
+    const p=[Math.cos(a)*r,Math.sin(a)*r*.94,(i%4===0?-1:1)*(.72+random()*.94)];
+    dust.add(ball(p,.018+random()*.027,[pearl,rose,glass,mistBlue][i%4],[1,1.1,1]));
+  }
+  const vaneMat=mat({color:'#fff6fc',map:maps.feather,transparent:true,opacity:.49,depthWrite:false,alphaTest:.015,roughness:.88,sheen:.65,sheenColor:'#f8e5f0'});
+  function featherVeil(pts,width){
+    const o=ribbon(pts,width,vaneMat,1.05);o.castShadow=false;dust.add(o);
+  }
+  featherVeil([[-1.48,-1.48,1.75],[-.70,-2.01,2.03],[.54,-2.24,2.05],[1.67,-2.17,1.50],[2.33,-2.32,.8]],.62);
+  featherVeil([[-1.72,1.30,1.24],[-.93,1.77,1.96],[.03,1.86,2.12],[.90,1.60,1.79]],.36);
+
   // Merge within an authored layer, retaining physically distinct materials.
   root.updateMatrixWorld(true);const originals=new Set();
   for(const g of groups){const inv=g.matrixWorld.clone().invert(),buckets=new Map();g.traverse(o=>{if(!o.isMesh)return;originals.add(o.geometry);const geo=o.geometry.clone();geo.applyMatrix4(inv.clone().multiply(o.matrixWorld));if(!geo.index)geo.setIndex(Array.from({length:geo.attributes.position.count},(_,i)=>i));if(!geo.attributes.uv)geo.setAttribute('uv',new T.Float32BufferAttribute(new Float32Array(geo.attributes.position.count*2),2));const key=o.material.uuid;if(!buckets.has(key))buckets.set(key,{m:o.material,geos:[]});buckets.get(key).geos.push(geo);});g.clear();for(const {m,geos} of buckets.values()){const merged=mergeGeometries(geos,false);geos.forEach(g=>g.dispose());if(!merged)throw new Error('Artwork geometry merge failed');g.add(mesh(merged,m));}}
   originals.forEach(g=>g.dispose());
   const positions=groups.map(g=>g.position.clone());
-  root.userData={title:'昨天，今天',english:'Yesterday, Today',version:'0.9.2',layers:groups.length,coreAxes:[3.88,4.01,3.88],labelRadius:.894,centerTreatment:'text-free memory lens',centerHasText:false,provenance:'Original botanical memory plate beneath convex glass; no lettering on the sculpture. Outer page title restored at user request. No reference pixels, artist credits, watermark or font file.'};
+  root.userData={title:'昨天，今天',english:'Yesterday, Today',version:'0.12.0',layers:groups.length,coreAxes:[3.88,4.01,3.88],labelRadius:.894*1.09,centerTreatment:'text-free memory lens',centerHasText:false,wrapTreatment:'thin lilac and blue cellophane; no corrugated hose',provenance:'Original botanical memory exposure under convex glass; unequal hydrangea clusters, translucent sleeves and feather veils. Outer page title retained. No reference pixels, artist credits, watermark or font file.'};
   return {root,groups,setSeparated(value){const t=T.MathUtils.clamp(Number(value),0,1);groups.forEach((g,i)=>{g.position.copy(positions[i]);if(i){g.position.z+=(i%2?1:-1)*(.11+i*.023)*t;g.position.x+=(i%3-1)*.07*t;}});},dispose(){const gs=new Set(),ms=new Set(),ts=new Set(Object.values(maps));root.traverse(o=>{if(o.geometry)gs.add(o.geometry);if(o.material)ms.add(o.material);});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());ts.forEach(t=>t.dispose());}};
 }

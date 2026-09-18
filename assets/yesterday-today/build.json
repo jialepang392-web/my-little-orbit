@@ -1,31 +1,36 @@
 {
-  "version": "0.9.2",
-  "sceneVersion": "0.9.2",
-  "renderedAt": "2026-09-18T08:13:17.200014+00:00",
+  "status": "passed",
+  "exported": true,
+  "version": "0.12.0",
+  "sceneVersion": "0.12.0",
+  "renderedAt": "2026-09-18T11:29:33.148911+00:00",
   "sourceHashes": {
-    "src/yesterday-today/model.js": "e73bbc5d29e8155fd3e162fb79d3132b26216b0e359952f54adabe62b56e70be",
-    "src/yesterday-today/textures.js": "fdb3d82fac0f1f8a3ba21a2e3e6897680f8122e9b9cb2f66c27c56bbdd7910c0",
-    "src/yesterday-today/viewer.js": "047be6a956070af2f75b64c405b8a998d78d2381b1994919b6aa5944dfb4a479",
-    "src/yesterday-today-page.js": "4c3c9a57a6f25138a5fb854ec38e085c8184c53fe36832264ee9234ba611d6c7",
-    "yesterday-today.html": "f5864f0740455204974aaee7b8babbe04f17299bab6920930ad7677962a07823",
+    "src/yesterday-today/model.js": "4f556151ea7196bd78fa6ee3754aee690a304e886eb05033c0f318512d723665",
+    "src/yesterday-today/textures.js": "07c0d77f24883d1af3797f412dd0fde53fa5d9cdc206450b11d293220fd73eb2",
+    "src/yesterday-today/viewer.js": "12823a0102ea62d752abdfa5e80bd47369aab29109f1c5a82771ac432cccdb96",
+    "src/yesterday-today-page.js": "2ffcc79a2d31806ed98fc05b0f2485c8200bf5e22abc5881ac7df534b1ef0a17",
+    "yesterday-today.html": "164d6763fb8bbde313115ab5aefd8a78d12795910ff6efc9883cfa36b87e9c60",
     "yesterday-today.css": "4fab9f2afe6dafbe3e5a5d377a5c33d11619a4d12bbfca19fc1dfbb50e2400bb",
     "assets/yesterday-today/title-glyphs.json": "95994c1541307f5fdbaca25e6f505d8bf13ad01f1740de9b7538df0778b16d3d",
     "assets/yesterday-today/title.svg": "04071bfe444c30b898cb6bf674d90eb25ca92656f1ab9ae5bfbe6eafa96a6214",
     "assets/yesterday-today/yesterday.svg": "50a25d81f76ab2e69db406a466f1cfd5bd29ae13a623fe7452f336a2929230df",
     "assets/yesterday-today/today.svg": "bce3ca4de826c16c676883763d23891f560c1628218e4046f2208c50308ee470"
   },
+  "generatorHashes": {
+    "scripts/build_yesterday.py": "fe2382bff9776ff35ff86deac88d118c0f3720e8a93871f9124bdc9b14f7337d"
+  },
   "artifacts": {
     "poster.webp": {
-      "sha256": "07dd7977612689b184a0fbc6d085bbb671a28a063f94225db8fd55f5b9602fb0",
-      "bytes": 263290
+      "sha256": "c41bae941418e0582b214df0191d954a42ae15dd6a7ae73daa6e91b815748f44",
+      "bytes": 202290
     },
     "cover.webp": {
-      "sha256": "499cd3bb71f8859f1e5d1da6ba4495d4f5b9436cdebb4465c32316351c5e3359",
-      "bytes": 242690
+      "sha256": "fe529a99e764a8be6e1f0269fd587e321272bac08eb5fbba67e719a9cf752ce9",
+      "bytes": 185360
     },
     "detail-record.webp": {
-      "sha256": "778d6112f0cf4dd9e615886a84079d8f8c8f6ee6842d9c260e4baf535a5a5ab1",
-      "bytes": 214850
+      "sha256": "ae12261444c369882209af9b89e4b260bbfe1f753629ee25b94a57b4dd9d5a91",
+      "bytes": 175682
     },
     "yesterday.svg": {
       "sha256": "50a25d81f76ab2e69db406a466f1cfd5bd29ae13a623fe7452f336a2929230df",
@@ -36,29 +41,180 @@
       "bytes": 1616
     },
     "back.webp": {
-      "sha256": "94d21809f1fe1ee7c4357b471e281772b65ef089ea6a3cd2890c9286a2e237f7",
-      "bytes": 148050
+      "sha256": "851fd4e2164e3badedaeb9e29e1684cd275a346bce0f9d18631154b4dd2d4f2a",
+      "bytes": 124838
     },
     "today.svg": {
       "sha256": "bce3ca4de826c16c676883763d23891f560c1628218e4046f2208c50308ee470",
       "bytes": 778
     },
     "side.webp": {
-      "sha256": "484708724cfba68edcbb8f4c79dce2afe3ffcd261b134fcff226b6dc5d795260",
-      "bytes": 148908
+      "sha256": "27963a7b5ccc631ab53603619ad5a927615e1de5eb3b7d64c46414dfc3dae8ce",
+      "bytes": 108770
     },
     "detail-conduit.webp": {
-      "sha256": "90b70a827b2f8f0d9e015f901352de541a934efd8909e21bf1408dd677feaa97",
-      "bytes": 199204
+      "sha256": "000be8812abd2198e16369646cde640a5eb409f684830bbb637bb84673c2bdb9",
+      "bytes": 141566
     },
     "yesterday-today.glb": {
-      "sha256": "fb706bda690598344d64d0addaf251068f216c417b636d8cf7dce613d82fc307",
-      "bytes": 18354456
+      "sha256": "44d29721c2c7c7add79c45b4be5b799d4982ab2bfbdd17604b3bb649f3600fc2",
+      "bytes": 21361264
     },
     "detail-feather.webp": {
-      "sha256": "59bc2e96a58fdecebdb28b253e5bc2e82be38ae64c3783f3a29c3251f563a7e7",
-      "bytes": 242770
+      "sha256": "f48ce41525f0ccd6cb6253245a1a93a57fe7e44fe654ed29cc0653eacf8de675",
+      "bytes": 188924
     }
+  },
+  "views": {
+    "front": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "\u6628\u5929\uff0c\u4eca\u5929",
+      "version": "0.12.0",
+      "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
+      "centerTreatment": "text-free memory lens",
+      "centerHasText": "false",
+      "frames": "3",
+      "layers": "14",
+      "drawCalls": "133",
+      "triangles": "801608",
+      "autoRotate": "false",
+      "separated": "false",
+      "separation": "0.000",
+      "light": "studio",
+      "camera": "1.4500,0.8600,13.1500",
+      "coreAxes": "3.88,4.01,3.88",
+      "labelRadius": "0.9744600000000001"
+    },
+    "record": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "\u6628\u5929\uff0c\u4eca\u5929",
+      "version": "0.12.0",
+      "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
+      "centerTreatment": "text-free memory lens",
+      "centerHasText": "false",
+      "frames": "4",
+      "layers": "14",
+      "drawCalls": "131",
+      "triangles": "800568",
+      "autoRotate": "false",
+      "separated": "false",
+      "separation": "0.000",
+      "light": "studio",
+      "camera": "0.6300,0.4900,6.6500",
+      "coreAxes": "3.88,4.01,3.88",
+      "labelRadius": "0.9744600000000001"
+    },
+    "conduit": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "\u6628\u5929\uff0c\u4eca\u5929",
+      "version": "0.12.0",
+      "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
+      "centerTreatment": "text-free memory lens",
+      "centerHasText": "false",
+      "frames": "5",
+      "layers": "14",
+      "drawCalls": "129",
+      "triangles": "799704",
+      "autoRotate": "false",
+      "separated": "false",
+      "separation": "0.000",
+      "light": "studio",
+      "camera": "2.8000,2.4800,5.3800",
+      "coreAxes": "3.88,4.01,3.88",
+      "labelRadius": "0.9744600000000001"
+    },
+    "feather": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "\u6628\u5929\uff0c\u4eca\u5929",
+      "version": "0.12.0",
+      "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
+      "centerTreatment": "text-free memory lens",
+      "centerHasText": "false",
+      "frames": "6",
+      "layers": "14",
+      "drawCalls": "119",
+      "triangles": "791160",
+      "autoRotate": "false",
+      "separated": "false",
+      "separation": "0.000",
+      "light": "studio",
+      "camera": "0.4500,-0.8500,5.2300",
+      "coreAxes": "3.88,4.01,3.88",
+      "labelRadius": "0.9744600000000001"
+    },
+    "back": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "\u6628\u5929\uff0c\u4eca\u5929",
+      "version": "0.12.0",
+      "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
+      "centerTreatment": "text-free memory lens",
+      "centerHasText": "false",
+      "frames": "7",
+      "layers": "14",
+      "drawCalls": "133",
+      "triangles": "801608",
+      "autoRotate": "false",
+      "separated": "false",
+      "separation": "0.000",
+      "light": "studio",
+      "camera": "-2.4000,1.4500,-13.1000",
+      "coreAxes": "3.88,4.01,3.88",
+      "labelRadius": "0.9744600000000001"
+    },
+    "side": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "\u6628\u5929\uff0c\u4eca\u5929",
+      "version": "0.12.0",
+      "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
+      "centerTreatment": "text-free memory lens",
+      "centerHasText": "false",
+      "frames": "8",
+      "layers": "14",
+      "drawCalls": "133",
+      "triangles": "801608",
+      "autoRotate": "false",
+      "separated": "false",
+      "separation": "0.000",
+      "light": "studio",
+      "camera": "13.2500,1.1000,0.5000",
+      "coreAxes": "3.88,4.01,3.88",
+      "labelRadius": "0.9744600000000001"
+    }
+  },
+  "glbReload": {
+    "meshes": 67,
+    "transmission": 39,
+    "iridescence": 39,
+    "layers": [
+      "01__FOLDED_PEARLESCENT_MEMORY_CORE",
+      "02__CURVED_MEMBRANES_&_SILVER_SEAMS",
+      "03__LUCENT_FOLDS",
+      "04__MEMORY_LENS_\u2014_NO_PRINTED_TITLE",
+      "05__LILAC_CELLOPHANE_\u2014_RECTO_TO_VERSO",
+      "06__ORBITAL_ATTACHMENTS",
+      "07__GLASS_MEMORY_WINDOWS",
+      "08__BLOSSOMS_THROUGH_THE_SEAM",
+      "09__SOFT_FEATHER_CODA",
+      "10__PEARLS_&_FIXINGS",
+      "11__PRINTED_MEMORY_\u2014_RECTO_&_VERSO",
+      "12__PRESSED_HYDRANGEA_\u2014_UNEQUAL_CLUSTERS",
+      "13__OVERLAPPING_ARCHIVAL_SLEEVES",
+      "14__PEARL_TRACES_&_FEATHER_VEILS"
+    ],
+    "sceneVersion": "0.12.0",
+    "centerHasText": false,
+    "wrapTreatment": "thin lilac and blue cellophane; no corrugated hose",
+    "size": [
+      5.6439526081085205,
+      5.576745510101318,
+      5.301422595977783
+    ]
   },
   "method": "Same live scene for front, profile, verso, three independently framed macros, poster and GLB. No generated reference pixels used."
 }

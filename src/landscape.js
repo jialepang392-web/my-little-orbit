@@ -1,9 +1,9 @@
 /** A full spherical assemblage of paper, pewter water, moss and orchid leaves. */
 import * as T from 'three';
-import { fromLatLon, clamp, seededRandom } from './math.js?v=0100';
-import { part, box, ball, cyl, mergeStatic, makePine, makeBamboo, makeRock, makeInkstone, makePlum, makeOrchid, makeFern, makeReeds, makeFlowerCluster, makeSeedPod } from './garden-models.js?v=0100';
-import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache, collageTextureReady, attachStoneTexture } from './collage-layers.js?v=0100';
-import { makeReferenceAccents } from './reference-art.js?v=0100';
+import { fromLatLon, clamp, seededRandom } from './math.js?v=0120';
+import { part, box, ball, cyl, mergeStatic, makePine, makeBamboo, makeRock, makeInkstone, makePlum, makeOrchid, makeFern, makeReeds, makeFlowerCluster, makeSeedPod } from './garden-models.js?v=0120';
+import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache, collageTextureReady, attachStoneTexture } from './collage-layers.js?v=0120';
+import { makeReferenceAccents } from './reference-art.js?v=0120';
 export const PLANET_RADIUS=5.4;
 const UP=new T.Vector3(0,1,0),WATER=5.425;
 const paperDecks=[[[17,103],2.4,2.8,-.32],[[35,83],1.1,.85,.35],[[-19,-108],2,2.6,.4]].map(([ll,w,h,angle])=>{
@@ -17,6 +17,9 @@ function waterField(n){
   const blend=clamp((n.z-.30)/.30,0,1);
   return rear*(1-blend)+front*blend;
 }
+// Keep a quiet corridor beneath the authored flute and its silk. Content
+// destinations and walkable routes are unaffected; only small filler plants move.
+function inInstrumentClearance(n){return n.z>.79&&n.y>-.22&&n.y<.62&&n.x>-.30&&n.x<.28;}
 function terrainRadius(n){const river=waterField(n),hill=Math.sin(n.x*9+n.z*3)*Math.cos(n.y*7-1)*.035+Math.sin(n.z*17+n.y*5)*.015;return PLANET_RADIUS+.075+hill-.11*(1-clamp((river-.055)/.065,0,1));}
 export function lakeDistance(n){return waterField(n)/.085;}
 export function surfaceRadius(n){
@@ -39,7 +42,7 @@ export function makeLandscape(normals){
   clearCollageMaterialCache();
   const root=new T.Group();root.name='longing-poem-sphere';const random=seededRandom(404917);
   const geometry=new T.SphereGeometry(PLANET_RADIUS,144,96),p=geometry.attributes.position,colors=new Float32Array(p.count*3),n=new T.Vector3();
-  const stone=new T.Color('#81867b'),moss=new T.Color('#617040'),ink=new T.Color('#484d48'),shore=new T.Color('#a7a693');
+  const stone=new T.Color('#94978b'),moss=new T.Color('#6d7956'),ink=new T.Color('#585c51'),shore=new T.Color('#b2b19e');
   for(let i=0;i<p.count;i++){
     n.fromBufferAttribute(p,i).normalize();const river=waterField(n),vein=Math.sin(n.x*21+n.y*17+Math.sin(n.z*11)*2);
     const field=Math.sin(n.x*5+n.z*4)*Math.cos(n.y*8)+Math.sin(n.z*9+n.x*4)*.3;
@@ -86,7 +89,7 @@ export function makeLandscape(normals){
   for(let i=0;i<440;i++){
     const y=1-2*(i+.5)/440,az=i*2.3999632297,nn=new T.Vector3(Math.cos(az)*Math.sqrt(1-y*y),y,Math.sin(az)*Math.sqrt(1-y*y));
     const proximity=[...normals.values()].some(o=>o.dot(nn)>.976),onPath=sampled.some(o=>o.dot(nn)>.9987);
-    if(waterField(nn)<.14||proximity||onPath||collageSurface(nn)>=5.6||nn.z>.67)continue;
+    if(waterField(nn)<.14||proximity||onPath||collageSurface(nn)>=5.6||nn.z>.67||inInstrumentClearance(nn))continue;
     if(i%4===0){const plant=(i%12===0?bambooTemplates[i%3]:pineTemplates[i%5]).clone();plant.scale.multiplyScalar(.62+random()*.55);placeSurface(plant,nn,-.015);plant.rotateY(random()*6.28);flora.add(plant);}
     else if(i%4===1){const rock=makeRock(.45+random()*.6,i%7);rock.traverse(o=>{if(o.isMesh&&['9aa49a','c3c8b8'].includes(o.material.color.getHexString()))o.material=texturedStoneMaterial();});placeSurface(rock,nn,-.03);rock.rotateY(i);stonework.add(rock);}
     else{const patch=i%2?makeFern(.53,i%3):makeFlowerCluster(.58,i%4);placeSurface(patch,nn,.012);patch.rotateY(i);details.add(patch);}
@@ -94,12 +97,12 @@ export function makeLandscape(normals){
   root.add(mergeStatic(flora),mergeStatic(stonework),mergeStatic(details));
   // Composed botanical islands: dense at their center, open along paths and paper terraces.
   const borders=new T.Group(),fineBorders=new T.Group(),fernTemplates=[makeFern(.85,0),makeFern(.66,1),makeReeds(.8,1),makeFlowerCluster(.95,1),makeFlowerCluster(.72,2),makeSeedPod(.7,0)];let botanicalClumps=0;
-  for(let cluster=0;cluster<58;cluster++){
-    const y=1-2*(cluster+.5)/58,a=cluster*2.39996323,center=new T.Vector3(Math.cos(a)*Math.sqrt(1-y*y),y,Math.sin(a)*Math.sqrt(1-y*y));
+  for(let cluster=0;cluster<44;cluster++){
+    const y=1-2*(cluster+.5)/44,a=cluster*2.39996323,center=new T.Vector3(Math.cos(a)*Math.sqrt(1-y*y),y,Math.sin(a)*Math.sqrt(1-y*y));
     const u=new T.Vector3().crossVectors(center,UP).normalize(),v=new T.Vector3().crossVectors(center,u).normalize();
     for(let j=0;j<6;j++){
       const angle=j*2.4+cluster,spread=.012+Math.sqrt(j)*.025,nn=center.clone().addScaledVector(u,Math.cos(angle)*spread).addScaledVector(v,Math.sin(angle)*spread).normalize();
-      if([...normals.values()].some(o=>o.dot(nn)>.987)||sampled.some(o=>o.dot(nn)>.9993)||collageSurface(nn)>=5.6||waterField(nn)<.075)continue;
+      if([...normals.values()].some(o=>o.dot(nn)>.987)||sampled.some(o=>o.dot(nn)>.9993)||collageSurface(nn)>=5.6||waterField(nn)<.075||inInstrumentClearance(nn))continue;
       const plant=fernTemplates[(cluster+j)%6].clone();placeSurface(plant,nn,.01);plant.rotateY(angle);(j%2?fineBorders:borders).add(plant);botanicalClumps++;
     }
   }const fineDetail=mergeStatic(fineBorders);root.add(mergeStatic(borders),fineDetail);
@@ -108,7 +111,7 @@ export function makeLandscape(normals){
     const center=new T.Vector3(...fromLatLon(...ll)),u=new T.Vector3().crossVectors(center,UP).normalize(),v=new T.Vector3().crossVectors(center,u).normalize();
     for(let j=0;j<10;j++){
       const a=j*2.399+k,r=Math.sqrt(j)*.035,nn=center.clone().addScaledVector(u,Math.cos(a)*r).addScaledVector(v,Math.sin(a)*r).normalize();
-      if(collageSurface(nn)>=5.6||[...normals.values()].some(o=>o.dot(nn)>.984)||sampled.some(o=>o.dot(nn)>.9995))continue;
+      if(collageSurface(nn)>=5.6||[...normals.values()].some(o=>o.dot(nn)>.984)||sampled.some(o=>o.dot(nn)>.9995)||inInstrumentClearance(nn))continue;
       const plant=fernTemplates[(j+k)%6].clone();plant.scale.multiplyScalar(1.25+(j%3)*.13);placeSurface(plant,nn,.015);plant.rotateY(a);focalGardens.add(plant);botanicalClumps++;
       if(j%3===0){const cushion=ball(.23,'#627749',[0,0,0],[1.5,.36,1.1]);cushion.material=mossMaterial();placeSurface(cushion,nn,.035);focalGardens.add(cushion);}
     }
@@ -116,7 +119,7 @@ export function makeLandscape(normals){
   }root.add(mergeStatic(focalGardens));
   const glints=new T.Group();
   for(let i=0;i<210;i++){const nn=new T.Vector3(random()-.5,random()-.5,random()-.5).normalize();if(waterField(nn)>.065)continue;const tangent=new T.Vector3().crossVectors(nn,UP).normalize(),points=[];
-    for(let j=0;j<7;j++)points.push(nn.clone().addScaledVector(tangent,(j-3)*.003).normalize().multiplyScalar(WATER+.008));const line=tube(points,.004,'#c5d5ce');line.castShadow=false;glints.add(line);
+    for(let j=0;j<7;j++)points.push(nn.clone().addScaledVector(tangent,(j-3)*.003).normalize().multiplyScalar(WATER+.008));const line=tube(points,.0014,'#aec4bb',{transparent:true,opacity:.6,depthWrite:false});line.castShadow=false;glints.add(line);
   }root.add(mergeStatic(glints));
   // The v0.4 assemblage remains in the source for historical builds; the current
   // foreground is deliberately composed from reference objects rather than the

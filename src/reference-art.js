@@ -2,9 +2,9 @@
  * The saved concept is never used as a scene background or a camera-facing globe.
  */
 import * as T from 'three';
-import {fromLatLon,seededRandom} from './math.js?v=0100';
-import {part,box,ball,cyl,mergeStatic,makeFern,makeReeds,makeFlowerCluster,makeOrchid} from './garden-models.js?v=0100';
-import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=0100';
+import {fromLatLon,seededRandom} from './math.js?v=0120';
+import {part,box,ball,cyl,mergeStatic,makeFern,makeReeds,makeFlowerCluster,makeOrchid} from './garden-models.js?v=0120';
+import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=0120';
 
 const R=5.4,UP=new T.Vector3(0,1,0),Z=new T.Vector3(0,0,1);
 const COLOR={bark:'#514333',barkLight:'#88735b',needle:'#314834',needleLight:'#627445',ivory:'#e9e0ca',pink:'#df9fa4',bud:'#b44750',gold:'#b99e60'};
@@ -50,7 +50,8 @@ function flute(){
   // The front-facing reference diagonal is upper-left -> lower-right.
   const start=new T.Vector3(-1.9,3.53,5.08),end=new T.Vector3(.72,.00,6.25),direction=start.clone().sub(end).normalize();
   const front=Z.clone().addScaledVector(direction,-Z.dot(direction)).normalize(),right=new T.Vector3().crossVectors(direction,front).normalize();
-  root.position.copy(start).add(end).multiplyScalar(.5);root.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(right,direction,front));
+  root.position.copy(start).add(end).multiplyScalar(.5);root.position.z+=.34;
+  root.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(right,direction,front));
   return mergeStatic(root);
 }
 
@@ -181,7 +182,11 @@ function banks(){
     const rock=boulder(.14+random()*.19,j+side);rock.position.copy(n).multiplyScalar(5.43);rock.quaternion.setFromUnitVectors(UP,n);rock.rotateY(j*.7);g.add(rock);
     if(j%2===0){
       const cushion=ball(.17,'#697b43',[0,0,0],[1.4,.43,1]);cushion.material=mossMaterial();const nn=n.clone().add(new T.Vector3(side*.03,0,0)).normalize();place(cushion,Math.asin(nn.y)*180/Math.PI,Math.atan2(nn.z,nn.x)*180/Math.PI,5.56);g.add(cushion);
-      const plant=(j%6===0?reed:j%4===0?fern:flower).clone();plant.position.copy(nn).multiplyScalar(5.58);plant.quaternion.setFromUnitVectors(UP,nn);plant.rotateY(j);g.add(plant);
+      // This short stretch passes underneath the bamboo and silk. Keep its low
+      // moss cushion; tall reeds formerly penetrated the instrument in close-up.
+      if(!(side===1&&j<10)){
+        const plant=(j%6===0?reed:j%4===0?fern:flower).clone();plant.position.copy(nn).multiplyScalar(5.58);plant.quaternion.setFromUnitVectors(UP,nn);plant.rotateY(j);g.add(plant);
+      }
     }
   }
   for(const [i,entry] of [[9,124,1.85],[-30,59,1.65],[44,40,1.2],[12,-117,1.4],[-35,-60,1.4]].entries()){
@@ -197,7 +202,7 @@ function banks(){
 
 function silkOrbit(){
   const g=new T.Group();g.name='reference-orchid-silhouette';
-  for(let i=0;i<12;i++){
+  for(let i=0;i<7;i++){
     const verts=[],n=100,phase=-2.2+i*.105,rot=new T.Quaternion().setFromEuler(new T.Euler(.07+(i%4)*.18, .21+(i%3)*.17, -.08+(i%5)*.07));
     const point=(t,side)=>{
       const a=phase+t*(4.90+(i%4)*.22),r=5.62+Math.sin(t*Math.PI)*(.12+(i%6)*.065),w=(.010+(i%4)*.008)*Math.pow(Math.sin(Math.PI*t),.7);
@@ -212,17 +217,17 @@ function silkOrbit(){
 function waterDetail(){
   const g=new T.Group();g.name='reference-river-and-waterfall';const random=seededRandom(722);
   // Curved foam ribbons lie on the water sphere, not on a flat image card.
-  for(let i=0;i<330;i++){
+  for(let i=0;i<180;i++){
     const y=.06-random()*.91,x=-.23+.10*Math.sin(y*7)+(random()-.5)*.34,z=Math.sqrt(Math.max(.001,1-y*y-x*x)),n=new T.Vector3(x,y,z).normalize();
     const side=new T.Vector3().crossVectors(n,UP).normalize(),pts=[];
     for(let j=0;j<6;j++){const u=(j-2.5)*(.006+(i%4)*.002);pts.push(n.clone().addScaledVector(side,u).add(new T.Vector3(0,Math.sin(j*.9+i)*.003,0)).normalize().multiplyScalar(5.434));}
-    const line=tube(pts,.004+random()*.007,i%3?'#b8ccc6':'#e1e4d2',7,{roughness:.29,metalness:.18});line.castShadow=false;g.add(line);
+    const line=tube(pts,.0012+random()*.0022,i%3?'#9bb6af':'#c4d1c1',7,{roughness:.63,metalness:.06,transparent:true,opacity:.62,depthWrite:false});line.castShadow=false;g.add(line);
   }
-  for(let ribbon=0;ribbon<18;ribbon++){
+  for(let ribbon=0;ribbon<12;ribbon++){
     const vertices=[];
     const p=(t,side)=>{const y=.12-t*.27,x=-.23+.10*Math.sin(y*7)+(ribbon-8.5)*.0035+Math.sin(t*12+ribbon)*.004+side*.0015,z=Math.sqrt(1-x*x-y*y);return new T.Vector3(x,y,z).normalize().multiplyScalar(5.43+.20*Math.pow(1-t,2));};
     for(let k=0;k<28;k++)vertices.push(p(k/28,-1),p(k/28,1),p((k+1)/28,1),p(k/28,-1),p((k+1)/28,1),p((k+1)/28,-1));
-    const strand=triMesh(vertices,ribbon%3?'#d8e1d8':'#9fbdb6',{roughness:.26,metalness:.22});strand.castShadow=false;g.add(strand);
+    const strand=triMesh(vertices,ribbon%3?'#b6ccc4':'#91b0aa',{roughness:.62,metalness:.06,transparent:true,opacity:.45,depthWrite:false});strand.castShadow=false;g.add(strand);
   }
   return mergeStatic(g);
 }

@@ -1,10 +1,10 @@
-import { LANDMARKS, landmarkById } from './data.js?v=0100';
-import { addDiscovery, readProgress, writeProgress } from './storage.js?v=0100';
-import { escapeHtml, renderMarkdown } from './markdown.js?v=0100';
-import { downloadPostcard } from './postcard.js?v=0100';
-import { artImage } from './art-paths.js?v=0100';
-import { iconSvg } from './illustrations.js?v=0100';
-import { waitForLiveView } from './exhibition-state.js?v=0100';
+import { LANDMARKS, landmarkById } from './data.js?v=0120';
+import { addDiscovery, readProgress, writeProgress } from './storage.js?v=0120';
+import { escapeHtml, renderMarkdown } from './markdown.js?v=0120';
+import { downloadPostcard } from './postcard.js?v=0120';
+import { artImage } from './art-paths.js?v=0120';
+import { iconSvg } from './illustrations.js?v=0120';
+import { waitForLiveView } from './exhibition-state.js?v=0120';
 
 const $=(selector)=>document.querySelector(selector);
 let storage=null;try{storage=window.localStorage;}catch{/* Private/blocked storage: session-only progress. */}
@@ -122,13 +122,14 @@ function setReading(value){
 async function bootWorld(){
   if(worldState!=='idle')return;worldState='loading';let timeout;
   try{
-    const module=await Promise.race([import('./world.js?v=0100'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
+    const module=await Promise.race([import('./world.js?v=0120'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
     world=module.createWorld({canvas,labelLayer:$('#landmark-labels'),reducedMotion,onNearby:setNearby,onNotice:toast,
       onNavigation:updateJourney,
       onArrival:(id)=>{void openLocation(id,true);},
       onError:(message)=>{worldState='failed';world?.dispose();world=null;setNearby(null);toast(message);setReading(true);}
     });
     worldState='ready';$('#scene-status').hidden=true;world.setDusk(document.documentElement.dataset.dusk==='true');
+    if(new URLSearchParams(location.search).get('build')==='1')window.poemBuild=world;
     if(matchMedia('(max-width: 720px)').matches){world.setLowPower(true);$('#quality-toggle').setAttribute('aria-pressed','true');}
     pauseWorld();
     if(pendingDestination&&!reading&&!dialog.open){const id=pendingDestination;pendingDestination=null;navigate(id);}
@@ -156,6 +157,7 @@ $('#theme-toggle').innerHTML=`${iconSvg('moon')} 黄昏`;
 $('#theme-toggle').addEventListener('click',()=>{const enabled=$('#theme-toggle').getAttribute('aria-pressed')!=='true';$('#theme-toggle').setAttribute('aria-pressed',String(enabled));$('#theme-toggle').setAttribute('aria-label',enabled?'切换日光光线':'切换黄昏光线');$('#theme-toggle').innerHTML=`${iconSvg(enabled?'sun':'moon')} ${enabled?'日光':'黄昏'}`;document.documentElement.dataset.dusk=String(enabled);world?.setDusk(enabled);});
 $('#start-explore').addEventListener('click',()=>{setReading(false);navigate('home');});
 $('#reset-view').addEventListener('click',()=>{world?.reset();toast('已回到起点，已获得的收藏不会丢失。');});
+for(const button of document.querySelectorAll('[data-garden-view]'))button.addEventListener('click',()=>world?.setView(button.dataset.gardenView));
 $('#quality-toggle').addEventListener('click',()=>{const enabled=$('#quality-toggle').getAttribute('aria-pressed')!=='true';$('#quality-toggle').setAttribute('aria-pressed',String(enabled));world?.setLowPower(enabled);});
 function updateJourney(journey){
   $('#journey-status').dataset.state=journey?'travelling':'idle';$('#journey-cancel').disabled=!journey;

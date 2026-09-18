@@ -1,0 +1,318 @@
+{
+  "status": "passed",
+  "version": "0.11.0",
+  "work": "poem",
+  "startedAt": "2026-09-18T09:36:21.736084+00:00",
+  "sourceHashes": {
+    "assets/illustrations/title-calligraphy.svg": "2dfac560792ddba1f270d3358366c7d95de059f66326e543c20e16183cbc1d7d",
+    "assets/textures/collage-atlas.png": "e93eacb8509195a5e053649f8b6863b13584c0868256c2115379d790486e345d",
+    "assets/textures/collage-atlas.webp": "764bc13d2ed485525fb48cce6bedb69d8d6f947fbeb9396184bc4f8e3e3842b4",
+    "src/app.js": "257fbd17b2fc5da21ede7fcaded59ffd1945300c39431269fe91708c964349eb",
+    "src/collage-layers.js": "e0fa5019fa28e7e33f5d0d0e0b0ff6bd43ceb5724918bf0373972ab69c7ec7cd",
+    "src/collage-light.js": "19632bd668dd37cb6f9385a96a80e24b57050737f36d8910226649adba0d9e14",
+    "src/data.js": "55499798b3283904b25073684b3b68598e8a5a36cdcbfb76691ae5bfe3700191",
+    "src/garden-models.js": "7f8e658d599c79b87d68616ab43bc34ae4ad1d746f3b6b900d9d7984210ac37b",
+    "src/landscape.js": "ba055cbe7b8e1922e010c508af25826a5491bce4afd2d08b70a00e167ef42229",
+    "src/math.js": "36f854bf14ad15a8cfab77a4e489fd7ea245b8bdd332f08a7974366ab8cfb63b",
+    "src/navigation.js": "411a689a4c0a934f1f923d7997ba066fa35b45c385f4080b4a87e153e46fb07a",
+    "src/reference-art.js": "7726de28bd1abc3f1520b9610aa132aa31c8ae27a6bbfd2cbdc8c06a1912d5c9",
+    "src/runtime.js": "29b610c20312290eac97e74458df9af972df38cf192c3ac0eda46aabd1940b8c",
+    "src/world.js": "8f8fdb68e380e33c658fc7d4ce9a2498b2dfaa593abdbe5eba744fe2a362a61e"
+  },
+  "views": {
+    "front": {
+      "engine": "three.js r180",
+      "botanicalClumps": "238",
+      "collageLayers": "15",
+      "edition": "garden",
+      "assetsExpected": "0",
+      "assetsLoaded": "0",
+      "assetFailures": "",
+      "textureStatus": "ready",
+      "dusk": "false",
+      "paused": "false",
+      "frame": "5",
+      "drawCalls": "376",
+      "triangles": "1062901",
+      "avatarAction": "Idle",
+      "ready": "true",
+      "position": "0.0955,-0.4067,0.9085",
+      "camera": "0.000000,0.055589,0.998454",
+      "cameraUp": "0.000000,0.998454,-0.055589",
+      "zoom": "1.000",
+      "navigation": "idle",
+      "target": "",
+      "targetLandmark": "",
+      "surfaceClicks": "0",
+      "orbitDrags": "0",
+      "cameraFollow": "false",
+      "inViewport": "true",
+      "sceneVersion": "0.11.0",
+      "cameraPosition": [
+        0,
+        1.3341356484306217,
+        23.96288968533609
+      ],
+      "cameraTarget": [
+        0,
+        0,
+        0
+      ],
+      "cameraFov": 34.5
+    },
+    "inkstone": {
+      "engine": "three.js r180",
+      "botanicalClumps": "238",
+      "collageLayers": "15",
+      "edition": "garden",
+      "assetsExpected": "0",
+      "assetsLoaded": "0",
+      "assetFailures": "",
+      "textureStatus": "ready",
+      "dusk": "false",
+      "paused": "false",
+      "frame": "6",
+      "drawCalls": "175",
+      "triangles": "847972",
+      "avatarAction": "Idle",
+      "ready": "true",
+      "position": "0.0955,-0.4067,0.9085",
+      "camera": "0.000000,0.055589,0.998454",
+      "cameraUp": "0.000000,0.998454,-0.055589",
+      "zoom": "1.000",
+      "navigation": "idle",
+      "target": "",
+      "targetLandmark": "",
+      "surfaceClicks": "0",
+      "orbitDrags": "0",
+      "cameraFollow": "false",
+      "inViewport": "true",
+      "sceneVersion": "0.11.0",
+      "cameraPosition": [
+        2.5,
+        5.4,
+        10.8
+      ],
+      "cameraTarget": [
+        0.55,
+        3.9,
+        4.6
+      ],
+      "cameraFov": 23
+    },
+    "flute": {
+      "engine": "three.js r180",
+      "botanicalClumps": "238",
+      "collageLayers": "15",
+      "edition": "garden",
+      "assetsExpected": "0",
+      "assetsLoaded": "0",
+      "assetFailures": "",
+      "textureStatus": "ready",
+      "dusk": "false",
+      "paused": "false",
+      "frame": "7",
+      "drawCalls": "208",
+      "triangles": "907510",
+      "avatarAction": "Idle",
+      "ready": "true",
+      "position": "0.0955,-0.4067,0.9085",
+      "camera": "0.000000,0.055589,0.998454",
+      "cameraUp": "0.000000,0.998454,-0.055589",
+      "zoom": "1.000",
+      "navigation": "idle",
+      "target": "",
+      "targetLandmark": "",
+      "surfaceClicks": "0",
+      "orbitDrags": "0",
+      "cameraFollow": "false",
+      "inViewport": "true",
+      "sceneVersion": "0.11.0",
+      "cameraPosition": [
+        4.2,
+        1.55,
+        11.34
+      ],
+      "cameraTarget": [
+        0.68,
+        0.28,
+        6.54
+      ],
+      "cameraFov": 30
+    },
+    "bank": {
+      "engine": "three.js r180",
+      "botanicalClumps": "238",
+      "collageLayers": "15",
+      "edition": "garden",
+      "assetsExpected": "0",
+      "assetsLoaded": "0",
+      "assetFailures": "",
+      "textureStatus": "ready",
+      "dusk": "false",
+      "paused": "false",
+      "frame": "8",
+      "drawCalls": "177",
+      "triangles": "892058",
+      "avatarAction": "Idle",
+      "ready": "true",
+      "position": "0.0955,-0.4067,0.9085",
+      "camera": "0.000000,0.055589,0.998454",
+      "cameraUp": "0.000000,0.998454,-0.055589",
+      "zoom": "1.000",
+      "navigation": "idle",
+      "target": "",
+      "targetLandmark": "",
+      "surfaceClicks": "0",
+      "orbitDrags": "0",
+      "cameraFollow": "false",
+      "inViewport": "true",
+      "sceneVersion": "0.11.0",
+      "cameraPosition": [
+        -5.65,
+        -1.2,
+        10.4
+      ],
+      "cameraTarget": [
+        -1.7,
+        -1.72,
+        5
+      ],
+      "cameraFov": 30
+    },
+    "side": {
+      "engine": "three.js r180",
+      "botanicalClumps": "238",
+      "collageLayers": "15",
+      "edition": "garden",
+      "assetsExpected": "0",
+      "assetsLoaded": "0",
+      "assetFailures": "",
+      "textureStatus": "ready",
+      "dusk": "false",
+      "paused": "false",
+      "frame": "9",
+      "drawCalls": "376",
+      "triangles": "1062901",
+      "avatarAction": "Idle",
+      "ready": "true",
+      "position": "0.0955,-0.4067,0.9085",
+      "camera": "0.999201,0.039968,0.000000",
+      "cameraUp": "-0.039968,0.999201,0.000000",
+      "zoom": "1.000",
+      "navigation": "idle",
+      "target": "",
+      "targetLandmark": "",
+      "surfaceClicks": "0",
+      "orbitDrags": "0",
+      "cameraFollow": "false",
+      "inViewport": "true",
+      "sceneVersion": "0.11.0",
+      "cameraPosition": [
+        23.980823009322943,
+        0.9592329203729177,
+        0
+      ],
+      "cameraTarget": [
+        0,
+        0,
+        0
+      ],
+      "cameraFov": 34.5
+    },
+    "back": {
+      "engine": "three.js r180",
+      "botanicalClumps": "238",
+      "collageLayers": "15",
+      "edition": "garden",
+      "assetsExpected": "0",
+      "assetsLoaded": "0",
+      "assetFailures": "",
+      "textureStatus": "ready",
+      "dusk": "false",
+      "paused": "false",
+      "frame": "10",
+      "drawCalls": "376",
+      "triangles": "1062901",
+      "avatarAction": "Idle",
+      "ready": "true",
+      "position": "0.0955,-0.4067,0.9085",
+      "camera": "0.000000,0.055027,-0.998485",
+      "cameraUp": "0.000000,0.998485,0.055027",
+      "zoom": "1.000",
+      "navigation": "idle",
+      "target": "",
+      "targetLandmark": "",
+      "surfaceClicks": "0",
+      "orbitDrags": "0",
+      "cameraFollow": "false",
+      "inViewport": "true",
+      "sceneVersion": "0.11.0",
+      "cameraPosition": [
+        0,
+        1.3206413270842594,
+        -23.9636371714562
+      ],
+      "cameraTarget": [
+        0,
+        0,
+        0
+      ],
+      "cameraFov": 34.5
+    }
+  },
+  "errors": [],
+  "exported": true,
+  "glbReload": {
+    "meshes": 371,
+    "materials": 105,
+    "title": "思念若是一首诗",
+    "sceneVersion": "0.11.0",
+    "bounds": [
+      12.908228874206543,
+      12.55536413192749,
+      13.837567579685038
+    ]
+  },
+  "finishedAt": "2026-09-18T09:42:34.252230+00:00",
+  "browser": "140.0.7339.16",
+  "artifacts": {
+    "poster.webp": {
+      "sha256": "74047645999e4618c8890d4d919eb807c9cbbc411b006b5ec323935709b48c3c",
+      "bytes": 342422
+    },
+    "cover.webp": {
+      "sha256": "5b75a6f893f6786ddb22827469235cc855e2ac6c65ed3cb5b0da1ee02fee397b",
+      "bytes": 491388
+    },
+    "detail-bank.webp": {
+      "sha256": "02f39a03228a3e461ead2cbefd95aaf651ccc5a398beb52dd25776429f4aa8bb",
+      "bytes": 458346
+    },
+    "back.webp": {
+      "sha256": "adab7344a27d88dc2187adac623b94c2516f91bf8bf042c3a1cfc4b4df556ea5",
+      "bytes": 258688
+    },
+    "side.webp": {
+      "sha256": "727b83eef15af54d10191374815e3b4b18a3882a69086d8e87a5afb401087c63",
+      "bytes": 249246
+    },
+    "longing-poem.glb": {
+      "sha256": "82c71f518b0adb94a8874b72c417d3dda9d58018386b270c217fd431a32bf18d",
+      "bytes": 58790868
+    },
+    "detail-inkstone.webp": {
+      "sha256": "d7abf2b2765a9238a476e187a9ef2b1620d25b38c4e5b29058cef9bafc4701f0",
+      "bytes": 282126
+    },
+    "detail-flute.webp": {
+      "sha256": "3e6dada221514c7ebca525415f36a2c91d9bf701daac2a5d2547f03d2ba1a65a",
+      "bytes": 381576
+    }
+  },
+  "generatorHashes": {
+    "scripts/build_exhibition_art.py": "80ac7357b2a5b4d7c579eee0d12f0c583643a5c7fb869b32c6ed870e8920a745"
+  },
+  "sceneVersion": "0.11.0",
+  "method": "One live scene: front, three independently positioned cameras, true side/back, composed print and reloaded GLB."
+}

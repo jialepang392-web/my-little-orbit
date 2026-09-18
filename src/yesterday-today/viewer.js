@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { makeYesterdayToday } from './model.js?v=0100';
+import { makeYesterdayToday } from './model.js?v=0120';
 
 function studio(renderer){
   const c=document.createElement('canvas');c.width=1024;c.height=512;const x=c.getContext('2d');
@@ -18,11 +18,11 @@ export function createYesterdayViewer(canvas,{onReady=()=>{},onError=()=>{}}={})
   renderer.setPixelRatio(Math.min(devicePixelRatio,build?2:innerWidth<600?1.3:1.65));renderer.outputColorSpace=T.SRGBColorSpace;
   renderer.setClearColor('#f2eee7',0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
-  const scene=new T.Scene(),camera=new T.PerspectiveCamera(33,1,.1,60);camera.position.set(3.1,1.25,12.9);
+  const scene=new T.Scene(),camera=new T.PerspectiveCamera(33,1,.1,60);camera.position.set(1.45,.86,13.15);
   const world=makeYesterdayToday();scene.add(world.root);
   const env=studio(renderer);scene.environment=env.texture;scene.environmentIntensity=.78;
   scene.add(new T.HemisphereLight('#faf1e8','#53465e',.86));
-  const key=new T.DirectionalLight('#fff1e3',3.5);key.position.set(-5,7,9);key.castShadow=true;
+  const key=new T.DirectionalLight('#fff1e3',2.95);key.position.set(-5,7,9);key.castShadow=true;
   key.shadow.mapSize.set(build?2048:1024,build?2048:1024);Object.assign(key.shadow.camera,{left:-5,right:5,top:5,bottom:-5,near:1,far:28});key.shadow.normalBias=.02;key.shadow.bias=-.00015;scene.add(key);
   const fill=new T.DirectionalLight('#c6c3ef',1.05);fill.position.set(6,3,-5);scene.add(fill);
   const front=new T.DirectionalLight('#fce7f1',.45);front.position.set(2,-2,8);scene.add(front);
@@ -30,7 +30,7 @@ export function createYesterdayViewer(canvas,{onReady=()=>{},onError=()=>{}}={})
   const clay=new T.MeshStandardMaterial({color:'#c6beb8',roughness:.94,side:T.DoubleSide});
   let raf=0,last=performance.now(),frames=0,disposed=false,lost=false,suspended=false,inView=true,turn=false,separated=false,amount=0,light='studio',settle=0;
   const abort=new AbortController();
-  function metrics(){Object.assign(canvas.dataset,{ready:'true',title:'昨天，今天',version:'0.9.2',centerTreatment:world.root.userData.centerTreatment,centerHasText:String(world.root.userData.centerHasText),frames:String(++frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),coreAxes:world.root.userData.coreAxes.join(','),labelRadius:String(world.root.userData.labelRadius)});}
+  function metrics(){Object.assign(canvas.dataset,{ready:'true',title:'昨天，今天',version:world.root.userData.version,wrapTreatment:world.root.userData.wrapTreatment,centerTreatment:world.root.userData.centerTreatment,centerHasText:String(world.root.userData.centerHasText),frames:String(++frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),coreAxes:world.root.userData.coreAxes.join(','),labelRadius:String(world.root.userData.labelRadius)});}
   function invalidate(){if(!raf&&!disposed&&!lost&&!suspended&&!document.hidden)raf=requestAnimationFrame(render);}
   function render(now){
     raf=0;if(disposed||lost||suspended||document.hidden)return;
@@ -57,8 +57,8 @@ export function createYesterdayViewer(canvas,{onReady=()=>{},onError=()=>{}}={})
     setTurn(value){turn=Boolean(value);last=performance.now();invalidate();},
     setSeparated(value){separated=Boolean(value);last=performance.now();invalidate();},
     setLight(cool){light=cool?'cool':'studio';key.color.set(cool?'#dde4ff':'#fff1e3');fill.color.set(cool?'#ecc4dc':'#c6c3ef');scene.environmentIntensity=cool?.91:.78;invalidate();},
-    setView(view){turn=false;world.root.rotation.set(0,0,0);controls.target.set(0,.06,0);camera.position.set(...(view==='back'?[-2.4,1.45,-13.1]:view==='side'?[13.25,1.1,.5]:[3.1,1.25,12.9]));frame();controls.update();settle=reduced?0:24;invalidate();},
-    setDetail(name){turn=false;world.root.rotation.set(0,0,0);const views={record:[[.25,-.07,2],[1.20,.38,6.4]],conduit:[[1.1,1.25,1.6],[3.5,2.5,4.65]],feather:[[-.25,-1.65,1.55],[.1,-.5,4.8]]};const [target,position]=views[name]||views.record;controls.target.set(...target);camera.position.set(...position);camera.fov=33;camera.updateProjectionMatrix();controls.update();invalidate();},
+    setView(view){turn=false;world.root.rotation.set(0,0,0);controls.target.set(0,.06,0);camera.position.set(...(view==='back'?[-2.4,1.45,-13.1]:view==='side'?[13.25,1.1,.5]:[1.45,.86,13.15]));frame();controls.update();settle=reduced?0:24;invalidate();},
+    setDetail(name){turn=false;world.root.rotation.set(0,0,0);const views={record:[[-.24,.06,2.05],[.63,.49,6.65]],conduit:[[.97,1.02,1.79],[2.8,2.48,5.38]],feather:[[-.30,-1.47,1.78],[.45,-.85,5.23]]};const [target,position]=views[name]||views.record;controls.target.set(...target);camera.position.set(...position);camera.fov=33;camera.updateProjectionMatrix();controls.update();invalidate();},
     setStudy(value){scene.overrideMaterial=value?clay:null;invalidate();},
     suspend(value){suspended=Boolean(value);if(suspended){cancelAnimationFrame(raf);raf=0;}else{last=performance.now();invalidate();}},
     async capture({background=false}={}){

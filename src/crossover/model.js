@@ -3,8 +3,8 @@
  * cable loops and floating type tiles. No terrain, trees or reused garden models.
  */
 import * as T from 'three';
-import { seededRandom } from '../math.js?v=0100';
-import { makePressTextures } from './textures.js?v=0100';
+import { seededRandom } from '../math.js?v=0120';
+import { makePressTextures } from './textures.js?v=0120';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 const Z=new T.Vector3(0,0,1),Y=new T.Vector3(0,1,0),R=3.02;
 
@@ -47,7 +47,7 @@ export function makeCrossover({glyphs={}}={}){
     [.79,-.24,.58,1.98,2.04,.3,'wash'],[-.42,-.72,.62,2.08,1.85,-.05,'news'],
     [.22,-.80,.53,2.16,1.98,.32,'diagram'],[-.34,.32,-.88,2.4,2.8,.4,'black'],
     [.55,.67,-.68,2.5,2.7,-.3,'news'],[-.76,-.49,-.47,2.2,2.4,-.2,'fragments'],
-    [.72,-.59,-.43,2.65,2.6,.2,'type'],[.07,-.18,-1,2.4,2.2,-.2,'diagram'],
+    [.72,-.59,-.43,2.65,2.6,.2,'type'],[.07,-.18,-1,2.4,2.2,-.2,'proof'],
   ];
   specs.forEach(([x,y,z,w,h,angle,kind],i)=>{
     const m=patch(w,h,R+.062+(i%3)*.023,811+i,paper(kind));m.quaternion.setFromUnitVectors(Z,new T.Vector3(x,y,z).normalize());m.rotateZ(angle);surfaces.add(m);layers.push(m);
@@ -102,6 +102,22 @@ export function makeCrossover({glyphs={}}={}){
   for(const [i,info] of [[-.90,1.11,.56,1.06,.04],[.60,1.26,.46,.73,-.04],[-1.10,-.47,.29,.84,.10],[1.05,.36,.25,.65,.12]].entries()){
     const [x,y,w,h,a]=info,m=mesh(new T.PlaneGeometry(w,h),paper(['type','wash','fragments','diagram'][i]),[x,y,3.45]);m.rotation.z=a;graphicSlivers.add(m);
   }
+  // Physical correction slips lift at one end and reveal the darker previous proof.
+  // Each is fixed to the existing sleeve; these are not disconnected ornaments.
+  function liftedProof(w,h,x,y,z,angle,lift){
+    const g=new T.Group();g.name='lifted-correction-proof';g.position.set(x,y,z);g.rotation.z=angle;
+    const geo=new T.PlaneGeometry(w,h,32,8),p=geo.attributes.position;
+    for(let i=0;i<p.count;i++){
+      const xx=p.getX(i),yy=p.getY(i),u=(xx+w/2)/w;
+      p.setXYZ(i,xx,yy+.012*Math.sin(xx*29+yy*17),-.05*xx*xx+lift*Math.pow(u,4)+.012*Math.sin(xx*8));
+    }
+    geo.computeVertexNormals();const underside=geo.clone();underside.translate(0,0,-.018);
+    g.add(mesh(underside,paper('black')),mesh(geo,paper('proof')));
+    const pin=mesh(new T.BoxGeometry(.18,.12,.012),paper('wash'),[-w*.38,0,.016]);g.add(pin);graphicSlivers.add(g);
+  }
+  liftedProof(2.20,.40,-.15,-1.20,3.45,-.10,.42);
+  liftedProof(1.85,.26,-.51,1.38,3.21,.17,.28);
+  liftedProof(.43,1.78,-1.49,-.10,3.22,-.15,.18);
 
   const accents=group('07 / SMALL COLOUR SIGNALS');
   const blue=new T.MeshPhysicalMaterial({color:'#9cadd0',map:maps.blue,roughness:.53,metalness:.07,transparent:true,opacity:.88,depthWrite:false,side:T.DoubleSide});
@@ -183,5 +199,6 @@ export function makeCrossover({glyphs={}}={}){
   const separated=[surfaces,sleeve,border,record,graphicSlivers,accents,orbits,hardware,ribbons,tiles].map((g,i)=>({g,position:g.position.clone(),axis:new T.Vector3((i%3-1)*.15,0,.10+i*.04)}));
   root.userData.title='删了一百遍';root.userData.reference='User-provided monochrome foil and printed type collage. Original artwork, no performer credits or photograph mapped onto geometry.';
   root.userData.layers=Object.keys(groups).length;
+  root.userData.sceneVersion='0.11.0';root.userData.structure='Overprinted ink, erased lines and lifted correction proofs, joined to one wrapped silver core.';
   return {root,groups,textures:maps,setSeparated(value){const amount=typeof value==='number'?T.MathUtils.clamp(value,0,1):Number(Boolean(value));for(const {g,position,axis} of separated)g.position.copy(position).addScaledVector(axis,amount);},dispose(){const gs=new Set(),ms=new Set(),ts=new Set(Object.values(maps));root.traverse(o=>{if(o.geometry)gs.add(o.geometry);for(const m of (Array.isArray(o.material)?o.material:o.material?[o.material]:[])){ms.add(m);for(const v of Object.values(m))if(v?.isTexture)ts.add(v);}});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());ts.forEach(t=>t.dispose());}};
 }

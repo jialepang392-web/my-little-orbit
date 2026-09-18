@@ -1,0 +1,76 @@
+/* Exhibition 01 / 留下的形状 — shared order, independent material temperatures. */
+.portfolio-page .collection-intro{display:grid;grid-template-columns:1.3fr 1fr;align-items:end;padding:48px 0 36px;gap:10%}
+.portfolio-page .collection-intro h1{font-family:'Songti SC','Noto Serif CJK SC',Georgia,serif;font-weight:400;font-size:clamp(58px,7vw,104px);line-height:1.08;letter-spacing:-.065em;margin:23px 0 0}
+.intro-title-end{display:block;margin-left:1.6em}.portfolio-page .collection-intro h1 em{color:#8e6f7b;letter-spacing:-.15em}
+.curator-label{max-width:340px;justify-self:end;padding-bottom:4px}.curator-label p{font-size:15px;line-height:2;color:#55584f;margin:17px 0}
+.curator-label .curator-kicker{font:10px/1.8 monospace;letter-spacing:.08em;color:#80796e}.curator-label .curator-caption{font-size:12px;color:#74756a}
+.exhibition-entry{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:290px;border-bottom:1px solid #aaa396;padding:13px 0;font-size:12px;margin-top:23px;min-height:44px}.exhibition-entry span{font-size:20px}
+.gallery-chapter{grid-column:1/-1;display:grid;grid-template-columns:180px 1fr auto;align-items:baseline;gap:26px;padding:8px 0 4px}
+.gallery-chapter>span{font:10px/1.8 monospace;letter-spacing:.05em;color:#77776c}.gallery-chapter h2{font:400 25px/1.5 'Songti SC',serif;margin:0}.gallery-chapter p{font-size:12px;line-height:1.8;margin:0;color:#74766c}
+.gallery-chapter.second-act{padding-top:15px}.portfolio-page .world-grid{gap:25px 36px}.portfolio-page .world-card{padding-bottom:26px}
+.portfolio-page .world-card h2{font-size:clamp(27px,2.8vw,40px);line-height:1.4;letter-spacing:-.035em;margin:22px 0 13px}
+.portfolio-page .world-card h2 span{font-size:10px;letter-spacing:.035em}.portfolio-page .world-description{max-width:34em;font-size:14px;line-height:1.95;min-height:3.9em}
+.portfolio-page .world-art{border:0}.portfolio-page .world-number{font:italic 25px Georgia,serif;left:20px;top:20px}.portfolio-page .world-tag{right:24px;top:25px;line-height:1.9}
+.portfolio-page .world-enter{background:transparent;backdrop-filter:none;border:0;font-size:27px;bottom:13px;right:16px}
+.portfolio-page .world-meta{padding-top:14px;border-top:1px solid #c9c7bd70;font-size:11px;margin-top:19px}.portfolio-page .collection-note{margin-top:54px;padding-top:40px;padding-bottom:60px}
+/* The second object carries the edit; remove the unrelated giant ghost headline. */
+.concept-stage .print-backdrop{height:1px;top:0;background:var(--line);opacity:.65}.print-backdrop img,.print-backdrop i{display:none}
+.concept-stage{background:radial-gradient(ellipse at 50% 45%,#f1f0eb88,transparent 66%)}
+.stage-register{left:14px;top:20px}.concept-notes h2,.rain-story h2{letter-spacing:-.02em}
+.concept-notes .micro-note,.story-copy .micro-note,.statement-copy .time-footnote{border-top:1px solid var(--exhibit-rule);padding-top:16px}
+.exhibit-section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:24px;border-top:1px solid var(--exhibit-rule);padding:20px 0 25px}
+.exhibit-section-heading h2{font:400 25px/1.6 'Songti SC',serif;margin:0}.exhibit-section-heading p{font:10px/1.8 monospace;letter-spacing:.06em;margin:0;color:var(--exhibit-text)}
+.exhibit-materials{margin:0 0 56px}.exhibit-materials .detail-strip,.exhibit-materials .rain-details{padding-top:0}
+.detail-strip figcaption span{display:block;font:10px/1.8 monospace;letter-spacing:.07em;margin:8px 0;color:#77717c}
+.detail-strip figcaption strong{display:block;font:400 17px/1.7 'Songti SC',serif}.detail-strip figcaption p,.rain-details figcaption p{font:12px/1.9 sans-serif;margin:8px 0 0;color:var(--exhibit-text)}
+.detail-strip figure:nth-child(2),.detail-strip figure:nth-child(3),.rain-details figure:nth-child(2),.rain-details figure:nth-child(3){padding-top:0}
+.detail-strip,.rain-details{grid-template-columns:1.25fr 1fr 1fr;gap:24px;align-items:start}.detail-strip figure:nth-child(2),.rain-details figure:nth-child(2){margin-top:58px}.detail-strip figure:nth-child(3),.rain-details figure:nth-child(3){margin-top:116px}
+.detail-strip img{object-fit:cover;background:transparent}.detail-open{height:auto}
+.exhibit-verso{border-top:1px solid var(--exhibit-rule);display:grid;grid-template-columns:1.6fr 1fr;gap:7%;padding:36px 0 50px;margin:0 0 20px;align-items:center}
+.exhibit-verso-views{display:grid;grid-template-columns:1fr 1fr;gap:18px}.exhibit-verso figure{margin:0}.exhibit-verso img{width:100%;height:auto;display:block}.exhibit-verso figcaption{font:10px/1.9 monospace;padding-top:12px;color:var(--exhibit-text)}
+.exhibit-verso h2{font:400 29px/1.6 'Songti SC',serif;margin:16px 0}.exhibit-verso p{font-size:13px;line-height:2;color:var(--exhibit-text)}
+.edition-downloads{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:22px}.edition-downloads a{border-bottom:1px solid var(--exhibit-rule);font-size:11px;padding:10px 0;min-height:44px;display:inline-flex;align-items:center}
+.edition-downloads small{flex-basis:100%;font-size:10px;line-height:1.9;color:var(--exhibit-text)}
+.edition-poster{max-width:155px;margin:28px 0 0!important}.edition-poster img{width:100%;height:auto;display:block;box-shadow:0 5px 18px #00000012}.edition-poster figcaption{font:9px/1.9 monospace;padding-top:10px}
+.rain-coda{padding:65px 0 80px;border-top:1px solid var(--exhibit-rule);display:flex;align-items:center;justify-content:space-between;gap:40px}
+.rain-coda h2{font:400 clamp(30px,4.5vw,60px)/1.65 'Songti SC',serif;margin:0;letter-spacing:.02em}.rain-coda h2 span{color:#7284a0}.rain-coda>p{font:10px/2 monospace;color:#899bb9;text-align:right}
+/* Garden as an album: paper ground, restrained framing, alternating studies. */
+body[data-orbit-world="poem"]{--paper:#e8e9df;--exhibit-surface:#e8e9df;--exhibit-text:#4b5945;--exhibit-rule:#b4baa5;--way-ground:#e8e9df;--way-line:#b4baa5;background:#e8e9df}
+body[data-orbit-world="poem"] .app-shell{background:transparent}body[data-orbit-world="poem"] .world-stage{background:transparent}
+body[data-orbit-world="poem"] .topbar{border-bottom-color:#b4baa5}body[data-orbit-world="poem"] .world-halo{opacity:.20}
+body[data-orbit-world="poem"] .world-heading,body[data-orbit-world="poem"] .intro-foot{color:#617053}
+.garden-statement{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10%;padding:60px 0 24px;border-top:1px solid var(--exhibit-rule)}
+.garden-statement h2{font:400 34px/1.65 var(--serif);margin:16px 0}.garden-statement>div>p:not(.eyebrow){font-size:14px;line-height:2.2;margin:14px 0;max-width:34em}
+body[data-orbit-world="poem"] .garden-details{border:0;margin-top:20px}.garden-detail-grid{grid-template-columns:1.1fr 1fr;gap:55px 10%;align-items:start}
+.garden-detail-grid figure:nth-child(2){padding-top:90px}.garden-detail-grid figure:nth-child(3){padding-top:0;grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10%;align-items:center}
+.garden-detail-grid figcaption{font-size:13px;line-height:2}.garden-detail-grid figcaption strong{display:block;font:400 21px/1.8 var(--serif);margin-bottom:12px}.garden-detail-grid figcaption span{display:block;font:10px/1.9 monospace;margin-bottom:12px;letter-spacing:.06em}
+.garden-edition{grid-column:1/-1;width:100%}.garden-edition .exhibit-verso{margin-top:20px}.garden-visit-tools{border-top:1px solid var(--exhibit-rule);padding-top:20px;margin-top:20px}
+.reading .garden-statement,.reading .garden-edition{display:none}
+.orbit-neighbour{border:0;border-top:1px solid var(--way-line);padding:20px 0}.orbit-neighbour:hover{background:transparent}.orbit-neighbour strong{font-size:25px}.orbit-neighbour img{border:0}
+.time-details figcaption,.time-verso figcaption{line-height:1.9}.time-details figcaption span{margin-bottom:9px}
+@media(min-width:1100px){.time-stage{height:clamp(580px,calc(100svh - 205px),820px)}.concept-stage,.rain-stage{height:clamp(520px,calc(100svh - 315px),710px)}}
+@media(max-width:800px){.gallery-chapter{grid-template-columns:1fr 1fr;gap:8px}.gallery-chapter h2{font-size:22px;text-align:right}.gallery-chapter p{grid-column:1/-1}.portfolio-page .collection-intro{gap:6%;padding-top:35px}.curator-label p{font-size:13px}.portfolio-page .world-grid{gap:25px}.exhibit-verso{grid-template-columns:1fr;gap:30px}.exhibit-verso-views{max-width:680px}.exhibit-verso h2{font-size:27px}.garden-statement{padding-top:45px;gap:7%}.garden-statement h2{font-size:29px}.garden-detail-grid{gap:40px 7%}.garden-detail-grid figure:nth-child(2){padding-top:75px}.rain-coda{padding:55px 0;gap:20px}}
+@media(max-width:600px){
+ .portfolio-page .collection-intro{display:block;padding:29px 0 26px}.portfolio-page .collection-intro h1{font-size:68px;line-height:1.06;margin-top:20px}.intro-title-end{margin-left:1.28em}.curator-label{margin-top:25px;max-width:none}.curator-label .curator-kicker{font-size:8px}.curator-label p{font-size:13px;line-height:1.95;margin:10px 0}.curator-label .curator-caption{display:none}.exhibition-entry{margin-top:13px;max-width:none;font-size:11px;padding:10px 0}.portfolio-page .collection-route{margin-top:0}
+ .gallery-chapter{padding:7px 0 0}.gallery-chapter>span{font-size:9px}.gallery-chapter h2{font-size:22px}.gallery-chapter p{font-size:11px}.gallery-chapter.second-act{margin-top:12px}.portfolio-page .world-grid{gap:25px}.portfolio-page .world-card h2{font-size:30px;display:flex}.portfolio-page .world-card h2 span{font-size:8px}.portfolio-page .world-description{font-size:13px;min-height:0}.portfolio-page .world-meta{font-size:10px}.portfolio-page .world-number{font-size:23px;left:11px;top:13px}.portfolio-page .world-tag{top:18px;right:17px;font-size:8px}.portfolio-page .collection-note{margin-top:40px;padding-bottom:40px}
+ .exhibit-section-heading{align-items:start;gap:15px;padding:20px 0}.exhibit-section-heading h2{font-size:23px}.exhibit-section-heading p{max-width:125px;text-align:right;font-size:8px}.detail-strip,.rain-details{grid-template-columns:1fr;gap:34px}.detail-strip figure:nth-child(n),.rain-details figure:nth-child(n){margin-top:0;padding-top:0}.detail-strip figure:nth-child(2),.rain-details figure:nth-child(2){width:90%;justify-self:end}.detail-strip figure:nth-child(3),.rain-details figure:nth-child(3){width:94%}.detail-strip figcaption strong{font-size:18px}.exhibit-materials{margin-bottom:37px}.exhibit-verso{padding-top:24px;margin-bottom:0}.exhibit-verso-views{gap:10px}.exhibit-verso figcaption{font-size:9px}.exhibit-verso h2{font-size:26px}.rain-coda{display:block;padding:50px 0 58px}.rain-coda>p{text-align:left;margin:24px 0 0;font-size:9px}
+ .garden-statement{grid-template-columns:1fr;gap:8px;padding-top:35px}.garden-statement h2{font-size:28px}.garden-statement>div>p:not(.eyebrow){font-size:13px;line-height:2.05}.garden-detail-grid{grid-template-columns:1fr;gap:35px}.garden-detail-grid figure:nth-child(n){padding-top:0;display:block}.garden-detail-grid figure:nth-child(2){width:90%;justify-self:end}.garden-detail-grid figure:nth-child(3){width:95%}.garden-detail-grid figcaption strong{font-size:20px;margin-bottom:6px}.garden-detail-grid figcaption{font-size:12px}.garden-detail-grid figcaption span{margin-bottom:7px;font-size:9px}.garden-visit-tools{padding-block:20px 25px}.orbit-neighbour strong{font-size:24px}
+}
+@media(max-width:359px){.portfolio-page .collection-intro h1{font-size:59px}.portfolio-page .world-card h2{font-size:25px}.portfolio-page .world-card h2 span{font-size:7px}.exhibit-section-heading h2{font-size:21px}.exhibit-verso figcaption{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.exhibition-entry,.edition-poster img{transition:none}}
+
+/* Mobile entry: keep the first sculpture visible, not a full screen of preface. */
+@media(max-width:600px){
+ .portfolio-page .collection-intro{padding:20px 0 20px}
+ .portfolio-page .collection-intro>.curator-label{display:grid;grid-template-columns:minmax(0,1fr) 82px;align-items:end;gap:14px;width:100%;max-width:none;margin-top:17px}
+ .portfolio-page .collection-intro .eyebrow{font-size:9px;margin:0;line-height:1.8}
+ .portfolio-page .collection-intro h1{font-size:54px;margin-top:13px;line-height:1.04}.intro-title-end{margin-left:1.55em}
+ .curator-label .curator-kicker,.curator-label .curator-caption{display:none}
+ .curator-label p{font-size:11px;line-height:1.85;margin:0}.curator-label .exhibition-entry{font-size:10px;min-height:42px;padding:8px 0;margin:0;gap:5px}.curator-label .exhibition-entry span{font-size:18px}
+ .portfolio-page .collection-route{grid-template-columns:repeat(4,minmax(0,1fr));counter-reset:exhibit-room;margin-bottom:10px}
+ .portfolio-page .collection-route>a:nth-child(n){display:block;position:relative;min-height:52px;padding:8px 5px;border-bottom:0;border-right:1px solid var(--line);counter-increment:exhibit-room}
+ .portfolio-page .collection-route>a:last-child{border-right:0}.portfolio-page .collection-route>a:before{content:'0' counter(exhibit-room);font:9px/1.6 monospace;color:#777268}
+ .portfolio-page .collection-route i{position:absolute;right:7px;top:12px;width:4px;height:4px}.portfolio-page .collection-route small{display:none}.portfolio-page .collection-route strong{font-size:10px;line-height:1.8;letter-spacing:-.015em}
+ .portfolio-page .works-heading{padding:12px 0;font-size:9px}.portfolio-page .works-heading span:last-child{font-size:8px}.portfolio-page .gallery-chapter{padding-top:4px;gap:5px}.portfolio-page .gallery-chapter h2{font-size:20px}.portfolio-page .gallery-chapter p{font-size:10px}
+}
+@media(max-width:359px){.portfolio-page .collection-intro h1{font-size:49px}.portfolio-page .collection-intro>.curator-label{grid-template-columns:minmax(0,1fr) 75px;gap:9px}.curator-label p{font-size:10px}.portfolio-page .collection-route strong{font-size:9px}.portfolio-page .gallery-chapter h2{font-size:18px}}

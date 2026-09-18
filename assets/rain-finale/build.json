@@ -1,0 +1,209 @@
+{
+  "status": "passed",
+  "version": "0.11.0",
+  "work": "rain-finale",
+  "startedAt": "2026-09-18T09:23:17.828485+00:00",
+  "sourceHashes": {
+    "assets/rain-finale/title-glyphs.json": "71087d87709a71e3bcf857022a22eece383dd0f1a05dfb8684ec97112f2ceb9d",
+    "assets/rain-finale/title.svg": "1c5445ed85bf0f61edb98d28e5f3240f4b502e4c6c246cf0c7dfa6c9f8f5d2f4",
+    "src/math.js": "36f854bf14ad15a8cfab77a4e489fd7ea245b8bdd332f08a7974366ab8cfb63b",
+    "src/rain-finale-page.js": "ebd1e34b283eea620271955c7fa6f8358ed292da776ff4977fe64768a60d7a30",
+    "src/rain-finale/model.js": "23a67de458786ee862685cca47096cacc789067c23f87a58a037cd285c04971d",
+    "src/rain-finale/textures.js": "6a556a6a6790fdbd58f11337fae108d2b2fc35f1b59d0d09881bace1fa5bb911",
+    "src/rain-finale/viewer.js": "3ba0bda78b6aa7cf74f52f620f2141a2dd0120a7d6d6d10ad99ccc930c0fb522"
+  },
+  "views": {
+    "front": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "雨终曲",
+      "frames": "7",
+      "layers": "12",
+      "triangles": "267515",
+      "meshes": "36",
+      "drawCalls": "91",
+      "camera": "0.0000,0.2200,13.2000",
+      "autoRotate": "false",
+      "rain": "false",
+      "separated": "false",
+      "light": "blue",
+      "rotation": "0.00000",
+      "sceneVersion": "0.11.0",
+      "cameraTarget": [
+        0,
+        0.1,
+        0
+      ],
+      "cameraFov": 35
+    },
+    "light": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "雨终曲",
+      "frames": "10",
+      "layers": "12",
+      "triangles": "267515",
+      "meshes": "36",
+      "drawCalls": "91",
+      "camera": "-5.2000,0.8500,7.4000",
+      "autoRotate": "false",
+      "rain": "false",
+      "separated": "false",
+      "light": "blue",
+      "rotation": "0.00000",
+      "sceneVersion": "0.11.0",
+      "cameraTarget": [
+        -1.6000000000000005,
+        -0.10000000000000003,
+        2.4
+      ],
+      "cameraFov": 28
+    },
+    "veil": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "雨终曲",
+      "frames": "13",
+      "layers": "12",
+      "triangles": "267515",
+      "meshes": "36",
+      "drawCalls": "90",
+      "camera": "5.7000,2.4000,6.7000",
+      "autoRotate": "false",
+      "rain": "false",
+      "separated": "false",
+      "light": "blue",
+      "rotation": "0.00000",
+      "sceneVersion": "0.11.0",
+      "cameraTarget": [
+        1.75,
+        0.67,
+        2.2
+      ],
+      "cameraFov": 27
+    },
+    "coda": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "雨终曲",
+      "frames": "16",
+      "layers": "12",
+      "triangles": "267515",
+      "meshes": "36",
+      "drawCalls": "89",
+      "camera": "1.9000,-4.3000,6.4000",
+      "autoRotate": "false",
+      "rain": "false",
+      "separated": "false",
+      "light": "blue",
+      "rotation": "0.00000",
+      "sceneVersion": "0.11.0",
+      "cameraTarget": [
+        0.26,
+        -2.45,
+        1.9
+      ],
+      "cameraFov": 27
+    },
+    "side": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "雨终曲",
+      "frames": "19",
+      "layers": "12",
+      "triangles": "267515",
+      "meshes": "36",
+      "drawCalls": "91",
+      "camera": "13.2000,0.7000,0.2000",
+      "autoRotate": "false",
+      "rain": "false",
+      "separated": "false",
+      "light": "blue",
+      "rotation": "0.00000",
+      "sceneVersion": "0.11.0",
+      "cameraTarget": [
+        0,
+        0.1,
+        0
+      ],
+      "cameraFov": 35
+    },
+    "back": {
+      "engine": "three.js r180",
+      "ready": "true",
+      "title": "雨终曲",
+      "frames": "22",
+      "layers": "12",
+      "triangles": "267515",
+      "meshes": "36",
+      "drawCalls": "91",
+      "camera": "0.0000,0.2200,-13.2000",
+      "autoRotate": "false",
+      "rain": "false",
+      "separated": "false",
+      "light": "blue",
+      "rotation": "0.00000",
+      "sceneVersion": "0.11.0",
+      "cameraTarget": [
+        0,
+        0.1,
+        0
+      ],
+      "cameraFov": 35
+    }
+  },
+  "errors": [],
+  "exported": true,
+  "glbReload": {
+    "meshes": 36,
+    "materials": 18,
+    "title": "雨终曲",
+    "sceneVersion": "0.11.0",
+    "bounds": [
+      6.828643560409546,
+      6.966882944107056,
+      6.046872854232788
+    ]
+  },
+  "finishedAt": "2026-09-18T09:29:08.969424+00:00",
+  "browser": "140.0.7339.16",
+  "artifacts": {
+    "poster.webp": {
+      "sha256": "53c206dfd731a9e52164451514de22386417f8a29016fa4be8f65a4297ce10e2",
+      "bytes": 512768
+    },
+    "cover.webp": {
+      "sha256": "b9dc0354f6afa680ab528d2db48c4e1382f3abee988673baf2ae343922bba2f7",
+      "bytes": 471494
+    },
+    "detail-veil.webp": {
+      "sha256": "58cdca412092a75532670f44b292823b24bf0aa379af9b9d18b7f17461266648",
+      "bytes": 492856
+    },
+    "back.webp": {
+      "sha256": "122f45b98db7dcbebb050e4d1a731a6c07ec4bebc01f6b79b7dd0a5325cc91bd",
+      "bytes": 197052
+    },
+    "side.webp": {
+      "sha256": "2255dfe77eb04b5f2d3bcbfb206b357ad4abeccacfcb68794ef46f98128e6357",
+      "bytes": 230940
+    },
+    "detail-coda.webp": {
+      "sha256": "efd5a8acab710d59ed66c775eb6432b3bd0ee2ccaf5f31c05d0125d3a469118a",
+      "bytes": 303014
+    },
+    "detail-light.webp": {
+      "sha256": "8d3e74566ad3d2abe06fc54d08793522d245c3d4d94ae89ae15ac9006c3b1c4b",
+      "bytes": 479024
+    },
+    "rain-finale.glb": {
+      "sha256": "bbf76ae0dbae6d1686da85d742812fda0cc95b3b500d959ab118cea92da1a458",
+      "bytes": 13566516
+    }
+  },
+  "generatorHashes": {
+    "scripts/build_exhibition_art.py": "80ac7357b2a5b4d7c579eee0d12f0c583643a5c7fb869b32c6ed870e8920a745"
+  },
+  "sceneVersion": "0.11.0",
+  "method": "One live scene: front, three independently positioned cameras, true side/back, composed print and reloaded GLB."
+}

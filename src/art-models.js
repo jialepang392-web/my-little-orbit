@@ -4,7 +4,7 @@
 import * as T from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { seededRandom } from './math.js?v=0100';
+import { seededRandom } from './math.js?v=0120';
 export const PALETTE=Object.freeze({cream:'#f9ebcc',wall:'#efce95',wood:'#795140',bark:'#654b37',roof:'#c26148',roofLight:'#df8b60',green:'#365d4c',mint:'#719e79',leaf:'#73a062',lime:'#b7c573',gold:'#e7b958',glass:'#a7d7c8',ink:'#233b35',blue:'#6197a5',pink:'#e9aaa2'});
 const materials=new Map(),shapes=new Map();
 export function mat(color,extra={}){const key=color+JSON.stringify(extra);if(!materials.has(key))materials.set(key,new T.MeshStandardMaterial({color,roughness:.8,...extra}));return materials.get(key);}

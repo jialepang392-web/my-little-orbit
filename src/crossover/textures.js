@@ -3,7 +3,7 @@
  * Seeded Canvas artwork; the reference photo is NOT mapped onto the sphere.
  */
 import * as T from 'three';
-import {seededRandom} from '../math.js?v=0100';
+import {seededRandom} from '../math.js?v=0120';
 function canvas(size=1024){const c=document.createElement('canvas');c.width=c.height=size;return c;}
 function texture(c,data=false){const t=new T.CanvasTexture(c);t.colorSpace=data?T.NoColorSpace:T.SRGBColorSpace;t.anisotropy=8;return t;}
 function paperNoise(c,seed,strength=10){const ctx=c.getContext('2d'),r=seededRandom(seed),im=ctx.getImageData(0,0,c.width,c.height),d=im.data;for(let i=0;i<d.length;i+=4){const n=(r()-.5)*strength;d[i]+=n;d[i+1]+=n;d[i+2]+=n;}ctx.putImageData(im,0,0);}
@@ -54,6 +54,17 @@ export function makePressTextures(glyphs={}){
       for(let i=0;i<75;i++){ctx.fillStyle=i%3?'#948ea2':'#cfcad1';ctx.beginPath();ctx.moveTo(r()*1024,r()*1024);for(let j=0;j<4;j++)ctx.lineTo(r()*1024,r()*1024);ctx.closePath();ctx.fill();}ctx.restore();
       title(ctx,'了',500,792,970,'#55525b',.7);
     }
+    // The ink is repeatedly revised, rather than a decorative title collage.
+    if(['black','news','type'].includes(kind)){
+      ctx.save();ctx.translate(0,12);ctx.rotate(-.018);
+      const dark=kind==='black';
+      for(const [x,y,w,h] of [[72,505,625,28],[194,651,691,21],[46,826,413,35]]){
+        ctx.fillStyle=dark?'#dddcd5':'#353139';ctx.globalAlpha=.82;ctx.fillRect(x,y,w,h);
+        ctx.globalAlpha=.28;ctx.fillRect(x+7,y-7,w*.83,4);
+      }
+      ctx.globalAlpha=.85;ctx.strokeStyle=dark?'#ece9e1':'#302c34';ctx.lineWidth=4;
+      ctx.strokeRect(56,475,702,97);ctx.beginPath();ctx.moveTo(704,508);ctx.lineTo(804,464);ctx.lineTo(845,493);ctx.stroke();ctx.restore();
+    }
     wear(ctx,seed+28,kind==='black'?1600:1100,kind==='black');paperNoise(c,seed+400,10);return texture(c);
   }
   function foil(){
@@ -85,9 +96,26 @@ export function makePressTextures(glyphs={}){
     title(ctx,'删了一百遍',348,778,137,'#2b2831',.73);
     ctx.save();ctx.translate(803,380);ctx.rotate(.08);ctx.fillStyle='#333039';ctx.fillRect(0,0,44,214);ctx.fillStyle='#dcd9dd';ctx.fillRect(11,38,50,116);ctx.restore();
     ctx.fillStyle='#655f69';ctx.font='20px monospace';ctx.fillText('DELETED / 100',410,884);
+    ctx.save();ctx.translate(50,485);ctx.rotate(-.055);
+    ctx.fillStyle='#deddd5';ctx.fillRect(0,0,792,45);ctx.fillRect(135,63,575,13);
+    ctx.globalAlpha=.34;ctx.fillStyle='#4b444e';ctx.font='bold 38px Georgia,serif';ctx.fillText('STILL HERE',90,38);
+    ctx.globalAlpha=1;ctx.strokeStyle='#302b35';ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(78,-77);ctx.lineTo(658,-63);ctx.stroke();
+    ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(86,-87);ctx.lineTo(713,-77);ctx.stroke();ctx.restore();
     paperNoise(c,631,9);wear(ctx,871,650,false);return texture(c);
   }
-  function alphabet(){const c=canvas(),ctx=c.getContext('2d');ctx.fillStyle='#efeeea';ctx.fillRect(0,0,1024,1024);const letters=['U','N','D','O','N','E','R','100','D','E','L','T','X','0','1','M'];for(let i=0;i<16;i++){const x=i%4*256,y=Math.floor(i/4)*256;ctx.fillStyle='#222127';ctx.font='900 66px Impact,"Arial Narrow",sans-serif';ctx.textAlign='center';ctx.fillText(letters[i],x+128,y+152);}paperNoise(c,1993,9);return texture(c);}
+  function alphabet(){const c=canvas(),ctx=c.getContext('2d');ctx.fillStyle='#efeeea';ctx.fillRect(0,0,1024,1024);const letters=['07','23','48','77','99','100','01','100','D','E','L','T','X','0','1','M'];for(let i=0;i<16;i++){const x=i%4*256,y=Math.floor(i/4)*256;ctx.fillStyle='#222127';ctx.font='500 86px monospace';ctx.textAlign='center';ctx.fillText(letters[i],x+128,y+152);if(i!==5){ctx.fillRect(x+56,y+118,145,6);ctx.fillRect(x+77,y+132,118,2);}ctx.font='13px monospace';ctx.fillText('PROOF / '+String(i+1).padStart(2,'0'),x+128,y+214);}paperNoise(c,1993,9);return texture(c);}
+  function proof(){
+    const c=canvas(),ctx=c.getContext('2d');ctx.fillStyle='#deddd4';ctx.fillRect(0,0,1024,1024);
+    ctx.strokeStyle='#77717a';ctx.lineWidth=2;
+    for(const [x,y] of [[40,40],[984,40],[40,984],[984,984]]){ctx.beginPath();ctx.moveTo(x-20,y);ctx.lineTo(x+20,y);ctx.moveTo(x,y-20);ctx.lineTo(x,y+20);ctx.stroke();}
+    ctx.fillStyle='#514b56';ctx.font='22px monospace';ctx.fillText('REVISION / 099 — 100',74,89);
+    ctx.font='bold 111px Georgia,serif';ctx.fillStyle='#a5a0a5';ctx.fillText('Unsent.',94,291);ctx.fillStyle='#2a2730';ctx.fillText('Unsent.',83,282);
+    for(let i=0;i<7;i++){ctx.fillStyle=i%3===0?'#625c65':'#2b2830';ctx.fillRect(78,340+i*74,800-i%3*126,21+i%2*6);ctx.fillStyle='#c3bfc1';ctx.fillRect(91,367+i*74,507+i%2*180,3);}
+    ctx.fillStyle='#eeece4';ctx.fillRect(35,507,886,42);ctx.fillRect(224,664,700,37);
+    ctx.strokeStyle='#3a343e';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(67,474);ctx.lineTo(881,410);ctx.moveTo(703,410);ctx.lineTo(881,410);ctx.lineTo(846,500);ctx.stroke();
+    ctx.fillStyle='#655e68';ctx.font='20px monospace';ctx.fillText('THE PREVIOUS LINE REMAINS',73,937);
+    paperNoise(c,3801,13);wear(ctx,3814,1000,false);return texture(c);
+  }
   function blue(){const c=canvas(512),ctx=c.getContext('2d'),r=seededRandom(121);ctx.fillStyle='#a7b8d480';ctx.fillRect(0,0,512,512);for(let i=0;i<230;i++){ctx.globalAlpha=.08+r()*.19;ctx.strokeStyle=i%4?'#3d62a5':'#d4d5dd';ctx.lineWidth=2+r()*10;const x=r()*512,y=r()*512;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+30+r()*70,y-40-r()*100);ctx.stroke();}ctx.globalAlpha=1;return texture(c);}
-  return {...foil(),blue:blue(),disc:disc(),letters:alphabet(),black:press('black',51),news:press('news',35),type:press('type',73),diagram:press('diagram',102),fragments:press('fragments',127),wash:press('wash',317)};
+  return {...foil(),blue:blue(),disc:disc(),proof:proof(),letters:alphabet(),black:press('black',51),news:press('news',35),type:press('type',73),diagram:press('diagram',102),fragments:press('fragments',127),wash:press('wash',317)};
 }

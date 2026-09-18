@@ -19,3 +19,11 @@ if(!document.body.dataset.orbitWorld&&location.hash.startsWith('#world-')){
   const target=document.getElementById(location.hash.slice(1));
   if(target){requestAnimationFrame(()=>target.focus({preventScroll:true}));}
 }
+// The exhibition entry does not animate page departures or alter browser history.
+// Make chapter jumps keyboard-readable without coupling them to any renderer.
+for(const link of document.querySelectorAll('.collection-route a,.exhibition-entry')){
+  link.addEventListener('click',()=>{
+    const id=link.getAttribute('href')?.slice(1),target=id&&document.getElementById(id);
+    if(target&&!target.matches('a,button')){target.setAttribute('tabindex','-1');requestAnimationFrame(()=>target.focus({preventScroll:true}));}
+  });
+}
