@@ -1,0 +1,15 @@
+{
+  "version": "0.12.2",
+  "source": "assets/mobile/yesterday-today-front-2048.webp",
+  "sourceHash": "ebd3b3e5ac3bab41a2182db47df74f9de32eac7652bde83fae8dd96b0cff95b2",
+  "generatorHash": "a310e828d72f59e2b1115dcd18bf6863dabb251f3baf21bd42e57d9b70e7343d",
+  "artifacts": {
+    "yesterday-today-front-1200.webp": {
+      "width": 1200,
+      "height": 1200,
+      "bytes": 403180,
+      "sha256": "e3680663b237cc1766f776fbe88837f9ca7f7c849fa19a639d87d53e2bcee59e"
+    }
+  },
+  "method": "Downsample the verified 2048px same-scene photograph. Native srcset selects a suitable pixel count; the lightbox always requests the 2048px original."
+}

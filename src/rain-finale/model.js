@@ -4,8 +4,8 @@
  */
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { seededRandom } from '../math.js?v=0121';
-import { makeRainTextures } from './textures.js?v=0121';
+import { seededRandom } from '../math.js?v=0122';
+import { makeRainTextures } from './textures.js?v=0122';
 
 const Z=new T.Vector3(0,0,1),Y=new T.Vector3(0,1,0),R=2.63;
 const V=a=>new T.Vector3(...a);

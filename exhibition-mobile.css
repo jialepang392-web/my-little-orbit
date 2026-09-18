@@ -1,0 +1,50 @@
+/* Mobile presentation; sculpture geometry, lighting and original editions stay intact. */
+.hero-inspect{display:none}
+.scene-still .hero-inspect{display:flex;position:absolute;inset:0;z-index:4;align-items:flex-end;justify-content:flex-end;padding:18px 18px 34px;border:0;background:transparent;color:var(--exhibit-text);font:11px/1.8 inherit;cursor:zoom-in;touch-action:pan-y pinch-zoom}
+.exhibit-immersive .hero-inspect{display:none}
+.hero-inspect:focus-visible{outline:2px solid var(--exhibit-accent);outline-offset:-4px}
+.exhibit-dialog{height:100dvh;overscroll-behavior:contain}
+.exhibit-dialog-header{padding-top:max(10px,env(safe-area-inset-top));padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+.exhibit-image-main{position:relative;padding:0;margin:0 12px;min-height:80px;flex:1;touch-action:none;user-select:none;-webkit-user-select:none;cursor:zoom-in}
+.exhibit-image-main img{flex:none;max-width:none;max-height:none;object-fit:contain;transform-origin:center;will-change:transform;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.exhibit-image-main.is-zoomed{cursor:grab}.exhibit-image-main.is-zoomed:active{cursor:grabbing}
+.exhibit-zoom-tools{display:flex;justify-content:center;align-items:center;gap:8px;padding:8px 12px 3px;flex-shrink:0}
+.exhibit-zoom-tools output{min-width:51px;text-align:center;font:11px/1.5 monospace}
+.exhibit-zoom-tools button{padding:7px 12px;min-width:44px;min-height:44px}
+.exhibit-zoom-tools button:disabled{opacity:.35;cursor:default}
+.exhibit-zoom-hint{text-align:center;font:11px/1.7 sans-serif;padding:0 12px 9px;flex-shrink:0}
+.exhibit-image-footer{padding-bottom:max(14px,env(safe-area-inset-bottom));padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right));gap:8px 16px}
+@media(max-width:900px) and (pointer:coarse){
+ body[data-orbit-view="still"] :is(.time-controls,.model-controls,.rain-controls,.world-controls){display:none}
+ .exhibit-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:10px 0 15px}
+ .exhibit-options small{grid-column:1/-1;max-width:none;font-size:11px;line-height:1.8;order:-1}
+ .exhibit-options button{min-width:0;min-height:46px;font-size:12px;line-height:1.5;padding:10px 6px}
+ .exhibit-options .exhibit-inspect{background:color-mix(in srgb,var(--exhibit-accent) 12%,transparent)}
+ .scene-still .hero-inspect{font-size:11px;padding-bottom:28px}
+ .yesterday-page .time-stage{height:clamp(405px,calc(100svh - 360px),530px)}
+ .yesterday-page .time-stage .time-poster{inset:78px 0 25px;width:100%;height:calc(100% - 103px);transform:none;object-fit:contain}
+ .exhibit-immersive .time-stage .time-poster{inset:0;height:100%}
+ .time-statement,.concept-notes,.rain-story{padding-top:28px}
+ .statement-copy p,.concept-notes p,.story-copy p{font-size:14px;line-height:2}
+ .time-details figcaption,.detail-strip figcaption,.rain-details figcaption{font-size:13px}
+ .time-details{grid-template-columns:1fr}
+ .time-details figure:nth-child(n){padding-top:0}
+ .time-details figure:nth-child(2){width:94%;justify-self:end}.time-details figure:nth-child(3){width:96%}
+ .time-buttons,.control-buttons{gap:5px}.time-buttons button,.control-buttons button{min-height:46px;border-color:var(--exhibit-rule)}
+ .exhibit-immersive :is(.time-controls,.model-controls,.rain-controls,.world-controls){display:flex;padding-bottom:max(10px,env(safe-area-inset-bottom))}
+ .orbit-picker>summary{min-height:44px;display:flex;align-items:center}
+}
+@media(max-width:600px){
+ .exhibit-dialog-header h2{font-size:14px}.exhibit-dialog-header{min-height:58px;gap:8px}
+ .exhibit-image-footer p{flex-basis:100%;font-size:11px;line-height:1.6;margin:3px 0;max-height:3.2em;overflow:auto}
+ .exhibit-image-footer nav{margin-left:auto;gap:8px}.exhibit-image-footer a{display:inline-flex;font-size:11px;min-height:44px}
+ .exhibit-image-footer button{font-size:11px;padding:8px 12px}.exhibit-zoom-hint{font-size:10px}
+ .exhibit-image-main{margin-inline:8px}
+ .portfolio-page .world-description{font-size:14px;line-height:1.9}
+}
+@media(max-height:500px) and (orientation:landscape){
+ .exhibit-dialog-header{min-height:44px;padding-block:0}.exhibit-dialog-header button{min-height:40px;padding-block:4px}
+ .exhibit-zoom-tools{position:absolute;top:52px;right:max(10px,env(safe-area-inset-right));z-index:2;flex-wrap:wrap;max-width:105px;padding:4px;background:var(--exhibit-surface);border:1px solid var(--exhibit-rule)}
+ .exhibit-zoom-tools button{padding:5px 7px}.exhibit-zoom-tools output{order:4;min-width:100%}
+ .exhibit-zoom-hint{display:none}.exhibit-image-footer{padding-top:3px;flex-wrap:nowrap}.exhibit-image-footer p{flex:1 1 auto;max-height:2.9em}.exhibit-image-footer a{display:none}
+}

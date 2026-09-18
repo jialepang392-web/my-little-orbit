@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { makeYesterdayToday } from './model.js?v=0121';
+import { makeYesterdayToday } from './model.js?v=0122';
 
 function studio(renderer){
   const c=document.createElement('canvas');c.width=1024;c.height=512;const x=c.getContext('2d');

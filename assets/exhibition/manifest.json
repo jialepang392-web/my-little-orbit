@@ -1,6 +1,6 @@
 {
-  "version": "0.12.1",
-  "builtAt": "2026-09-18T12:22:55.034012+00:00",
+  "version": "0.12.2",
+  "builtAt": "2026-09-18T13:18:51.908277+00:00",
   "method": "Responsive sizes from the current verified real-scene covers. No recolouring or separate cover-only geometry.",
   "sourceHashes": {
     "assets/yesterday-today/cover.webp": "c35e15a600b498c2cf820de3d7121e6bbcf809eebaa7afafbaf73b706d35ee53",

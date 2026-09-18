@@ -1,5 +1,5 @@
 {
-  "version":"0.12.1",
+  "version":"0.12.2",
   "edition":"the-shape-of-what-remains",
   "exhibitionTitle":"留下的形状",
   "date":"2026-09-18",
@@ -12,5 +12,6 @@
   "presentation":"Yesterday, Today v0.12.1: a restrained lens-edge refinement of the verified v0.12.0 time specimen. Three fine interrupted pearl arcs, fifteen micro-pearls and two transparent sleeve keepers enrich the rim only. Botanical exposure, clear optical centre, exterior title, flowers, membranes, feathers and all thirteen other layers are preserved. No central text and no red hose.",
   "images":"Three revised artworks each have a 1600px cover, three independent 1200px material-camera studies, profile, verso, 1600x2000 print and reloaded GLB. Per-work build.json and responsive manifest hold exact hashes.",
   "modelLimitations":"GLB omits web lighting, bloom, rain animation and interaction. Garden is a static snapshot; its mineral ground uses authored vertex colours rather than the browser-only grain shader.",
-  "navigation":"Unchanged four-world order, native picker and contextual gallery return"
+  "navigation":"Unchanged four-world order, native picker and contextual gallery return",
+  "mobilePresentation":"Touch devices up to 900 CSS pixels enter with high-resolution still plates and opt into the complete original 3D scenes. Native 1200/2048px responsive entry image, same-scene 2048px Yesterday, Today inspection photographs, pinch/pan/double-tap inspection, native scrolling and safe-area-aware controls. Sculpture editions remain unchanged."
 }
