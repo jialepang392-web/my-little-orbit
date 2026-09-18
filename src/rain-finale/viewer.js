@@ -5,8 +5,8 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { seededRandom } from '../math.js?v=092';
-import { makeRainFinale } from './model.js?v=092';
+import { seededRandom } from '../math.js?v=0100';
+import { makeRainFinale } from './model.js?v=0100';
 
 function studio(renderer){
   const c=Object.assign(document.createElement('canvas'),{width:1024,height:512}),ctx=c.getContext('2d');

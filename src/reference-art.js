@@ -2,9 +2,9 @@
  * The saved concept is never used as a scene background or a camera-facing globe.
  */
 import * as T from 'three';
-import {fromLatLon,seededRandom} from './math.js?v=092';
-import {part,box,ball,cyl,mergeStatic,makeFern,makeReeds,makeFlowerCluster,makeOrchid} from './garden-models.js?v=092';
-import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=092';
+import {fromLatLon,seededRandom} from './math.js?v=0100';
+import {part,box,ball,cyl,mergeStatic,makeFern,makeReeds,makeFlowerCluster,makeOrchid} from './garden-models.js?v=0100';
+import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=0100';
 
 const R=5.4,UP=new T.Vector3(0,1,0),Z=new T.Vector3(0,0,1);
 const COLOR={bark:'#514333',barkLight:'#88735b',needle:'#314834',needleLight:'#627445',ivory:'#e9e0ca',pink:'#df9fa4',bud:'#b44750',gold:'#b99e60'};

@@ -4,20 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#b9c5b1">
-  <meta name="orbit-version" content="0.8.1">
+  <meta name="orbit-version" content="0.10.0">
   <meta name="description" content="思念若是一首诗。把信笺、文字与一方山水安放在可以走遍的小星球上，随纸鹤去读一页故事。">
   <title>思念若是一首诗 · 我的小宇宙</title>
   <link rel="icon" href="./assets/illustrations/orbit-emblem.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=092">
-  <link rel="stylesheet" href="./art.css?v=092">
-  <link rel="stylesheet" href="./garden.css?v=092">
-  <link rel="stylesheet" href="./exhibition.css?v=092">
-  <link rel="stylesheet" href="./orbit-navigation.css?v=092">
+  <link rel="stylesheet" href="./styles.css?v=0100">
+  <link rel="stylesheet" href="./art.css?v=0100">
+  <link rel="stylesheet" href="./garden.css?v=0100">
+  <link rel="stylesheet" href="./exhibition.css?v=0100">
+  <link rel="stylesheet" href="./orbit-navigation.css?v=0100">
   <script type="module" src="./src/orbit-navigation.js?v=081-nav2"></script>
   <script type="importmap">
   {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}
   </script>
-  <script type="module" src="./src/app.js?v=092"></script>
+  <script type="module" src="./src/app.js?v=0100"></script>
+  <link rel="canonical" href="https://jialepang392-web.github.io/my-little-orbit/poem.html">
+  <meta property="og:title" content="思念若是一首诗 · 我的小宇宙">
+  <meta property="og:description" content="纸墨、青瓷与竹笛，在一颗可以散步的小星球上相遇。">
+  <meta property="og:image" content="https://jialepang392-web.github.io/my-little-orbit/assets/review/current.webp">
+  <link rel="stylesheet" href="./exhibition-polish.css?v=0100">
+  <script type="module" src="./src/exhibition-ui.js?v=0100"></script>
 </head>
 <body data-orbit-world="poem">
   <a class="skip-link" href="#destinations">跳到内容导航</a>
@@ -38,15 +44,15 @@
     <nav class="orbit-wayfinder" aria-label="星球选择与当前位置">
     <div class="orbit-breadcrumb"><a href="./#world-poem">← 星球作品集</a><span>03 / 04 · 纸墨山水</span></div>
     <details class="orbit-picker"><summary>切换星球 <span class="orbit-picker-count">03 / 04</span></summary><div class="orbit-picker-panel"><div class="orbit-picker-label"><span>FOUR WORLDS / 自由选择下一站</span><span>同一宇宙，不同世界</span></div><div class="orbit-picker-grid">
-    <a class="orbit-choice" data-orbit-choice="yesterday-today" href="./yesterday-today.html?v=092"><img src="./assets/yesterday-today/cover.webp?v=092" width="1600" height="1600" alt="" loading="lazy"><span><small>01 / PEARL · TIME</small><strong>昨天，今天</strong></span></a>
-    <a class="orbit-choice" data-orbit-choice="crossover" href="./crossover.html?v=081"><img src="./assets/crossover/cover.webp" width="1600" height="1600" alt="" loading="lazy"><span><small>02 / SILVER · TYPE</small><strong>删了一百遍</strong></span></a>
-    <a class="orbit-choice" data-orbit-choice="poem" aria-current="page" href="./poem.html?v=081"><img src="./assets/review/current.webp" width="710" height="710" alt="" loading="lazy"><span><small>03 / PAPER · GARDEN</small><strong>思念若是一首诗</strong></span></a>
-    <a class="orbit-choice" data-orbit-choice="rain-finale" href="./rain-finale.html?v=081"><img src="./assets/rain-finale/cover.webp" width="1600" height="1600" alt="" loading="lazy"><span><small>04 / BLUE · NOCTURNE</small><strong>雨终曲</strong></span></a>
+    <a class="orbit-choice" data-orbit-choice="yesterday-today" href="./yesterday-today.html?v=0100"><img src="./assets/yesterday-today/cover.webp?v=0100" width="1600" height="1600" alt="" loading="lazy"><span><small>01 / PEARL · TIME</small><strong>昨天，今天</strong></span></a>
+    <a class="orbit-choice" data-orbit-choice="crossover" href="./crossover.html?v=0100"><img src="./assets/crossover/cover.webp" width="1600" height="1600" alt="" loading="lazy"><span><small>02 / SILVER · TYPE</small><strong>删了一百遍</strong></span></a>
+    <a class="orbit-choice" data-orbit-choice="poem" aria-current="page" href="./poem.html?v=0100"><img src="./assets/review/current.webp" width="710" height="710" alt="" loading="lazy"><span><small>03 / PAPER · GARDEN</small><strong>思念若是一首诗</strong></span></a>
+    <a class="orbit-choice" data-orbit-choice="rain-finale" href="./rain-finale.html?v=0100"><img src="./assets/rain-finale/cover.webp" width="1600" height="1600" alt="" loading="lazy"><span><small>04 / BLUE · NOCTURNE</small><strong>雨终曲</strong></span></a>
     </div></div></details></nav>
 
     <main class="universe" id="main">
       <section class="intro" aria-labelledby="hero-title">
-        <div class="eyebrow"><span class="chapter-mark">肆</span> 我的小宇宙 / 游园手札</div>
+        <div class="eyebrow"><span class="chapter-mark">叁</span> 我的小宇宙 / 游园手札</div>
         <h1 id="hero-title"><img class="calligraphy-title" src="./assets/illustrations/title-calligraphy.svg" width="212" height="420" alt="思念若是一首诗"></h1>
         <p class="intro-copy">把未说完的话，安放在一方山水里。<br>点一处风景，走过去，读一页。</p>
         <div class="hero-actions">
@@ -67,6 +73,7 @@
       <section class="world-stage" id="world-stage" aria-label="可以点击行走、向任意方向转动的三维园林星球">
         <div class="world-halo" aria-hidden="true"></div>
         <div class="orbit-label" aria-hidden="true">若思念<br><strong>有形</strong></div>
+        <img class="garden-poster" src="./assets/review/current.webp" width="710" height="710" alt="纸墨园林真实实景：青瓷砚台、竹笛、信笺与水岸" fetchpriority="high">
         <canvas id="world-canvas" tabindex="0" aria-label="园林漫游：点击地面行走，拖动转动完整星球，WASD 或方向键移动，E 与附近地标互动"></canvas>
         <div id="landmark-labels" class="landmark-labels" inert aria-hidden="true"></div>
         <div class="scene-status" id="scene-status" role="status"><span class="loading-dot"></span> 正在展开这一方山水…</div>
@@ -94,6 +101,15 @@
       </div>
       </div>
 
+      <section class="garden-visit-tools" aria-label="纸鹤引路与探索进度"></section>
+      <section class="garden-details" id="garden-materials" aria-labelledby="garden-materials-title">
+        <div class="garden-details-heading"><h2 id="garden-materials-title">纸上，藏着一方山水。</h2><p>青瓷、竹与纸墨 / 点击看近景</p></div>
+        <div class="garden-detail-grid">
+          <figure><img src="./assets/review/inkstone.webp" width="640" height="640" loading="lazy" alt="园林实景中的青瓷砚台与浅色纸张"><figcaption>01 / 青瓷的边缘，收住一池静水。</figcaption></figure>
+          <figure><img src="./assets/review/flute.webp" width="640" height="640" loading="lazy" alt="园林实景中的竹笛、玉坠与丝穗"><figcaption>02 / 竹节与丝穗，让风有了形状。</figcaption></figure>
+          <figure><img src="./assets/review/bank.webp" width="640" height="640" loading="lazy" alt="园林实景中的水岸、松梅与纸石层次"><figcaption>03 / 水岸很小，留白很长。</figcaption></figure>
+        </div>
+      </section>
       <section class="journal-preview" aria-labelledby="journal-preview-title">
         <div class="journal-preview-heading"><div><div class="eyebrow">WORDS TO KEEP / 留在纸上的</div><h2 id="journal-preview-title">翻开一页手札。</h2></div><button class="text-button" id="browse-stories">阅读全部故事 <span>↗</span></button></div>
         <div class="journal-preview-cards" id="journal-preview-cards"></div>
@@ -113,10 +129,10 @@
       <div class="keyboard-hint"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移动</span><span><kbd>E</kbd> 互动</span></div>
     </footer>
     <nav class="orbit-continuation" id="continue-worlds" aria-label="继续游览相邻星球"><div class="orbit-continuation-heading"><span>03 / 04 — A DIFFERENT WORLD AWAITS</span><a href="./#world-poem">查看全部四颗 ↗</a></div><div class="orbit-neighbours">
-    <a class="orbit-neighbour" rel="prev" data-orbit-prev="crossover" href="./crossover.html?v=081"><img src="./assets/crossover/cover.webp" width="108" height="108" alt="" loading="lazy"><span><small>← 上一颗 / 02</small><strong>删了一百遍</strong><em>离开水岸，重读银箔上的字。</em></span><b aria-hidden="true">↖</b></a>
-    <a class="orbit-neighbour" rel="next" data-orbit-next="rain-finale" href="./rain-finale.html?v=081"><img src="./assets/rain-finale/cover.webp" width="108" height="108" alt="" loading="lazy"><span><small>下一颗 / 04 →</small><strong>雨终曲</strong><em>走过纸墨园林，听夜色落下。</em></span><b aria-hidden="true">↗</b></a>
+    <a class="orbit-neighbour" rel="prev" data-orbit-prev="crossover" href="./crossover.html?v=0100"><img src="./assets/crossover/cover.webp" width="108" height="108" alt="" loading="lazy"><span><small>← 上一颗 / 02</small><strong>删了一百遍</strong><em>离开水岸，重读银箔上的字。</em></span><b aria-hidden="true">↖</b></a>
+    <a class="orbit-neighbour" rel="next" data-orbit-next="rain-finale" href="./rain-finale.html?v=0100"><img src="./assets/rain-finale/cover.webp" width="108" height="108" alt="" loading="lazy"><span><small>下一颗 / 04 →</small><strong>雨终曲</strong><em>走过纸墨园林，听夜色落下。</em></span><b aria-hidden="true">↗</b></a>
     </div></nav>
-    <div class="colophon"><span>思念若是一首诗<small>MY LITTLE ORBIT · 2026</small></span><a href="./art-review.html">参考与实景 ↗</a><a href="./#world-poem">返回星球作品集 ↗</a></div>
+    <div class="colophon"><span>思念若是一首诗<small>MY LITTLE ORBIT · 2026</small></span><a href="#garden-materials">材料近景 ↗</a><a href="./#world-poem">返回星球作品集 ↗</a></div>
   </div>
 
   <dialog class="content-dialog" id="content-dialog" aria-labelledby="dialog-title">

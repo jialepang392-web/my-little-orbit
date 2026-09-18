@@ -1,9 +1,10 @@
-import { LANDMARKS, landmarkById } from './data.js?v=092';
-import { addDiscovery, readProgress, writeProgress } from './storage.js?v=092';
-import { escapeHtml, renderMarkdown } from './markdown.js?v=092';
-import { downloadPostcard } from './postcard.js?v=092';
-import { artImage } from './art-paths.js?v=092';
-import { iconSvg } from './illustrations.js?v=092';
+import { LANDMARKS, landmarkById } from './data.js?v=0100';
+import { addDiscovery, readProgress, writeProgress } from './storage.js?v=0100';
+import { escapeHtml, renderMarkdown } from './markdown.js?v=0100';
+import { downloadPostcard } from './postcard.js?v=0100';
+import { artImage } from './art-paths.js?v=0100';
+import { iconSvg } from './illustrations.js?v=0100';
+import { waitForLiveView } from './exhibition-state.js?v=0100';
 
 const $=(selector)=>document.querySelector(selector);
 let storage=null;try{storage=window.localStorage;}catch{/* Private/blocked storage: session-only progress. */}
@@ -15,7 +16,8 @@ function setLabels(value){$('#world-stage').classList.toggle('show-landmarks',va
 $('#labels-toggle').addEventListener('click',()=>setLabels($('#labels-toggle').getAttribute('aria-pressed')!=='true'));
 
 function toast(message){clearTimeout(toastTimer);$('#toast').textContent=message;$('#toast').hidden=false;toastTimer=setTimeout(()=>{$('#toast').hidden=true;},4200);}
-function pauseWorld(){world?.setPaused(reading||dialog.open||document.hidden);}
+function pauseWorld(){world?.setPaused(reading||dialog.open||document.hidden||document.body.dataset.exhibitPaused==='true');}
+document.addEventListener('orbit:pause',pauseWorld);
 function openDialog(title,kicker='EXPLORER’S JOURNAL'){
   contentRequest?.abort();contentRequest=null;$('#dialog-title').textContent=title;$('#dialog-kicker').textContent=kicker;body.replaceChildren();
   if(!dialog.open)dialog.showModal();dialog.scrollTop=0;pauseWorld();$('#close-dialog').focus({preventScroll:true});
@@ -120,7 +122,7 @@ function setReading(value){
 async function bootWorld(){
   if(worldState!=='idle')return;worldState='loading';let timeout;
   try{
-    const module=await Promise.race([import('./world.js?v=092'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
+    const module=await Promise.race([import('./world.js?v=0100'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
     world=module.createWorld({canvas,labelLayer:$('#landmark-labels'),reducedMotion,onNearby:setNearby,onNotice:toast,
       onNavigation:updateJourney,
       onArrival:(id)=>{void openLocation(id,true);},
@@ -170,5 +172,5 @@ window.addEventListener('pageshow',(event)=>{if(event.persisted)pauseWorld();});
 function openHash(){const id=location.hash.startsWith('#post/')?location.hash.slice(6):null;if(landmarkById(id))void openLocation(id);}
 window.addEventListener('hashchange',openHash);
 renderProgress();
-if(new URLSearchParams(location.search).get('mode')==='read')setReading(true);else void bootWorld();
+if(new URLSearchParams(location.search).get('mode')==='read')setReading(true);else void waitForLiveView($('#world-stage')).then(bootWorld);
 openHash();

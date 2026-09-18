@@ -1,14 +1,14 @@
 import * as T from 'three';
-import { LANDMARKS, landmarkById } from './data.js?v=092';
-import { fromLatLon, seededRandom, clamp } from './math.js?v=092';
-import { orbitFrame, dragOrbit, surfaceStep } from './navigation.js?v=092';
-import { frameSeconds, shouldAnimate } from './runtime.js?v=092';
-import { Stars } from './vendor/stars.js?v=092';
-import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=092';
-import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=092';
-import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=092';
-import { AssetSlots, disposeTree } from './assets.js?v=092';
-import { makeCollageLight } from './collage-light.js?v=092';
+import { LANDMARKS, landmarkById } from './data.js?v=0100';
+import { fromLatLon, seededRandom, clamp } from './math.js?v=0100';
+import { orbitFrame, dragOrbit, surfaceStep } from './navigation.js?v=0100';
+import { frameSeconds, shouldAnimate } from './runtime.js?v=0100';
+import { Stars } from './vendor/stars.js?v=0100';
+import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=0100';
+import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=0100';
+import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=0100';
+import { AssetSlots, disposeTree } from './assets.js?v=0100';
+import { makeCollageLight } from './collage-light.js?v=0100';
 
 const R=5.4,UP=new T.Vector3(0,1,0);
 const initialNormal=new T.Vector3(...fromLatLon(-24,84));

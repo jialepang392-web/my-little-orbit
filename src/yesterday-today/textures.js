@@ -1,6 +1,6 @@
 /** Original printmaking for Yesterday, Today. No photographs or font assets. */
 import * as T from 'three';
-import { seededRandom } from '../math.js?v=092';
+import { seededRandom } from '../math.js?v=0100';
 const canvas=(n=1024)=>{const c=document.createElement('canvas');c.width=c.height=n;return c;};
 function texture(c,data=false){const t=new T.CanvasTexture(c);t.colorSpace=data?T.NoColorSpace:T.SRGBColorSpace;t.anisotropy=4;return t;}
 function grain(c,seed,amount){const x=c.getContext('2d'),r=seededRandom(seed),im=x.getImageData(0,0,c.width,c.height);for(let i=0;i<im.data.length;i+=4){const v=(r()-.5)*amount;for(let k=0;k<3;k++)im.data[i+k]+=v;}x.putImageData(im,0,0);}

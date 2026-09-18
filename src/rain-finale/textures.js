@@ -2,7 +2,7 @@
  * Colour textures are sRGB; the crease normal and roughness maps are linear data.
  */
 import * as T from 'three';
-import { seededRandom } from '../math.js?v=092';
+import { seededRandom } from '../math.js?v=0100';
 
 const makeCanvas = (n = 1024) => Object.assign(document.createElement('canvas'), {width:n, height:n});
 function tex(c, data = false) {

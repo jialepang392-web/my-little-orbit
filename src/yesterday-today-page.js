@@ -1,13 +1,16 @@
+import { waitForLiveView } from './exhibition-state.js?v=0100';
 const canvas=document.querySelector('#yesterday-canvas'),stage=document.querySelector('#yesterday-stage'),status=document.querySelector('#model-status');
 const buttons=[...document.querySelectorAll('[data-scene-action]')];
 let viewer=null,turn=false,separated=false,cool=false;
 buttons.forEach(b=>b.disabled=true);stage.setAttribute('aria-busy','true');
 function fail(){stage.classList.remove('is-ready');stage.setAttribute('aria-busy','false');buttons.forEach(b=>b.disabled=true);status.textContent='三维暂不可用；已保留同一作品的静态封面与细节图。';}
 function sync(){for(const [id,value,text,onText] of [['rotate-toggle',turn,'缓慢转动','停止转动'],['layers-toggle',separated,'展开叠层','合拢叠层'],['light-toggle',cool,'珠光冷调','恢复展览光']]){const b=document.getElementById(id);b.setAttribute('aria-pressed',String(value));b.textContent=value?onText:text;}}
+document.addEventListener('orbit:pause',e=>viewer?.suspend(Boolean(e.detail.paused)));
+await waitForLiveView(stage);
 try{
   let timer;
   const {createYesterdayViewer}=await Promise.race([
-    import('./yesterday-today/viewer.js?v=092'),
+    import('./yesterday-today/viewer.js?v=0100'),
     new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Viewer loading timed out')),22000);})
   ]).finally(()=>clearTimeout(timer));
   viewer=createYesterdayViewer(canvas,{onReady(){stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');buttons.forEach(b=>b.disabled=false);status.textContent='真实三维 · 拖动旋转，滚轮靠近，方向键查看';},onError:fail});
@@ -21,6 +24,7 @@ try{
     catch{status.textContent='这次保存未完成，请稍后重试。';}finally{if(stage.classList.contains('is-ready'))b.disabled=false;}
   });
   if(new URLSearchParams(location.search).get('build')==='1')window.yesterdayBuild=viewer;
+  viewer.suspend(document.body.dataset.exhibitPaused==='true');
 }catch(error){console.warn('Yesterday, Today:',error.message);fail();}
 window.addEventListener('pagehide',e=>{if(e.persisted)viewer?.suspend(true);else viewer?.dispose();});
-window.addEventListener('pageshow',e=>{if(e.persisted)viewer?.suspend(false);});
+window.addEventListener('pageshow',e=>{if(e.persisted)viewer?.suspend(document.body.dataset.exhibitPaused==='true');});
