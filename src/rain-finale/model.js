@@ -4,8 +4,9 @@
  */
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { seededRandom } from '../math.js?v=0122';
-import { makeRainTextures } from './textures.js?v=0122';
+import { seededRandom } from '../math.js?v=0123';
+import { makeRainTextures } from './textures.js?v=0123';
+import {exposureTexture,emulsionPaper} from '../song-surfaces.js?v=0123';
 
 const Z=new T.Vector3(0,0,1),Y=new T.Vector3(0,1,0),R=2.63;
 const V=a=>new T.Vector3(...a);
@@ -234,6 +235,31 @@ export function makeRainFinale({glyphs={}}={}) {
     const m=mesh(shard(.08+random()*.15,.13+random()*.27,140+i),i%4===0?glass:i%2?graphite:silver);m.position.copy(n.multiplyScalar(radius));aim(m,n,random()*6.28);floating.add(m);
   }
 
+  // v0.12.3 / private photographs behind the rain. An empty room keeps the
+  // light of one instant; the paper carries moisture, not decorative lyrics.
+  const room=exposureTexture({night:true});
+  for(const [x,y,z,w,h,a] of [[-1.28,.36,2.69,1.04,.82,-.22],[1.45,.67,2.46,.71,.88,.27],[.36,-1.92,2.32,.95,.69,-.19]]){
+    const photo=emulsionPaper(w,h,room,{curl:.105,night:true});photo.position.set(x,y,z);photo.rotation.set(.07,x*.09,a);print.add(photo);
+  }
+  // A cut exposure is suspended with a physical gap; no literal pause-button.
+  for(const [offset,u] of [[-.16,0],[.20,.5]]){
+    const half=room.clone();half.repeat.set(.46,1);half.offset.x=u;half.needsUpdate=true;
+    const photo=emulsionPaper(.30,.50,half,{curl:.035,night:true});photo.position.set(.28+offset,-2.12,2.69);photo.rotation.set(.08,-.10,-.13);floating.add(photo);
+  }
+  print.userData.songGesture={edition:'0.12.3',photographs:3,gesture:'unlit room, photographs behind a protective rain screen'};
+  // Fine slanting lines veil portions of the image without filling its dark air.
+  for(let i=0;i<19;i++){
+    const x=-1.82+i*.061,y=.64+.06*Math.sin(i*1.7),z=2.88;
+    threads.add(tube([[x,y,z],[x-.025,y-.29,z+.008],[x-.055,y-.56-(i%3)*.06,z-.005]],.0023,i%4?wireDark:fineSilver,14));
+  }
+  const pauseA=[[.95,-1.70,2.42],[.79,-2.38,2.55],[.21,-2.53,2.51],[-.21,-2.25,2.45]];
+  const pauseB=[[-.35,-2.20,2.46],[-.64,-1.91,2.40],[-.83,-1.78,2.35]];
+  wires.add(tube(pauseA,.006,fineSilver,52),tube(pauseB,.006,wireIce,36));
+  floating.userData.songGesture={edition:'0.12.3',gesture:'split image and interrupted trajectory, time held before falling'};
+  // Remote streetlights are independent, unequal and behind the foreground.
+  const distantLamp=material('#a8b2c2',.1,.55,{emissive:'#d0c3af',emissiveIntensity:.70});
+  for(const [x,y,z,s] of [[-2.24,1.94,1.03,.016],[-1.63,2.39,.56,.023],[1.26,2.64,.27,.012],[2.72,.95,.34,.019],[2.86,-.19,.17,.010]])bulbs.add(mesh(new T.SphereGeometry(s,9,7),distantLamp,[x,y,z]));
+
   // Batch within authored layers so thousands of fine details don't cause
   // thousands of draw calls. Preserve real materials and GLB-exportable meshes.
   root.updateMatrixWorld(true);
@@ -256,7 +282,7 @@ export function makeRainFinale({glyphs={}}={}) {
   originals.forEach(g=>g.dispose());
   const separations=Object.values(groups).map((g,i)=>({g,base:g.position.clone(),offset:new T.Vector3((i%3-1)*.16,(i%2-.5)*.10,i*.052)}));
   root.userData={title:'雨终曲',english:'RAIN FINALE',layers:Object.keys(groups).length,reference:'Original 3D interpretation of the user-provided black/silver, blue-light and gauze collage. No original photograph, watermark, performer credits or lyrics are embedded.',back:'Authored continuation; not an inferred photograph of the original back.'};
-  root.userData.sceneVersion='0.11.0';root.userData.structure='Concentrated left-hand light, silver veil, rain-bearing fringe and a converging lower coda.';
+  root.userData.sceneVersion='0.12.3';root.userData.structure='Dark room exposures under rain, suspended split photographs and an interrupted trajectory; distant lamps behind the original silver veil and cobalt coda.';
   return {
     root,groups,emitterPoints,
     setSeparated(amount){const a=T.MathUtils.clamp(Number(amount),0,1);for(const {g,base,offset} of separations)g.position.copy(base).addScaledVector(offset,a);},

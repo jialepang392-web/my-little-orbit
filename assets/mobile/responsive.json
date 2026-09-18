@@ -1,14 +1,14 @@
 {
-  "version": "0.12.2",
+  "version": "0.12.3",
   "source": "assets/mobile/yesterday-today-front-2048.webp",
-  "sourceHash": "ebd3b3e5ac3bab41a2182db47df74f9de32eac7652bde83fae8dd96b0cff95b2",
-  "generatorHash": "a310e828d72f59e2b1115dcd18bf6863dabb251f3baf21bd42e57d9b70e7343d",
+  "sourceHash": "4a51282db2de917d6f5f2bd4c48711136370c48b0e4c0b25f304dabb14a42bc8",
+  "generatorHash": "46176e039d6291e6bbe351c3e590e5d4f2e7af9335972b4a18082cd29b6b9d45",
   "artifacts": {
     "yesterday-today-front-1200.webp": {
       "width": 1200,
       "height": 1200,
-      "bytes": 403180,
-      "sha256": "e3680663b237cc1766f776fbe88837f9ca7f7c849fa19a639d87d53e2bcee59e"
+      "bytes": 407344,
+      "sha256": "6ddbe1d9a2d97a09e6902bdade3ec85b8569a87ec76ce6cb35741e569cc4fca9"
     }
   },
   "method": "Downsample the verified 2048px same-scene photograph. Native srcset selects a suitable pixel count; the lightbox always requests the 2048px original."

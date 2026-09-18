@@ -1,16 +1,18 @@
 {
   "status": "passed",
-  "version": "0.11.0",
+  "version": "0.12.3",
   "work": "crossover",
-  "startedAt": "2026-09-18T09:10:52.232908+00:00",
+  "startedAt": "2026-09-18T14:47:12.682779+00:00",
   "sourceHashes": {
     "assets/crossover/title-glyphs.json": "7623fb18016aaf8115163e0aa31ec24285e1aaddbc8e7485f585fcf25f01d700",
     "assets/crossover/title.svg": "c8c8e08733ef3b6efc24c6a6faa3b99e35ebf67a8409eece65ad54a8584a70a3",
+    "crossover.html": "646ec777e9119fd451742bd459f03593da918558e6285e22f507bbe2e8cb1efe",
     "src/crossover-page.js": "f075177c8368befdf773a0925acdf5b3bc8d81331e2ff57242a64a4144f96861",
-    "src/crossover/model.js": "69f99f2747b23e4995d1967be1c50c7b6824c1358dab08faf8c1a23d94026192",
+    "src/crossover/model.js": "179bce3eb647bf81baebe08c1851f09d41579c26703d7deb7421fad0b8592eaa",
     "src/crossover/textures.js": "162142eff270df4ac484ce2ab85158e0907b51234fc4349f0bca279c8cb07f38",
     "src/crossover/viewer.js": "d52f40176606231285af89485ed41dcd15d1e0fd00096737532c4328f9fb735a",
-    "src/math.js": "36f854bf14ad15a8cfab77a4e489fd7ea245b8bdd332f08a7974366ab8cfb63b"
+    "src/math.js": "36f854bf14ad15a8cfab77a4e489fd7ea245b8bdd332f08a7974366ab8cfb63b",
+    "src/song-surfaces.js": "28c55e2e55c4fb672d80058aa41ccf9c5c0b412826e05df21e5c16e2aba5224d"
   },
   "views": {
     "front": {
@@ -18,15 +20,15 @@
       "ready": "true",
       "title": "删了一百遍",
       "frames": "6",
-      "triangles": "257876",
-      "drawCalls": "53",
+      "triangles": "263684",
+      "drawCalls": "58",
       "layers": "11",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
       "light": "studio",
       "camera": "0.0000,0.2400,16.6000",
-      "sceneVersion": "0.11.0",
+      "sceneVersion": "0.12.3",
       "cameraTarget": [
         0,
         0.15,
@@ -39,15 +41,15 @@
       "ready": "true",
       "title": "删了一百遍",
       "frames": "8",
-      "triangles": "256866",
-      "drawCalls": "36",
+      "triangles": "258978",
+      "drawCalls": "38",
       "layers": "11",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
       "light": "studio",
       "camera": "1.8000,1.2500,8.0000",
-      "sceneVersion": "0.11.0",
+      "sceneVersion": "0.12.3",
       "cameraTarget": [
         0.1,
         -0.25,
@@ -60,15 +62,15 @@
       "ready": "true",
       "title": "删了一百遍",
       "frames": "10",
-      "triangles": "257792",
-      "drawCalls": "45",
+      "triangles": "263600",
+      "drawCalls": "50",
       "layers": "11",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
       "light": "studio",
       "camera": "6.1000,3.0000,6.6000",
-      "sceneVersion": "0.11.0",
+      "sceneVersion": "0.12.3",
       "cameraTarget": [
         1.7500000000000002,
         1.3000000000000003,
@@ -81,15 +83,15 @@
       "ready": "true",
       "title": "删了一百遍",
       "frames": "12",
-      "triangles": "254158",
-      "drawCalls": "39",
+      "triangles": "258734",
+      "drawCalls": "43",
       "layers": "11",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
       "light": "studio",
       "camera": "-3.2000,-2.7000,6.8000",
-      "sceneVersion": "0.11.0",
+      "sceneVersion": "0.12.3",
       "cameraTarget": [
         -0.2,
         -1.1,
@@ -102,15 +104,15 @@
       "ready": "true",
       "title": "删了一百遍",
       "frames": "14",
-      "triangles": "257876",
-      "drawCalls": "53",
+      "triangles": "263684",
+      "drawCalls": "58",
       "layers": "11",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
       "light": "studio",
       "camera": "16.6000,1.1000,0.3500",
-      "sceneVersion": "0.11.0",
+      "sceneVersion": "0.12.3",
       "cameraTarget": [
         0,
         0.15,
@@ -123,15 +125,15 @@
       "ready": "true",
       "title": "删了一百遍",
       "frames": "16",
-      "triangles": "257876",
-      "drawCalls": "53",
+      "triangles": "263684",
+      "drawCalls": "58",
       "layers": "11",
       "autoRotate": "false",
       "separated": "false",
       "separation": "0.000",
       "light": "studio",
       "camera": "0.0000,0.2400,-16.6000",
-      "sceneVersion": "0.11.0",
+      "sceneVersion": "0.12.3",
       "cameraTarget": [
         0,
         0.15,
@@ -143,55 +145,55 @@
   "errors": [],
   "exported": true,
   "glbReload": {
-    "meshes": 51,
-    "materials": 32,
+    "meshes": 56,
+    "materials": 36,
     "title": "删了一百遍",
-    "sceneVersion": "0.11.0",
+    "sceneVersion": "0.12.3",
     "bounds": [
       8.750176429748535,
       7.755936861038208,
-      7.090928792953491
+      7.222322940826416
     ]
   },
-  "finishedAt": "2026-09-18T09:16:12.788570+00:00",
+  "finishedAt": "2026-09-18T14:52:35.246575+00:00",
   "browser": "140.0.7339.16",
   "artifacts": {
     "poster.webp": {
-      "sha256": "c8925bac6f88749cb2fe6dbc95d16cda869fdac1cf89e7b436cfe429597fe975",
-      "bytes": 294180
+      "sha256": "afcad9286c4454f13019d5d8f5be3a1b4f5e56c6c0c95eaf75f14a3975312349",
+      "bytes": 285848
     },
     "cover.webp": {
-      "sha256": "39be149bcdf489357b48f7335689f65e4cfee2e005086c8fe86d2947e7b69a7a",
-      "bytes": 268998
+      "sha256": "2a281ae53e520d283568052310a1b53d3a793c7c08f95e19887f163487e973a9",
+      "bytes": 260388
     },
     "deleted-a-hundred-times.glb": {
-      "sha256": "b04d88e1918aa10bc2b2674f0a833c897970e3ec3b15bd17dc83bb9dde62215c",
-      "bytes": 24581856
+      "sha256": "31bb3a40df9e4753c9f2121cd757018f6c45c5b2f144625368e29f309ccb58af",
+      "bytes": 28589308
     },
     "back.webp": {
       "sha256": "e670315f02992cb86636a15f480b168eb492ec2ba8a24927d5755b8bd5d753d2",
       "bytes": 202568
     },
     "detail-disc.webp": {
-      "sha256": "9356c91887fbaf72963d46e412fe6d771b4ea0b21a4ccea5b6569561b67f2a0d",
-      "bytes": 264436
+      "sha256": "bdb06fd84421adef497708643f76a2793fe280592122019d7736653aa7f66583",
+      "bytes": 244246
     },
     "side.webp": {
-      "sha256": "c4bb68d5be6ecb135f2174b93782bb707d52c2e623384c23f24d07727f29f5a9",
-      "bytes": 187092
+      "sha256": "fdd5e3e2b2733d4695dd2734d2db560a818baabe4fcf2e3e7c7f2081aac98ca0",
+      "bytes": 190968
     },
     "detail-wire.webp": {
-      "sha256": "f897e32c8e77fc10a817da85747052696c046f015c4c0d2d66a0857e06469dea",
-      "bytes": 356960
+      "sha256": "c0deab00741aa78dede3d77c379ca1b0902711c86d466fb0a1a28fa0a50e65fc",
+      "bytes": 353468
     },
     "detail-proof.webp": {
-      "sha256": "84326df1174f7e31bd959689e410ea7b13e3925d4226109735947bb5cd135df0",
-      "bytes": 246042
+      "sha256": "00268c3176988422e1115bec829b2de1fcfefb007a9437d702dc1d47635a9636",
+      "bytes": 223774
     }
   },
   "generatorHashes": {
-    "scripts/build_exhibition_art.py": "80ac7357b2a5b4d7c579eee0d12f0c583643a5c7fb869b32c6ed870e8920a745"
+    "scripts/build_exhibition_art.py": "925a3b8933d4be0d123562d81c8476d5d4abe1d4020434894c056eda9a9f4f18"
   },
-  "sceneVersion": "0.11.0",
+  "sceneVersion": "0.12.3",
   "method": "One live scene: front, three independently positioned cameras, true side/back, composed print and reloaded GLB."
 }

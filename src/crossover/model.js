@@ -3,9 +3,10 @@
  * cable loops and floating type tiles. No terrain, trees or reused garden models.
  */
 import * as T from 'three';
-import { seededRandom } from '../math.js?v=0122';
-import { makePressTextures } from './textures.js?v=0122';
+import { seededRandom } from '../math.js?v=0123';
+import { makePressTextures } from './textures.js?v=0123';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import {exposureTexture,emulsionPaper} from '../song-surfaces.js?v=0123';
 const Z=new T.Vector3(0,0,1),Y=new T.Vector3(0,1,0),R=3.02;
 
 export function makeCrossover({glyphs={}}={}){
@@ -177,6 +178,28 @@ export function makeCrossover({glyphs={}}={}){
     const face=new T.MeshStandardMaterial({map,roughness:.93});t.add(mesh(new T.PlaneGeometry(.565,.636),face,[0,0,.024]));
     const back=mesh(new T.PlaneGeometry(.565,.636),face,[0,0,-.024]);back.rotation.y=Math.PI;t.add(back);tiles.add(t);
   });
+  // v0.12.3 / one exposure, returned to four times. The same room loses its
+  // red and blue with each development; the final print keeps an empty margin.
+  const exposures=[
+    {p:[1.25,1.98,2.93],w:.76,h:.91,a:-.15,c:1.0},
+    {p:[1.61,1.68,3.02],w:.79,h:.94,a:.025,c:.55},
+    {p:[1.94,1.41,3.13],w:.77,h:.92,a:.15,c:.13},
+    {p:[-.23,-1.32,3.57],w:1.39,h:.73,a:-.12,c:0,crop:.5}
+  ];
+  exposures.forEach(({p,w,h,a,c,crop},i)=>{
+    const photo=emulsionPaper(w,h,exposureTexture({chroma:c,crop:crop||0}),{curl:.10+i*.035});
+    photo.position.set(...p);photo.rotation.set(i===3?-.12:.10,-.12,a);graphicSlivers.add(photo);
+    // A dark previous image is still visible along each lifted paper edge.
+    const old=mesh(new T.PlaneGeometry(w*.97,h*.96),paper('black'),[p[0]-.047,p[1]+.035,p[2]-.055]);old.rotation.copy(photo.rotation);graphicSlivers.add(old);
+  });
+  graphicSlivers.userData.songGesture={edition:'0.12.3',exposureCount:4,chroma:[1,.55,.13,0],gesture:'delete, withdraw, expose the previous print'};
+  // Crop registration encloses only three corners. Regret occupies the fourth.
+  for(const [x,y,sx,sy] of [[-.92,-.99,1,-1],[.57,-.98,-1,-1],[-.93,-1.72,1,1]]){
+    graphicSlivers.add(strip([x+sx*.17,y,3.72],[x,y,3.72],.008,.007,ink),strip([x,y,3.72],[x,y+sy*.12,3.72],.008,.007,ink));
+  }
+  const revisit=new T.CatmullRomCurve3([[-1.34,-1.57,3.42],[-1.58,-1.81,3.50],[-.80,-1.96,3.63],[.43,-1.78,3.71],[.57,-1.58,3.68]].map(p=>new T.Vector3(...p)));
+  graphicSlivers.add(mesh(new T.TubeGeometry(revisit,80,.008,5,false),ink));
+
   // Batch within each of the eleven authored layers; retains distinct material
   // and contact-shadow boundaries while avoiding hundreds of chip draw calls.
   root.updateMatrixWorld(true);
@@ -199,6 +222,6 @@ export function makeCrossover({glyphs={}}={}){
   const separated=[surfaces,sleeve,border,record,graphicSlivers,accents,orbits,hardware,ribbons,tiles].map((g,i)=>({g,position:g.position.clone(),axis:new T.Vector3((i%3-1)*.15,0,.10+i*.04)}));
   root.userData.title='删了一百遍';root.userData.reference='User-provided monochrome foil and printed type collage. Original artwork, no performer credits or photograph mapped onto geometry.';
   root.userData.layers=Object.keys(groups).length;
-  root.userData.sceneVersion='0.11.0';root.userData.structure='Overprinted ink, erased lines and lifted correction proofs, joined to one wrapped silver core.';
+  root.userData.sceneVersion='0.12.3';root.userData.structure='Repeated photographic exposure, chromatic loss, incomplete crop registration and a returned proof, joined to the original wrapped silver core.';
   return {root,groups,textures:maps,setSeparated(value){const amount=typeof value==='number'?T.MathUtils.clamp(value,0,1):Number(Boolean(value));for(const {g,position,axis} of separated)g.position.copy(position).addScaledVector(axis,amount);},dispose(){const gs=new Set(),ms=new Set(),ts=new Set(Object.values(maps));root.traverse(o=>{if(o.geometry)gs.add(o.geometry);for(const m of (Array.isArray(o.material)?o.material:o.material?[o.material]:[])){ms.add(m);for(const v of Object.values(m))if(v?.isTexture)ts.add(v);}});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());ts.forEach(t=>t.dispose());}};
 }

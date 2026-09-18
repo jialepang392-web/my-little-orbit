@@ -1,7 +1,7 @@
 /** Curved, layered physical collage. Generated imagery is used only as material texture. */
 import * as T from 'three';
-import { fromLatLon, seededRandom } from './math.js?v=0122';
-import { part, ball, mergeStatic } from './garden-models.js?v=0122';
+import { fromLatLon, seededRandom } from './math.js?v=0123';
+import { part, ball, mergeStatic } from './garden-models.js?v=0123';
 const R=5.4,Z=new T.Vector3(0,0,1),atlasUrl=new URL('../assets/textures/collage-atlas.webp',import.meta.url).href;
 const supportLayers=[
   [17,71,4.3,4.2,-.24,5.57],[18,122,2.5,2.9,.16,5.57],[-30,58,2.7,3.0,-.30,5.57],[-19,-108,3.0,3.4,.4,5.57],[28,-55,2.3,2.8,-.30,5.57],

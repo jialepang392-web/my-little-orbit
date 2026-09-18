@@ -2,9 +2,10 @@
  * The saved concept is never used as a scene background or a camera-facing globe.
  */
 import * as T from 'three';
-import {fromLatLon,seededRandom} from './math.js?v=0122';
-import {part,box,ball,cyl,mergeStatic,makeFern,makeReeds,makeFlowerCluster,makeOrchid} from './garden-models.js?v=0122';
-import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=0122';
+import {fromLatLon,seededRandom} from './math.js?v=0123';
+import {part,box,ball,cyl,mergeStatic,makeFern,makeReeds,makeFlowerCluster,makeOrchid} from './garden-models.js?v=0123';
+import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=0123';
+import {quietHaloTexture,paperImpressionTexture} from './song-surfaces.js?v=0123';
 
 const R=5.4,UP=new T.Vector3(0,1,0),Z=new T.Vector3(0,0,1);
 const COLOR={bark:'#514333',barkLight:'#88735b',needle:'#314834',needleLight:'#627445',ivory:'#e9e0ca',pink:'#df9fa4',bud:'#b44750',gold:'#b99e60'};
@@ -232,9 +233,47 @@ function waterDetail(){
   return mergeStatic(g);
 }
 
+function unspokenAlbum(){
+  const g=new T.Group();g.name='song-memory-river-moon-and-folio';
+  // The same curved river runs from a warm beginning towards a cool distance.
+  for(let line=0;line<3;line++){
+    const points=Array.from({length:70},(_,i)=>{
+      const y=.065-i/69*.94,x=-.23+.10*Math.sin(y*7)+(line-1)*.013+.008*Math.sin(i*.14);
+      return new T.Vector3(x,y,Math.sqrt(Math.max(.001,1-x*x-y*y))).normalize().multiplyScalar(5.445);
+    });
+    const strand=tube(points,.0022,line===0?'#b8b699':'#b0c7bb',120,{roughness:.68,transparent:true,opacity:.34,depthWrite:false});strand.castShadow=false;g.add(strand);
+  }
+  // Moon as a thin paper-light impression in the upper margin, not a new sky.
+  const moon=new T.Group();moon.position.set(1.65,4.08,4.22);moon.quaternion.setFromUnitVectors(Z,moon.position.clone().normalize());
+  const moonMat=new T.MeshPhysicalMaterial({map:paperImpressionTexture(true),color:'#d0d5c6',roughness:.84,metalness:0,side:T.DoubleSide,transparent:true,opacity:.74,depthWrite:false});
+  const disk=new T.Mesh(new T.CircleGeometry(.38,80),moonMat);disk.castShadow=false;moon.add(disk);
+  const halo=new T.Mesh(new T.PlaneGeometry(1.75,1.75),new T.MeshBasicMaterial({map:quietHaloTexture(),transparent:true,depthWrite:false,side:T.DoubleSide}));halo.position.z=-.006;moon.add(halo);
+  const broken=part(new T.TorusGeometry(.42,.002,4,80,Math.PI*.91),'#bfc9b8',[0,0,.015],{roughness:.7,transparent:true,opacity:.45});broken.rotation.z=.4;moon.add(broken);g.add(moon);
+  // A quiet sheaf is tucked under the existing ruled paper and bamboo.
+  // Unwritten pages, folds and a thread carry the story instead of quoted verse.
+  const folio=new T.Group();folio.position.set(1.42,.43,5.70);folio.rotation.set(-.08,.20,-.19);
+  const folioMap=paperImpressionTexture();
+  for(let sheet=0;sheet<3;sheet++){
+    const geo=new T.PlaneGeometry(1.18,1.62,30,32),p=geo.attributes.position;
+    for(let i=0;i<p.count;i++){
+      const x=p.getX(i),y=p.getY(i),u=x/.59,v=y/.81;
+      p.setXYZ(i,x+.012*Math.sin(v*35)*Math.abs(u)**18,y,.045*sheet+.07*u*u+.22*Math.max(0,u)**5*Math.max(0,-v)**3);
+    }
+    geo.computeVertexNormals();const page=part(geo,['#d8d5bd','#e3dfc9','#eae5d1'][sheet],[sheet*.039,sheet*.025,0],{map:folioMap,side:T.DoubleSide,roughness:.97});folio.add(page);
+  }
+  for(let i=0;i<4;i++){
+    const x=-.43+i*.25;folio.add(tube([[x,-.60,.124],[x,-.08,.106],[x,.66,.124]],.0018,'#b3aaa0',15,{transparent:true,opacity:.42}));
+  }
+  folio.add(tube([[-.53,-.53,.13],[-.58,.02,.13],[-.51,.63,.13]],.006,'#8c8d75',30));
+  for(const y of [-.45,.07,.56])folio.add(tube([[-.58,y,.12],[-.52,y+.015,.15],[-.48,y-.02,.12]],.004,'#a09d80',8));
+  g.add(folio);
+  g.userData.songSemantics={edition:'0.12.3',motifs:['continuous river','moonlit margin','unspoken folio'],meaning:'youthful longing carried through the same river and different readings of the past'};
+  return g;
+}
+
 export function makeReferenceAccents(){
   const root=new T.Group();root.name='reference-composition-v05';
-  root.add(flute(),inkstone(),envelope(),surfaceBlossoms(),banks(),silkOrbit(),waterDetail());
+  root.add(flute(),inkstone(),envelope(),surfaceBlossoms(),banks(),silkOrbit(),waterDetail(),unspokenAlbum());
   root.userData.artDirection='Scalloped celadon / bamboo flute / torn letters / moss banks';
   return root;
 }

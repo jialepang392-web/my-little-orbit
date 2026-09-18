@@ -1,6 +1,6 @@
 /** Common exhibition tools. Native navigation and images remain usable without JS. */
-import { initialStillView } from './exhibition-state.js?v=0122';
-import { createImageZoom } from './exhibition-zoom.js?v=0122';
+import { initialStillView } from './exhibition-state.js?v=0123';
+import { createImageZoom } from './exhibition-zoom.js?v=0123';
 const world=document.body.dataset.orbitWorld;
 const names={'yesterday-today':'昨天，今天',crossover:'删了一百遍',poem:'思念若是一首诗','rain-finale':'雨终曲'};
 const stage=document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage');

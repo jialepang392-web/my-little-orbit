@@ -4,8 +4,8 @@
  */
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { seededRandom } from '../math.js?v=0122';
-import { makeYesterdayTextures } from './textures.js?v=0122';
+import { seededRandom } from '../math.js?v=0123';
+import { makeYesterdayTextures } from './textures.js?v=0123';
 const Z=new T.Vector3(0,0,1),Y=new T.Vector3(0,1,0),TAU=Math.PI*2;
 const v=p=>new T.Vector3(...p);
 
@@ -251,11 +251,35 @@ export function makeYesterdayToday(){
   featherVeil([[-1.48,-1.48,1.75],[-.70,-2.01,2.03],[.54,-2.24,2.05],[1.67,-2.17,1.50],[2.33,-2.32,.8]],.62);
   featherVeil([[-1.72,1.30,1.24],[-.93,1.77,1.96],[.03,1.86,2.12],[.90,1.60,1.79]],.36);
 
+  // v0.12.3 / two returning paths almost meet at the lens's lower edge.
+  // The remaining air is intentional. Do not bridge it or mark the clear centre.
+  const duskRose=mat({color:'#e8c4ba',roughness:.32,transmission:.63,thickness:.018,ior:1.26,iridescence:.22,clearcoat:.35});
+  const nearA=[[-2.12,-.73,1.43],[-1.49,-1.28,2.18],[-.57,-1.20,2.49],[.05,-.99,2.52],[.13,-.91,2.50]];
+  const nearB=[[2.16,-.31,1.42],[1.50,-1.08,2.17],[.76,-1.19,2.46],[.31,-1.01,2.51],[.22,-.90,2.50]];
+  sleeves.add(ribbon(nearA,.12,duskRose,1.05),ribbon(nearB,.105,mistBlue,1.15));
+  sleeves.add(tube(curve(nearA),.0038,pearl,70,4),tube(curve(nearB),.0033,glass,70,4));
+  sleeves.userData.songGesture={edition:'0.12.3',gesture:'two returning paths, separated by a breath',gap:.09};
+  // Autumn is a few translucent impressions caught by the evening air.
+  // Leaf veins and warm emulsion belong to the sleeve, not a literal street set.
+  const autumn=mat({color:'#cfad93',roughness:.61,transmission:.37,thickness:.008,ior:1.24,sheen:.4});
+  for(const [x,y,z,s,a] of [[-.68,-1.53,2.43,.71,-.72],[.52,-1.75,2.25,.53,.63],[1.13,1.38,2.02,.46,-.57]]){
+    const leaf=new T.Group();leaf.position.set(x,y,z);leaf.rotation.set(.15,-.14,a);leaf.scale.setScalar(s);
+    leaf.add(mesh(petal(.41,.095,123),autumn));
+    leaf.add(tube(curve([[0,0,.008],[0,.20,.08],[0,.39,.048]]),.003,stem,18,4));
+    for(let i=1;i<5;i++)for(const sign of [-1,1])leaf.add(tube(curve([[0,.055*i,.06],[sign*.031,.055*i+.035,.084],[sign*.071,.055*i+.055,.08]]),.0018,pearl,8,3));
+    dust.add(leaf);
+  }
+  // Overlapping, unlettered message slips ride one wind direction above the rim.
+  for(let i=0;i<4;i++){
+    const slip=inlay(.17+i*.025,.30,[1.00+i*.14,1.22+i*.11,2.23-i*.09],-.32+i*.13,i%2?glass:duskRose,.075);
+    sleeves.add(slip);
+  }
+
   // Merge within an authored layer, retaining physically distinct materials.
   root.updateMatrixWorld(true);const originals=new Set();
   for(const g of groups){const inv=g.matrixWorld.clone().invert(),buckets=new Map();g.traverse(o=>{if(!o.isMesh)return;originals.add(o.geometry);const geo=o.geometry.clone();geo.applyMatrix4(inv.clone().multiply(o.matrixWorld));if(!geo.index)geo.setIndex(Array.from({length:geo.attributes.position.count},(_,i)=>i));if(!geo.attributes.uv)geo.setAttribute('uv',new T.Float32BufferAttribute(new Float32Array(geo.attributes.position.count*2),2));const key=o.material.uuid;if(!buckets.has(key))buckets.set(key,{m:o.material,geos:[]});buckets.get(key).geos.push(geo);});g.clear();for(const {m,geos} of buckets.values()){const merged=mergeGeometries(geos,false);geos.forEach(g=>g.dispose());if(!merged)throw new Error('Artwork geometry merge failed');g.add(mesh(merged,m));}}
   originals.forEach(g=>g.dispose());
   const positions=groups.map(g=>g.position.clone());
-  root.userData={title:'昨天，今天',english:'Yesterday, Today',version:'0.12.1',layers:groups.length,coreAxes:[3.88,4.01,3.88],labelRadius:.894*1.09,centerTreatment:'text-free memory lens',centerHasText:false,wrapTreatment:'thin lilac and blue cellophane; no corrugated hose',provenance:'Original botanical memory exposure under convex glass; unequal hydrangea clusters, translucent sleeves and feather veils. Outer page title retained. No reference pixels, artist credits, watermark or font file.'};
+  root.userData={title:'昨天，今天',english:'Yesterday, Today',version:'0.12.3',layers:groups.length,coreAxes:[3.88,4.01,3.88],labelRadius:.894*1.09,centerTreatment:'text-free memory lens',centerHasText:false,wrapTreatment:'thin lilac and blue cellophane; no corrugated hose',songSemantics:'Nearly meeting return paths; evening warmth, translucent autumn impressions and unlettered message slips. Longing to approach again.',provenance:'Original botanical memory exposure under convex glass; unequal hydrangea clusters, translucent sleeves and feather veils. Outer page title retained. No reference pixels, artist credits, watermark or font file.'};
   return {root,groups,setSeparated(value){const t=T.MathUtils.clamp(Number(value),0,1);groups.forEach((g,i)=>{g.position.copy(positions[i]);if(i){g.position.z+=(i%2?1:-1)*(.11+i*.023)*t;g.position.x+=(i%3-1)*.07*t;}});},dispose(){const gs=new Set(),ms=new Set(),ts=new Set(Object.values(maps));root.traverse(o=>{if(o.geometry)gs.add(o.geometry);if(o.material)ms.add(o.material);});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());ts.forEach(t=>t.dispose());}};
 }

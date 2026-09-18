@@ -1,19 +1,20 @@
 {
   "status": "passed",
-  "version": "0.12.2",
-  "sceneVersion": "0.12.1",
-  "startedAt": "2026-09-18T13:26:26.483371+00:00",
+  "version": "0.12.3",
+  "sceneVersion": "0.12.3",
+  "startedAt": "2026-09-18T15:09:32.748128+00:00",
   "sourceHashes": {
-    "src/yesterday-today/model.js": "194a114fe758a29bba8769ea4eb6a24d2b7edab8077930f38401a811e0647322",
+    "src/yesterday-today/model.js": "74e71afa60aacba6bd216a3b727f081b02c5302dea18864a2febb29cb5e13a8f",
     "src/yesterday-today/textures.js": "07c0d77f24883d1af3797f412dd0fde53fa5d9cdc206450b11d293220fd73eb2",
     "src/yesterday-today/viewer.js": "12823a0102ea62d752abdfa5e80bd47369aab29109f1c5a82771ac432cccdb96",
     "src/yesterday-today-page.js": "2ffcc79a2d31806ed98fc05b0f2485c8200bf5e22abc5881ac7df534b1ef0a17",
-    "yesterday-today.html": "3d8196207af6a7e6e8f185046ed2ee591c306a5a366b1a2e0c3089f32988b34c",
+    "yesterday-today.html": "0080b60da0e90cc3c9783961d959539f06a093402d1ea9b5e0031fcaf107e063",
     "yesterday-today.css": "4fab9f2afe6dafbe3e5a5d377a5c33d11619a4d12bbfca19fc1dfbb50e2400bb",
     "assets/yesterday-today/title-glyphs.json": "95994c1541307f5fdbaca25e6f505d8bf13ad01f1740de9b7538df0778b16d3d",
     "assets/yesterday-today/title.svg": "04071bfe444c30b898cb6bf674d90eb25ca92656f1ab9ae5bfbe6eafa96a6214",
     "assets/yesterday-today/yesterday.svg": "50a25d81f76ab2e69db406a466f1cfd5bd29ae13a623fe7452f336a2929230df",
-    "assets/yesterday-today/today.svg": "bce3ca4de826c16c676883763d23891f560c1628218e4046f2208c50308ee470"
+    "assets/yesterday-today/today.svg": "bce3ca4de826c16c676883763d23891f560c1628218e4046f2208c50308ee470",
+    "src/math.js": "36f854bf14ad15a8cfab77a4e489fd7ea245b8bdd332f08a7974366ab8cfb63b"
   },
   "views": {
     "front": {
@@ -50,7 +51,7 @@
         2048,
         2048
       ],
-      "reusedVerifiedRawCapture": true
+      "reusedVerifiedRawCapture": false
     },
     "feather": {
       "camera": "0.4500,-0.8500,5.2300",
@@ -69,33 +70,33 @@
     "yesterday-today-front-2048.webp": {
       "width": 2048,
       "height": 2048,
-      "bytes": 988358,
-      "sha256": "ebd3b3e5ac3bab41a2182db47df74f9de32eac7652bde83fae8dd96b0cff95b2"
+      "bytes": 999772,
+      "sha256": "4a51282db2de917d6f5f2bd4c48711136370c48b0e4c0b25f304dabb14a42bc8"
     },
     "yesterday-today-record-2048.webp": {
       "width": 2048,
       "height": 2048,
-      "bytes": 577918,
-      "sha256": "2b3b0d3d87982d5cfccd3afe820988b8f74651802c99b094381417a6459214e5"
+      "bytes": 586876,
+      "sha256": "d5b0888ecf44c9626f8f330f34fae67080af3fb309b8ab77e3dab9adef9ede3c"
     },
     "yesterday-today-conduit-2048.webp": {
       "width": 2048,
       "height": 2048,
-      "bytes": 424336,
-      "sha256": "01021c4ebb498048da04340c257f7096541afe22ab1d7c94b97598eba31a2b60"
+      "bytes": 430188,
+      "sha256": "479c08dbe21bb9297af3e51e8e4af1f51e856d58a02dbf5ad6ff0872cbb2cc19"
     },
     "yesterday-today-feather-2048.webp": {
       "width": 2048,
       "height": 2048,
-      "bytes": 528296,
-      "sha256": "e5d36f5f2259a32b2a0e8f3f81a63bee29c837af9a154a1b4acd1cc73fc2f26d"
+      "bytes": 531022,
+      "sha256": "812fcb9ea725b7d1f9214075552fb0c7bebd9ab343c311bd0bb7768143fb5e01"
     }
   },
   "errors": [],
   "resumedFromPartialRun": true,
-  "finishedAt": "2026-09-18T13:30:08.764055+00:00",
+  "finishedAt": "2026-09-18T15:16:23.041608+00:00",
   "generatorHashes": {
-    "scripts/build_mobile_edition.py": "61ea28e88f8074974ca28dfeb41f6fe30c7f7d016e170349715be2e6afcf3bec"
+    "scripts/build_mobile_edition.py": "3d82a6ee672da1af6e818262780fad9b52331fe78a53f51ed7dde21d65aa3fbe"
   },
-  "method": "2048px photographs downsampled from a 2800px square live render. Identical sculpture, optical materials, lights and camera positions. Transparent front is a framed alpha crop; independent detail cameras are not cover crops. Original art editions retained."
+  "method": "2048px photographs downsampled from a 2800px square live render of the verified current artwork. Same optical materials, lights and camera positions. Transparent front is a framed alpha crop; independent detail cameras are not cover crops. Previous editions are retained in the private baseline."
 }
