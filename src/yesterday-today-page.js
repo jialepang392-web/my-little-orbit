@@ -6,11 +6,11 @@ function fail(){stage.classList.remove('is-ready');stage.setAttribute('aria-busy
 function sync(){for(const [id,value,text,onText] of [['rotate-toggle',turn,'缓慢转动','停止转动'],['layers-toggle',separated,'展开叠层','合拢叠层'],['light-toggle',cool,'珠光冷调','恢复展览光']]){const b=document.getElementById(id);b.setAttribute('aria-pressed',String(value));b.textContent=value?onText:text;}}
 try{
   let timer;
-  const [{createYesterdayViewer},data]=await Promise.race([
-    Promise.all([import('./yesterday-today/viewer.js?v=091'),fetch('./assets/yesterday-today/title-glyphs.json?v=090').then(r=>{if(!r.ok)throw new Error('Title unavailable');return r.json();})]),
+  const {createYesterdayViewer}=await Promise.race([
+    import('./yesterday-today/viewer.js?v=092'),
     new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Viewer loading timed out')),22000);})
   ]).finally(()=>clearTimeout(timer));
-  viewer=createYesterdayViewer(canvas,{glyphs:data.glyphs,onReady(){stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');buttons.forEach(b=>b.disabled=false);status.textContent='真实三维 · 拖动旋转，滚轮靠近，方向键查看';},onError:fail});
+  viewer=createYesterdayViewer(canvas,{onReady(){stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');buttons.forEach(b=>b.disabled=false);status.textContent='真实三维 · 拖动旋转，滚轮靠近，方向键查看';},onError:fail});
   document.getElementById('rotate-toggle').addEventListener('click',()=>{turn=!turn;viewer.setTurn(turn);sync();});
   document.getElementById('layers-toggle').addEventListener('click',()=>{separated=!separated;viewer.setSeparated(separated);sync();});
   document.getElementById('light-toggle').addEventListener('click',()=>{cool=!cool;viewer.setLight(cool);sync();});

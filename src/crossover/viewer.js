@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { makeCrossover } from './model.js?v=091';
+import { makeCrossover } from './model.js?v=092';
 
 function studioEnvironment(renderer){
   const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=512;const c=canvas.getContext('2d');

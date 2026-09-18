@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { makeYesterdayToday } from './model.js?v=091';
+import { makeYesterdayToday } from './model.js?v=092';
 
 function studio(renderer){
   const c=document.createElement('canvas');c.width=1024;c.height=512;const x=c.getContext('2d');
@@ -11,7 +11,7 @@ function studio(renderer){
   const pm=new T.PMREMGenerator(renderer),target=pm.fromEquirectangular(t);pm.dispose();t.dispose();return target;
 }
 
-export function createYesterdayViewer(canvas,{glyphs={},onReady=()=>{},onError=()=>{}}={}){
+export function createYesterdayViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const build=new URLSearchParams(location.search).get('build')==='1';
   const renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power'});
@@ -19,7 +19,7 @@ export function createYesterdayViewer(canvas,{glyphs={},onReady=()=>{},onError=(
   renderer.setClearColor('#f2eee7',0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(33,1,.1,60);camera.position.set(3.1,1.25,12.9);
-  const world=makeYesterdayToday({glyphs});scene.add(world.root);
+  const world=makeYesterdayToday();scene.add(world.root);
   const env=studio(renderer);scene.environment=env.texture;scene.environmentIntensity=.78;
   scene.add(new T.HemisphereLight('#faf1e8','#53465e',.86));
   const key=new T.DirectionalLight('#fff1e3',3.5);key.position.set(-5,7,9);key.castShadow=true;
@@ -30,7 +30,7 @@ export function createYesterdayViewer(canvas,{glyphs={},onReady=()=>{},onError=(
   const clay=new T.MeshStandardMaterial({color:'#c6beb8',roughness:.94,side:T.DoubleSide});
   let raf=0,last=performance.now(),frames=0,disposed=false,lost=false,suspended=false,inView=true,turn=false,separated=false,amount=0,light='studio',settle=0;
   const abort=new AbortController();
-  function metrics(){Object.assign(canvas.dataset,{ready:'true',title:'昨天，今天',version:'0.9.0',frames:String(++frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),coreAxes:world.root.userData.coreAxes.join(','),labelRadius:String(world.root.userData.labelRadius)});}
+  function metrics(){Object.assign(canvas.dataset,{ready:'true',title:'昨天，今天',version:'0.9.2',centerTreatment:world.root.userData.centerTreatment,centerHasText:String(world.root.userData.centerHasText),frames:String(++frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),coreAxes:world.root.userData.coreAxes.join(','),labelRadius:String(world.root.userData.labelRadius)});}
   function invalidate(){if(!raf&&!disposed&&!lost&&!suspended&&!document.hidden)raf=requestAnimationFrame(render);}
   function render(now){
     raf=0;if(disposed||lost||suspended||document.hidden)return;

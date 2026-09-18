@@ -3,7 +3,7 @@
  * keep their moving parts separate. No external model or image is required.
  */
 import * as T from 'three';
-import { part, box, ball, cyl, mergeStatic } from './art-models.js?v=091';
+import { part, box, ball, cyl, mergeStatic } from './art-models.js?v=092';
 export { part, box, ball, cyl, mergeStatic };
 
 export const GARDEN_PALETTE=Object.freeze({

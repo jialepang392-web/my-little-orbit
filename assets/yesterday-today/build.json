@@ -1,14 +1,14 @@
 {
-  "version": "0.9.1",
-  "sceneVersion": "0.9.0",
-  "renderedAt": "2026-09-17T15:32:51.482251+00:00",
+  "version": "0.9.2",
+  "sceneVersion": "0.9.2",
+  "renderedAt": "2026-09-18T08:13:17.200014+00:00",
   "sourceHashes": {
-    "src/yesterday-today/model.js": "fa07fa10f2048631475aa56469b8797770413488d12a97a9a12e17fda7a6ce75",
-    "src/yesterday-today/textures.js": "7423bfcdb986dbdc2c57750cc9ea53bfc2a43f3c9ce587f4ee8bfbe76dfc8b67",
-    "src/yesterday-today/viewer.js": "2a19b89cfa3ba31007d2effa0e75073738bc49dd641e1e80cdda25e9a943abc4",
-    "src/yesterday-today-page.js": "d4619d12de6a81233733f956c388f573f8ba04edabc2a260c896cee0743aabc7",
-    "yesterday-today.html": "3d03962d861d8981f8d2760bc73d132c214f632821d61ab5b59580c2ad574879",
-    "yesterday-today.css": "7a775a3633186b0953832ce5ba53496604db841cb63f198fdad45562640cf777",
+    "src/yesterday-today/model.js": "e73bbc5d29e8155fd3e162fb79d3132b26216b0e359952f54adabe62b56e70be",
+    "src/yesterday-today/textures.js": "fdb3d82fac0f1f8a3ba21a2e3e6897680f8122e9b9cb2f66c27c56bbdd7910c0",
+    "src/yesterday-today/viewer.js": "047be6a956070af2f75b64c405b8a998d78d2381b1994919b6aa5944dfb4a479",
+    "src/yesterday-today-page.js": "4c3c9a57a6f25138a5fb854ec38e085c8184c53fe36832264ee9234ba611d6c7",
+    "yesterday-today.html": "f5864f0740455204974aaee7b8babbe04f17299bab6920930ad7677962a07823",
+    "yesterday-today.css": "4fab9f2afe6dafbe3e5a5d377a5c33d11619a4d12bbfca19fc1dfbb50e2400bb",
     "assets/yesterday-today/title-glyphs.json": "95994c1541307f5fdbaca25e6f505d8bf13ad01f1740de9b7538df0778b16d3d",
     "assets/yesterday-today/title.svg": "04071bfe444c30b898cb6bf674d90eb25ca92656f1ab9ae5bfbe6eafa96a6214",
     "assets/yesterday-today/yesterday.svg": "50a25d81f76ab2e69db406a466f1cfd5bd29ae13a623fe7452f336a2929230df",
@@ -16,16 +16,16 @@
   },
   "artifacts": {
     "poster.webp": {
-      "sha256": "761722d5a86237b84391c23c59d8330cb186fd13ae846cf1781bfde03c91393d",
-      "bytes": 227722
+      "sha256": "07dd7977612689b184a0fbc6d085bbb671a28a063f94225db8fd55f5b9602fb0",
+      "bytes": 263290
     },
     "cover.webp": {
-      "sha256": "02e9d70ad0141d48cdb1bd00522579fa622bb9fcd7805223463645012b44521a",
-      "bytes": 216872
+      "sha256": "499cd3bb71f8859f1e5d1da6ba4495d4f5b9436cdebb4465c32316351c5e3359",
+      "bytes": 242690
     },
     "detail-record.webp": {
-      "sha256": "a588d758d476602a28ea01f0e644809f4aa03f36f5fc5802ea7ebcc4a4c4a772",
-      "bytes": 242328
+      "sha256": "778d6112f0cf4dd9e615886a84079d8f8c8f6ee6842d9c260e4baf535a5a5ab1",
+      "bytes": 214850
     },
     "yesterday.svg": {
       "sha256": "50a25d81f76ab2e69db406a466f1cfd5bd29ae13a623fe7452f336a2929230df",
@@ -36,28 +36,28 @@
       "bytes": 1616
     },
     "back.webp": {
-      "sha256": "03820721e0dd0b648558d4bbbe3a67e7e221b94faed6d9598dcd22179a0a3ee1",
-      "bytes": 135452
+      "sha256": "94d21809f1fe1ee7c4357b471e281772b65ef089ea6a3cd2890c9286a2e237f7",
+      "bytes": 148050
     },
     "today.svg": {
       "sha256": "bce3ca4de826c16c676883763d23891f560c1628218e4046f2208c50308ee470",
       "bytes": 778
     },
     "side.webp": {
-      "sha256": "10ee26f681344b0905aedaa38081c1ede341908fd5c81a520e4b2c709df59695",
-      "bytes": 145778
+      "sha256": "484708724cfba68edcbb8f4c79dce2afe3ffcd261b134fcff226b6dc5d795260",
+      "bytes": 148908
     },
     "detail-conduit.webp": {
-      "sha256": "c54800867f8e0db091baad69bb685a9ea078fa73d2d5cc103438cc03a1380bd6",
-      "bytes": 201086
+      "sha256": "90b70a827b2f8f0d9e015f901352de541a934efd8909e21bf1408dd677feaa97",
+      "bytes": 199204
     },
     "yesterday-today.glb": {
-      "sha256": "4bd9c735df02cc3f98453af96a3e089f208c2dc54398fb92def33ddba34ef59c",
-      "bytes": 17329540
+      "sha256": "fb706bda690598344d64d0addaf251068f216c417b636d8cf7dce613d82fc307",
+      "bytes": 18354456
     },
     "detail-feather.webp": {
-      "sha256": "a3143860c4f905cfc7923b7baef70cd94cc4c7c1795ded9f350e3862dfd049d7",
-      "bytes": 255260
+      "sha256": "59bc2e96a58fdecebdb28b253e5bc2e82be38ae64c3783f3a29c3251f563a7e7",
+      "bytes": 242770
     }
   },
   "method": "Same live scene for front, profile, verso, three independently framed macros, poster and GLB. No generated reference pixels used."

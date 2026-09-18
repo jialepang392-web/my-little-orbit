@@ -4,14 +4,14 @@
  */
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { seededRandom } from '../math.js?v=091';
-import { makeYesterdayTextures } from './textures.js?v=091';
+import { seededRandom } from '../math.js?v=092';
+import { makeYesterdayTextures } from './textures.js?v=092';
 const Z=new T.Vector3(0,0,1),Y=new T.Vector3(0,1,0),TAU=Math.PI*2;
 const v=p=>new T.Vector3(...p);
 
-export function makeYesterdayToday({glyphs={}}={}){
+export function makeYesterdayToday(){
   const root=new T.Group();root.name='YESTERDAY-TODAY';
-  const groups=[],maps=makeYesterdayTextures(glyphs),random=seededRandom(26091809);
+  const groups=[],maps=makeYesterdayTextures(),random=seededRandom(26091809);
   const layer=name=>{const g=new T.Group();g.name=name;root.add(g);groups.push(g);return g;};
   const mat=o=>new T.MeshPhysicalMaterial({side:T.DoubleSide,...o});
   const pearl=mat({color:'#e0cfdb',map:maps.membrane,roughness:.39,metalness:.24,iridescence:.68,iridescenceIOR:1.34,iridescenceThicknessRange:[180,570],clearcoat:.48,bumpMap:maps.folds,bumpScale:.035});
@@ -82,18 +82,39 @@ export function makeYesterdayToday({glyphs={}}={}){
   films.add(ribbon([[-1.8,-1.5,-.25],[-1.38,-.96,-1.82],[-.12,.05,-2.47],[1.02,1.3,-1.72]],.53,glass,1.4));
   for(let i=0;i<5;i++)films.add(ribbon([[-1.8,-1.2,1.2],[-.7,-2.03-i*.03,1.5],[.95,-2.29+i*.06,.94],[1.84,-1.65,.67]],.04+i*.014,i%2?pearl:silver,.9));
 
-  const record=layer('04 / EMBEDDED RECORD & PRINTED TIME');
+  const record=layer('04 / MEMORY LENS — NO PRINTED TITLE');
   record.position.set(.28,-.12,2.02);record.rotation.set(.10,-.19,-.105);
   const disc=mesh(new T.CylinderGeometry(1.07,1.03,.10,100),depth);disc.rotation.x=Math.PI/2;record.add(disc);
-  record.add(mesh(new T.RingGeometry(.77,1.068,128),violet,[0,0,.058]));
-  for(let i=0;i<18;i++)record.add(mesh(new T.TorusGeometry(.815+i*.012,.0018,3,100),i%3?steel:pearl,[0,0,.063]));
-  record.add(mesh(new T.CircleGeometry(.767,100),mat({map:maps.label,roughness:.88}),[0,0,.071]));
-  record.add(mesh(new T.TorusGeometry(1.08,.016,7,110,.0+Math.PI*1.52),steel,[0,0,.018]));
-  record.add(ball([0,-.43,.085],.036,red,[.66,1.06,.5]));
+  // The broad printed label is gone. A narrow interrupted rim holds a
+  // convex coloured memory window with physical inlays underneath.
+  record.add(mesh(new T.RingGeometry(.885,1.068,120,1,.06,Math.PI*1.72),violet,[0,0,.058]));
+  for(let i=0;i<10;i++)record.add(mesh(new T.TorusGeometry(.925+i*.012,.0018,3,100,Math.PI*1.55),i%3?steel:pearl,[0,0,.064]));
+  const memoryMat=mat({map:maps.memory,color:'#ded0e8',roughness:.86,metalness:0,clearcoat:0});
+  record.add(mesh(new T.CircleGeometry(.894,112),memoryMat,[0,0,.073]));
+  function inlay(w,h,p,angle,m,curl=.08){
+    const geo=new T.PlaneGeometry(w,h,18,12),a=geo.attributes.position;
+    for(let i=0;i<a.count;i++){const x=a.getX(i),y=a.getY(i),u=x/w*2,t=y/h*2;
+      a.setXYZ(i,x+Math.pow(Math.abs(t),18)*.012*Math.sin(u*34),y+Math.pow(Math.abs(u),18)*.014*Math.sin(t*29),curl*(u*u*.65+t*t*.24)+.009*Math.sin(u*8+t*5));}
+    geo.computeVertexNormals();const o=mesh(geo,m,p);o.rotation.z=angle;return o;
+  }
+  record.add(inlay(.49,.75,[-.40,.09,.095],-.37,inkPaper[1],.045));
+  record.add(inlay(.74,.33,[.10,-.49,.104],.24,memoryMat,.07));
+  const lensMat=mat({side:T.FrontSide,color:'#fff9fc',roughness:.025,metalness:0,transmission:.97,thickness:.035,ior:1.18,clearcoat:.25,iridescence:.18,iridescenceThicknessRange:[170,390]});
+  const optical=mesh(new T.SphereGeometry(.91,64,40),lensMat,[.02,.012,.165]);optical.scale.z=.115;record.add(optical);
+  record.add(mesh(new T.TorusGeometry(.91,.013,8,112,Math.PI*1.58),steel,[.02,.012,.12]));
+  const arc=mesh(new T.TorusGeometry(.954,.019,7,100,Math.PI*.56),glass,[.018,.0,.118]);arc.rotation.z=3.75;record.add(arc);
+  // Torn emulsion and a silver hinge overlap the rim, embedding the lens.
+  record.add(inlay(.34,.64,[-.76,.36,.20],-.51,inkPaper[0],.12));
+  record.add(inlay(.52,.22,[.54,-.57,.22],.38,pearl,.16));
+  record.add(inlay(.15,.32,[.74,-.48,.21],.32,silver,.06));
+  record.add(ball([.07,-.035,.289],.066,steel,[1,1,.54]));
+  record.add(ball([.49,-.50,.255],.051,red,[.86,1.13,.67]));
   // The first visual review rejected a broad, flat C-shaped frame. A narrow
   // bent bridge now connects two folds without becoming a second front plate.
   films.add(ribbon([[-1.34,1.15,1.60],[-.72,1.46,2.13],[.10,1.31,2.30],[.66,.73,2.09]],.12,steel,.5));
   films.add(ribbon([[1.15,.39,2.0],[1.31,-.03,1.93],[1.28,-.48,1.76]],.073,silver,.4));
+  films.add(ribbon([[-1.0,.81,1.9],[-.65,.62,2.25],[-.56,.14,2.41],[-.04,-.81,2.28],[.79,-1.01,1.85]],.105,glass,1.35));
+  films.add(ribbon([[.98,1.10,1.70],[1.24,.73,2.04],[1.32,.12,2.07],[1.05,-.32,2.02]],.24,glass,.9));
 
   const conduit=layer('05 / RED CORRUGATED CONDUIT');
   const hose=curve([[-1.1,1.16,-1.80],[-1.0,2.18,-.73],[-.63,2.39,.70],[.3,2.02,1.70],[1.35,1.39,1.94],[2.15,.52,1.24],[2.30,-.52,.14],[1.72,-1.54,-.86],[.44,-2.06,-1.04]]);
@@ -118,10 +139,14 @@ export function makeYesterdayToday({glyphs={}}={}){
     const lens=new T.Group();lens.position.set(x,y,z);lens.rotation.set(.2,a,a*.57);lens.add(ball([0,0,0],r,i%3?glass:rose,[1,1.14,.16]));lens.add(mesh(new T.TorusGeometry(r,.006,5,68),steel));lens.add(ball([0,-r,.005],.04,steel));lenses.add(lens);
   });
 
+  const nearLens=new T.Group();nearLens.position.set(-1.13,.92,2.04);nearLens.rotation.set(.16,.36,-.32);
+  const celadon=mat({color:'#d3dfb9',roughness:.13,transmission:.77,thickness:.09,ior:1.36,iridescence:.55});
+  nearLens.add(ball([0,0,0],.31,celadon,[1,1.12,.13]));nearLens.add(mesh(new T.TorusGeometry(.31,.006,5,64),steel));lenses.add(nearLens);
+
   const blooms=layer('08 / BLOSSOMS THROUGH THE SEAM');
   function petal(length,width,seed){const p=[],uv=[],idx=[],rows=16,cols=8;for(let i=0;i<=rows;i++)for(let j=0;j<=cols;j++){const t=i/rows,u=j/cols*2-1,w=width*Math.pow(Math.sin(Math.PI*t),.58)*(1+.1*Math.sin(t*19+seed)),z=length*(.28*Math.sin(t*2.8)+u*u*.20*Math.sin(t*Math.PI))+.009*Math.sin(t*28+u*4+seed);p.push(u*w,t*length,z);uv.push(j/cols,t);if(i<rows&&j<cols){const a=i*(cols+1)+j,b=a+cols+1;idx.push(a,b,a+1,b,b+1,a+1);}}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g;}
   const pg=petal(.39,.18,91);
-  [[-1.08,.92,1.86,.85],[-1.55,.56,1.60,.75],[-1.27,.15,1.97,1.06],[-1.63,-.14,1.67,.63],[-1.02,-.42,2.11,.68],[-.83,-1.17,1.85,.70],[-1.39,1.23,1.33,.56],[-1.97,.80,.76,.54],[-.76,-.71,-2.12,.78],[-1.16,-.25,-1.88,.63]].forEach(([x,y,z,s],i)=>{
+  [[-1.08,.92,1.86,.85],[-1.55,.56,1.60,.75],[-1.27,.15,1.97,1.06],[-1.63,-.14,1.67,.63],[-1.02,-.42,2.11,.68],[-.83,-1.17,1.85,.70],[-1.39,1.23,1.33,.56],[-1.97,.80,.76,.54],[-.76,-.71,-2.12,.78],[-1.16,-.25,-1.88,.63],[-.48,-.91,2.16,.69],[-.66,-.59,2.21,.49],[.96,-.80,1.96,.44]].forEach(([x,y,z,s],i)=>{
     const flower=new T.Group();flower.position.set(x,y,z);flower.scale.setScalar(s);orient(flower,[x*.19,y*.18,z>0?1:-1],i*1.67);
     for(let k=0;k<7;k++){const p=mesh(pg,i%3?pink:pale);p.rotation.set((random()-.5)*.38,0,k*TAU/7);flower.add(p);}
     for(let k=0;k<7;k++){const a=k*TAU/7;flower.add(ball([Math.cos(a)*.05,Math.sin(a)*.05,.10+random()*.025],.014,white));}
@@ -144,6 +169,8 @@ export function makeYesterdayToday({glyphs={}}={}){
     [1.27,.88,[.68,.51,.67],2.40,.40,2],[1.10,1.5,[.77,-.40,.42],2.40,-.38,0],
     [1.34,1.05,[.07,-.77,.7],2.40,.2,1],[1.12,1.02,[-.36,.90,.20],2.31,-.5,1],
     [1.34,.83,[-.13,.53,.84],2.25,.16,2],
+    [.73,1.04,[-.63,.32,.77],2.46,-.68,1],[.93,.52,[.62,-.55,.60],2.45,.65,2],
+    [.72,.47,[.82,.24,.52],2.44,-.22,0],
     [1.52,1.58,[-.44,.43,-.81],2.41,-.35,0],[1.50,1.15,[.45,.50,-.74],2.39,.3,1],
     [1.31,1.75,[.36,-.49,-.8],2.42,-.3,2],[1.20,1.2,[-.6,-.41,-.72],2.38,.25,1]
   ];
@@ -161,6 +188,6 @@ export function makeYesterdayToday({glyphs={}}={}){
   for(const g of groups){const inv=g.matrixWorld.clone().invert(),buckets=new Map();g.traverse(o=>{if(!o.isMesh)return;originals.add(o.geometry);const geo=o.geometry.clone();geo.applyMatrix4(inv.clone().multiply(o.matrixWorld));if(!geo.index)geo.setIndex(Array.from({length:geo.attributes.position.count},(_,i)=>i));if(!geo.attributes.uv)geo.setAttribute('uv',new T.Float32BufferAttribute(new Float32Array(geo.attributes.position.count*2),2));const key=o.material.uuid;if(!buckets.has(key))buckets.set(key,{m:o.material,geos:[]});buckets.get(key).geos.push(geo);});g.clear();for(const {m,geos} of buckets.values()){const merged=mergeGeometries(geos,false);geos.forEach(g=>g.dispose());if(!merged)throw new Error('Artwork geometry merge failed');g.add(mesh(merged,m));}}
   originals.forEach(g=>g.dispose());
   const positions=groups.map(g=>g.position.clone());
-  root.userData={title:'昨天，今天',english:'Yesterday, Today',version:'0.9.0',layers:groups.length,coreAxes:[3.88,4.01,3.88],labelRadius:.767,provenance:'Original procedural sculpture and limited lettering. No source cover, artist credits, watermark or font file.'};
+  root.userData={title:'昨天，今天',english:'Yesterday, Today',version:'0.9.2',layers:groups.length,coreAxes:[3.88,4.01,3.88],labelRadius:.894,centerTreatment:'text-free memory lens',centerHasText:false,provenance:'Original botanical memory plate beneath convex glass; no lettering on the sculpture. Outer page title restored at user request. No reference pixels, artist credits, watermark or font file.'};
   return {root,groups,setSeparated(value){const t=T.MathUtils.clamp(Number(value),0,1);groups.forEach((g,i)=>{g.position.copy(positions[i]);if(i){g.position.z+=(i%2?1:-1)*(.11+i*.023)*t;g.position.x+=(i%3-1)*.07*t;}});},dispose(){const gs=new Set(),ms=new Set(),ts=new Set(Object.values(maps));root.traverse(o=>{if(o.geometry)gs.add(o.geometry);if(o.material)ms.add(o.material);});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());ts.forEach(t=>t.dispose());}};
 }

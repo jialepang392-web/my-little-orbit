@@ -1,5 +1,5 @@
 {
-  "version": "0.9.1",
+  "version": "0.9.2",
   "worlds": [
     {"id":"yesterday-today","title":"昨天，今天","english":"YESTERDAY, TODAY","page":"yesterday-today.html","cover":"assets/yesterday-today/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":false},
     {"id":"crossover","title":"删了一百遍","english":"DELETED A HUNDRED TIMES","page":"crossover.html","cover":"assets/crossover/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":false},

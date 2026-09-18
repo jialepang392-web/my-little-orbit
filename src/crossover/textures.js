@@ -3,7 +3,7 @@
  * Seeded Canvas artwork; the reference photo is NOT mapped onto the sphere.
  */
 import * as T from 'three';
-import {seededRandom} from '../math.js?v=091';
+import {seededRandom} from '../math.js?v=092';
 function canvas(size=1024){const c=document.createElement('canvas');c.width=c.height=size;return c;}
 function texture(c,data=false){const t=new T.CanvasTexture(c);t.colorSpace=data?T.NoColorSpace:T.SRGBColorSpace;t.anisotropy=8;return t;}
 function paperNoise(c,seed,strength=10){const ctx=c.getContext('2d'),r=seededRandom(seed),im=ctx.getImageData(0,0,c.width,c.height),d=im.data;for(let i=0;i<d.length;i+=4){const n=(r()-.5)*strength;d[i]+=n;d[i+1]+=n;d[i+2]+=n;}ctx.putImageData(im,0,0);}
