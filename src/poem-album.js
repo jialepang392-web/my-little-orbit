@@ -4,15 +4,15 @@
 import * as T from 'three';
 import { fromLatLon, seededRandom } from './math.js?v=0130';
 import { part, mergeStatic } from './garden-models.js?v=0130';
-import { paperImpressionTexture } from './song-surfaces.js?v=0130';
+import { poemTexture } from './poem-reliquary.js?v=0160';
 
 const R=5.4,Z=new T.Vector3(0,0,1);
 const leaves=[
-  {lat:30,lon:126,w:2.25,h:2.36,angle:.28,r:5.72,curl:.18},
-  {lat:-27,lon:57,w:2.3,h:2.25,angle:-.24,r:5.72,curl:.23},
-  {lat:13,lon:61,w:1.72,h:2.92,angle:-.21,r:5.73,curl:.13},
-  {lat:-20,lon:-108,w:2.45,h:2.61,angle:.36,r:5.72,curl:.17},
-  {lat:35,lon:-55,w:1.68,h:2.22,angle:-.31,r:5.72,curl:.16},
+  {lat:20,lon:127,w:1.98,h:2.76,angle:.26,r:5.70,curl:.16},
+  {lat:-33,lon:52,w:2.26,h:2.45,angle:-.36,r:5.71,curl:.19},
+  {lat:27,lon:-115,w:3.29,h:3.20,angle:.20,r:5.71,curl:.21},
+  {lat:-31,lon:-73,w:2.93,h:2.51,angle:-.32,r:5.71,curl:.17},
+  {lat:14,lon:9,w:2.36,h:2.80,angle:-.23,r:5.71,curl:.19},
 ];
 function orientation(s){return new T.Quaternion().setFromUnitVectors(Z,new T.Vector3(...fromLatLon(s.lat,s.lon))).multiply(new T.Quaternion().setFromAxisAngle(Z,s.angle));}
 const support=leaves.map(s=>({...s,inverse:orientation(s).invert()}));
@@ -31,7 +31,7 @@ function localPoint(x,y,s,layer=0){
 }
 export function makePoemAlbum(){
   const root=new T.Group();root.name='opened-album-leaves-and-river-reflections';
-  const map=paperImpressionTexture(),random=seededRandom(130031);
+  const map=poemTexture('paper'),random=seededRandom(130031);
   for(const [index,s] of leaves.entries()){
     const g=new T.Group();g.name='album-leaf-'+index;g.quaternion.copy(orientation(s));
     for(let layer=0;layer<2;layer++){
@@ -43,7 +43,7 @@ export function makePoemAlbum(){
         p.setXYZ(i,...localPoint(x+layer*.033,y+layer*.025,s,layer).toArray());
       }
       geo.computeVertexNormals();
-      const sheet=part(geo,layer?'#eee9d7':'#c8cbbb',[0,0,0],{map,side:T.DoubleSide,roughness:.94,metalness:0});
+      const sheet=part(geo,layer?'#fffbed':'#d9decb',[0,0,0],{map,bumpMap:map,bumpScale:.012,side:T.DoubleSide,roughness:.92,metalness:0});
       sheet.name='deckled-physical-sheet';g.add(sheet);
     }
     // A thin book-edge catches the light; a few fibres break its silhouette.
@@ -73,6 +73,6 @@ export function makePoemAlbum(){
     }
   }
   root.add(mergeStatic(current));
-  root.userData={edition:'0.13.0',physicalLeaves:10,motifs:['deckled page and exposed verso','thread-bound book edges','continuous moonlit river'],notAFlatCover:true};
+  root.userData={edition:'0.16.0',physicalLeaves:10,motifs:['deckled page and exposed verso','thread-bound book edges','continuous moonlit river'],notAFlatCover:true};
   return root;
 }

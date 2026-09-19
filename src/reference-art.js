@@ -4,9 +4,10 @@
 import * as T from 'three';
 import {fromLatLon,seededRandom} from './math.js?v=0130';
 import {part,box,ball,cyl,mergeStatic,makeFern,makeReeds,makeFlowerCluster,makeOrchid} from './garden-models.js?v=0130';
-import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=0130';
+import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=0160';
 import {quietHaloTexture,paperImpressionTexture} from './song-surfaces.js?v=0130';
-import {makePoemAlbum} from './poem-album.js?v=0130';
+import {makePoemAlbum} from './poem-album.js?v=0160';
+import {poemTexture} from './poem-reliquary.js?v=0160';
 
 const R=5.4,UP=new T.Vector3(0,1,0),Z=new T.Vector3(0,0,1);
 const COLOR={bark:'#514333',barkLight:'#88735b',needle:'#314834',needleLight:'#627445',ivory:'#e9e0ca',pink:'#df9fa4',bud:'#b44750',gold:'#b99e60'};
@@ -23,7 +24,7 @@ function triMesh(vertices,color,extra={}){
 /** Rigid bamboo flute, with an actual bore, finger holes, bindings and silk tassel. */
 function flute(){
   const root=new T.Group();root.name='reference-bamboo-flute';
-  const bamboo=new T.MeshStandardMaterial({color:'#b5b77f',roughness:.4,metalness:.04});
+  const bamboo=new T.MeshStandardMaterial({color:'#c5c78e',roughness:.36,metalness:.04});
   bamboo.onBeforeCompile=s=>{
     s.vertexShader='varying vec3 bambooPoint;\n'+s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nbambooPoint=position;');
     s.fragmentShader='varying vec3 bambooPoint;\n'+s.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
@@ -54,6 +55,7 @@ function flute(){
   const front=Z.clone().addScaledVector(direction,-Z.dot(direction)).normalize(),right=new T.Vector3().crossVectors(direction,front).normalize();
   root.position.copy(start).add(end).multiplyScalar(.5);root.position.z+=.34;
   root.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(right,direction,front));
+  root.scale.setScalar(1.09);
   return mergeStatic(root);
 }
 
@@ -61,7 +63,7 @@ function flute(){
 function inkstone(){
   const g=new T.Group();g.name='reference-scalloped-inkstone';
   const contour=(scale,y)=>Array.from({length:97},(_,i)=>{const a=i*Math.PI/48,r=(.86+.115*Math.cos(a*4))*scale;return new T.Vector3(Math.cos(a)*r,y,Math.sin(a)*r);});
-  const glaze=new T.MeshPhysicalMaterial({color:'#718578',metalness:.12,roughness:.23,clearcoat:1,clearcoatRoughness:.12});
+  const glaze=new T.MeshPhysicalMaterial({color:'#b9cab3',map:poemTexture('jade'),bumpMap:poemTexture('jade'),bumpScale:.007,metalness:.15,roughness:.21,clearcoat:1,clearcoatRoughness:.12});
   const pewter=new T.MeshStandardMaterial({color:'#b6c1b4',roughness:.23,metalness:.85});
   const shell=new T.Shape(contour(1,0).map(p=>new T.Vector2(p.x,p.z)));
   const hole=new T.Path(contour(.78,0).reverse().map(p=>new T.Vector2(p.x,p.z)));shell.holes.push(hole);
@@ -70,7 +72,7 @@ function inkstone(){
     const rim=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(contour(scale,y)),128,thickness,8,false),mat);rim.castShadow=true;g.add(rim);
   }
   const wellGeo=new T.ShapeGeometry(new T.Shape(contour(.80,0).map(p=>new T.Vector2(p.x,p.z))),48);wellGeo.rotateX(-Math.PI/2);
-  const well=new T.Mesh(wellGeo,new T.MeshPhysicalMaterial({color:'#151e1b',metalness:.4,roughness:.25,clearcoat:.9,clearcoatRoughness:.15}));well.position.y=.055;well.receiveShadow=true;g.add(well);
+  const well=new T.Mesh(wellGeo,new T.MeshPhysicalMaterial({color:'#c4c9c3',map:poemTexture('graphite'),bumpMap:poemTexture('graphite'),bumpScale:.018,metalness:.45,roughness:.26,clearcoat:.7,clearcoatRoughness:.23}));well.position.y=.055;well.receiveShadow=true;g.add(well);
   for(let i=0;i<28;i++){const p=contour(.96,.17)[Math.floor(i*96/28)];g.add(ball(.013,'#bac4a9',p.toArray(),[1,1,.7]));}
   // Three veined lotus leaves resting on its far rim.
   for(let k=0;k<3;k++){
@@ -80,30 +82,30 @@ function inkstone(){
       verts.push(center,point(i),point(i+1));
       if(i%4===0)leaf.add(tube([center.clone().setY(.041),point(i).multiplyScalar(.62).add(new T.Vector3(0,.018,0)),point(i)],.004,'#a9b38a',5));
     }
-    leaf.add(triMesh(verts,['#768364','#88916d','#626f53'][k],{roughness:.88}));leaf.position.set(.59+k*.13,.27+k*.045,.47-k*.29);leaf.rotation.y=k*.9;g.add(leaf);
+    leaf.add(triMesh(verts,['#bac99d','#c1caac','#a5b48d'][k],{map:poemTexture('jade'),bumpMap:poemTexture('jade'),bumpScale:.008,roughness:.65}));leaf.position.set(.59+k*.13,.27+k*.045,.47-k*.29);leaf.rotation.y=k*.9;g.add(leaf);
   }
-  place(g,42,81,5.64);g.rotateY(-.25);g.scale.setScalar(1.09);return mergeStatic(g);
+  place(g,36,82,5.72);g.rotateY(-.25);g.scale.setScalar(1.27);return mergeStatic(g);
 }
 
 function envelope(){
   const g=new T.Group();g.name='reference-vermilion-letter';
-  g.add(box(1.53,.028,.96,'#965946',[0,.015,0],.012));
-  g.add(triMesh([[-.765,.043,-.48],[.765,.043,-.48],[0,.067,.19]],'#ac6e55',{roughness:.95}));
-  g.add(triMesh([[-.765,.038,-.42],[0,.048,.1],[-.765,.038,.48]],'#a4624e',{roughness:.95}));
-  g.add(triMesh([[.765,.038,-.42],[.765,.038,.48],[0,.048,.1]],'#865344',{roughness:.95}));
+  g.add(box(1.53,.028,.96,'#b92e23',[0,.015,0],.012));
+  g.add(triMesh([[-.765,.043,-.48],[.765,.043,-.48],[0,.067,.19]],'#ce3e2d',{roughness:.94}));
+  g.add(triMesh([[-.765,.038,-.42],[0,.048,.1],[-.765,.038,.48]],'#ba3529',{roughness:.94}));
+  g.add(triMesh([[.765,.038,-.42],[.765,.038,.48],[0,.048,.1]],'#9d2d25',{roughness:.96}));
   const seal=cyl(.073,.078,.025,'#9e251c',[.03,.067,.12],18,{roughness:.32});g.add(seal);
   // Small blank seal block on an ivory offcut (no copied signatures/credits).
   g.add(box(.39,.018,.42,COLOR.ivory,[.67,.04,-.60],.005));
   g.add(box(.22,.012,.23,'#a84835',[.67,.06,-.60],.002));
   for(let j=0;j<4;j++)g.add(box(.014,.005,.14,'#e0c7a0',[.60+j*.045,.068,-.60],.001));
-  place(g,15,86,5.76);g.rotateY(-.32);g.scale.setScalar(.70);return mergeStatic(g);
+  place(g,14,88,5.91);g.rotateY(-.29);g.scale.setScalar(.90);return mergeStatic(g);
 }
 
 /** Irregular needles, tapered bark, exposed roots: no stacked canopy disks. */
 export function makeSculpturalPine(size=1,seed=1){
   const g=new T.Group(),random=seededRandom(seed*973+61);g.name='sculptural-pine';
   const spine=[[0,0,0],[-.08,.16,.045],[.035,.36,-.02],[-.06,.58,.055],[.10,.86,.015],[.08,1.06,0]].map(p=>new T.Vector3(...p));
-  const trunk=tube(spine,.064,COLOR.bark,36);const a=trunk.geometry.attributes.position;
+  const trunk=tube(spine,.064,'#a18e70',36,{map:poemTexture('bark'),bumpMap:poemTexture('bark'),bumpScale:.025,roughness:.92});const a=trunk.geometry.attributes.position;
   for(let i=0;i<a.count;i++){const x=a.getX(i),y=a.getY(i),z=a.getZ(i),taper=1-.63*Math.max(0,Math.min(1,y/1.12));a.setXYZ(i,x*(.76+taper*.45),y,z*(.8+taper*.3));}trunk.geometry.computeVertexNormals();g.add(trunk);
   for(let root=0;root<7;root++){const az=root*2.4,dx=Math.cos(az),dz=Math.sin(az);g.add(tube([[0,.09,0],[dx*.16,.033,dz*.15],[dx*.28,-.016,dz*.23]],.021,COLOR.bark,12));}
   for(let line=0;line<9;line++){
@@ -150,7 +152,14 @@ function blossom(g,p,normal,size,variant){
 
 function surfaceBlossoms(){
   const g=new T.Group();g.name='plum-canopy';const random=seededRandom(1505);
-  const routes=[[[ -34,133],[-2,133],[28,124],[51,111]], [[-26,60],[-2,68],[23,80]], [[-27,-106],[-7,-120],[22,-129]]];
+  const routes=[
+    [[-40,132],[-20,138],[-2,131],[18,128],[35,113],[50,111]],
+    [[-29,56],[-12,62],[4,65],[20,77]],
+    [[-43,-132],[-23,-141],[-5,-129],[11,-138],[29,-128],[43,-111]],
+    [[-36,-42],[-15,-43],[3,-48],[18,-55]],
+    [[-39,172],[-14,167],[9,178],[30,170]],
+    [[25,4],[44,-3],[56,21]]
+  ]; 
   for(const [routeIndex,route] of routes.entries()){
     const curve=new T.CatmullRomCurve3(route.map(ll=>at(...ll,5.73)));
     const pts=Array.from({length:49},(_,i)=>curve.getPoint(i/48).normalize().multiplyScalar(5.74));g.add(tube(pts,.046,COLOR.bark,72));
@@ -204,10 +213,10 @@ function banks(){
 
 function silkOrbit(){
   const g=new T.Group();g.name='reference-orchid-silhouette';
-  for(let i=0;i<7;i++){
-    const verts=[],n=100,phase=-2.2+i*.105,rot=new T.Quaternion().setFromEuler(new T.Euler(.07+(i%4)*.18, .21+(i%3)*.17, -.08+(i%5)*.07));
+  for(let i=0;i<12;i++){
+    const verts=[],n=100,phase=-2.2+i*.091,rot=new T.Quaternion().setFromEuler(new T.Euler(.07+(i%4)*.21, .21+(i%3)*.19, -.08+(i%5)*.083));
     const point=(t,side)=>{
-      const a=phase+t*(4.90+(i%4)*.22),r=5.62+Math.sin(t*Math.PI)*(.12+(i%6)*.065),w=(.010+(i%4)*.008)*Math.pow(Math.sin(Math.PI*t),.7);
+      const a=phase+t*(4.90+(i%4)*.22),r=5.70+Math.sin(t*Math.PI)*(.16+(i%6)*.075),w=(.016+(i%4)*.012)*Math.pow(Math.sin(Math.PI*t),.7);
       return new T.Vector3(Math.cos(a)*(r+side*w),Math.sin(a)*(r+side*w),.50+Math.sin(t*Math.PI*2+i)*.35).applyQuaternion(rot);
     };
     for(let j=0;j<n;j++)verts.push(point(j/n,-1),point(j/n,1),point((j+1)/n,1),point(j/n,-1),point((j+1)/n,1),point((j+1)/n,-1));
@@ -252,8 +261,8 @@ function unspokenAlbum(){
   const broken=part(new T.TorusGeometry(.52,.002,4,80,Math.PI*.91),'#bfc9b8',[0,0,.015],{roughness:.7,transparent:true,opacity:.45});broken.rotation.z=.4;moon.add(broken);g.add(moon);
   // A quiet sheaf is tucked under the existing ruled paper and bamboo.
   // Unwritten pages, folds and a thread carry the story instead of quoted verse.
-  const folio=new T.Group();folio.position.set(1.42,.43,5.70);folio.rotation.set(-.08,.20,-.19);
-  const folioMap=paperImpressionTexture();
+  const folio=new T.Group();folio.position.copy(at(27,-114,5.91));folio.quaternion.setFromUnitVectors(Z,folio.position.clone().normalize());folio.rotateZ(.20);
+  const folioMap=poemTexture('paper');
   for(let sheet=0;sheet<3;sheet++){
     const geo=new T.PlaneGeometry(1.18,1.62,30,32),p=geo.attributes.position;
     for(let i=0;i<p.count;i++){

@@ -2,9 +2,10 @@
 import * as T from 'three';
 import { fromLatLon, clamp, seededRandom } from './math.js?v=0130';
 import { part, box, ball, cyl, mergeStatic, makePine, makeBamboo, makeRock, makeInkstone, makePlum, makeOrchid, makeFern, makeReeds, makeFlowerCluster, makeSeedPod } from './garden-models.js?v=0130';
-import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache, collageTextureReady, attachStoneTexture } from './collage-layers.js?v=0130';
-import { makeReferenceAccents } from './reference-art.js?v=0130';
-import { albumSurface } from './poem-album.js?v=0130';
+import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache, collageTextureReady, attachStoneTexture } from './collage-layers.js?v=0160';
+import { makeReferenceAccents, makeSculpturalPine } from './reference-art.js?v=0160';
+import { makePoemReliquary, poemTexture, reliquarySurface } from './poem-reliquary.js?v=0160';
+import { albumSurface } from './poem-album.js?v=0160';
 export const PLANET_RADIUS=5.4;
 const UP=new T.Vector3(0,1,0),WATER=5.425;
 const paperDecks=[[[17,103],2.4,2.8,-.32],[[35,83],1.1,.85,.35],[[-19,-108],2,2.6,.4]].map(([ll,w,h,angle])=>{
@@ -13,8 +14,8 @@ const paperDecks=[[[17,103],2.4,2.8,-.32],[[35,83],1.1,.85,.35],[[-19,-108],2,2.
 });
 const edges=[['home','journal'],['home','studio'],['journal','lab'],['studio','lab'],['journal','library'],['studio','observatory'],['library','camp'],['camp','mail'],['mail','observatory'],['mail','lab'],['camp','home']];
 function waterField(n){
-  const rear=Math.abs(n.y*.71+n.x*.28+Math.sin(n.z*4+n.x*2)*.19);
-  const front=n.y>.12?.28:Math.abs(n.x+.23-.10*Math.sin(n.y*7))*.72;
+  const rear=Math.abs(n.y*.72+n.x*.23+Math.sin(n.z*3+n.x*5)*.16+Math.sin(n.x*6-1)*.07);
+  const front=n.y>.12?.28:Math.abs(n.x+.21-.10*Math.sin(n.y*7))*(.62-.20*Math.sin(Math.min(1,Math.abs(n.y))*Math.PI));
   const blend=clamp((n.z-.30)/.30,0,1);
   return rear*(1-blend)+front*blend;
 }
@@ -24,7 +25,7 @@ function inInstrumentClearance(n){return n.z>.79&&n.y>-.22&&n.y<.62&&n.x>-.30&&n
 function terrainRadius(n){const river=waterField(n),hill=Math.sin(n.x*9+n.z*3)*Math.cos(n.y*7-1)*.035+Math.sin(n.z*17+n.y*5)*.015;return PLANET_RADIUS+.075+hill-.11*(1-clamp((river-.055)/.065,0,1));}
 export function lakeDistance(n){return waterField(n)/.085;}
 export function surfaceRadius(n){
-  let height=Math.max(terrainRadius(n),WATER+.015,collageSurface(n),albumSurface(n));
+  let height=Math.max(terrainRadius(n),WATER+.015,collageSurface(n),albumSurface(n),reliquarySurface(n));
   for(const deck of paperDecks){const local=n.clone().applyQuaternion(deck.inverse),x=local.x*(PLANET_RADIUS+.12),y=local.y*(PLANET_RADIUS+.12);
     if(local.z>.9&&Math.abs(x)<deck.w/2&&Math.abs(y)<deck.h/2)height=Math.max(height,PLANET_RADIUS+.13+.028*Math.sin(y*3+x));
   }return height;
@@ -43,7 +44,7 @@ export function makeLandscape(normals){
   clearCollageMaterialCache();
   const root=new T.Group();root.name='longing-poem-sphere';const random=seededRandom(404917);
   const geometry=new T.SphereGeometry(PLANET_RADIUS,144,96),p=geometry.attributes.position,colors=new Float32Array(p.count*3),n=new T.Vector3();
-  const stone=new T.Color('#989c90'),moss=new T.Color('#76816b'),ink=new T.Color('#646d63'),shore=new T.Color('#b6b6a3');
+  const stone=new T.Color('#b4baa7'),moss=new T.Color('#8d9b7f'),ink=new T.Color('#829181'),shore=new T.Color('#c1c7b4');
   for(let i=0;i<p.count;i++){
     n.fromBufferAttribute(p,i).normalize();const river=waterField(n),vein=Math.sin(n.x*21+n.y*17+Math.sin(n.z*11)*2);
     const field=Math.sin(n.x*5+n.z*4)*Math.cos(n.y*8)+Math.sin(n.z*9+n.x*4)*.3;
@@ -52,30 +53,17 @@ export function makeLandscape(normals){
     p.setXYZ(i,...n.clone().multiplyScalar(terrainRadius(n)).toArray());colors.set([c.r,c.g,c.b],i*3);
   }
   geometry.setAttribute('color',new T.BufferAttribute(colors,3));geometry.computeVertexNormals();
-  const groundMaterial=new T.MeshStandardMaterial({vertexColors:true,roughness:.96});
-  attachStoneTexture(groundMaterial);
-  groundMaterial.onBeforeCompile=shader=>{
-    shader.vertexShader='varying vec3 poemSurface;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\npoemSurface=position;');
-    shader.fragmentShader='varying vec3 poemSurface;\n'+shader.fragmentShader.replace('#include <map_fragment>',`#ifdef USE_MAP
-      vec3 w=pow(abs(normalize(poemSurface)),vec3(4.));w/=w.x+w.y+w.z;
-      vec3 tx=texture2D(map,vec2(.507,.507)+fract(poemSurface.yz*.31)*.486).rgb;
-      vec3 ty=texture2D(map,vec2(.507,.507)+fract(poemSurface.xz*.31)*.486).rgb;
-      vec3 tz=texture2D(map,vec2(.507,.507)+fract(poemSurface.xy*.31)*.486).rgb;
-      vec3 mineral=tx*w.x+ty*w.y+tz*w.z;
-      diffuseColor.rgb*=mix(vec3(.92),mineral*1.8,.42);
-    #endif`).replace('#include <color_fragment>',`#include <color_fragment>
-      float grain=fract(sin(dot(floor(poemSurface*230.),vec3(12.9898,78.233,45.164)))*43758.5453);
-      float vein=sin(poemSurface.y*26.+sin(poemSurface.x*7.)*2.+sin(poemSurface.z*13.)*1.7);
-      diffuseColor.rgb*=.9+grain*.14+smoothstep(.84,1.,vein)*.075;`);
-  };
+  const groundMap=poemTexture('substrate');
+  const groundMaterial=new T.MeshStandardMaterial({vertexColors:true,map:groundMap,bumpMap:groundMap,bumpScale:.012,roughness:.98});
   const ground=new T.Mesh(geometry,groundMaterial);ground.name='garden-ground';ground.receiveShadow=true;root.add(ground);
-  const water=part(new T.SphereGeometry(WATER,128,80),'#779e9f',[0,0,0],{roughness:.24,metalness:.34});water.name='continuous-jade-water';water.castShadow=false;root.add(water);
+  const waterMap=poemTexture('water');
+  const water=part(new T.SphereGeometry(WATER,128,80),'#c6e1e0',[0,0,0],{map:waterMap,bumpMap:waterMap,bumpScale:.014,roughness:.23,metalness:.39});water.name='continuous-jade-water';water.castShadow=false;root.add(water);
   let waterShader;water.material.onBeforeCompile=shader=>{waterShader=shader;shader.uniforms.poemTime={value:0};shader.vertexShader='varying vec3 waterPoint;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nwaterPoint=position;');shader.fragmentShader='varying vec3 waterPoint; uniform float poemTime;\n'+shader.fragmentShader.replace('#include <normal_fragment_begin>',`#include <normal_fragment_begin>
     normal=normalize(normal+vec3(sin(waterPoint.x*65.+waterPoint.y*39.+poemTime)*.035,cos(waterPoint.z*73.-poemTime*.7)*.026,0.));`);};
   const paths=new T.Group(),sampled=[];
   for(const [a,b] of edges){const aa=normals.get(a),bb=normals.get(b),angle=Math.acos(clamp(aa.dot(bb),-1,1)),steps=Math.ceil(angle*PLANET_RADIUS/.19);
     for(let i=1;i<steps;i++){const nn=slerp(aa,bb,i/steps);sampled.push(nn);if([...normals.values()].some(o=>o.dot(nn)>.989))continue;
-      const step=box(.145+(i%4)*.012,.031,.084+(i%3)*.009,i%7===0?'#a4aa96':'#bbc1ac',[0,0,0],.024);placeSurface(step,nn,.018);step.rotateY(i*.27);paths.add(step);
+      const step=box(.113+(i%4)*.011,.027,.076+(i%3)*.009,i%7===0?'#9ca88f':'#b1b9a1',[0,0,0],.029);placeSurface(step,nn,.018);step.rotateY(i*.27);paths.add(step);
     }
     for(let i=2;i<steps-2;i++){const nn=slerp(aa,bb,i/steps);if(waterField(nn)>.065||nn.z>.35)continue;
       const tangent=slerp(aa,bb,(i+1)/steps).sub(nn).normalize(),side=new T.Vector3().crossVectors(nn,tangent).normalize();
@@ -85,10 +73,10 @@ export function makeLandscape(normals){
     }
   }root.add(mergeStatic(paths));
   const flora=new T.Group(),stonework=new T.Group(),details=new T.Group();
-  const pineTemplates=Array.from({length:5},(_,i)=>makePine(1,i)),bambooTemplates=Array.from({length:3},(_,i)=>makeBamboo(1,i));
+  const pineTemplates=Array.from({length:5},(_,i)=>makeSculpturalPine(.64,i+17)),bambooTemplates=Array.from({length:3},(_,i)=>makeBamboo(.76,i));
   // Open terraces around every content destination; flora uses the entire sphere.
-  for(let i=0;i<440;i++){
-    const y=1-2*(i+.5)/440,az=i*2.3999632297,nn=new T.Vector3(Math.cos(az)*Math.sqrt(1-y*y),y,Math.sin(az)*Math.sqrt(1-y*y));
+  for(let i=0;i<180;i++){
+    const y=1-2*(i+.5)/180,az=i*2.3999632297,nn=new T.Vector3(Math.cos(az)*Math.sqrt(1-y*y),y,Math.sin(az)*Math.sqrt(1-y*y));
     const proximity=[...normals.values()].some(o=>o.dot(nn)>.976),onPath=sampled.some(o=>o.dot(nn)>.9987);
     if(waterField(nn)<.14||proximity||onPath||collageSurface(nn)>=5.6||nn.z>.67||inInstrumentClearance(nn))continue;
     if(i%4===0){const plant=(i%12===0?bambooTemplates[i%3]:pineTemplates[i%5]).clone();plant.scale.multiplyScalar(.62+random()*.55);placeSurface(plant,nn,-.015);plant.rotateY(random()*6.28);flora.add(plant);}
@@ -116,7 +104,7 @@ export function makeLandscape(normals){
       const plant=fernTemplates[(j+k)%6].clone();plant.scale.multiplyScalar(1.25+(j%3)*.13);placeSurface(plant,nn,.015);plant.rotateY(a);focalGardens.add(plant);botanicalClumps++;
       if(j%3===0){const cushion=ball(.23,'#627749',[0,0,0],[1.5,.36,1.1]);cushion.material=mossMaterial();placeSurface(cushion,nn,.035);focalGardens.add(cushion);}
     }
-    if(k%3===0){const tree=makePine(1.5,k);placeSurface(tree,center,.005);tree.rotateY(k);focalGardens.add(tree);}
+    if(k%3===0){const tree=makeSculpturalPine(1.05,k+31);placeSurface(tree,center,.005);tree.rotateY(k);focalGardens.add(tree);}
   }root.add(mergeStatic(focalGardens));
   const glints=new T.Group();
   for(let i=0;i<210;i++){const nn=new T.Vector3(random()-.5,random()-.5,random()-.5).normalize();if(waterField(nn)>.065)continue;const tangent=new T.Vector3().crossVectors(nn,UP).normalize(),points=[];
@@ -169,7 +157,7 @@ export function makeLandscape(normals){
     pewter.add(tube(pts,.045,'#a5b2ad',{roughness:.24,metalness:.52}));
   }root.add(mergeStatic(pewter));
   } else {
-    root.add(makeCollageLayers(),makeReferenceAccents());
+    root.add(makeCollageLayers(),makeReferenceAccents(),makePoemReliquary());
   }
   const fireflyPositions=[];for(let i=0;i<45;i++){const q=new T.Vector3(random()-.5,random()-.5,random()-.5).normalize();fireflyPositions.push(...q.multiplyScalar(PLANET_RADIUS+.4+random()*.6).toArray());}
   const fireflyGeo=new T.BufferGeometry();fireflyGeo.setAttribute('position',new T.Float32BufferAttribute(fireflyPositions,3));const fireflies=new T.Points(fireflyGeo,new T.PointsMaterial({color:'#f6d28e',size:.035,transparent:true,opacity:0,depthWrite:false}));root.add(fireflies);

@@ -6,6 +6,8 @@ import { showExhibitDialog } from './exhibition-dialog.js?v=0150';
 const ids=['yesterday-today','crossover','poem','rain-finale'];
 const names=['昨天，今天','删了一百遍','思念若是一首诗','雨终曲'];
 const world=document.body.dataset.orbitWorld,index=ids.indexOf(world);
+const workLink=id=>document.querySelector(`[data-orbit-choice="${id}"],.world-card[data-world="${id}"]`)?.getAttribute('href')||'./'+id+'.html';
+const workThumbnail=id=>document.querySelector(`[data-orbit-choice="${id}"] img`)?.getAttribute('src')||'./assets/exhibition/'+id+'-192.webp';
 const make=(tag,cls,text)=>{const node=document.createElement(tag);if(cls)node.className=cls;if(text)node.textContent=text;return node;};
 const link=(text,href,cls)=>{const node=make('a',cls,text);node.href=href;return node;};
 const action=(text,fn,cls)=>{const node=make('button',cls,text);node.type='button';node.addEventListener('click',fn);return node;};
@@ -13,7 +15,7 @@ try{
   if(index>=0&&!new URLSearchParams(location.search).has('build'))sessionStorage.setItem('orbit-last-work',world);
   else if(index<0){
     const previous=sessionStorage.getItem('orbit-last-work'),last=ids.indexOf(previous);
-    if(last>=0)document.querySelector('.opening-note')?.append(link('接着看 · '+names[last]+' ↗','./'+previous+'.html?v=0150','visit-resume'));
+    if(last>=0)document.querySelector('.opening-note')?.append(link('接着看 · '+names[last]+' ↗',workLink(previous),'visit-resume'));
   }
 }catch{/* Private browsing or blocked storage must not block entry. */}
 
@@ -31,9 +33,9 @@ if(index>=0){
       const note=make('p','visit-directory-note','留下的形状 / 01—04');
       const nav=make('nav','visit-directory-grid');nav.setAttribute('aria-label','选择作品');
       ids.forEach((id,n)=>{
-        const a=link('','./'+id+'.html?v=0150','visit-directory-item');
+        const a=link('',workLink(id),'visit-directory-item');
         if(id===world)a.setAttribute('aria-current','page');
-        const photo=make('img');photo.src='./assets/exhibition/'+id+'-192.webp?v=0130';photo.alt='';photo.width=192;photo.height=192;photo.decoding='async';
+        const photo=make('img');photo.src=workThumbnail(id);photo.alt='';photo.width=192;photo.height=192;photo.decoding='async';
         const text=make('span');text.append(make('small','',String(n+1).padStart(2,'0')+' / '+(id===world?'正在观看':'进入展室')),make('strong','',names[n]));
         a.append(photo,text,make('span','visit-directory-arrow',id===world?'·':'↗'));
         if(id===world)a.addEventListener('click',event=>{event.preventDefault();directory.close();});
@@ -63,7 +65,7 @@ if(index>=0){
   const dock=make('nav','visit-dock');dock.setAttribute('aria-label','手机观看快捷操作');
   const inspect=action('高清放大',()=>document.dispatchEvent(new CustomEvent('orbit:inspect',{detail:{index:0,opener:inspect}})),'visit-dock-primary');
   const catalogue=action('作品目录',()=>openDirectory(catalogue));catalogue.setAttribute('aria-haspopup','dialog');
-  dock.append(link('作品集','./#world-'+world),catalogue,inspect,link(index===3?'回到开篇 ↗':'下一件 ↗','./'+ids[(index+1)%4]+'.html?v=0150'));
+  dock.append(link('作品集','./#world-'+world),catalogue,inspect,link(index===3?'回到开篇 ↗':'下一件 ↗',workLink(ids[(index+1)%4])));
   document.body.append(dock);
   // Reuse the same scene and viewer. No extra renderer, image carousel library,
   // network prefetch, analytics or automatic tour is started by these controls.

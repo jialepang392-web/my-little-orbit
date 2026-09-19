@@ -1,33 +1,34 @@
 {
   "status": "passed",
-  "version": "0.13.0",
+  "version": "0.16.0",
   "work": "poem",
-  "startedAt": "2026-09-18T16:54:01.460174+00:00",
+  "startedAt": "2026-09-19T13:03:15.593840+00:00",
   "sourceHashes": {
     "assets/illustrations/title-calligraphy.svg": "2dfac560792ddba1f270d3358366c7d95de059f66326e543c20e16183cbc1d7d",
     "assets/scenography/poem-opening.svg": "dafc5f5c7e5ecb6870d1e4293b140c9df52133969a6984a90131ec2e64d33fe6",
     "assets/textures/collage-atlas.png": "e93eacb8509195a5e053649f8b6863b13584c0868256c2115379d790486e345d",
     "assets/textures/collage-atlas.webp": "764bc13d2ed485525fb48cce6bedb69d8d6f947fbeb9396184bc4f8e3e3842b4",
-    "poem.html": "13e1ce1561cbfd5fa3b16e314d005db79a7f60d60f75629069629589021e93d3",
+    "poem.html": "d2a58ad921b0e41a866dda04f92128c8c6795fc71f9de5d1fb73ecbbda3d7734",
     "src/app.js": "6bedd78c1817314b4930ad10d0de8a16941ad2b630df6dfe49a28a6424591d88",
-    "src/collage-layers.js": "e0fa5019fa28e7e33f5d0d0e0b0ff6bd43ceb5724918bf0373972ab69c7ec7cd",
-    "src/collage-light.js": "19632bd668dd37cb6f9385a96a80e24b57050737f36d8910226649adba0d9e14",
+    "src/collage-layers.js": "ed690995662c6cdbd89861538649280d423d103de5738e33256b46321a6825a1",
+    "src/collage-light.js": "41b9591a31ee2cdb237c73c348fb6b54ce39af5e68b0cef086dd2b0b70c57b64",
     "src/data.js": "926514e0595b1408f57823d8c3dfc1dc92d1dbf3e015dcdf92065b92ddd98ab8",
     "src/garden-models.js": "7f8e658d599c79b87d68616ab43bc34ae4ad1d746f3b6b900d9d7984210ac37b",
-    "src/landscape.js": "57b8595c66e164508513b9b52897fe65197e31003d052ae0a332640f9d6d060a",
+    "src/landscape.js": "da047adfaee2ccaebab512a39319a5eb121a4c93f3275ae9d119f965c5917dff",
     "src/math.js": "36f854bf14ad15a8cfab77a4e489fd7ea245b8bdd332f08a7974366ab8cfb63b",
     "src/navigation.js": "411a689a4c0a934f1f923d7997ba066fa35b45c385f4080b4a87e153e46fb07a",
-    "src/poem-album.js": "98c02501fa566f0b2867a125040a7308eb014ad94fd93aa062bdc66f296dddab",
-    "src/reference-art.js": "bfac7eb6255ec95c4e818cab2a86760306ae1e87fba08ddb491afc4baff6b52f",
+    "src/poem-album.js": "d0763df2a3d0e2dd24efef1f33deb634404ebf26783c332e33d5bf7a45a1a618",
+    "src/poem-reliquary.js": "0ca182b0516f71c0115ee74e2cf7d89a603a137c34177c025bfc1142795935a9",
+    "src/reference-art.js": "5f16be873fd69df17b051095e35e221b67b250cd8d4ff617c7c5c327fb933c89",
     "src/runtime.js": "29b610c20312290eac97e74458df9af972df38cf192c3ac0eda46aabd1940b8c",
     "src/song-surfaces.js": "28c55e2e55c4fb672d80058aa41ccf9c5c0b412826e05df21e5c16e2aba5224d",
-    "src/world.js": "b8e0e347420c2ec938427d1dc091ecc9a434c1186a25a833f6857b6a691681ff"
+    "src/world.js": "f4b690cc85f8e204f33e293e6f0f8998949f0dfe69632c3e8ac10879c597f3ee"
   },
   "views": {
     "front": {
       "engine": "three.js r180",
-      "botanicalClumps": "238",
-      "collageLayers": "15",
+      "botanicalClumps": "191",
+      "collageLayers": "44",
       "edition": "garden",
       "assetsExpected": "0",
       "assetsLoaded": "0",
@@ -36,8 +37,8 @@
       "dusk": "false",
       "paused": "false",
       "frame": "5",
-      "drawCalls": "427",
-      "triangles": "1155381",
+      "drawCalls": "603",
+      "triangles": "1818841",
       "avatarAction": "Idle",
       "ready": "true",
       "position": "0.0955,-0.4067,0.9085",
@@ -51,7 +52,7 @@
       "orbitDrags": "0",
       "cameraFollow": "false",
       "inViewport": "true",
-      "sceneVersion": "0.13.0",
+      "sceneVersion": "0.16.0",
       "cameraPosition": [
         0,
         1.3341356484306217,
@@ -66,8 +67,8 @@
     },
     "inkstone": {
       "engine": "three.js r180",
-      "botanicalClumps": "238",
-      "collageLayers": "15",
+      "botanicalClumps": "191",
+      "collageLayers": "44",
       "edition": "garden",
       "assetsExpected": "0",
       "assetsLoaded": "0",
@@ -76,8 +77,8 @@
       "dusk": "false",
       "paused": "false",
       "frame": "6",
-      "drawCalls": "216",
-      "triangles": "923284",
+      "drawCalls": "320",
+      "triangles": "1412176",
       "avatarAction": "Idle",
       "ready": "true",
       "position": "0.0955,-0.4067,0.9085",
@@ -91,7 +92,7 @@
       "orbitDrags": "0",
       "cameraFollow": "false",
       "inViewport": "true",
-      "sceneVersion": "0.13.0",
+      "sceneVersion": "0.16.0",
       "cameraPosition": [
         3,
         5.4,
@@ -106,8 +107,8 @@
     },
     "flute": {
       "engine": "three.js r180",
-      "botanicalClumps": "238",
-      "collageLayers": "15",
+      "botanicalClumps": "191",
+      "collageLayers": "44",
       "edition": "garden",
       "assetsExpected": "0",
       "assetsLoaded": "0",
@@ -116,8 +117,8 @@
       "dusk": "false",
       "paused": "false",
       "frame": "7",
-      "drawCalls": "242",
-      "triangles": "975966",
+      "drawCalls": "356",
+      "triangles": "1506227",
       "avatarAction": "Idle",
       "ready": "true",
       "position": "0.0955,-0.4067,0.9085",
@@ -131,7 +132,7 @@
       "orbitDrags": "0",
       "cameraFollow": "false",
       "inViewport": "true",
-      "sceneVersion": "0.13.0",
+      "sceneVersion": "0.16.0",
       "cameraPosition": [
         4.2,
         1.55,
@@ -146,8 +147,8 @@
     },
     "bank": {
       "engine": "three.js r180",
-      "botanicalClumps": "238",
-      "collageLayers": "15",
+      "botanicalClumps": "191",
+      "collageLayers": "44",
       "edition": "garden",
       "assetsExpected": "0",
       "assetsLoaded": "0",
@@ -156,8 +157,8 @@
       "dusk": "false",
       "paused": "false",
       "frame": "8",
-      "drawCalls": "200",
-      "triangles": "961590",
+      "drawCalls": "326",
+      "triangles": "1464032",
       "avatarAction": "Idle",
       "ready": "true",
       "position": "0.0955,-0.4067,0.9085",
@@ -171,7 +172,7 @@
       "orbitDrags": "0",
       "cameraFollow": "false",
       "inViewport": "true",
-      "sceneVersion": "0.13.0",
+      "sceneVersion": "0.16.0",
       "cameraPosition": [
         -5.65,
         -1.2,
@@ -186,8 +187,8 @@
     },
     "side": {
       "engine": "three.js r180",
-      "botanicalClumps": "238",
-      "collageLayers": "15",
+      "botanicalClumps": "191",
+      "collageLayers": "44",
       "edition": "garden",
       "assetsExpected": "0",
       "assetsLoaded": "0",
@@ -196,8 +197,8 @@
       "dusk": "false",
       "paused": "false",
       "frame": "9",
-      "drawCalls": "427",
-      "triangles": "1155381",
+      "drawCalls": "603",
+      "triangles": "1818841",
       "avatarAction": "Idle",
       "ready": "true",
       "position": "0.0955,-0.4067,0.9085",
@@ -211,7 +212,7 @@
       "orbitDrags": "0",
       "cameraFollow": "false",
       "inViewport": "true",
-      "sceneVersion": "0.13.0",
+      "sceneVersion": "0.16.0",
       "cameraPosition": [
         23.980823009322943,
         0.9592329203729177,
@@ -226,8 +227,8 @@
     },
     "back": {
       "engine": "three.js r180",
-      "botanicalClumps": "238",
-      "collageLayers": "15",
+      "botanicalClumps": "191",
+      "collageLayers": "44",
       "edition": "garden",
       "assetsExpected": "0",
       "assetsLoaded": "0",
@@ -236,8 +237,8 @@
       "dusk": "false",
       "paused": "false",
       "frame": "10",
-      "drawCalls": "427",
-      "triangles": "1155381",
+      "drawCalls": "603",
+      "triangles": "1818841",
       "avatarAction": "Idle",
       "ready": "true",
       "position": "0.0955,-0.4067,0.9085",
@@ -251,7 +252,7 @@
       "orbitDrags": "0",
       "cameraFollow": "false",
       "inViewport": "true",
-      "sceneVersion": "0.13.0",
+      "sceneVersion": "0.16.0",
       "cameraPosition": [
         0,
         1.3206413270842594,
@@ -268,59 +269,59 @@
   "errors": [],
   "exported": true,
   "glbReload": {
-    "meshes": 420,
-    "materials": 124,
+    "meshes": 596,
+    "materials": 171,
     "title": "思念若是一首诗",
-    "sceneVersion": "0.13.0",
+    "sceneVersion": "0.16.0",
     "bounds": [
-      12.908228874206543,
-      12.55536413192749,
-      13.837567579685038
+      12.533494077018169,
+      12.260475635528564,
+      13.934587252078837
     ]
   },
-  "finishedAt": "2026-09-18T16:58:21.362817+00:00",
+  "finishedAt": "2026-09-19T13:12:24.345837+00:00",
   "browser": "140.0.7339.16",
   "artifacts": {
     "poster.webp": {
-      "sha256": "3f78c475b30c20f5bee27fc04679ae6babc92bfdc5433962fb54b697fd83486e",
-      "bytes": 364494
+      "sha256": "c93ba272e268869e97a34b774a71ffa83bd556628a36945259a612affcaa2071",
+      "bytes": 362704
     },
     "cover.webp": {
-      "sha256": "9bc08a3cbd656c0ed12cbac9e96ca68de9bb54ed6f76bc9bf264b8a002773d85",
-      "bytes": 467540
+      "sha256": "04787264823d3733dd43ae46008a28b1cb1290ebbd682d27ca1551055ca6a353",
+      "bytes": 457856
     },
     "detail-bank.webp": {
-      "sha256": "bafd61ee3f73335db976b2304a1cf9c6bc79fa0bb7f20b62eee1e7192b3068ec",
-      "bytes": 475998
+      "sha256": "bb658f10475146623fc89d08e168f7475e7f788ffaaee8000e048198d03c192c",
+      "bytes": 467824
     },
     "back.webp": {
-      "sha256": "0a68bead6ae8e579fa64208c257de1cd31c32ddd4ecdc5a0370fd904997b0fc9",
-      "bytes": 247592
+      "sha256": "897f89d31030e436cd2aebca290d7c1f07ac1824fe674fa06e54581611a60e5b",
+      "bytes": 252170
     },
     "side.webp": {
-      "sha256": "5fa459516839b2c130291536b05bfdf4f9dbf5ba83df9640162da8cb31f3bc4b",
-      "bytes": 247180
+      "sha256": "aa4327f1b65100eda1c4ddf5c3e558d729679f3e38d24d8ab1c6329b4c0268aa",
+      "bytes": 241000
     },
     "front-transparent.webp": {
-      "sha256": "ff79d18f0a317df703c9865807a7c676f96c02a7a5d9d91388db1979b64005cb",
-      "bytes": 648254
+      "sha256": "052374b41e5c6b173e46d605df4161b773636fa0d657be46b5eb1546ccfdec89",
+      "bytes": 611258
     },
     "longing-poem.glb": {
-      "sha256": "765b4e15794287e6d392901cddc66e2dda45bc633617b1272eac572889394706",
-      "bytes": 62583452
+      "sha256": "688c5857ab02e79745d3a4d4a7782d65133e984af802ae9980255175ccc0cd20",
+      "bytes": 85583476
     },
     "detail-inkstone.webp": {
-      "sha256": "b53693bf237be28bd80a8670583c99c3cea740f63675118cabd257819f9ec162",
-      "bytes": 306528
+      "sha256": "49c6ac6b151dcefb2aebd5772815e5cdab6dab1545098bafc2efcced76ecf42b",
+      "bytes": 292004
     },
     "detail-flute.webp": {
-      "sha256": "3ab9d43599c1bedcd728feafb3a54e429e98407c8698f4fdadac1d2717ceb331",
-      "bytes": 335218
+      "sha256": "eea145ccddab221ec2e1f324359815dd9262594f4ed3f80e1a38ef35e03f3221",
+      "bytes": 277466
     }
   },
   "generatorHashes": {
-    "scripts/build_exhibition_art.py": "17ab45b6cf422f1372bb1ffaf5d973d564c51ab83c7139edba4500c72ee7d0cc"
+    "scripts/build_exhibition_art.py": "f47c203a2d1c64f9b22cf1488bef034b8971a2b501d170668266b674b8b1dd54"
   },
-  "sceneVersion": "0.13.0",
+  "sceneVersion": "0.16.0",
   "method": "One live scene: front, three independently positioned cameras, true side/back, composed print and reloaded GLB."
 }

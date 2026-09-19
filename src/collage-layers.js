@@ -3,10 +3,14 @@ import * as T from 'three';
 import { fromLatLon, seededRandom } from './math.js?v=0130';
 import { part, ball, mergeStatic } from './garden-models.js?v=0130';
 const R=5.4,Z=new T.Vector3(0,0,1),atlasUrl=new URL('../assets/textures/collage-atlas.webp',import.meta.url).href;
-const supportLayers=[
-  [17,71,4.3,4.2,-.24,5.57],[18,122,2.5,2.9,.16,5.57],[-30,58,2.7,3.0,-.30,5.57],[-19,-108,3.0,3.4,.4,5.57],[28,-55,2.3,2.8,-.30,5.57],
-  [17,71,4.0,3.85,-.24,5.65],[18,122,2.17,2.53,.16,5.64],[-30,58,2.38,2.63,-.30,5.64],[-19,-108,2.67,3.02,.4,5.64],[28,-55,1.98,2.43,-.30,5.64]
-].map(([lat,lon,w,h,angle,height])=>({w,h,height,inverse:new T.Quaternion().setFromUnitVectors(Z,new T.Vector3(...fromLatLon(lat,lon))).multiply(new T.Quaternion().setFromAxisAngle(Z,angle)).invert()}));
+// Composed folios on every hemisphere. The rear is a second composition, not filler.
+const FOLIOS=[
+  [18,69,3.80,3.92,-.27],[20,127,2.16,2.98,.26],[-33,52,2.52,2.76,-.36],
+  [27,-115,3.66,3.55,.20],[-31,-73,3.22,2.85,-.32],[22,-48,2.14,3.18,-.39],
+  [-15,176,2.57,3.25,.31],[14,9,2.67,3.11,-.23],[-47,133,2.55,2.16,.45],
+  [62,52,2.68,2.10,.22],[-61,-147,2.70,2.18,-.24]
+];
+const supportLayers=FOLIOS.map(([lat,lon,w,h,angle])=>({w:w+.20,h:h+.20,height:5.67,inverse:new T.Quaternion().setFromUnitVectors(Z,new T.Vector3(...fromLatLon(lat,lon))).multiply(new T.Quaternion().setFromAxisAngle(Z,angle)).invert()}));
 export function collageSurface(n){let height=0;for(const layer of supportLayers){const v=n.clone().applyQuaternion(layer.inverse);if(v.z>.8&&Math.abs(v.x*R)<layer.w/2&&Math.abs(v.y*R)<layer.h/2)height=Math.max(height,layer.height);}return height;}
 let atlas=null;
 function atlasResource(){
@@ -42,12 +46,12 @@ function material(kind,color='#ffffff'){
 function orient(root,lat,lon,angle=0){root.quaternion.setFromUnitVectors(Z,new T.Vector3(...fromLatLon(lat,lon)));root.rotateZ(angle);}
 function patch(w,h,radius,kind,seed,ragged=true){
   const random=seededRandom(seed),geo=new T.PlaneGeometry(w,h,36,42),pos=geo.attributes.position;
-  const nx=37,ny=43,left=Array.from({length:ny},()=>random()*.11),right=Array.from({length:ny},()=>random()*.11),top=Array.from({length:nx},()=>random()*.08),bottom=Array.from({length:nx},()=>random()*.08);
+  const nx=37,ny=43,left=Array.from({length:ny},()=>random()*.035),right=Array.from({length:ny},()=>random()*.035),top=Array.from({length:nx},()=>random()*.026),bottom=Array.from({length:nx},()=>random()*.026);
   for(let i=0;i<pos.count;i++){
     const row=Math.floor(i/nx),col=i%nx;let x=pos.getX(i),y=pos.getY(i);
     if(ragged){x+=col<3?left[row]*(1-col/3)*2.7:col>33?-right[row]*(col-33)/3*2.7:0;y+=row<3?-top[col]*(1-row/3)*2.5:row>39?bottom[col]*(row-39)/3*2.5:0;}
-    const foldedCorner=kind==='paper'?.085*Math.pow(Math.max(0,x/(w/2)),7)*Math.pow(Math.max(0,y/(h/2)+.12),3):0;
-    const n=new T.Vector3(x,y,R).normalize(),curl=(kind==='paper'?.008:.012)*Math.sin(x*6+seed)*Math.sin(y*7)+foldedCorner;
+    const foldedCorner=kind==='paper'?.16*Math.pow(Math.max(0,x/(w/2)),7)*Math.pow(Math.max(0,y/(h/2)+.12),3):0;
+    const n=new T.Vector3(x,y,R).normalize(),curl=(kind==='paper'?.014:kind==='foil'?.075:.018)*Math.sin(x*6+seed)*Math.sin(y*7)+foldedCorner;
     pos.setXYZ(i,...n.multiplyScalar(radius+curl).toArray());
   }geo.computeVertexNormals();const m=new T.Mesh(geo,material(kind));m.castShadow=true;m.receiveShadow=true;return m;
 }
@@ -63,14 +67,18 @@ export function makeCollageLayers(){
   const root=new T.Group();root.name='layered-paper-foil-and-lace';let patchCount=0;
   function sheet(lat,lon,w,h,angle,kind,radius,seed){const m=patch(w,h,radius,kind,seed);orient(m,lat,lon,angle);root.add(m);patchCount++;return m;}
   // Strata show through between the papers; irregular edges reveal the layer below.
-  for(const [i,a] of [[17,71,4.3,4.2,-.24],[18,122,2.5,2.9,.16],[-30,58,2.7,3.0,-.30],[-19,-108,3.0,3.4,.4],[28,-55,2.3,2.8,-.30]].entries()){
-    const [lat,lon,w,h,angle]=a;sheet(lat,lon,w,h,angle,'foil',5.51,40+i);sheet(lat+.7,lon+.3,w*.96,h*.96,angle+.025,'stone',5.55,80+i);
+  for(const [i,a] of FOLIOS.entries()){
+    const [lat,lon,w,h,angle]=a;
+    sheet(lat,lon,w+.46,h+.38,angle-.018,'foil',5.525,40+i);
+    sheet(lat+.7,lon+.3,w+.23,h+.20,angle+.025,'stone',5.57,80+i);
+    // Exposed parchment verso: a thin warm lip under each original manuscript.
+    sheet(lat-.45,lon-.35,w+.09,h+.075,angle-.012,'paper',5.607,120+i);
   }
-  const papers=[[17,71,4.0,3.85,-.24],[18,122,2.17,2.53,.16],[-30,58,2.38,2.63,-.30],[-19,-108,2.67,3.02,.4],[28,-55,1.98,2.43,-.30]];
+  const papers=FOLIOS;
   for(const [i,a] of papers.entries()){
-    const [lat,lon,w,h,angle]=a;sheet(lat,lon,w,h,angle,'paper',i===0?5.63:5.62,11+i);
+    const [lat,lon,w,h,angle]=a;sheet(lat,lon,w,h,angle,'paper',5.65,11+i);
     const rules=new T.Group();
-    for(let x=-w*.35;x<w*.4;x+=.43){const pts=[];for(let j=0;j<=30;j++){const y=-h*.4+j/30*h*.8;pts.push(new T.Vector3(x,y,R).normalize().multiplyScalar(i===0?5.646:5.636));}rules.add(curve(pts,.003,'#a65e53'));}
+    for(let x=-w*.35;x<w*.4;x+=.43){const pts=[];for(let j=0;j<=30;j++){const y=-h*.4+j/30*h*.8;pts.push(new T.Vector3(x,y,R).normalize().multiplyScalar(5.673));}rules.add(curve(pts,.003,'#a65e53'));}
     orient(rules,lat,lon,angle);root.add(mergeStatic(rules));
   }
   const poem=inkText('思念',.57,1.05);orient(poem,24,65,-.24);root.add(poem);
@@ -79,7 +87,7 @@ export function makeCollageLayers(){
   // Wider-spaced manuscript rules belong to each paper, not to a single oversized front rectangle.
   // Embroidered wire mesh uses tiny crossings and bead accents instead of a solid ring.
   const lace=new T.Group();
-  for(const [lat,lon,angle] of [[51,120,-.3],[-46,75,.25],[7,-118,.5]]){
+  for(const [lat,lon,angle] of [[51,120,-.3],[-46,75,.25],[7,-118,.5],[43,-66,-.22],[-39,-128,.31],[12,173,-.36]]){
     const panel=new T.Group();
     for(const slope of [-1,1])for(let row=-13;row<=13;row++){
       const pts=[];for(let j=0;j<=24;j++){const x=-1.55+j/24*3.1,y=row*.092+slope*x*.20;if(Math.abs(y)>.28)continue;pts.push(new T.Vector3(x,y,R).normalize().multiplyScalar(5.69+.02*Math.sin(x*8+row)));}
@@ -88,7 +96,7 @@ export function makeCollageLayers(){
     for(let i=0;i<19;i++){const x=-1.45+i*.16,y=Math.sin(i*2.3)*.14,p=new T.Vector3(x,y,R).normalize().multiplyScalar(5.72);panel.add(ball(.023,i%3?'#92aa9b':'#b89599',p.toArray()));}
     orient(panel,lat,lon,angle);lace.add(panel);
   }root.add(mergeStatic(lace));
-  root.userData.patchCount=patchCount;return root;
+  root.userData={patchCount,edition:'0.16.0',folioCount:FOLIOS.length,coverage:'front, sides, rear, crown and underside; physical folded layers'};return root;
 }
 export function texturedStoneMaterial(){return material('stone','#bdc5bc');}
 export function attachStoneTexture(m){m.map=atlasMap('stone');atlasResource().materials.add(m);if(atlasResource().failed)m.map=null;return m;}

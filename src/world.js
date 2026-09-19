@@ -6,9 +6,9 @@ import { frameSeconds, shouldAnimate } from './runtime.js?v=0130';
 import { Stars } from './vendor/stars.js?v=0130';
 import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=0130';
 import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=0130';
-import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=0130';
+import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=0160';
 import { AssetSlots, disposeTree } from './assets.js?v=0130';
-import { makeCollageLight } from './collage-light.js?v=0130';
+import { makeCollageLight } from './collage-light.js?v=0160';
 
 const R=5.4,UP=new T.Vector3(0,1,0);
 const initialNormal=new T.Vector3(...fromLatLon(-24,84));
@@ -26,11 +26,14 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.06;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(43,1,.1,180);
-  const studioLight=makeCollageLight(renderer);scene.environment=studioLight.texture;scene.environmentIntensity=.67;
+  const studioLight=makeCollageLight(renderer);scene.environment=studioLight.texture;scene.environmentIntensity=1.05;
   const hemisphere=new T.HemisphereLight('#f0efe3','#414b3a',1.15);scene.add(hemisphere);
   const sun=new T.DirectionalLight('#fff5df',2.75);sun.position.set(-9,11,12);sun.castShadow=true;
   sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-8;sun.shadow.camera.right=8;sun.shadow.camera.top=8;sun.shadow.camera.bottom=-8;sun.shadow.normalBias=.035;
-  scene.add(sun,new T.AmbientLight('#edf3ed',.2));
+  scene.add(sun,new T.AmbientLight('#edf1e6',.38));
+  // The verso is an exhibited face as well, with its own broad photographic fill.
+  const versoFill=new T.DirectionalLight('#eff2e5',2.0);versoFill.position.set(8,6,-12);scene.add(versoFill);
+  const lowerFill=new T.DirectionalLight('#d4e3df',.65);lowerFill.position.set(-7,-5,-8);scene.add(lowerFill);
   const random=seededRandom(9162026);
   const stars=new Stars({particleCount:180,minimumDistance:13,maximumDistance:36,size:.045,seed:916});stars.visible=false;scene.add(stars);
   const normals=new Map(LANDMARKS.map((item)=>[item.id,new T.Vector3(...fromLatLon(item.lat,item.lon))]));
@@ -40,7 +43,7 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   let dusk=false;
   const landmarks=[],labels=[],slots={};
   for(const item of LANDMARKS){
-    const model=makeLandmark(item),normal=normals.get(item.id);placeSurface(model.root,normal);scene.add(model.root);
+    const model=makeLandmark(item),normal=normals.get(item.id);model.root.scale.setScalar(.82);placeSurface(model.root,normal);scene.add(model.root);
     landmarks.push({...model,item,normal});slots[item.id]={parent:model.root,placeholder:model.building,placeholders:[...model.root.children]};
     const label=document.createElement('button');label.className='landmark-label';label.textContent=item.name;label.dataset.landmark=item.id;label.setAttribute('aria-label',`前往${item.name}`);
     labelLayer.append(label);labels.push({element:label,normal,point:normal.clone().multiplyScalar(R+1.05),id:item.id});
@@ -206,13 +209,13 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   schedule();
   return { navigateTo,cancelNavigation,setDirection,reset,setPaused,setLowPower,setDusk,setView,setDetail,
     ready:landscape.ready,
-    stats(){return {...canvas.dataset,sceneVersion:'0.13.0',cameraPosition:camera.position.toArray(),cameraTarget:inspection?.target??[0,0,0],cameraFov:camera.fov};},
+    stats(){return {...canvas.dataset,sceneVersion:'0.16.0',cameraPosition:camera.position.toArray(),cameraTarget:inspection?.target??[0,0,0],cameraFov:camera.fov};},
     async capture(){await landscape.ready;applyCamera();renderer.render(scene,camera);return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Garden capture failed')),'image/png'));},
     async exportGLB(){
       await landscape.ready;
       const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');
       const sculpture=new T.Group();sculpture.name='IF-LONGING-WERE-A-POEM';
-      sculpture.userData={title:'思念若是一首诗',sceneVersion:'0.13.0',landmarks:8,edition:'Static sculpture snapshot; no walking, lights or animated water. Ground uses authored vertex colours without the browser-only triplanar grain shader.'};
+      sculpture.userData={title:'思念若是一首诗',sceneVersion:'0.16.0',landmarks:8,edition:'Static sculpture snapshot; no walking, lights or animated water. Ground uses authored vertex colours without the browser-only triplanar grain shader.'};
       for(const child of scene.children){
         if(!child.visible||child.isLight||child.isCamera||child===stars||child===clouds||child===targetMarker)continue;
         sculpture.add(child.clone(true));
