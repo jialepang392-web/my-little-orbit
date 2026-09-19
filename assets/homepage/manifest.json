@@ -1,0 +1,56 @@
+{
+  "version": "0.14.0",
+  "method": "Finite authored typography and seeded paper texture; no font files, photograph copies or external assets.",
+  "generatorHashes": {
+    "scripts/build_homepage.py": "bd85f3831a514f60465b61d5165511d8be4bc94c95b928583b83cec021f4b938"
+  },
+  "artifacts": {
+    "masthead.svg": {
+      "text": "小宇宙",
+      "fontOutlineSource": "STSongti-SC-Black",
+      "width": 311,
+      "height": 108,
+      "bytes": 4472,
+      "sha256": "f41430b1b59acc25da0a3b24b58694be20454a3f639c70195b3c5d7810a4ff27"
+    },
+    "title-yesterday-today.svg": {
+      "text": "昨天，今天",
+      "fontOutlineSource": "STXingkaiSC-Light",
+      "width": 469,
+      "height": 108,
+      "bytes": 12043,
+      "sha256": "79f3efa7bc1a2e334b3838b4e3c53d473d15726a6af994333f46672b8bf7c731"
+    },
+    "title-crossover.svg": {
+      "text": "删了一百遍",
+      "fontOutlineSource": "STXingkaiSC-Light",
+      "width": 511,
+      "height": 108,
+      "bytes": 16296,
+      "sha256": "b336b03c50ac73083000bddac88312b982e68548379ff12c4763b4bef1d98ec5"
+    },
+    "title-poem.svg": {
+      "text": "思念若是一首诗",
+      "fontOutlineSource": "STXingkaiSC-Light",
+      "width": 711,
+      "height": 108,
+      "bytes": 27478,
+      "sha256": "58d524082ab6899f9f8ca488c38d0ebcf505c0f73a032ec616b65881e2bae325"
+    },
+    "title-rain-finale.svg": {
+      "text": "雨终曲",
+      "fontOutlineSource": "STXingkaiSC-Light",
+      "width": 311,
+      "height": 108,
+      "bytes": 11759,
+      "sha256": "637124221ece85f1344e6d0d56306240995660dc41fd673e84f666b948796866"
+    },
+    "paper-grain.webp": {
+      "width": 384,
+      "height": 384,
+      "method": "seeded original paper pulp texture",
+      "bytes": 42428,
+      "sha256": "2a0f03a42f8733e8802faaa2521ee766c6937f251c6b65b071ea07145a72701e"
+    }
+  }
+}

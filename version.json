@@ -1,5 +1,8 @@
 {
-  "version":"0.13.0",
+  "version":"0.14.0",
+  "pageVersions":{"index":"0.14.0","yesterday-today":"0.13.0","crossover":"0.13.0","poem":"0.13.0","rain-finale":"0.13.0"},
+  "homepageEdition":"Paper record sleeves / four loose catalogue slips",
+  "homepageScope":"Homepage only, continuing the verified 0.13.0 / 2f86133 release. Four pastel record sleeves, irregular handwritten-style tickets and original scene photographs. All four artwork pages, their 16 backgrounds, interaction code, images and model exports are preserved byte for byte.",
   "edition":"the-shape-of-what-remains",
   "exhibitionTitle":"留下的形状",
   "date":"2026-09-19",
