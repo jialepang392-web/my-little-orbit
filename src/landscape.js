@@ -2,10 +2,11 @@
 import * as T from 'three';
 import { fromLatLon, clamp, seededRandom } from './math.js?v=0130';
 import { part, box, ball, cyl, mergeStatic, makePine, makeBamboo, makeRock, makeInkstone, makePlum, makeOrchid, makeFern, makeReeds, makeFlowerCluster, makeSeedPod } from './garden-models.js?v=0130';
-import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache, collageTextureReady, attachStoneTexture } from './collage-layers.js?v=0160';
-import { makeReferenceAccents, makeSculpturalPine } from './reference-art.js?v=0160';
-import { makePoemReliquary, poemTexture, reliquarySurface } from './poem-reliquary.js?v=0160';
-import { albumSurface } from './poem-album.js?v=0160';
+import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial, clearCollageMaterialCache, collageTextureReady, attachStoneTexture } from './collage-layers.js?v=0170';
+import { makeReferenceAccents, makeSculpturalPine } from './reference-art.js?v=0170';
+import { makePoemReliquary, poemTexture, reliquarySurface } from './poem-reliquary.js?v=0170';
+import { albumSurface } from './poem-album.js?v=0170';
+import { assemblageRadius, openAssemblage, makeReleasedFolios } from './poem-assemblage.js?v=0170';
 export const PLANET_RADIUS=5.4;
 const UP=new T.Vector3(0,1,0),WATER=5.425;
 const paperDecks=[[[17,103],2.4,2.8,-.32],[[35,83],1.1,.85,.35],[[-19,-108],2,2.6,.4]].map(([ll,w,h,angle])=>{
@@ -22,14 +23,15 @@ function waterField(n){
 // Keep a quiet corridor beneath the authored flute and its silk. Content
 // destinations and walkable routes are unaffected; only small filler plants move.
 function inInstrumentClearance(n){return n.z>.79&&n.y>-.22&&n.y<.62&&n.x>-.30&&n.x<.28;}
-function terrainRadius(n){const river=waterField(n),hill=Math.sin(n.x*9+n.z*3)*Math.cos(n.y*7-1)*.035+Math.sin(n.z*17+n.y*5)*.015;return PLANET_RADIUS+.075+hill-.11*(1-clamp((river-.055)/.065,0,1));}
+function terrainRadius(n){const river=waterField(n),hill=Math.sin(n.x*9+n.z*3)*Math.cos(n.y*7-1)*.10+Math.sin(n.z*17+n.y*5)*.035;return PLANET_RADIUS+.075+hill-.11*(1-clamp((river-.055)/.065,0,1));}
 export function lakeDistance(n){return waterField(n)/.085;}
-export function surfaceRadius(n){
+function rawSurfaceRadius(n){
   let height=Math.max(terrainRadius(n),WATER+.015,collageSurface(n),albumSurface(n),reliquarySurface(n));
   for(const deck of paperDecks){const local=n.clone().applyQuaternion(deck.inverse),x=local.x*(PLANET_RADIUS+.12),y=local.y*(PLANET_RADIUS+.12);
     if(local.z>.9&&Math.abs(x)<deck.w/2&&Math.abs(y)<deck.h/2)height=Math.max(height,PLANET_RADIUS+.13+.028*Math.sin(y*3+x));
   }return height;
 }
+export function surfaceRadius(n){return assemblageRadius(n,rawSurfaceRadius(n));}
 export function placeSurface(object,n,offset=0){object.position.copy(n).multiplyScalar(surfaceRadius(n)+offset);object.quaternion.setFromUnitVectors(UP,n);}
 function slerp(a,b,t){const angle=Math.acos(clamp(a.dot(b),-1,1));return a.clone().multiplyScalar(Math.sin((1-t)*angle)).addScaledVector(b,Math.sin(t*angle)).normalize();}
 function tube(points,r,color,extra={}){return part(new T.TubeGeometry(new T.CatmullRomCurve3(points),Math.max(12,points.length*2),r,5,false),color,[0,0,0],extra);}
@@ -41,10 +43,14 @@ function paperPatch(center,w,h,angle,color,ruled=false){
   const nn=new T.Vector3(...fromLatLon(...center));g.position.copy(nn).multiplyScalar(PLANET_RADIUS+.12);g.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),nn);g.rotateZ(angle);return g;
 }
 export function makeLandscape(normals){
+  // Build the inherited garden in its authoring coordinates, then shape once.
+  // The public surface function applies the same shape to visitors and landmarks.
+  const surfaceRadius=rawSurfaceRadius;
+  const placeSurface=(object,n,offset=0)=>{object.position.copy(n).multiplyScalar(surfaceRadius(n)+offset);object.quaternion.setFromUnitVectors(UP,n);};
   clearCollageMaterialCache();
   const root=new T.Group();root.name='longing-poem-sphere';const random=seededRandom(404917);
   const geometry=new T.SphereGeometry(PLANET_RADIUS,144,96),p=geometry.attributes.position,colors=new Float32Array(p.count*3),n=new T.Vector3();
-  const stone=new T.Color('#b4baa7'),moss=new T.Color('#8d9b7f'),ink=new T.Color('#829181'),shore=new T.Color('#c1c7b4');
+  const stone=new T.Color('#c4c3ad'),moss=new T.Color('#9aab8b'),ink=new T.Color('#91a397'),shore=new T.Color('#c8cbb9');
   for(let i=0;i<p.count;i++){
     n.fromBufferAttribute(p,i).normalize();const river=waterField(n),vein=Math.sin(n.x*21+n.y*17+Math.sin(n.z*11)*2);
     const field=Math.sin(n.x*5+n.z*4)*Math.cos(n.y*8)+Math.sin(n.z*9+n.x*4)*.3;
@@ -54,7 +60,7 @@ export function makeLandscape(normals){
   }
   geometry.setAttribute('color',new T.BufferAttribute(colors,3));geometry.computeVertexNormals();
   const groundMap=poemTexture('substrate');
-  const groundMaterial=new T.MeshStandardMaterial({vertexColors:true,map:groundMap,bumpMap:groundMap,bumpScale:.012,roughness:.98});
+  const groundMaterial=new T.MeshStandardMaterial({vertexColors:true,map:groundMap,bumpMap:groundMap,bumpScale:.043,roughness:.98});
   const ground=new T.Mesh(geometry,groundMaterial);ground.name='garden-ground';ground.receiveShadow=true;root.add(ground);
   const waterMap=poemTexture('water');
   const water=part(new T.SphereGeometry(WATER,128,80),'#c6e1e0',[0,0,0],{map:waterMap,bumpMap:waterMap,bumpScale:.014,roughness:.23,metalness:.39});water.name='continuous-jade-water';water.castShadow=false;root.add(water);
@@ -161,6 +167,8 @@ export function makeLandscape(normals){
   }
   const fireflyPositions=[];for(let i=0;i<45;i++){const q=new T.Vector3(random()-.5,random()-.5,random()-.5).normalize();fireflyPositions.push(...q.multiplyScalar(PLANET_RADIUS+.4+random()*.6).toArray());}
   const fireflyGeo=new T.BufferGeometry();fireflyGeo.setAttribute('position',new T.Float32BufferAttribute(fireflyPositions,3));const fireflies=new T.Points(fireflyGeo,new T.PointsMaterial({color:'#f6d28e',size:.035,transparent:true,opacity:0,depthWrite:false}));root.add(fireflies);
+  openAssemblage(root);
+  root.add(makeReleasedFolios());
   root.userData.botanicalClumps=botanicalClumps;
   return {root,ground,surface:ground,ready:collageTextureReady(),setLowPower(value){fineDetail.visible=!value;},animate(t,reduced,dusk){fireflies.material.opacity=dusk?.75:0;if(!reduced){fireflies.rotation.y=t*.009;if(waterShader)waterShader.uniforms.poemTime.value=t;}}};
 }

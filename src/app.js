@@ -123,7 +123,7 @@ function setReading(value){
 async function bootWorld(){
   if(worldState!=='idle')return;worldState='loading';let timeout;
   try{
-    const module=await Promise.race([import('./world.js?v=0160'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
+    const module=await Promise.race([import('./world.js?v=0170'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
     world=module.createWorld({canvas,labelLayer:$('#landmark-labels'),reducedMotion,onNearby:setNearby,onNotice:toast,
       onNavigation:updateJourney,
       onArrival:(id)=>{void openLocation(id,true);},

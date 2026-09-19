@@ -4,7 +4,7 @@
 import * as T from 'three';
 import { fromLatLon, seededRandom } from './math.js?v=0130';
 import { part, mergeStatic } from './garden-models.js?v=0130';
-import { poemTexture } from './poem-reliquary.js?v=0160';
+import { poemTexture } from './poem-reliquary.js?v=0170';
 
 const R=5.4,Z=new T.Vector3(0,0,1);
 const leaves=[

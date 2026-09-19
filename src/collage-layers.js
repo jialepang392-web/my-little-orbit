@@ -10,7 +10,7 @@ const FOLIOS=[
   [-15,176,2.57,3.25,.31],[14,9,2.67,3.11,-.23],[-47,133,2.55,2.16,.45],
   [62,52,2.68,2.10,.22],[-61,-147,2.70,2.18,-.24]
 ];
-const supportLayers=FOLIOS.map(([lat,lon,w,h,angle])=>({w:w+.20,h:h+.20,height:5.67,inverse:new T.Quaternion().setFromUnitVectors(Z,new T.Vector3(...fromLatLon(lat,lon))).multiply(new T.Quaternion().setFromAxisAngle(Z,angle)).invert()}));
+const supportLayers=FOLIOS.map(([lat,lon,w,h,angle])=>({w:w+.20,h:h+.20,height:6.04,inverse:new T.Quaternion().setFromUnitVectors(Z,new T.Vector3(...fromLatLon(lat,lon))).multiply(new T.Quaternion().setFromAxisAngle(Z,angle)).invert()}));
 export function collageSurface(n){let height=0;for(const layer of supportLayers){const v=n.clone().applyQuaternion(layer.inverse);if(v.z>.8&&Math.abs(v.x*R)<layer.w/2&&Math.abs(v.y*R)<layer.h/2)height=Math.max(height,layer.height);}return height;}
 let atlas=null;
 function atlasResource(){
@@ -50,7 +50,7 @@ function patch(w,h,radius,kind,seed,ragged=true){
   for(let i=0;i<pos.count;i++){
     const row=Math.floor(i/nx),col=i%nx;let x=pos.getX(i),y=pos.getY(i);
     if(ragged){x+=col<3?left[row]*(1-col/3)*2.7:col>33?-right[row]*(col-33)/3*2.7:0;y+=row<3?-top[col]*(1-row/3)*2.5:row>39?bottom[col]*(row-39)/3*2.5:0;}
-    const foldedCorner=kind==='paper'?.16*Math.pow(Math.max(0,x/(w/2)),7)*Math.pow(Math.max(0,y/(h/2)+.12),3):0;
+    const foldedCorner=kind==='paper'?.40*Math.pow(Math.max(0,x/(w/2)),7)*Math.pow(Math.max(0,y/(h/2)+.12),3):0;
     const n=new T.Vector3(x,y,R).normalize(),curl=(kind==='paper'?.014:kind==='foil'?.075:.018)*Math.sin(x*6+seed)*Math.sin(y*7)+foldedCorner;
     pos.setXYZ(i,...n.multiplyScalar(radius+curl).toArray());
   }geo.computeVertexNormals();const m=new T.Mesh(geo,material(kind));m.castShadow=true;m.receiveShadow=true;return m;
@@ -59,7 +59,7 @@ function inkText(text,width=1.2,height=1.7){
   const canvas=document.createElement('canvas');canvas.width=512;canvas.height=768;const c=canvas.getContext('2d');c.clearRect(0,0,512,768);c.fillStyle='#35413aec';c.font='124px "Songti SC", "STSong", serif';c.textAlign='center';
   [...text].forEach((ch,i)=>c.fillText(ch,270+(i%2)*8,140+i*153));
   const texture=new T.CanvasTexture(canvas);texture.colorSpace=T.SRGBColorSpace;
-  const geo=new T.PlaneGeometry(width,height,12,16),p=geo.attributes.position;for(let i=0;i<p.count;i++){const n=new T.Vector3(p.getX(i),p.getY(i),R).normalize();p.setXYZ(i,...n.multiplyScalar(5.68).toArray());}geo.computeVertexNormals();
+  const geo=new T.PlaneGeometry(width,height,12,16),p=geo.attributes.position;for(let i=0;i<p.count;i++){const n=new T.Vector3(p.getX(i),p.getY(i),R).normalize();p.setXYZ(i,...n.multiplyScalar(6.01).toArray());}geo.computeVertexNormals();
   return new T.Mesh(geo,new T.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false,side:T.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1}));
 }
 function curve(points,r,color,extra={}){return part(new T.TubeGeometry(new T.CatmullRomCurve3(points),points.length*2,r,4,false),color,[0,0,0],extra);}
@@ -69,16 +69,16 @@ export function makeCollageLayers(){
   // Strata show through between the papers; irregular edges reveal the layer below.
   for(const [i,a] of FOLIOS.entries()){
     const [lat,lon,w,h,angle]=a;
-    sheet(lat,lon,w+.46,h+.38,angle-.018,'foil',5.525,40+i);
-    sheet(lat+.7,lon+.3,w+.23,h+.20,angle+.025,'stone',5.57,80+i);
+    sheet(lat,lon,w+.54,h+.41,angle-.073,'foil',5.525,40+i);
+    sheet(lat+.7,lon+.3,w+.25,h+.23,angle+.057,'stone',5.66,80+i);
     // Exposed parchment verso: a thin warm lip under each original manuscript.
-    sheet(lat-.45,lon-.35,w+.09,h+.075,angle-.012,'paper',5.607,120+i);
+    sheet(lat-.75,lon-.65,w+.12,h+.11,angle-.030,'paper',5.80,120+i);
   }
   const papers=FOLIOS;
   for(const [i,a] of papers.entries()){
-    const [lat,lon,w,h,angle]=a;sheet(lat,lon,w,h,angle,'paper',5.65,11+i);
+    const [lat,lon,w,h,angle]=a;sheet(lat,lon,w,h,angle,'paper',5.98,11+i);
     const rules=new T.Group();
-    for(let x=-w*.35;x<w*.4;x+=.43){const pts=[];for(let j=0;j<=30;j++){const y=-h*.4+j/30*h*.8;pts.push(new T.Vector3(x,y,R).normalize().multiplyScalar(5.673));}rules.add(curve(pts,.003,'#a65e53'));}
+    for(let x=-w*.35;x<w*.4;x+=.43){const pts=[];for(let j=0;j<=30;j++){const y=-h*.4+j/30*h*.8;pts.push(new T.Vector3(x,y,R).normalize().multiplyScalar(6.003));}rules.add(curve(pts,.003,'#a65e53'));}
     orient(rules,lat,lon,angle);root.add(mergeStatic(rules));
   }
   const poem=inkText('思念',.57,1.05);orient(poem,24,65,-.24);root.add(poem);
@@ -96,7 +96,7 @@ export function makeCollageLayers(){
     for(let i=0;i<19;i++){const x=-1.45+i*.16,y=Math.sin(i*2.3)*.14,p=new T.Vector3(x,y,R).normalize().multiplyScalar(5.72);panel.add(ball(.023,i%3?'#92aa9b':'#b89599',p.toArray()));}
     orient(panel,lat,lon,angle);lace.add(panel);
   }root.add(mergeStatic(lace));
-  root.userData={patchCount,edition:'0.16.0',folioCount:FOLIOS.length,coverage:'front, sides, rear, crown and underside; physical folded layers'};return root;
+  root.userData={patchCount,edition:'0.17.0',folioCount:FOLIOS.length,coverage:'front, sides, rear, crown and underside; physical folded layers'};return root;
 }
 export function texturedStoneMaterial(){return material('stone','#bdc5bc');}
 export function attachStoneTexture(m){m.map=atlasMap('stone');atlasResource().materials.add(m);if(atlasResource().failed)m.map=null;return m;}

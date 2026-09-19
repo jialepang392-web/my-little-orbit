@@ -6,7 +6,7 @@
 import * as T from 'three';
 import {fromLatLon,seededRandom} from './math.js?v=0130';
 import {part,box,ball,cyl,mergeStatic,makeFern,makeReeds,makeFlowerCluster} from './garden-models.js?v=0130';
-import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=0160';
+import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=0170';
 
 const R=5.4,Z=new T.Vector3(0,0,1),UP=new T.Vector3(0,1,0);
 const maps=new Map();

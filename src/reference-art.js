@@ -4,10 +4,10 @@
 import * as T from 'three';
 import {fromLatLon,seededRandom} from './math.js?v=0130';
 import {part,box,ball,cyl,mergeStatic,makeFern,makeReeds,makeFlowerCluster,makeOrchid} from './garden-models.js?v=0130';
-import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=0160';
+import {texturedStoneMaterial,mossMaterial} from './collage-layers.js?v=0170';
 import {quietHaloTexture,paperImpressionTexture} from './song-surfaces.js?v=0130';
-import {makePoemAlbum} from './poem-album.js?v=0160';
-import {poemTexture} from './poem-reliquary.js?v=0160';
+import {makePoemAlbum} from './poem-album.js?v=0170';
+import {poemTexture} from './poem-reliquary.js?v=0170';
 
 const R=5.4,UP=new T.Vector3(0,1,0),Z=new T.Vector3(0,0,1);
 const COLOR={bark:'#514333',barkLight:'#88735b',needle:'#314834',needleLight:'#627445',ivory:'#e9e0ca',pink:'#df9fa4',bud:'#b44750',gold:'#b99e60'};
@@ -53,7 +53,7 @@ function flute(){
   // The front-facing reference diagonal is upper-left -> lower-right.
   const start=new T.Vector3(-1.9,3.53,5.08),end=new T.Vector3(.72,.00,6.25),direction=start.clone().sub(end).normalize();
   const front=Z.clone().addScaledVector(direction,-Z.dot(direction)).normalize(),right=new T.Vector3().crossVectors(direction,front).normalize();
-  root.position.copy(start).add(end).multiplyScalar(.5);root.position.z+=.34;
+  root.position.copy(start).add(end).multiplyScalar(.5);root.position.z+=.52;
   root.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(right,direction,front));
   root.scale.setScalar(1.09);
   return mergeStatic(root);
@@ -84,7 +84,7 @@ function inkstone(){
     }
     leaf.add(triMesh(verts,['#bac99d','#c1caac','#a5b48d'][k],{map:poemTexture('jade'),bumpMap:poemTexture('jade'),bumpScale:.008,roughness:.65}));leaf.position.set(.59+k*.13,.27+k*.045,.47-k*.29);leaf.rotation.y=k*.9;g.add(leaf);
   }
-  place(g,36,82,5.72);g.rotateY(-.25);g.scale.setScalar(1.27);return mergeStatic(g);
+  place(g,36,82,6.04);g.rotateY(-.25);g.scale.setScalar(1.27);return mergeStatic(g);
 }
 
 function envelope(){
@@ -98,7 +98,7 @@ function envelope(){
   g.add(box(.39,.018,.42,COLOR.ivory,[.67,.04,-.60],.005));
   g.add(box(.22,.012,.23,'#a84835',[.67,.06,-.60],.002));
   for(let j=0;j<4;j++)g.add(box(.014,.005,.14,'#e0c7a0',[.60+j*.045,.068,-.60],.001));
-  place(g,14,88,5.91);g.rotateY(-.29);g.scale.setScalar(.90);return mergeStatic(g);
+  place(g,14,88,6.25);g.rotateY(-.29);g.scale.setScalar(.90);return mergeStatic(g);
 }
 
 /** Irregular needles, tapered bark, exposed roots: no stacked canopy disks. */
@@ -212,17 +212,23 @@ function banks(){
 }
 
 function silkOrbit(){
-  const g=new T.Group();g.name='reference-orchid-silhouette';
-  for(let i=0;i<12;i++){
-    const verts=[],n=100,phase=-2.2+i*.091,rot=new T.Quaternion().setFromEuler(new T.Euler(.07+(i%4)*.21, .21+(i%3)*.19, -.08+(i%5)*.083));
-    const point=(t,side)=>{
-      const a=phase+t*(4.90+(i%4)*.22),r=5.70+Math.sin(t*Math.PI)*(.16+(i%6)*.075),w=(.016+(i%4)*.012)*Math.pow(Math.sin(Math.PI*t),.7);
-      return new T.Vector3(Math.cos(a)*(r+side*w),Math.sin(a)*(r+side*w),.50+Math.sin(t*Math.PI*2+i)*.35).applyQuaternion(rot);
-    };
-    for(let j=0;j<n;j++)verts.push(point(j/n,-1),point(j/n,1),point((j+1)/n,1),point(j/n,-1),point((j+1)/n,1),point((j+1)/n,-1));
-    g.add(triMesh(verts,['#263f2d','#3f5335','#72774a','#233b2d'][i%4],{roughness:.46,metalness:.08}));
-    if(i%3===0)g.add(tube(Array.from({length:81},(_,j)=>point(j/80,0)),.004,'#b0ad6f',80,{roughness:.43}));
-  }return mergeStatic(g);
+  const g=new T.Group();g.name='reference-open-orchid-gestures';
+  const gestures=[
+    [[-3.8,-2.9,2.7],[-5.65,-.4,1.3],[-5.10,2.8,.1],[-2.8,5.4,.55],[.12,5.7,1.35]],
+    [[-4.1,-2.4,2.8],[-5.9,.7,.75],[-4.55,3.9,-.2],[-1.52,5.58,.65],[.86,5.01,1.20]],
+    [[3.7,-3.8,1.8],[5.4,-1.5,1.05],[5.48,1.7,-.3],[3.43,4.52,1.45]],
+    [[3.93,-3.20,2.1],[5.63,-.75,.32],[4.94,2.14,-.85],[2.83,4.61,.75]],
+    [[-3.48,-3.15,-2.2],[-4.42,-.1,-3.68],[-2.73,4.20,-2.88],[1.15,5.3,-.34]],
+    [[4.42,.38,-2.9],[3.7,3.54,-2.89],[.36,5.57,-1.19],[-1.55,4.99,-1.65]]
+  ];
+  for(const [i,points] of gestures.entries()){
+    const path=new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p))),verts=[],steps=90;
+    const point=(t,sign)=>{const p=path.getPoint(t),tangent=path.getTangent(t),edge=new T.Vector3().crossVectors(tangent,p.clone().normalize()).normalize();return p.addScaledVector(edge,sign*(.035+i%3*.019)*Math.sin(Math.PI*t)**.6);};
+    for(let j=0;j<steps;j++)verts.push(point(j/steps,-1),point(j/steps,1),point((j+1)/steps,1),point(j/steps,-1),point((j+1)/steps,1),point((j+1)/steps,-1));
+    g.add(triMesh(verts,['#304736','#617147','#344638'][i%3],{roughness:.52,metalness:.05}));
+    if(i%2===0)g.add(tube(Array.from({length:61},(_,j)=>point(j/60,0)),.004,'#9caa7a',60));
+  }
+  g.userData={openGestures:gestures.length,closedRings:0};return mergeStatic(g);
 }
 
 function waterDetail(){
