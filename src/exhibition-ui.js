@@ -3,8 +3,8 @@ import { initialStillView } from './exhibition-state.js?v=0130';
 import { createImageZoom } from './exhibition-zoom.js?v=0130';
 import { showExhibitDialog } from './exhibition-dialog.js?v=0150';
 const world=document.body.dataset.orbitWorld;
-const names={'yesterday-today':'昨天，今天',crossover:'删了一百遍',poem:'思念若是一首诗','rain-finale':'雨终曲'};
-const stage=document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage');
+const names={'yesterday-today':'昨天，今天',crossover:'删了一百遍',poem:'思念若是一首诗','rain-finale':'雨终曲',jielan:'芥兰'};
+const stage=document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage,#jielan-stage');
 const controls=document.querySelector('.time-controls,.model-controls,.world-controls,.rain-controls');
 const edition=(document.querySelector('meta[name="orbit-version"]')?.content||'0.12.0').replaceAll('.','');
 if(world==='poem'){
@@ -151,6 +151,7 @@ document.addEventListener('orbit:inspect',event=>openItem(event.detail?.index||0
 // Hidden navigation gets genuinely small thumbnails instead of 1600px covers.
 for(const image of document.querySelectorAll('.orbit-choice img,.orbit-neighbour img')){
   const link=image.closest('a'),id=link?.dataset.orbitChoice||link?.dataset.orbitNext||link?.dataset.orbitPrev;
-  if(names[id]){const artworkEdition=new URL(image.getAttribute('src'),location.href).searchParams.get('v')||edition;image.src=`./assets/exhibition/${id}-192.webp?v=${artworkEdition}`;image.srcset=`./assets/exhibition/${id}-192.webp?v=${artworkEdition} 192w, ./assets/exhibition/${id}-480.webp?v=${artworkEdition} 480w`;image.sizes='(max-width:700px) 125px, 155px';image.decoding='async';}
+  if(id==='jielan'){image.src='./assets/jielan/cover-768.webp?v=0180';image.decoding='async';}
+  else if(names[id]){const artworkEdition=new URL(image.getAttribute('src'),location.href).searchParams.get('v')||edition;image.src=`./assets/exhibition/${id}-192.webp?v=${artworkEdition}`;image.srcset=`./assets/exhibition/${id}-192.webp?v=${artworkEdition} 192w, ./assets/exhibition/${id}-480.webp?v=${artworkEdition} 480w`;image.sizes='(max-width:700px) 125px, 155px';image.decoding='async';}
 }
 window.addEventListener('pageshow',()=>{document.dispatchEvent(new CustomEvent('orbit:pause',{detail:{paused:reasons.size>0}}));});

@@ -1,5 +1,5 @@
-/* Homepage 0.14 — a stack of physical record sleeves and loose catalogue slips.
-   Scoped to the collection: the four artwork rooms keep their own editions. */
+/* Homepage 0.18 — a stack of physical record sleeves and loose catalogue slips.
+   Scoped to the collection: artwork rooms keep their own editions. */
 .sleeve-home{--paper:#e8e5e0;--ink:#242326;--line:#8c85815c;--muted:#665d61;--coral:#cb575e;background:var(--paper);color:var(--ink);overflow-x:clip;position:relative;isolation:isolate}
 .sleeve-home:before{content:'';position:absolute;inset:0;background:url('./assets/homepage/paper-grain.webp');background-size:310px;opacity:.42;pointer-events:none;z-index:8;mix-blend-mode:multiply}
 .sleeve-home .collection-header{height:76px;max-width:1250px;margin:0 auto;padding:0 12px;border-bottom:1px solid var(--line)}
@@ -24,6 +24,9 @@
 .sleeve-home .world-card.cross{--sleeve:#d6968f;--edge:#924f4c;--ticket:#e8e6df;--pen:#3d3b46;margin-left:13px}
 .sleeve-home .world-card.poem{--sleeve:#cbb8cf;--edge:#8b718f;--ticket:#dce4df;--pen:#576344;margin-left:-6px}
 .sleeve-home .world-card.rain{--sleeve:#d9959e;--edge:#985b67;--ticket:#e5e4ec;--pen:#4c5878;margin-left:9px}
+.sleeve-home .world-card.jielan{--sleeve:#b9c297;--edge:#717e59;--ticket:#f0edda;--pen:#52632e;margin-left:-2px}
+.sleeve-home .jielan .sleeve-ticket{border:1px solid #8c98795c;border-left:5px solid #697b44;transform:rotate(2deg)}
+.sleeve-home .jielan h2{font:500 58px/1.1 'Kaiti SC','STKaiti','Songti SC',serif;letter-spacing:.15em;margin-block:3px}
 .sleeve-surface{position:absolute;inset:0 0 2px;background:linear-gradient(100deg,#ffffff19,transparent 13%,#ffffff15 55%,#3b233c0c 98%),var(--sleeve);border-radius:2px 5px 7px 2px;box-shadow:inset 0 2px 0 #ffffff54,inset 0 -4px 0 #321c332e,inset -11px 0 15px #582c3326;mask-image:radial-gradient(circle 19px at 9% 100%,transparent 97%,#000 100%);z-index:-2}
 .sleeve-surface:before{content:'';position:absolute;inset:0;background:url('./assets/homepage/paper-grain.webp');background-size:185px;opacity:.64;mix-blend-mode:multiply}
 .sleeve-surface:after{content:'';position:absolute;inset:9px 10px 12px 0;border-right:1px solid #ffffff45;border-top:1px solid #fceaf03c;box-shadow:10px 5px 9px #5f333319}
@@ -89,3 +92,5 @@
  .sleeve-home .world-card .world-meta{font-size:8px}
  .sleeve-home .collection-route strong{font-size:9px}
 }
+@media(max-width:1000px){.sleeve-home .jielan h2{font-size:46px}}
+@media(max-width:600px){.sleeve-home .jielan h2{font-size:34px}.sleeve-home .jielan .sleeve-ticket{padding-top:12px;padding-bottom:12px}.sleeve-home .collection-route>a:last-child{grid-column:1/-1}}

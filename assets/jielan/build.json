@@ -1,0 +1,370 @@
+{
+  "status": "passed",
+  "version": "0.18.0",
+  "exported": true,
+  "sourceHashes": {
+    "art-review.html": "d3a48b678244c9039ee66242d63ca1876d1fcc748a181e7f5196d70930e26b0a",
+    "exhibition-scenography.css": "44003c7e556bea12cc17440659be0f2a0b846b30f42d739142a91164b130b27d",
+    "version.json": "6f39e424480ac6213394c08eef43913d14fd4de3bc7252bca6e2c34768713dbd",
+    "crossover.css": "ce9f3039ec53d0223aff9ce530c450fca175e27cb97538a626c8eaaa15b0cdd8",
+    "rain-finale.css": "0226e67485f1b41ff006f24a5327c09326e4f9de80003c0eceb56ae47da36cea",
+    "rain-finale.html": "fd96ac6f9aaa44c9b22da1f6a88c60f7f4d21911456fcc3d418e73fbb249f2fe",
+    "yesterday-today.css": "4fab9f2afe6dafbe3e5a5d377a5c33d11619a4d12bbfca19fc1dfbb50e2400bb",
+    "index.html": "367d91eaf1a05846d90d458d302d72b9acaf40f13fd3295e7eb98053986502ab",
+    "styles.css": "72b5d1544d7945dbc8ce9fb5849eaa03808bc77fb328c87b716d4dfb72466623",
+    "jielan.html": "0ac9c6b8afe08b5ecef227f4840afab35c3f3bc81a1b5b7812ec34eca943e3c3",
+    "exhibition-mobile.css": "37bae45ca68cdbeda48e70dfea9cae7a439c612862028b0702920e83f5c58709",
+    "visit-ui.css": "1b910df9728c905b7bd1d3da937fb79055433c21c21dc7a96fbedb73b8de0256",
+    "exhibition.css": "f0eb8198ac9445a7600b1a886eeb365de9139895d78b544034bb496f3f87f616",
+    "exhibition-polish.css": "d414ed6141a6d314082df987f7237cea8cd0e0cea991d8892f8a1790a0dfa19b",
+    "jielan.css": "dbdb675a4d48092380e4ce2475d3e5f4639446feb05b25eb7f3df133b8d1ee87",
+    "homepage-sleeves.css": "e8bfa2b9203c6ed9e003778a748d8a5dc566b6ab4bde2b92fe0a8917cf4245aa",
+    "collection.css": "47cf726f5b6d603144594ebdaa72ab2274e2dc1c401196a30a5b10f0c586f70e",
+    "crossover.html": "e14f22f768c4a57146d0cb53e7b1254826d54da4417345630477595275efc8d0",
+    "art.css": "bf6be52b835e432154abf45fb803e2c1dd65239b7560c605ba2ba5816cf54a24",
+    "exhibition-editorial.css": "fdab349bf4b377cdc6774dd25729f745294a4e4abd32e648564b5b85f1ec9d70",
+    "yesterday-today.html": "cd25d90da71e0403d478ecd0070b869fd1c6e76e4b5d2d3aa40da4571a84169f",
+    "blender-preview.html": "4ab71829904a88d066e22340fc7323a4c71497a493e37f5f633e75cb2a0bf024",
+    "art-studio.html": "11aeb718fefa02a28e6fd3597c364d0907ea044faca51dea87b6f64ae72c051e",
+    "orbit-navigation.css": "4598f85842dfd0774d1e722cff3098e7d327dfa50c6198279aff2113b5508fef",
+    "poem.html": "af7ab25dd597ddd6b8f4582a5bb4b619d1fdcd2d46d504b8a401ea8afe66e4d4",
+    "garden.css": "5008e5c5e5d925309ee59b5c4365e7bb55a7130ae8addd505c28070851caa465",
+    "worlds.json": "d5b9b8284cdd9162de59c3c4d5a09509cce75e36db649039a27c2f3f5ffe3c85",
+    "favicon.svg": "593ebbfa5f7b422bca38d47a67c28c0873b05dc33d3d4af27fa31340f42c9643",
+    "assets/jielan/passage.svg": "527ada1de77ca92fce684385150e6ff45dce2021458696f3e825cc40760c2b18",
+    "assets/jielan/opening.svg": "5c6e0553c5ed640837f804abfe17811ea11fc45f8a9a5254e5dd278b680eafcc",
+    "src/reference-art.js": "c174ea66589698908b77861dd70f2dbe06d8713ba490544dbb44a2f075dc2bae",
+    "src/song-surfaces.js": "28c55e2e55c4fb672d80058aa41ccf9c5c0b412826e05df21e5c16e2aba5224d",
+    "src/collage-light.js": "41b9591a31ee2cdb237c73c348fb6b54ce39af5e68b0cef086dd2b0b70c57b64",
+    "src/runtime.js": "29b610c20312290eac97e74458df9af972df38cf192c3ac0eda46aabd1940b8c",
+    "src/exhibition-zoom.js": "e5431ed2f87ee48a2a8a5199b51c2a93b1713519092dba97a90f10f0b685d5c5",
+    "src/jielan-page.js": "4fe1b572052a70dce90ef3e71cefee89cccd0bd5ec9e9ca93e03238b5e230f7c",
+    "src/world.js": "c8646f31d1b9a6fc388915a10cd8ddf7bfadf277418b79296bf4c3063704f5f4",
+    "src/crossover-page.js": "f075177c8368befdf773a0925acdf5b3bc8d81331e2ff57242a64a4144f96861",
+    "src/illustrations.js": "17bac3e0f8543554862d5e8be6a8382e2a443de24a8bf037e7adcb58bf754f92",
+    "src/art-studio.js": "cce0ceaccedb1524b8d1bc171b9a093436eab6e6d88f174b33dddbb866b9b0b7",
+    "src/models.js": "d6399c7bbbee8278647743962f08eb5576768673edfcd14af80f6f2b6f158ca6",
+    "src/poem-reliquary.js": "0ca182b0516f71c0115ee74e2cf7d89a603a137c34177c025bfc1142795935a9",
+    "src/exhibition-ui.js": "a59edff77cd126a6506a18c50045c27dccbabed5391072ff9d27837e36b8ae7c",
+    "src/art-models.js": "0ccee8f074074ba567dec0062dffaf853ced85c85a8cc1d1be789a99119555ed",
+    "src/poem-assemblage.js": "0aa7445dc843da9e099fbeab37ebaf608c0e2f4def5bd85a915c5bb3d6410224",
+    "src/orbit-navigation.js": "bc57f6e35a6e42d8156ffdf7bfce6b4fc5c2d171c118f174397fc9a46f20ceee",
+    "src/exhibition-state.js": "88b6e1f72cdbb9d37b04a2b5be73358ae62cd1028b4d69cfa6e2b1582f39fbb1",
+    "src/art-paths.js": "0e17e1b719dab6c1ceda88651ba0ced3cc87995a1fd7f59d365db03232262cfc",
+    "src/blender-preview.js": "3d85f5562abdc429ff6079b37b77c3431c6abbee2157be82e2ffd887e914810a",
+    "src/navigation.js": "411a689a4c0a934f1f923d7997ba066fa35b45c385f4080b4a87e153e46fb07a",
+    "src/math.js": "36f854bf14ad15a8cfab77a4e489fd7ea245b8bdd332f08a7974366ab8cfb63b",
+    "src/data.js": "926514e0595b1408f57823d8c3dfc1dc92d1dbf3e015dcdf92065b92ddd98ab8",
+    "src/exhibition-dialog.js": "ffc19fabf34d60d0a43721b8ff475462075d48386c86a3d138aa809f88869e64",
+    "src/landscape.js": "4a5fde38566276f2bde5c468826443e176a9b761c5bd672f29c6f18eb5d92a76",
+    "src/yesterday-today-page.js": "2ffcc79a2d31806ed98fc05b0f2485c8200bf5e22abc5881ac7df534b1ef0a17",
+    "src/poem-album.js": "d0763df2a3d0e2dd24efef1f33deb634404ebf26783c332e33d5bf7a45a1a618",
+    "src/garden-models.js": "7f8e658d599c79b87d68616ab43bc34ae4ad1d746f3b6b900d9d7984210ac37b",
+    "src/collage-layers.js": "311df819bd44e8b6c560121c0492e10be2cdc216287a92d2efb6996361d1cb51",
+    "src/postcard.js": "c3514d04106e9a5e5a7f8b0fc3db34268f8ed985c371f29c5e75913c4919dfaf",
+    "src/rain-finale-page.js": "ebd1e34b283eea620271955c7fa6f8358ed292da776ff4977fe64768a60d7a30",
+    "src/collection.js": "d2a5b2f081554b4aefbd9e189da5ddd338ca3daf6377d01a20695bcc37868b2f",
+    "src/app.js": "6bedd78c1817314b4930ad10d0de8a16941ad2b630df6dfe49a28a6424591d88",
+    "src/visit-ui.js": "8ebca3f1662c87f7806bf3b435913310940bcd5d94b9c01d1e9e1531db0578dd",
+    "src/storage.js": "315caa53e7952a51e1d67dc8522f8f7746ab1e96b910747439d4bbfb7fcf9fc7",
+    "src/assets.js": "a749a1934518b997e93e1ec87318d4f983f7f29ea62957e518ba2b1a29a27988",
+    "src/markdown.js": "fc12debaef582a8aa0282377669c450900b671038c5fff7313d38b9865606787",
+    "src/jielan/materials.js": "aa1246df2e51a2610a80dffe0dee8721f50ac572d7fef3fe97bbfca6f8169ce5",
+    "src/jielan/viewer.js": "e4b4d677aa5e788c52852c624639b32b99c5d13f41fafd7035ec641a550cc624",
+    "src/jielan/model.js": "23597a9a0c09c06c34306bb176cf2a9e10ae905aa049aeb410b2b089dc8a8703",
+    "src/rain-finale/viewer.js": "3ba0bda78b6aa7cf74f52f620f2141a2dd0120a7d6d6d10ad99ccc930c0fb522",
+    "src/rain-finale/textures.js": "6a556a6a6790fdbd58f11337fae108d2b2fc35f1b59d0d09881bace1fa5bb911",
+    "src/rain-finale/model.js": "d3470ee17958e14df5dfba794d33d51bffb2b0f838e3c2cb798bc000a21d3cea",
+    "src/crossover/viewer.js": "d52f40176606231285af89485ed41dcd15d1e0fd00096737532c4328f9fb735a",
+    "src/crossover/textures.js": "162142eff270df4ac484ce2ab85158e0907b51234fc4349f0bca279c8cb07f38",
+    "src/crossover/model.js": "179bce3eb647bf81baebe08c1851f09d41579c26703d7deb7421fad0b8592eaa",
+    "src/yesterday-today/viewer.js": "12823a0102ea62d752abdfa5e80bd47369aab29109f1c5a82771ac432cccdb96",
+    "src/yesterday-today/textures.js": "07c0d77f24883d1af3797f412dd0fde53fa5d9cdc206450b11d293220fd73eb2",
+    "src/yesterday-today/model.js": "74e71afa60aacba6bd216a3b727f081b02c5302dea18864a2febb29cb5e13a8f",
+    "src/vendor/stars.js": "617c3f543ea14b65338952963fc7a38e127e3706653441dabce24d25014f6803"
+  },
+  "generatorHashes": {
+    "scripts/build_jielan.py": "c4172611199f4d0de7b43bb8dd460156021e1ea2a72a5dd1f2a1873cf9cbf423",
+    "scripts/jielan_common.py": "340b0459c20e2527047ca3aabe2eba81570cfd3e14e324b07852fd7db17f9dba"
+  },
+  "views": {
+    "front": {
+      "stats": {
+        "engine": "three.js r180",
+        "ready": "true",
+        "title": "芥兰",
+        "version": "0.18.0",
+        "frames": "6",
+        "layers": "7",
+        "drawCalls": "232",
+        "triangles": "853868",
+        "autoRotate": "false",
+        "separated": "false",
+        "separation": "0.000",
+        "light": "studio",
+        "view": "front",
+        "detail": "",
+        "camera": "0.4409,0.3100,10.9878",
+        "bounds": "4.003789129309546,5.667310381448466,3.588825587523421",
+        "leafCount": "11"
+      },
+      "alphaBounds": [
+        504,
+        182,
+        1882,
+        2267
+      ],
+      "size": [
+        2400,
+        2400
+      ]
+    },
+    "side": {
+      "stats": {
+        "engine": "three.js r180",
+        "ready": "true",
+        "title": "芥兰",
+        "version": "0.18.0",
+        "frames": "7",
+        "layers": "7",
+        "drawCalls": "232",
+        "triangles": "853868",
+        "autoRotate": "false",
+        "separated": "false",
+        "separation": "0.000",
+        "light": "studio",
+        "view": "side",
+        "detail": "",
+        "camera": "11.0909,0.4900,0.2378",
+        "bounds": "4.003789129309546,5.667310381448466,3.588825587523421",
+        "leafCount": "11"
+      },
+      "alphaBounds": [
+        530,
+        256,
+        1816,
+        2245
+      ],
+      "size": [
+        2400,
+        2400
+      ]
+    },
+    "back": {
+      "stats": {
+        "engine": "three.js r180",
+        "ready": "true",
+        "title": "芥兰",
+        "version": "0.18.0",
+        "frames": "8",
+        "layers": "7",
+        "drawCalls": "232",
+        "triangles": "853868",
+        "autoRotate": "false",
+        "separated": "false",
+        "separation": "0.000",
+        "light": "studio",
+        "view": "back",
+        "detail": "",
+        "camera": "-1.0091,0.4900,-11.0122",
+        "bounds": "4.003789129309546,5.667310381448466,3.588825587523421",
+        "leafCount": "11"
+      },
+      "alphaBounds": [
+        505,
+        171,
+        1861,
+        2163
+      ],
+      "size": [
+        2400,
+        2400
+      ]
+    },
+    "leaves": {
+      "stats": {
+        "engine": "three.js r180",
+        "ready": "true",
+        "title": "芥兰",
+        "version": "0.18.0",
+        "frames": "9",
+        "layers": "7",
+        "drawCalls": "126",
+        "triangles": "688504",
+        "autoRotate": "false",
+        "separated": "false",
+        "separation": "0.000",
+        "light": "studio",
+        "view": "back",
+        "detail": "leaves",
+        "camera": "-1.2000,1.7500,4.5000",
+        "bounds": "4.003789129309546,5.667310381448466,3.588825587523421",
+        "leafCount": "11"
+      },
+      "alphaBounds": [
+        594,
+        0,
+        2400,
+        2400
+      ],
+      "size": [
+        2400,
+        2400
+      ]
+    },
+    "linen": {
+      "stats": {
+        "engine": "three.js r180",
+        "ready": "true",
+        "title": "芥兰",
+        "version": "0.18.0",
+        "frames": "10",
+        "layers": "7",
+        "drawCalls": "182",
+        "triangles": "803772",
+        "autoRotate": "false",
+        "separated": "false",
+        "separation": "0.000",
+        "light": "studio",
+        "view": "back",
+        "detail": "linen",
+        "camera": "3.0000,1.3000,4.5000",
+        "bounds": "4.003789129309546,5.667310381448466,3.588825587523421",
+        "leafCount": "11"
+      },
+      "alphaBounds": [
+        0,
+        0,
+        1913,
+        2400
+      ],
+      "size": [
+        2400,
+        2400
+      ]
+    },
+    "glass": {
+      "stats": {
+        "engine": "three.js r180",
+        "ready": "true",
+        "title": "芥兰",
+        "version": "0.18.0",
+        "frames": "11",
+        "layers": "7",
+        "drawCalls": "188",
+        "triangles": "781212",
+        "autoRotate": "false",
+        "separated": "false",
+        "separation": "0.000",
+        "light": "studio",
+        "view": "back",
+        "detail": "glass",
+        "camera": "2.0000,-0.1500,3.6000",
+        "bounds": "4.003789129309546,5.667310381448466,3.588825587523421",
+        "leafCount": "11"
+      },
+      "alphaBounds": [
+        0,
+        0,
+        2400,
+        2400
+      ],
+      "size": [
+        2400,
+        2400
+      ]
+    }
+  },
+  "errors": [],
+  "artboard": {
+    "css": {
+      "x": 0,
+      "y": 10,
+      "width": 1600,
+      "height": 1600,
+      "top": 10,
+      "right": 1600,
+      "bottom": 1610,
+      "left": 0
+    },
+    "width": 2400,
+    "height": 2400
+  },
+  "differences": {
+    "front/side": 24.239963107638886,
+    "front/back": 23.335575810185187,
+    "front/leaves": 54.83971715856482,
+    "front/linen": 55.80998625578704,
+    "front/glass": 82.57629846643518,
+    "side/back": 22.630244502314813,
+    "side/leaves": 54.599446614583336,
+    "side/linen": 54.646755642361114,
+    "side/glass": 87.53412543402777,
+    "back/leaves": 54.48705150462964,
+    "back/linen": 52.650047019675924,
+    "back/glass": 83.88084129050927,
+    "leaves/linen": 87.36852575231482,
+    "leaves/glass": 99.82899305555554,
+    "linen/glass": 66.89854600694444
+  },
+  "glbReload": {
+    "meshes": 116,
+    "materials": 19,
+    "sceneVersion": "0.18.0",
+    "size": [
+      4.003789129309546,
+      5.667310381448466,
+      3.588825587523421
+    ]
+  },
+  "artifacts": {
+    "cover.webp": {
+      "sha256": "68b1d729a68347c399a5567fd9301c11e0c3cc20161e960f0d7c217fd8cd9152",
+      "bytes": 261510
+    },
+    "cover-768.webp": {
+      "sha256": "74f067a72e7a9d0b6fd2d14700b77072b9b3cc241abf2a590ee8cfacb12d16e7",
+      "bytes": 48848
+    },
+    "cover-1200.webp": {
+      "sha256": "c85fd8d98ab6a60b9fb6a2f46023406a832443bf8b0be5e7d2154037e2b10f1d",
+      "bytes": 100148
+    },
+    "front.png": {
+      "sha256": "0c03633ea110b6d3fffbda7f1a96bf93b610e599737677a2f0c1899c69230ff9",
+      "bytes": 2453104
+    },
+    "poster.png": {
+      "sha256": "be7f0a64d357f90c79292e8632438cfbfd1042c85ff0d9dd70acae58a58f6579",
+      "bytes": 2176467
+    },
+    "side.webp": {
+      "sha256": "c267ce534e9a87bc1b8291633472ed85fcff446ccccef465b26ed46c64a1ceb2",
+      "bytes": 173302
+    },
+    "back.webp": {
+      "sha256": "be9bf61d684829d08b6275c024054ee52f12fd7cdca324d769bde60ce6d7d671",
+      "bytes": 212368
+    },
+    "detail-leaves.webp": {
+      "sha256": "5aec8501a8270a5eced2953fa9a8c8df15443fcebbb3ea68bc98b4d7be5e82c1",
+      "bytes": 393418
+    },
+    "detail-linen.webp": {
+      "sha256": "d2281c1fc7703f8e8a70d8e030d8d687b113bda4457fbf8070c09b33b56485a0",
+      "bytes": 341698
+    },
+    "detail-glass.webp": {
+      "sha256": "e356216372f744d2995ab45026990dd6b5a023d7ae283c551eb658e22989fee1",
+      "bytes": 339694
+    },
+    "jielan.glb": {
+      "sha256": "868a23a66a4c30c616bb470d6f42d063c30b3dd97598a54f3f1cb23bb7cf7f77",
+      "bytes": 14415528
+    }
+  },
+  "sceneVersion": "0.18.0",
+  "browser": "140.0.7339.16",
+  "method": "One live scene; independent camera captures. GLB excludes webpage lighting and interaction.",
+  "artReview": "pending"
+}

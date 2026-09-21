@@ -1,9 +1,10 @@
 {
-  "version": "0.13.0",
+  "version": "0.18.0",
   "worlds": [
     {"id":"yesterday-today","title":"昨天，今天","english":"YESTERDAY, TODAY","page":"yesterday-today.html","cover":"assets/yesterday-today/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":false},
     {"id":"crossover","title":"删了一百遍","english":"DELETED A HUNDRED TIMES","page":"crossover.html","cover":"assets/crossover/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":false},
     {"id":"poem","title":"思念若是一首诗","english":"IF LONGING WERE A POEM","page":"poem.html","cover":"assets/poem/cover.webp","status":"published","interaction":"exploration"},
-    {"id":"rain-finale","title":"雨终曲","english":"RAIN FINALE","page":"rain-finale.html","cover":"assets/rain-finale/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":false}
+    {"id":"rain-finale","title":"雨终曲","english":"RAIN FINALE","page":"rain-finale.html","cover":"assets/rain-finale/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":false},
+    {"id":"jielan","title":"芥兰","english":"JIE LAN","page":"jielan.html","cover":"assets/jielan/cover.webp","status":"concept","interaction":"orbit-inspection","workingTitle":false}
   ]
 }
