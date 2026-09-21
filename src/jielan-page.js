@@ -14,7 +14,7 @@ stage.setAttribute('aria-busy','true');
 try{
   let timer;
   const {createJielanViewer}=await Promise.race([
-    import('./jielan/viewer.js?v=0180'),
+    import('./jielan/viewer.js?v=0190'),
     new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Scene load timeout')),25000);})
   ]).finally(()=>clearTimeout(timer));
   viewer=createJielanViewer(canvas,{onReady(){

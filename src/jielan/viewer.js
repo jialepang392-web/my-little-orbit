@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {makeJielan} from './model.js?v=0180';
+import {makeJielan} from './model.js?v=0190';
 
 function studio(renderer){
   const c=document.createElement('canvas');c.width=512;c.height=256;const x=c.getContext('2d');
@@ -23,11 +23,11 @@ export function createJielanViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
   const clay=new T.MeshStandardMaterial({color:'#c6c2b4',roughness:.92,side:T.DoubleSide});
   let raf=0,disposed=false,lost=false,suspended=false,turn=false,inView=true,separated=false,amount=0,last=performance.now(),frames=0,settle=0,light='studio',view='front',detail=null;
   const abort=new AbortController();
-  function metrics(){Object.assign(canvas.dataset,{ready:'true',title:'芥兰',version:'0.18.0',frames:String(++frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,view,detail:detail||'',camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),bounds:size.toArray().join(','),leafCount:'11'});}
+  function metrics(){Object.assign(canvas.dataset,{ready:'true',title:'芥兰',version:'0.19.0',frames:String(++frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,view,detail:detail||'',camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),bounds:size.toArray().join(','),leafCount:String(world.root.userData.leafCount)});}
   function invalidate(){if(!raf&&!disposed&&!lost&&!suspended&&!document.hidden)raf=requestAnimationFrame(render);}
   function render(now){raf=0;if(disposed||lost||suspended||document.hidden)return;const dt=Math.min(Math.max((now-last)/1000,.001),.1);last=now;if(turn&&inView)world.root.rotation.y+=dt*.105;const goal=Number(separated);amount=reduced?goal:T.MathUtils.damp(amount,goal,9,dt);if(Math.abs(amount-goal)<.001)amount=goal;world.setSeparated(amount);controls.update();renderer.render(scene,camera);metrics();if((turn&&inView)||amount!==goal||settle-->0)invalidate();}
-  function frame(){if(detail)return;const distance=camera.position.distanceTo(controls.target),height=Math.max(size.y*1.13,(Math.max(size.x,size.z)*1.13)/camera.aspect);camera.fov=T.MathUtils.radToDeg(2*Math.atan(height/(2*distance)));camera.updateProjectionMatrix();}
-  function setView(name){view=['front','side','back'].includes(name)?name:'front';detail=null;turn=false;world.root.rotation.set(0,0,0);controls.target.copy(center);const p=view==='back'?[-1.1,.5,-11]:view==='side'?[11,.5,.25]:[.35,.32,11];camera.position.copy(center).add(V(p));frame();controls.update();settle=reduced?0:18;invalidate();}
+  function frame(){if(detail)return;const distance=camera.position.distanceTo(controls.target),height=Math.max(size.y*1.24,(Math.max(size.x,size.z)*1.24)/camera.aspect);camera.fov=T.MathUtils.radToDeg(2*Math.atan(height/(2*distance)));camera.updateProjectionMatrix();}
+  function setView(name){view=['front','side','back'].includes(name)?name:'front';detail=null;turn=false;world.root.rotation.set(0,0,0);controls.target.copy(center);const p=view==='back'?[-.55,.35,-13]:view==='side'?[13,.35,.45]:[2.7,1.1,13];camera.position.copy(center).add(V(p));frame();controls.update();settle=reduced?0:18;invalidate();}
   function resize(){const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return;renderer.setSize(b.width,b.height,false);camera.aspect=b.width/b.height;frame();invalidate();}
   controls.addEventListener('change',invalidate);controls.addEventListener('start',()=>{settle=20;});controls.addEventListener('end',()=>{settle=20;invalidate();});
   const sizes=new ResizeObserver(resize);sizes.observe(canvas);const visibility=new IntersectionObserver(([e])=>{inView=e.isIntersecting;if(inView)invalidate();});visibility.observe(canvas);
@@ -40,7 +40,7 @@ export function createJielanViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
     setSeparated(value){separated=Boolean(value);last=performance.now();invalidate();},
     setLight(cool){light=cool?'cool':'studio';key.color.set(cool?'#e4ecff':'#fff4df');scene.environmentIntensity=cool?.8:.72;invalidate();},
     setView,
-    setDetail(name){detail=['leaves','linen','glass'].includes(name)?name:'leaves';turn=false;world.root.rotation.set(0,0,0);const views={leaves:[[-.95,1.24,.15],[-1.2,1.75,4.5]],linen:[[1.1,.74,.05],[3,1.3,4.5]],glass:[[.95,-.65,.6],[2,-.15,3.6]]};const [target,position]=views[detail];controls.target.set(...target);camera.position.set(...position);camera.fov=33;camera.updateProjectionMatrix();controls.update();invalidate();},
+    setDetail(name){detail=['leaves','linen','glass'].includes(name)?name:'leaves';turn=false;world.root.rotation.set(0,0,0);const views={leaves:[[-.91,.62,.81],[-1.75,1.30,4.40]],linen:[[1.05,.12,-.12],[4.05,.85,2.70]],glass:[[.16,-.14,.20],[.60,.27,3.65]]};const [target,position]=views[detail];controls.target.set(...target);camera.position.set(...position);camera.fov=33;camera.updateProjectionMatrix();controls.update();invalidate();},
     setStudy(value){scene.overrideMaterial=value?clay:null;invalidate();},
     suspend(value){suspended=Boolean(value);if(suspended){cancelAnimationFrame(raf);raf=0;}else{last=performance.now();invalidate();}},
     async capture({background=false}={}){if(lost||disposed)throw new Error('Renderer unavailable');renderer.render(scene,camera);let target=canvas;if(background){target=document.createElement('canvas');target.width=canvas.width;target.height=canvas.height;const ctx=target.getContext('2d');ctx.fillStyle='#f3f0e7';ctx.fillRect(0,0,target.width,target.height);ctx.drawImage(canvas,0,0);}return new Promise((resolve,reject)=>target.toBlob(b=>b?resolve(b):reject(new Error('Capture failed')),'image/png'));},
