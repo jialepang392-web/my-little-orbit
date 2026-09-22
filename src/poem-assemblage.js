@@ -7,13 +7,12 @@ const Z=new T.Vector3(0,0,1);
 
 /** Radial shaping keeps the existing geodesic garden and its objects aligned. */
 export function assemblageRadius(n,r){
-  const ellipsoid=1/Math.sqrt((n.x/1.01)**2+(n.y/.86)**2+(n.z/.83)**2);
-  const scoop=(x,y,z,w)=>Math.exp(-((n.x-x)**2+(n.y-y)**2+(n.z-z)**2)/w);
-  const relief=.21*Math.sin(n.x*4.7+n.y*2.3)*Math.cos(n.z*3.2-n.y)
-    -1.47*scoop(.87,.07,.43,.13)-.87*scoop(-.56,-.76,.25,.12)
-    +.35*scoop(-.68,.5,.42,.22)-.55*scoop(.22,.88,-.32,.12);
+  // The planet is spherical again. Irregularity belongs to the surface
+  // collage, not unequal global axes or deep scoops through the body.
+  // This exact radial function also locates the traveller and all landmarks.
+  const relief=.045*Math.sin(n.x*4.7+n.y*2.3)*Math.cos(n.z*3.2-n.y);
   const inset=Math.max(0,Math.min(1,(5.94-r)/.47));
-  return r*ellipsoid+relief-inset*(.56+.48*scoop(.47,-.14,.86,.20));
+  return r+relief-.035*inset;
 }
 
 /** Bake the nonlinear support into existing meshes, leaving their UVs intact. */
@@ -37,7 +36,7 @@ export function openAssemblage(root){
   });
   // Original geometries may still belong to templates used outside this root.
   // Do not dispose shared template buffers while the garden builds landmarks.
-  root.name='poem-open-material-assemblage';root.userData.silhouette='asymmetric folded mass; scooped flanks and released margins';
+  root.name='poem-rounded-material-planet';root.userData.silhouette='equal-axis spherical body with shallow paper, river and stone relief';root.userData.bodyAxes=[1,1,1];
   return root;
 }
 const paper=new T.MeshStandardMaterial({color:'#f4edda',map:poemTexture('paper'),bumpMap:poemTexture('paper'),bumpScale:.023,roughness:.94,side:T.DoubleSide});
@@ -104,6 +103,22 @@ export function makeReleasedFolios(){
   root.add(drape('rear-indigo-released-edge',[[3.03,2.4,-2.9],[4.51,1.41,-2.09],[5.02,-.31,-1.71],[4.55,-2.47,-2.36],[3.59,-3.14,-3.03]],1.36,blue));
   // One narrow loose strip joins the base to the foreground; no enclosing hoop.
   root.add(drape('silver-turn-under-the-river',[[-.3,-3.58,3.7],[.41,-4.28,4.0],[2.11,-4.92,3.0],[3.65,-4.39,1.6]],.55,silk));
-  root.userData={edition:'0.17.0',freeLeaves:10,detachedDrapes:3,structure:'bound roots, turned edges, real air gaps and three-dimensional folds'};
+  // Keep the existing ten loose sheets, but shorten their protrusions and
+  // seat the hinges against the round body. Avoid turning its outline into
+  // an upright stack of pages. The paper geometry itself remains unflattened.
+  for(const group of root.children){
+    if(group.userData.freeLeaves){
+      group.position.normalize().multiplyScalar(5.20);
+      group.scale.setScalar(group.name==='front-unbound-letter'?.60:.64);
+    }else{
+      // The existing drapes were authored around the compressed body. Seat
+      // each vertex on the spherical shoulder without anisotropic scaling.
+      group.traverse(o=>{if(!o.isMesh)return;const geo=o.geometry.clone(),p=geo.attributes.position,q=new T.Vector3();
+        for(let i=0;i<p.count;i++){q.fromBufferAttribute(p,i);const r=q.length();q.multiplyScalar((5.64+.15*Math.tanh((r-5.7)*1.4))/r);p.setXYZ(i,q.x,q.y,q.z);}
+        o.geometry.dispose();o.geometry=geo;geo.computeVertexNormals();geo.computeBoundingBox();geo.computeBoundingSphere();
+      });
+    }
+  }
+  root.userData={edition:'0.21.0',freeLeaves:10,detachedDrapes:3,structure:'short raised margins over a round planet, rather than oversized protrusions or an ellipsoid'};
   return root;
 }

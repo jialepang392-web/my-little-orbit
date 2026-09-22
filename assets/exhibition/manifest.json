@@ -1,11 +1,11 @@
 {
-  "version": "0.17.0",
-  "builtAt": "2026-09-19T14:08:31.270584+00:00",
-  "method": "Responsive sizes from the current verified real-scene covers. No recolouring or separate cover-only geometry.",
+  "version": "0.21.0",
+  "builtAt": "2026-09-22T07:41:54.595678+00:00",
+  "method": "Poem responsive sizes updated from the round 0210 live-scene cover. Other three source covers and all their derivative bytes retained.",
   "sourceHashes": {
     "assets/yesterday-today/cover.webp": "fa5bab34c548edd1130cd5652372802fb28802d757fc3e39006f9fa75315e49d",
     "assets/crossover/cover.webp": "2a281ae53e520d283568052310a1b53d3a793c7c08f95e19887f163487e973a9",
-    "assets/poem/cover.webp": "abb7def4acc0f655cf6d8f85cf05204499da5dd3424ed4bdab67f83edd412fde",
+    "assets/poem/cover.webp": "79712e502fede4f3d8cd3fea345f0df304f928f86b4d73424219b59c24b8343f",
     "assets/rain-finale/cover.webp": "db373482d67d27de1d55177c462617a657d01d882d51b5782c63f5fed46a2b4b"
   },
   "artifacts": {
@@ -46,22 +46,22 @@
       "sha256": "269a961600c3e171ed14de1dae5c346534d3c3f9b79455de1593cb3d2de42657"
     },
     "poem-192.webp": {
-      "bytes": 7134,
+      "bytes": 10398,
       "width": 192,
       "height": 192,
-      "sha256": "88c063bb96f176378a346c9a6849d99498e0511f6013d681bc361244a55ab9f4"
+      "sha256": "d4915f35a45a6086840694c0b43e20d4b3b68cf3d0a83e1554d66f7c0a666423"
     },
     "poem-480.webp": {
-      "bytes": 34950,
+      "bytes": 50776,
       "width": 480,
       "height": 480,
-      "sha256": "9917b279999a3f07a2fec125881f3949ed3286106756955d65df57f43f75ebd3"
+      "sha256": "98a1df3233ec4f56d5bc1d10f18620da675dca0c28c460334e638becee953318"
     },
     "poem-800.webp": {
-      "bytes": 112410,
+      "bytes": 122934,
       "width": 800,
       "height": 800,
-      "sha256": "05dbb28f297ee7bef0d4a461b6671a695ced86cf9be17caf22d885f0107201aa"
+      "sha256": "47978cfb34ab2b7e30971d71b06dca8ce6344c46010321622bb4dcad5b1d71af"
     },
     "rain-finale-192.webp": {
       "bytes": 8450,

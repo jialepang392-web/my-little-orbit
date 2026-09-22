@@ -6,7 +6,7 @@ import { makeCollageLayers, collageSurface, texturedStoneMaterial, mossMaterial,
 import { makeReferenceAccents, makeSculpturalPine } from './reference-art.js?v=0170';
 import { makePoemReliquary, poemTexture, reliquarySurface } from './poem-reliquary.js?v=0170';
 import { albumSurface } from './poem-album.js?v=0170';
-import { assemblageRadius, openAssemblage, makeReleasedFolios } from './poem-assemblage.js?v=0170';
+import { assemblageRadius, openAssemblage, makeReleasedFolios } from './poem-assemblage.js?v=0210';
 export const PLANET_RADIUS=5.4;
 const UP=new T.Vector3(0,1,0),WATER=5.425;
 const paperDecks=[[[17,103],2.4,2.8,-.32],[[35,83],1.1,.85,.35],[[-19,-108],2,2.6,.4]].map(([ll,w,h,angle])=>{

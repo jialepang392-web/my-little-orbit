@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {makeJielan} from './model.js?v=0200';
+import {makeJielan} from './model.js?v=0210';
 
 function studio(renderer){
   const c=document.createElement('canvas');c.width=512;c.height=256;const x=c.getContext('2d');
@@ -10,20 +10,20 @@ function studio(renderer){
 }
 export function createJielanViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,build=new URLSearchParams(location.search).get('build')==='1';
-  const renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power'});
+  const renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,preserveDrawingBuffer:build,powerPreference:'low-power'});
   renderer.setPixelRatio(Math.min(devicePixelRatio,build?2:innerWidth<600?1.3:1.65));renderer.outputColorSpace=T.SRGBColorSpace;renderer.setClearColor('#f3f0e7',0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(33,1,.1,60),world=makeJielan();scene.add(world.root);
-  const env=studio(renderer);scene.environment=env.texture;scene.environmentIntensity=.64;scene.add(new T.HemisphereLight('#f8f1df','#77745e',.98));
+  const env=studio(renderer);scene.environment=env.texture;scene.environmentIntensity=.64;scene.add(new T.HemisphereLight('#f8f1df','#64634e',.73));
   const key=new T.DirectionalLight('#fff5e4',2.55);key.position.set(-4,7,8);key.castShadow=true;key.shadow.mapSize.set(build?2048:1024,build?2048:1024);key.shadow.radius=3.5;Object.assign(key.shadow.camera,{left:-4,right:4,top:4,bottom:-4,near:1,far:24});key.shadow.normalBias=.008;key.shadow.bias=-.00012;scene.add(key);
   const fill=new T.DirectionalLight('#e8ede4',.85);fill.position.set(5,3,-5);scene.add(fill);
   const front=new T.DirectionalLight('#ffe8cc',.30);front.position.set(2,-3,6);scene.add(front);
   const controls=new OrbitControls(camera,canvas);controls.enablePan=false;controls.enableDamping=!reduced;controls.dampingFactor=.1;controls.minDistance=build?.7:1.5;controls.maxDistance=38;controls.rotateSpeed=.6;
-  const box=new T.Box3().setFromObject(world.root),center=box.getCenter(new T.Vector3()),size=box.getSize(new T.Vector3());
+  const box=new T.Box3().setFromObject(world.root),center=new T.Vector3().fromArray(world.root.userData.bodyCenter||box.getCenter(new T.Vector3()).toArray()),size=box.getSize(new T.Vector3());
   const clay=new T.MeshStandardMaterial({color:'#c6c2b4',roughness:.92,side:T.DoubleSide});
   let raf=0,disposed=false,lost=false,suspended=false,turn=false,inView=true,separated=false,amount=0,last=performance.now(),frames=0,settle=0,light='studio',view='front',detail=null,fitDistance=0;
   const abort=new AbortController();
-  function metrics(){Object.assign(canvas.dataset,{ready:'true',title:'芥兰',version:'0.20.0',frames:String(++frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,view,detail:detail||'',camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),bounds:size.toArray().join(','),leafCount:String(world.root.userData.leafCount),modelMeshes:String(world.root.userData.meshCount),modelTriangles:String(world.root.userData.triangleCount),artRevision:String(world.root.userData.artRevision),worldRotation:world.root.rotation.y.toFixed(6),inView:String(inView),visibleSurface:String(visibleSurface()),suspended:String(suspended),study:String(scene.overrideMaterial===clay)});}
+  function metrics(){Object.assign(canvas.dataset,{ready:'true',title:'芥兰',version:'0.21.0',solidCore:String(world.root.userData.solidCore),bodyAxes:world.root.userData.bodyAxes.join(','),bodyRadius:String(world.root.userData.bodyRadius),frames:String(++frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,view,detail:detail||'',camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),bounds:size.toArray().join(','),leafCount:String(world.root.userData.leafCount),modelMeshes:String(world.root.userData.meshCount),modelTriangles:String(world.root.userData.triangleCount),artRevision:String(world.root.userData.artRevision),worldRotation:world.root.rotation.y.toFixed(6),inView:String(inView),visibleSurface:String(visibleSurface()),suspended:String(suspended),study:String(scene.overrideMaterial===clay)});}
   function invalidate(){if(!raf&&!disposed&&!lost&&!suspended&&!document.hidden)raf=requestAnimationFrame(render);}
   // IntersectionObserver can retain the old scrolled-page intersection when
   // a canvas is reparented into a top-layer dialog. An open immersive dialog

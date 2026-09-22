@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-import {makeMaterials} from './materials.js?v=0200';
+import {makeMaterials} from './materials.js?v=0210';
 const V=p=>new T.Vector3(...p), TAU=2*Math.PI;
 function surface(f,nu=32,nv=22,flip=false){
   const p=[],uv=[],ix=[];
@@ -20,7 +20,7 @@ function tube(points,r=.007,n=24,end=.65,sides=6){
   g.deleteAttribute('normal');g.computeVertexNormals();return g;
 }
 export function makeJielan(){
-  const root=new T.Group(),groups=[],m=makeMaterials();root.name='芥兰 / forked herbarium assemblage';
+  const root=new T.Group(),groups=[],m=makeMaterials();root.name='芥兰 / gathered everyday memories';
   const layer=(name,separation)=>{const g=new T.Group();g.name=name;g.userData.separation=separation;root.add(g);groups.push(g);return g;};
   const mesh=(g,geo,mat,name='')=>{const o=new T.Mesh(geo,mat);o.name=name;const clear=mat.transmission>0||mat.transparent;o.castShadow=!clear;o.receiveShadow=!clear;if(mat.transparent)o.renderOrder=2;g.add(o);return o;};
   const batch=(g,geos,mat,name)=>{if(!geos.length)return;const merged=mergeGeometries(geos);geos.forEach(x=>x.dispose());return mesh(g,merged,mat,name);};
@@ -33,6 +33,52 @@ export function makeJielan(){
   }
   const ellipsoid=(p,s,rotation=0,detail=14)=>{const g=new T.SphereGeometry(1,detail,10);g.scale(...s);g.rotateZ(rotation);g.translate(...p);return g;};
   const local=(parent,p,r)=>{const g=new T.Group();g.position.set(...p);g.rotation.set(...r);parent.add(g);return g;};
+  // Latest correction: a genuinely filled, equal-axis globe, not a cage.
+  // The closed opaque mesh remains behind every opening between materials.
+  const coreCenter=V([0,-.10,0]),coreRadius=.65;
+  const globe=layer('00 / filled spherical heart of pressed plant fibre',[0,0,0]);
+  const coreGeo=new T.SphereGeometry(coreRadius,96,64),cp=coreGeo.attributes.position,cc=[];
+  const olive=new T.Color('#263e2e'),sage=new T.Color('#46583c'),warm=new T.Color('#645b3e');
+  for(let i=0;i<cp.count;i++){
+    const n=new T.Vector3().fromBufferAttribute(cp,i).normalize(),rough=.014*Math.sin(n.x*11+n.z*4)*Math.sin(n.y*9-n.z*5)+.008*Math.sin(n.z*23+n.x*7)+.006*Math.sin(n.x*53+n.y*41)*Math.cos(n.z*43);
+    const p=n.clone().multiplyScalar(coreRadius+rough).add(coreCenter);cp.setXYZ(i,p.x,p.y,p.z);
+    const shade=.5+.5*Math.sin(n.x*7+n.z*4)*Math.cos(n.y*8-n.z*3),c=olive.clone().lerp(sage,shade*.67).lerp(warm,.14+.10*Math.sin(n.y*9));cc.push(c.r,c.g,c.b);
+  }
+  coreGeo.setAttribute('color',new T.Float32BufferAttribute(cc,3));coreGeo.computeVertexNormals();
+  const filled=mesh(globe,coreGeo,m.globeFiber,'closed spherical plant-fibre core');filled.userData={solidCore:true,radius:coreRadius,center:coreCenter.toArray(),axes:[1,1,1]};
+  // Unequal curved patches are laid OVER the solid heart, rather than used
+  // to imitate a globe by surrounding an empty center. All edges have depth.
+  const bodyPatches=[
+    [[-.62,-.45,.78],.93,.66,.32,'linen'],[[.30,-.82,.56],.64,.53,-.35,'blue'],
+    [[-.79,.12,.64],.63,.74,-.33,'leafDark'],[[.72,.04,.76],.80,.65,.22,'linenPale'],
+    [[.04,.35,.96],.50,.73,-.20,'leafDark'],[[.85,-.30,.22],.48,.51,.35,'cobalt'],
+    [[-.15,.29,-.98],.91,.71,.32,'linen'],[[.64,.21,-.72],.59,.54,-.41,'blue'],
+    [[-.72,-.20,-.73],.66,.72,.42,'paper'],[[.02,-.87,-.48],.70,.62,-.27,'leafPale'],
+    [[-.94,-.24,-.05],.57,.74,.29,'blue'],[[.42,.83,-.30],.59,.59,-.32,'leafDark'],
+    [[.65,-.65,-.39],.76,.56,.48,'linenPale'],[[-.66,.63,-.31],.49,.71,-.28,'leafDark'],
+    [[-.30,-.85,.60],.73,.49,.62,'linenPale'],[[.58,.55,.56],.73,.57,-.61,'linen']
+  ];
+  const seams=[];
+  bodyPatches.forEach(([normal,w,h,twist,key],i)=>{
+    const n=V(normal).normalize(),up=V([0,1,0]).addScaledVector(n,-n.y).normalize(),right=up.clone().cross(n).normalize(),q=new T.Quaternion().setFromAxisAngle(n,twist);up.applyQuaternion(q);right.applyQuaternion(q);
+    const f=(u,v)=>{
+      const x=(u-.5)*w*(1+.065*Math.sin(v*13+i)),y=(v-.5)*h*(1+.055*Math.sin(u*17+i));
+      const dir=n.clone().addScaledVector(right,x).addScaledVector(up,y).normalize();
+      const fabric=key.includes('linen'),curl=.033*Math.sin(u*8+v*6+i)+(.13+.015*(i%3))*Math.pow(u,9)*Math.sin(v*Math.PI);
+      const folds=fabric?(.038*Math.sin(u*17+v*3+i)+.026*Math.sin(v*12-u*5)):0;
+      return dir.multiplyScalar(1.025+curl+folds+.037*(i%3)).add(coreCenter).toArray();
+    };
+    skin(globe,f,m[key],key==='blue'||key==='cobalt'?m.porcelain:m.linenReverse,key==='blue'||key==='cobalt'?.019:.007,30,26,key==='blue'||key==='cobalt'?m.porcelain:m.thread);
+    if(['linen','linenPale','paper'].includes(key))for(const e of [0,1]){const ps=[];for(let k=0;k<=27;k++)ps.push(f(k/27,e));seams.push(tube(ps,.0020,30,.55));}
+  });
+  batch(globe,seams,m.thread,'stitched edges following the spherical body');
+  const surfaceFibres=[];
+  for(let i=0;i<86;i++){
+    const y=1-2*(i+.5)/86,a=i*2.39996323,n=V([Math.sqrt(1-y*y)*Math.cos(a),y,Math.sqrt(1-y*y)*Math.sin(a)]),t=V([Math.cos(i),Math.sin(i*.73),Math.cos(i*.47)]).addScaledVector(n,-V([Math.cos(i),Math.sin(i*.73),Math.cos(i*.47)]).dot(n)).normalize(),ps=[];
+    for(let k=0;k<=16;k++){const u=k/16-.5;ps.push(n.clone().addScaledVector(t,u*(.22+.055*(i%4))).normalize().multiplyScalar(coreRadius+.028+.007*Math.sin(u*14+i)).add(coreCenter).toArray());}
+    surfaceFibres.push(tube(ps,.0018+(i%3)*.0004,18,.65));
+  }
+  batch(globe,surfaceFibres,m.thread,'short irregular surface fibres over the filled heart');
   const wood=layer('01 / forked pale driftwood and crossing structural roots',[-.10,.05,-.06]);
   const limbs=[
     [[.42,-1.10,-.30],[-.16,-.44,-.51],[-.63,.43,-.40],[-.83,1.22,-.43],[-.60,1.93,-.30]],
@@ -93,13 +139,13 @@ export function makeJielan(){
       const s=u*2-1,t=v,envelope=Math.pow(Math.sin(Math.PI*t),.55+.035*(seed%4))*(.73+.34*t);
       const scallop=1+(.055+.009*(seed%3))*Math.sin(t*TAU*(4+seed%3)+seed)+.018*Math.sin(t*43+seed*.7);
       const lean=.06*w*Math.sin(Math.PI*t)*Math.sin(t*3+seed),curl=(.07+.022*(seed%4))*s*s;
-      const ridge=.021*Math.cos(s*7.0+t*4.2+seed)*Math.sin(Math.PI*t),edge=.033*Math.sin(t*(21+seed%5)+seed)*s**6;
+      const ridge=(.023*Math.cos(s*7.0+t*4.2+seed)+.012*Math.sin(s*19+t*23+seed)*Math.abs(s))*Math.sin(Math.PI*t),edge=.047*Math.sin(t*(21+seed%5)+seed)*s**6;
       return [lean+s*w*.5*envelope*scallop*(1+.035*s), (t-.27)*h+.025*s*Math.sin(Math.PI*t)*Math.sin(seed+t*3),
         .14*Math.sin(t*(3.8+.12*(seed%4)))+(curl+ridge+edge+.035*s*Math.sin(t*4+seed))*envelope+(.04+.014*(seed%4))*t**7];
     };
     mesh(g,surface(f,secondary?20:32,secondary?26:44),seed%4===1?(m.leafDark||m.leaf):seed%5===0?(m.leafPale||m.young):m.leaf,'kale lamina '+leafCount);g.updateMatrixWorld(true);
     const pt=(u,v)=>V(f(u,v)).add(V([0,0,.004])).applyMatrix4(g.matrixWorld).toArray();
-    const mid=[];for(let k=0;k<=22;k++)mid.push(pt(.5,k/22));veins.push(tube(mid,secondary?.0027:.0043,26,.16));
+    const mid=[];for(let k=0;k<=22;k++)mid.push(pt(.5,k/22));veins.push(tube(mid,secondary?.0022:.0037,26,.16));
     const count=secondary?5:6+seed%2;
     for(let j=1;j<=count;j++)for(const s of [-1,1]){const t=.10+j*.73/(count+1)+.022*Math.sin(seed*1.7+j*2.2+s),reach=.39+.075*(.5+.5*Math.sin(seed+j*1.9+s)),rise=.075+.065*(.5+.5*Math.cos(seed*.8+j+s)),ps=[];for(let k=0;k<=10;k++){const q=k/10;ps.push(pt(.5+s*reach*q,t+rise*q+.012*Math.sin(q*Math.PI)));}veins.push(tube(ps,.0017+.00035*(j%2),14,.22));
       if(!secondary&&j===2+seed%3){const q=.56,u=.5+s*reach*q,v=t+rise*q+.012*Math.sin(q*Math.PI);veins.push(tube([pt(u,v),pt(u+s*.065,v+.047),pt(u+s*.11,v+.082)],.0010,9,.20));}}
@@ -125,6 +171,24 @@ export function makeJielan(){
     [[-.43,-.76,.05],[.73,-.48,2.65],.42,.61],
     [[.68,.43,-.49],[.68,1.75,-.79],.43,.70]
   ].forEach(([p,r,w,h],i)=>leaf(p,r,w,h,60+i,i>3));
+  // A few broad leaves follow the globe's shoulders and lower body. The
+  // filled center reads as a botanical planet, not bare paint between labels.
+  [
+    [[-.05,.59,.96],[-.26,-.32,-.10],.56,.97],
+    [[-.70,-.43,.99],[.24,-.29,1.21],.60,.93],
+    [[.17,-.80,.94],[.60,.08,2.60],.61,.76],
+    [[.28,.20,-1.10],[.21,2.90,-.80],.63,.86],
+    [[1.0,.11,.26],[.33,.68,-1.30],.46,.81],
+    [[1.13,.49,.26],[-.31,.89,-.92],.43,.72],
+    [[-.25,-.45,1.07],[.40,-.12,1.68],.51,.69],
+    [[-.50,-.61,-.78],[.22,2.67,2.36],.58,.80],
+    [[-.94,.17,-.56],[.40,3.77,.91],.47,.86],
+    [[.80,-.58,-.51],[.55,2.2,-1.88],.55,.82],
+    [[.51,.81,-.48],[.11,2.5,-.76],.43,.76],
+    [[1.06,-.09,.18],[-.20,1.53,-.29],.57,.85],
+    [[.99,-.43,-.09],[.38,1.65,2.27],.48,.69],
+    [[-1.03,-.20,-.05],[-.32,-1.53,.44],.49,.77]
+  ].forEach(([p,r,w,h],i)=>leaf(p,r,w,h,90+i));
   batch(plants,veins,m.vein,'unequal branching midribs and veins');batch(plants,stems,m.leafDark,'green petioles anchored through the root cradle');batch(plants,dew,m.dew||m.glassEdge,'attached dew droplets');
   const ceramic=layer('04 / four offset partial porcelain crescents',[.04,-.02,-.08]);
   const shards=[[-1.05,-.04,.02,.22,-.60,.45,.75,.38], [1.03,-.73,.19,-.24,.36,-.47,.63,.42], [.15,.26,-.99,.12,2.88,.57,.66,.38],[-.60,-.81,-.54,.35,2.35,-.48,.48,.26]];
@@ -155,7 +219,7 @@ export function makeJielan(){
       const cross=frames[k].clone().lerp(frames[k+1],a);cross.addScaledVector(t,-cross.dot(t)).normalize();const normal=t.clone().cross(cross).normalize(),s=v-.5;
       const twist=(tail?.57:.23)*Math.sin(u*4.4+seed*.62)+(tail?.29:0)*u*u;
       const across=cross.clone().multiplyScalar(Math.cos(twist)).addScaledVector(normal,Math.sin(twist)),out=normal.clone().multiplyScalar(Math.cos(twist)).addScaledVector(cross,-Math.sin(twist));
-      const gather=Math.exp(-(((u-.70)/.17)**2)),shoulder=Math.sin(Math.PI*u),breadth=(rose?.84:.75)+(rose?.10:.28)*shoulder-(tail?.15:.27)*gather;
+      const gather=Math.exp(-(((u-.70)/.17)**2)),shoulder=Math.sin(Math.PI*u),breadth=((rose?.84:.75)+(rose?.10:.28)*shoulder-(tail?.15:.27)*gather)*(.80+.16*Math.sin(u*5.3+seed)+.10*Math.sin(u*10.7+seed));
       // Unequal moving valleys: one broad drape, two finer gathered pleats.
       // This is actual relief across the cloth, not a corrugated texture.
       const pleat=rose?.019*Math.sin(v*5.5+u*3):(.028+.038*shoulder)*Math.sin(v*TAU*1.65+u*2.1+seed*.45)+(.015+.020*gather)*Math.sin(v*TAU*3.15-u*2.6+seed);
@@ -181,7 +245,7 @@ export function makeJielan(){
     const pleat=(.038+.045*fall)*Math.sin(u*8.8+t*2.5)+(.010+.023*gather)*Math.sin(u*17-t*2)+crease;
     return [cx+s*width+.018*Math.sin(t*15+u*4)*s,
       .83-1.27*t+.032*Math.sin(u*8+t*4)*(.2+fall)+.04*Math.cos(u*5)*t*t,
-      -.08+.50*Math.sin(t*Math.PI*.85)+.12*s+pleat+.023*s*s*Math.sin(t*12)];
+      .40+.50*Math.sin(t*Math.PI*.85)+.12*s+pleat+.023*s*s*Math.sin(t*12)];
   };
   skin(cloth,shoulder,m.linen,m.linenReverse,.007,48,64);
   // A folded-back upper corner exposes a separate underside and a small
@@ -210,7 +274,7 @@ export function makeJielan(){
   batch(cloth,binding,m.thread,'five close linen turns binding the gathered knot');
   batch(cloth,hems,m.thread,'linen selvedges');batch(cloth,fray,m.thread,'free frayed lower ends');batch(cloth,roseHems,m.roseThread||m.wine,'wine ribbon edges');
   const papers=layer('06 / small warm torn front slips and curled verso',[0,.01,.13]);
-  [[.01,.23,.88,.10,-.20,-.24,.51,.57],[.24,-.04,.75,-.10,.33,.19,.33,.43],[-.15,-.26,.66,.25,-.16,.43,.30,.39],[.03,.52,.45,-.35,.34,-.48,.30,.40],[-.17,.51,-.90,.2,2.9,-.3,.37,.48],[.41,-.18,-.88,-.2,3.25,.5,.30,.41]].forEach(([x,y,z,rx,ry,rz,w,h],i)=>{const g=local(papers,[x,y,z],[rx,ry,rz]),notch=(q,center,span)=>Math.max(0,1-Math.abs(q-center)/span);skin(g,(u,v)=>[(u-.5)*w+(1-u)*.027*notch(v,.23+i*.037,.043)-u*.020*notch(v,.73-i*.023,.057),(v-.5)*h+(1-v)*.021*notch(u,.68-i*.033,.045)-v*.016*notch(u,.19+i*.051,.032),.019*Math.sin(u*3.5+v*2+i*.3)+.13*u**8+.036*v**6],i===0?m.menu:i<4?(i===2?m.receipt:m.paper):m.verso,m.verso,.004,40,32);});
+  [[.18,.18,1.29,.10,-.20,-.24,.57,.47],[.24,-.04,.75,-.10,.33,.19,.33,.43],[-.15,-.26,.66,.25,-.16,.43,.30,.39],[.03,.52,.45,-.35,.34,-.48,.30,.40],[-.17,.51,-.90,.2,2.9,-.3,.37,.48],[.41,-.18,-.88,-.2,3.25,.5,.30,.41]].forEach(([x,y,z,rx,ry,rz,w,h],i)=>{const g=local(papers,[x,y,z],[rx,ry,rz]),notch=(q,center,span)=>Math.max(0,1-Math.abs(q-center)/span);skin(g,(u,v)=>[(u-.5)*w+(1-u)*.027*notch(v,.23+i*.037,.043)-u*.020*notch(v,.73-i*.023,.057),(v-.5)*h+(1-v)*.021*notch(u,.68-i*.033,.045)-v*.016*notch(u,.19+i*.051,.032),.019*Math.sin(u*3.5+v*2+i*.3)+.13*u**8+.036*v**6],i===0?m.menu:i<4?(i===2?m.receipt:m.paper):m.verso,m.verso,.004,40,32);});
   // A turned paper saddle reaches from the front slips into the cradle; this
   // otherwise hidden surface is visible from the side and through the roots.
   skin(papers,(u,v)=>[(u-.5)*.72-.22, -.48+.33*v+.055*Math.sin(u*5+v*2), -.51+.98*v+.12*Math.sin(Math.PI*u)-.08*Math.sin(v*5)],m.paper,m.verso,.004,32,36);
@@ -226,19 +290,27 @@ export function makeJielan(){
   // Offset this small lens from the knot so the right loop and free tails
   // remain visible as real folded cloth instead of one refracted flat patch.
   pocket.scale.set(.86,.90,.92);
-  const bowl=(u,v)=>{const a=-.28+u*5.61,r=.025+.975*v,R=.37+.028*Math.sin(a*3);return [R*r*Math.cos(a),.46*r*Math.sin(a),.18*(1-r*r)+.010*Math.sin(a*4)*r];};
-  mesh(pocket,surface(bowl,64,28),m.specimenGlass,'open convex glass meniscus');const lip=[];for(let k=0;k<=80;k++)lip.push(bowl(k/80,1));mesh(pocket,tube(lip,.005,84),m.glassEdge,'interrupted clear glass lip');
+  const bowl=(u,v)=>{const a=-.28+u*5.61,r=.025+.975*v,R=.37+.028*Math.sin(a*3);return [R*r*Math.cos(a),.46*r*Math.sin(a),.28*(1-r*r)+.010*Math.sin(a*4)*r];};
+  mesh(pocket,surface(bowl,64,28),m.specimenGlass,'open convex glass meniscus');const lip=[];for(let k=0;k<=80;k++)lip.push(bowl(k/80,1));mesh(pocket,tube(lip,.008,84),m.glassEdge,'interrupted clear glass lip');
   const seeds={wine:[],violet:[],seedGold:[]},seedLayout=[],seedGlassGap=.055;
   // Both glass and seeds inherit exactly the same pocket transform. For each
   // rotated ellipsoid, bound its entire XY projection, then bound the lowest
   // glass Z over that rectangle using R >= .342 and ripple >= -.010.
   // The seed's foremost vertex is kept .055 BEHIND that conservative bound;
   // this is a whole-ellipsoid clearance, not just a center-point comparison.
-  [[-.14,.17,.075,.11,.055,'wine'],[-.055,-.015,.046,.085,.050,'violet'],[.16,.23,.055,.07,.040,'wine'],[-.14,-.17,.065,.085,.040,'violet'],[.22,.06,.050,.065,.035,'seedGold'],[.02,-.32,.040,.055,.028,'seedGold'],[-.26,-.035,.035,.05,.025,'seedGold']].forEach(([x,y,w,h,d,key],i)=>{
-    const angle=[-.28,.19,.53,-.41,.27,-.19,.32][i],cx=Math.cos(angle),sx=Math.sin(angle),extentX=Math.hypot(w*cx,h*sx),extentY=Math.hypot(w*sx,h*cx),radialBound=Math.hypot((Math.abs(x)+extentX)/.342,(Math.abs(y)+extentY)/.46),glassLowerBound=.18*(1-radialBound*radialBound)-.010,z=glassLowerBound-d-seedGlassGap;
-    seeds[key].push(ellipsoid([x,y,z],[w,h,d],angle,20));seedLayout.push({material:key,center:[x,y,z],radii:[w,h,d],rotationZ:angle,radialBound,glassLowerBound,minimumLocalZGap:seedGlassGap});
+  [[-.12,.02,.065,.083,.055,'wine'],[-.035,-.095,.046,.071,.050,'violet'],[.10,.015,.052,.062,.040,'wine'],[-.15,-.18,.058,.073,.040,'violet'],[.12,-.14,.048,.064,.035,'seedGold'],[.005,-.28,.040,.055,.028,'seedGold'],[-.23,-.07,.034,.046,.025,'seedGold']].forEach(([x,y,w,h,d,key],i)=>{
+    const angle=[-.28,.19,.53,-.41,.27,-.19,.32][i],cx=Math.cos(angle),sx=Math.sin(angle),extentX=Math.hypot(w*cx,h*sx),extentY=Math.hypot(w*sx,h*cx),radialBound=Math.hypot((Math.abs(x)+extentX)/.342,(Math.abs(y)+extentY)/.46),glassLowerBound=.28*(1-radialBound*radialBound)-.010,z=glassLowerBound-d-seedGlassGap;
+    const seedGeo=ellipsoid([0,0,0],[w,h,d],angle,24),sp=seedGeo.attributes.position;
+    for(let j=0;j<sp.count;j++){const a=Math.atan2(sp.getY(j),sp.getX(j)),q=1-.036*(.5+.5*Math.sin(a*9+i+sp.getZ(j)*160));sp.setXYZ(j,sp.getX(j)*q+x,sp.getY(j)*q+y,sp.getZ(j)*q+z);}
+    seedGeo.computeVertexNormals();seeds[key].push(seedGeo);seedLayout.push({material:key,center:[x,y,z],radii:[w,h,d],rotationZ:angle,radialBound,glassLowerBound,minimumLocalZGap:seedGlassGap});
   });
   for(const key of Object.keys(seeds))batch(pocket,seeds[key],m[key],'nested behind glass / '+key+' ovoids');
+  const driedPetals=[];
+  for(let i=0;i<9;i++){
+    const a=i*2.4,px=.18*Math.cos(a),py=-.03+.27*Math.sin(a);
+    driedPetals.push(surface((u,v)=>{const t=v,s=(u-.5)*2;return [px+s*.052*Math.sin(t*Math.PI),py+(t-.5)*.11,-.21+.024*Math.sin(t*5+i)+.016*s*s];},12,15));
+  }
+  batch(pocket,driedPetals,m.bud,'nine curled dried plum petals behind the seeds');
   // Fine dry stalks join the preserved seeds on the reverse of the lens.
   // Their last points meet the seeds' back surface, never the optical skin.
   batch(pocket,seedLayout.map(s=>tube([[.015,-.25,-.29],[s.center[0]*.57,s.center[1]-.06,Math.min(-.16,s.center[2]-.09)],[s.center[0],s.center[1],s.center[2]-s.radii[2]]],.0027,16,.40)),m.branch,'seven fine dried seed stalks behind the glass');
@@ -253,7 +325,7 @@ export function makeJielan(){
   const orbit=layer('10 / oblique specimen ribbon, interrupted brass and moss satellites',[0,0,0]);
   // One OPEN diagonal sweep: it passes behind the upper-left crown, through
   // the right shoulder gap, and in front of the low glass counterweight.
-  const filmPath=new T.CatmullRomCurve3([V([-1.68,.98,-.68]),V([-.71,1.61,-.89]),V([.97,1.02,-.55]),V([1.60,-.11,.08]),V([.87,-1.13,.97]),V([-.58,-1.51,.65])]);
+  const filmPath=new T.CatmullRomCurve3([V([-1.58,.35,-.72]),V([-.51,.80,-1.20]),V([1.30,.28,-.75]),V([1.66,-.91,.44]),V([.41,-1.22,1.18]),V([-1.34,.16,1.09]),V([-1.66,.35,.19])]);
   const film=(u,v)=>{const p=filmPath.getPoint(u),t=filmPath.getTangent(u),cross=V([0,0,1]).cross(t).normalize(),width=.082-.026*u*u;return p.addScaledVector(cross,(v-.5)*width).add(V([0,0,.018*Math.sin(u*17+v*3)])).toArray();};
   mesh(orbit,surface(film,110,6),m.film,'open front-to-back pressed leaf film');
   const edges=[];for(const v of [0,1]){const ps=[];for(let k=0;k<=100;k++)ps.push(film(k/100,v));edges.push(tube(ps,.0019,104));}batch(orbit,edges,m.glassEdge,'thin film edges');
@@ -274,8 +346,55 @@ export function makeJielan(){
   // Increase real layer depth, not the front silhouette. The original draft
   // placed most material close to one picture plane; the deeper cradle and
   // reverse foliage now remain spatially legible from the side.
-  root.scale.z=1.18;
+  root.scale.set(1,1,1);
+  // Preserve the existing materials, but seat them just outside the filled
+  // globe. This is a mesh-space radial placement, never an image stretch.
+  const seat=(group,gap)=>{
+    group.updateMatrixWorld(true);
+    group.traverse(o=>{if(!o.isMesh)return;const inverse=o.matrixWorld.clone().invert(),old=o.geometry,geo=old.clone(),p=geo.attributes.position;
+      for(let i=0;i<p.count;i++){
+        const v=new T.Vector3().fromBufferAttribute(p,i).applyMatrix4(o.matrixWorld).sub(coreCenter),r=v.length();
+        if(r>1e-6&&r<coreRadius+gap){const radius=coreRadius+gap+.040*Math.tanh((r-.85)*4);v.multiplyScalar(radius/r);}
+        v.add(coreCenter).applyMatrix4(inverse);p.setXYZ(i,v.x,v.y,v.z);
+      }
+      o.geometry=geo;old.dispose();geo.computeVertexNormals();geo.computeBoundingBox();geo.computeBoundingSphere();
+    });
+  };
+  seat(ceramic,.13);
+  // Paper slips, utensils and the glass pocket keep their own size/curvature.
+  // Move each assembled object outward rigidly rather than inflating its
+  // individual vertices to the sphere, which distorted the cutlery and text.
+  for(const child of papers.children){
+    const b=new T.Box3().setFromObject(child),p=b.getCenter(new T.Vector3()).sub(coreCenter),r=p.length();
+    if(r>1e-5&&r<coreRadius+.19)child.position.addScaledVector(p.normalize(),coreRadius+.19-r);
+  }
+  utensils.position.set(-.11,.04,.19);glass.position.set(.23,.02,.19);
+  plants.position.set(.07,-.18,.04);
+  // Unequal roots bridge the material seams at different depths, leaving
+  // the dark central mass recessed rather than outlining a smooth sphere.
+  hems.length=0;fray.length=0;roseHems.length=0;
+  const envelope=layer('11 / interwoven seam roots and gathered linen',[.02,0,.03]),woven=[];
+  for(let i=0;i<32;i++){
+    const angle=i*2.39996323,y=1-2*(i+.5)/32,n=V([Math.sqrt(1-y*y)*Math.cos(angle),y,Math.sqrt(1-y*y)*Math.sin(angle)]);
+    const tangent=V([Math.sin(i*.8),Math.cos(i*.63),Math.sin(i*1.3)]).addScaledVector(n,-V([Math.sin(i*.8),Math.cos(i*.63),Math.sin(i*1.3)]).dot(n)).normalize(),ps=[];
+    for(let k=0;k<=23;k++){
+      const t=k/23-.5,rad=1.13+.025*Math.sin(i*1.7)+.018*Math.sin(t*19+i);
+      ps.push(n.clone().addScaledVector(tangent,t*(.56+.09*(i%4))).normalize().multiplyScalar(rad+.065*Math.sin((t+.5)*Math.PI)).add(coreCenter).toArray());
+    }
+    woven.push(tube(ps,.0045+.001*(i%3),26,.48));
+  }
+  batch(envelope,woven,m.branch,'32 irregular root bridges over layered material seams');
+  // A broad, tapered folded panel replaces the repeated C-shaped front loop.
+  skin(envelope,(u,v)=>{const s=u-.5,t=v,w=.66*(1-.49*t),pleat=.034*Math.sin(u*14+t*7)+.022*Math.sin(u*6-t*4);return [.78+s*w+.16*Math.sin(t*3.8),.48-t*.91+.07*s,.76+.23*Math.sin(t*2.7)+pleat+.025*s*s];},m.linen,m.linenReverse,.005,42,40);
+  ribbon(envelope,[[-.69,-.01,.83],[-.83,-.35,.98],[-.59,-.56,1.02],[-.47,-.79,.99],[-.56,-1.31,.80]],.25,m.roseLinen,m.roseLinen,3,true);
+  ribbon(envelope,[[.18,.69,-.82],[.61,.29,-1.02],[.49,-.21,-1.09],[.15,-.62,-.96],[-.15,-1.15,-.72]],.37,m.linenPale,m.linenReverse,9,true);
+  batch(envelope,hems.splice(0),m.thread,'additional gathered linen selvedges');
+  batch(envelope,fray.splice(0),m.thread,'additional gathered linen free threads');
+  batch(envelope,roseHems.splice(0),m.roseThread,'additional wine textile free threads');
+  // Round the underlying body equally along every axis; keep modest leaf
+  // tips and trailing cloth, which do not determine its radius.
+  groups.forEach(g=>g.userData.restPosition=g.position.toArray());
   let meshCount=0,triangleCount=0;root.traverse(o=>{if(o.isMesh){meshCount++;triangleCount+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3;}});
-  root.userData={title:'芥兰',englishTitle:'JIE LAN',version:'0.20.0',artRevision:15,leafCount,leafClusters:3,seedSprigs:6,netVeils:2,porcelainFragments:4,woodForks:5,structuralRoots:23,seedGlassGap,seedLayout,meshCount,triangleCount,layers:groups.map(g=>g.name),detailTargets:{leaves:[-.85,1.02,.413],linen:[.83,-.13,.555],glass:[.35,-.67,1.310],paper:[.01,.23,1.038],utensils:[-.12,-.61,1.015],rearSeam:[-.15,.05,-1.04]},structure:'Open forked wood with 23 connecting roots/cross-ties; left broad-leaf crown and lower reverse foliage, gathered shoulder panel, bound two-loop linen knot, unequal hanging tails, deep rear sling and turned paper saddle; four thick broken porcelain shards and a small low-reflection glass pocket; two unequal interrupted brass sweeps without a spherical shell',referenceBasis:'User botanical collage material relationships; recovered Kale Planet reference viewed without copying its pixels, signatures or typography. Original procedural geometry and local material studies.',back:'Gathered narrow woven seam at wood joints, two curled paper versos, staggered porcelain, sparse sideways leaves and gathered connecting linen with open gaps; independently designed completion',visualStatus:'Revision 15: inherited offset glass pocket and gathered cloth preserved; petioles stop at leaf bases; dried seed stalks and two fine lens ties establish physical connections. Multi-view validation and publication approval are separate source-bound records.'};
-  return {root,groups,setSeparated(amount){const a=T.MathUtils.clamp(Number(amount)||0,0,1);groups.forEach(g=>g.position.fromArray(g.userData.separation).multiplyScalar(a));},dispose(){const geos=new Set();root.traverse(o=>{if(o.geometry)geos.add(o.geometry);});geos.forEach(g=>g.dispose());m.dispose();}};
+  root.userData={title:'芥兰',englishTitle:'JIE LAN',version:'0.21.0',artRevision:19,solidCore:true,bodyRadius:coreRadius,bodyCenter:coreCenter.toArray(),bodyAxes:[1,1,1],leafCount,leafClusters:3,seedSprigs:6,netVeils:2,porcelainFragments:4,woodForks:5,structuralRoots:55,seedGlassGap,seedLayout,meshCount,triangleCount,layers:groups.map(g=>g.name),detailTargets:{leaves:[-.60,.91,.61],linen:[.83,-.13,1.04],glass:[.52,-.65,1.27],paper:[.01,.23,1.08],utensils:[-.12,-.61,1.10],rearSeam:[-.15,.05,-1.04]},structure:'Compact equal-axis recessed heart concealed by 16 curled material patches, layered leaves, independently gathered textiles and irregular seam roots. Paper, porcelain, utensils and the small glass pocket retain spatial proportions. One thin oblique specimen ribbon passes from back to front.',referenceBasis:'User botanical collage relationships and 2026-09-22 generated concept; original procedural geometry and material studies, no reference pixels, artist signatures or lyrics.',back:'Independently composed rear leaves, paper versos, staggered porcelain, gathered diagonal linen and seam roots continue around the compact body.',visualStatus:'Revision 19 translates the new concept into layered geometry. Rendered art review and runtime verification are recorded separately; it is not a photoreal scan.'};
+  return {root,groups,setSeparated(amount){const a=T.MathUtils.clamp(Number(amount)||0,0,1);groups.forEach(g=>g.position.fromArray(g.userData.restPosition||[0,0,0]).addScaledVector(V(g.userData.separation),a));},dispose(){const geos=new Set();root.traverse(o=>{if(o.geometry)geos.add(o.geometry);});geos.forEach(g=>g.dispose());m.dispose();}};
 }

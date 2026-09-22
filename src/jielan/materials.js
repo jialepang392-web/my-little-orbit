@@ -27,7 +27,7 @@ export function makeMaterials(){
   }
   function texture(kind){
     const [c,x]=canvas();
-    const grounds={linen:'#e9e8d8',leaf:'#d5e2c7',glaze:'#eee7d4',bark:'#b6a183',grain:'#eee6d3',paper:'#f4e6c9',menu:'#f2e2bd',receipt:'#ede2c6',verso:'#eee0bf'};
+    const grounds={plantFiber:'#d8dfcb',linen:'#e9e8d8',leaf:'#d5e2c7',glaze:'#eee7d4',bark:'#b6a183',grain:'#eee6d3',paper:'#f4e6c9',menu:'#f2e2bd',receipt:'#ede2c6',verso:'#eee0bf'};
     x.fillStyle=grounds[kind]||grounds.grain;x.fillRect(0,0,N,N);
     for(let i=0;i<(kind==='leaf'?145:65);i++){
       const a=rnd()*N,b=rnd()*N,r=12+rnd()*82,g=x.createRadialGradient(a,b,0,a,b,r);
@@ -35,6 +35,14 @@ export function makeMaterials(){
       g.addColorStop(0,`rgba(${ink},${kind==='leaf'?.16:kind==='bark'?.12:.046})`);g.addColorStop(1,`rgba(${ink},0)`);x.fillStyle=g;x.fillRect(a-r,b-r,r*2,r*2);
     }
     for(let i=0;i<13000;i++){x.fillStyle=`rgba(${i%2?'255,255,235':'46,43,24'},${.018+rnd()*.052})`;x.fillRect(rnd()*N,rnd()*N,.7+rnd(),.6+rnd());}
+    if(kind==='plantFiber'){
+      // Short interlocked vegetal fibres, not a smooth olive-painted balloon.
+      for(let i=0;i<10500;i++){
+        const a=rnd()*N,b=rnd()*N,angle=rnd()*TAU,len=2+rnd()*12;
+        x.strokeStyle=i%3?'#59715140':'#f2eed07a';x.lineWidth=.45+rnd()*1.3;x.beginPath();x.moveTo(a,b);
+        x.quadraticCurveTo(a+Math.cos(angle+.4)*len*.55,b+Math.sin(angle+.4)*len*.55,a+Math.cos(angle)*len,b+Math.sin(angle)*len);x.stroke();
+      }
+    }
     if(kind==='linen'){
       for(let i=0;i<N;i+=3){x.lineWidth=.7;x.strokeStyle=i%6?'#5e645518':'#fffbe960';x.beginPath();x.moveTo(i,0);x.bezierCurveTo(i+.9,170,i-.9,340,i,N);x.moveTo(0,i);x.bezierCurveTo(160,i+.7,340,i-.8,N,i);x.stroke();}
       for(let i=0;i<500;i++){x.strokeStyle='#716f5630';x.lineWidth=.5;const a=rnd()*N,b=rnd()*N;x.beginPath();x.moveTo(a,b);x.lineTo(a+(i%2?1:4),b+(i%2?5:1));x.stroke();}
@@ -105,14 +113,15 @@ export function makeMaterials(){
     linenPale:mat({color:'#b7bca0',map:maps.linen,bumpMap:weave,bumpScale:.006,roughness:.98,sheen:.35,sheenColor:'#e1decb'}),
     roseLinen:mat({color:'#995968',map:maps.linen,bumpMap:weave,bumpScale:.006,roughness:.97,sheen:.27,sheenColor:'#d9a3ad'}),
     roseThread:mat({color:'#bd8994',roughness:.94,sheen:.24}),
-    leaf:mat({side:T.DoubleSide,color:'#4c7943',map:maps.leaf,bumpMap:leafRelief,bumpScale:.007,roughness:.65,clearcoat:.10,clearcoatRoughness:.48}),
-    leafDark:mat({side:T.DoubleSide,color:'#315e43',map:maps.leaf,bumpMap:leafRelief,bumpScale:.006,roughness:.72,clearcoat:.07,clearcoatRoughness:.50}),
-    leafPale:mat({side:T.DoubleSide,color:'#809d63',map:maps.leaf,bumpMap:leafRelief,bumpScale:.006,roughness:.67,clearcoat:.10,clearcoatRoughness:.47}),
+    leaf:mat({side:T.DoubleSide,color:'#396b2e',map:maps.leaf,bumpMap:leafRelief,bumpScale:.015,roughness:.52,clearcoat:.19,clearcoatRoughness:.39}),
+    leafDark:mat({side:T.DoubleSide,color:'#214c32',map:maps.leaf,bumpMap:leafRelief,bumpScale:.013,roughness:.53,clearcoat:.18,clearcoatRoughness:.38}),
+    leafPale:mat({side:T.DoubleSide,color:'#74974d',map:maps.leaf,bumpMap:leafRelief,bumpScale:.014,roughness:.47,clearcoat:.22,clearcoatRoughness:.34}),
     young:mat({side:T.DoubleSide,color:'#8cab55',map:maps.leaf,bumpMap:leafRelief,bumpScale:.005,roughness:.63,clearcoat:.11,clearcoatRoughness:.45}),
-    vein:mat({color:'#9fae70',roughness:.76,clearcoat:.03}),
+    vein:mat({color:'#889e58',roughness:.73,clearcoat:.04}),
     branch:mat({color:'#817c5e',map:maps.grain,bumpMap:grain,bumpScale:.011,roughness:.98}),
     bark:mat({color:'#a8997e',map:maps.bark,bumpMap:barkRelief,bumpScale:.028,roughness:.98}),
     moss:mat({color:'#74843b',map:maps.leaf,bumpMap:grain,bumpScale:.026,roughness:1}),
+    globeFiber:mat({color:'#f8faf2',map:texture('plantFiber'),vertexColors:true,bumpMap:grain,bumpScale:.014,roughness:.98}),
     bud:mat({color:'#843e50',map:maps.grain,roughness:.83}),
     flower:mat({color:'#dbc54b',roughness:.62}),
     seedGold:mat({color:'#ae873b',map:maps.grain,roughness:.51,metalness:.12}),
@@ -131,12 +140,12 @@ export function makeMaterials(){
     violet:mat({color:'#684467',bumpMap:grain,bumpScale:.003,roughness:.39,metalness:.02,clearcoat:.33,clearcoatRoughness:.29}),
     brass:mat({color:'#a49064',metalness:.79,roughness:.35,bumpMap:grain,bumpScale:.002}),
     warmCore:mat({color:'#edbd63',emissive:'#d99135',emissiveIntensity:.55,roughness:.25,metalness:.08}),
-    specimenGlass:mat({side:T.DoubleSide,color:'#ffffff',transmission:1,opacity:1,thickness:.016,ior:1.30,roughness:.055,envMapIntensity:.24,clearcoat:.08,clearcoatRoughness:.18}),
+    specimenGlass:mat({side:T.DoubleSide,color:'#e9e0c8',transparent:true,opacity:.16,depthWrite:false,forceSinglePass:true,transmission:0,roughness:.12,metalness:.08,envMapIntensity:.55,clearcoat:.82,clearcoatRoughness:.13}),
     dew:mat({color:'#ffffff',transmission:1,opacity:1,thickness:.028,ior:1.333,roughness:.035,envMapIntensity:.55,clearcoat:.15}),
-    glassEdge:mat({side:T.DoubleSide,color:'#f0eee2',metalness:.04,roughness:.24,transparent:true,opacity:.32,depthWrite:false,forceSinglePass:true}),
+    glassEdge:mat({side:T.DoubleSide,color:'#cdd4c8',metalness:.04,roughness:.34,transparent:true,opacity:.24,depthWrite:false,forceSinglePass:true}),
     // This second, very thin membrane is a non-refracting transparent layer.
     // Keep it separate from the physical glass pocket for stable orbit sorting.
-    film:mat({side:T.DoubleSide,color:'#e0e8d7',transparent:true,opacity:.105,depthWrite:false,forceSinglePass:true,transmission:0,roughness:.30,clearcoat:.10,clearcoatRoughness:.3,iridescence:0})
+    film:mat({side:T.DoubleSide,color:'#c6d3bb',transparent:true,opacity:.055,depthWrite:false,forceSinglePass:true,transmission:0,roughness:.50,clearcoat:0,clearcoatRoughness:.5,iridescence:0})
   };
   for(const [name,material] of Object.entries(materials))material.name=`Jielan / ${name}`;
   return {...materials,dispose(){Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}};

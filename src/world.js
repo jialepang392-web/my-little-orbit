@@ -6,7 +6,7 @@ import { frameSeconds, shouldAnimate } from './runtime.js?v=0130';
 import { Stars } from './vendor/stars.js?v=0130';
 import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=0130';
 import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=0130';
-import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=0170';
+import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=0210';
 import { AssetSlots, disposeTree } from './assets.js?v=0130';
 import { makeCollageLight } from './collage-light.js?v=0160';
 
@@ -19,7 +19,7 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   const historicalEdition=blenderEdition||originalEdition;
   const makeAvatar=historicalEdition?makeOriginalAvatar:makeGardenAvatar,makeGuide=historicalEdition?makeOriginalGuide:makeGardenGuide,makeLandmark=historicalEdition?makeOriginalLandmark:makeGardenLandmark;
   let renderer;
-  try{renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power'});}
+  try{renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,preserveDrawingBuffer:new URLSearchParams(location.search).get('build')==='1',powerPreference:'low-power'});}
   catch(error){throw new Error('此浏览器无法启动 WebGL2。纯阅读模式仍可使用。',{cause:error});}
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
   renderer.setClearColor(0xdde6dd,0);renderer.outputColorSpace=T.SRGBColorSpace;
@@ -70,7 +70,7 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   const initialOrbit=orbitFrame([0,.055589,.998454],[0,.998454,-.055589]);
   let orbit=initialOrbit;
   const cameraOutward=new T.Vector3(...orbit.outward),cameraUp=new T.Vector3(...orbit.up);
-  const cameraDistance=24.0,raycaster=new T.Raycaster(),pointer=new T.Vector2();
+  const cameraDistance=26.0,raycaster=new T.Raycaster(),pointer=new T.Vector2();
   const ground=landscape.ground??landscape.surface??landscape.root.children.find(object=>object.isMesh);
   const targetMarker=new T.Mesh(new T.TorusGeometry(.19,.015,6,36),new T.MeshBasicMaterial({color:'#a53d36',depthWrite:false}));
   targetMarker.geometry.rotateX(Math.PI/2);targetMarker.visible=false;targetMarker.renderOrder=2;scene.add(targetMarker);
@@ -132,7 +132,7 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   function reset(){inspection=null;normal.copy(initialNormal);forward.copy(UP).addScaledVector(normal,-UP.dot(normal)).normalize();target=null;zoom=1;orbit=initialOrbit;followTraveller=true;clearInput();nearbyId=null;onNearby(null);resize();invalidate();}
   function setView(kind){inspection=null;target=null;clearInput();zoom=1;followTraveller=false;orbit=kind==='side'?orbitFrame([1,.04,0],[0,1,0]):kind==='back'?orbitFrame([0,.055,-.998],[0,1,0]):initialOrbit;resize();invalidate();}
   function setDetail(kind){
-    const views={inkstone:{target:[.62,3.30,4.20],position:[2.10,5.10,10.40],fov:28},flute:{target:[1.28,1.18,4.75],position:[4.20,2.65,10.15],fov:32},bank:{target:[-1.34,-1.75,3.57],position:[-4.85,-.88,9.18],fov:32}};
+    const views={inkstone:{target:[.62,3.30,4.20],position:[2.10,5.10,10.40],fov:28},flute:{target:[-.55,1.60,6.15],position:[.10,3.0,14.80],fov:38},bank:{target:[-1.34,-1.75,3.57],position:[-4.85,-.88,9.18],fov:32}};
     if(!views[kind])throw new Error('Unknown garden study');target=null;clearInput();followTraveller=false;inspection=views[kind];resize();invalidate();
   }
   function applyCamera(){
@@ -146,7 +146,11 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   function invalidate(){dirty=true;if(!frame)lastTime=performance.now();schedule();}
   function schedule(){
     const active=Boolean(target||drag||Object.values(input).some(Boolean));
-    if(!frame&&!disposed&&shouldAnimate({paused,hidden:document.hidden,inViewport:inViewport||renderedFrames===0,reducedMotion,active,dirty}))frame=requestAnimationFrame(animate);
+    // A canvas moved into the dialog is visible even when its old document
+    // IntersectionObserver entry is offscreen. Wheel/reset invalidations
+    // must render there after the active pointer drag has ended.
+    const visible=inViewport||Boolean(canvas.closest('.exhibit-immersive[open]'))||renderedFrames===0;
+    if(!frame&&!disposed&&shouldAnimate({paused,hidden:document.hidden,inViewport:visible,reducedMotion,active,dirty}))frame=requestAnimationFrame(animate);
   }
   function animate(now){
     frame=0;if(disposed||paused||document.hidden)return;
@@ -209,13 +213,13 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   schedule();
   return { navigateTo,cancelNavigation,setDirection,reset,setPaused,setLowPower,setDusk,setView,setDetail,
     ready:landscape.ready,
-    stats(){return {...canvas.dataset,sceneVersion:'0.17.0',cameraPosition:camera.position.toArray(),cameraTarget:inspection?.target??[0,0,0],cameraFov:camera.fov};},
+    stats(){return {...canvas.dataset,sceneVersion:'0.21.0',bodyAxes:[1,1,1],surfaceAxisRadii:[[1,0,0],[0,1,0],[0,0,1]].map(n=>surfaceRadius(new T.Vector3(...n))),cameraPosition:camera.position.toArray(),cameraTarget:inspection?.target??[0,0,0],cameraFov:camera.fov};},
     async capture(){await landscape.ready;applyCamera();renderer.render(scene,camera);return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Garden capture failed')),'image/png'));},
     async exportGLB(){
       await landscape.ready;
       const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');
       const sculpture=new T.Group();sculpture.name='IF-LONGING-WERE-A-POEM';
-      sculpture.userData={title:'思念若是一首诗',sceneVersion:'0.17.0',landmarks:8,edition:'Static sculpture snapshot; no walking, lights or animated water. Ground uses authored vertex colours without the browser-only triplanar grain shader.'};
+      sculpture.userData={title:'思念若是一首诗',sceneVersion:'0.21.0',bodyAxes:[1,1,1],landmarks:8,edition:'Static sculpture snapshot; no walking, lights or animated water. Ground uses authored vertex colours without the browser-only triplanar grain shader.'};
       for(const child of scene.children){
         if(!child.visible||child.isLight||child.isCamera||child===stars||child===clouds||child===targetMarker)continue;
         sculpture.add(child.clone(true));
