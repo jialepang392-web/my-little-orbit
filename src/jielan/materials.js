@@ -96,6 +96,7 @@ export function makeMaterials(){
   }
   const maps={linen:texture('linen'),leaf:texture('leaf'),glaze:texture('glaze'),bark:texture('bark'),paper:texture('paper'),grain:texture('grain'),menu:texture('menu'),receipt:texture('receipt'),verso:texture('verso')};
   const weave=relief('weave'),grain=relief('grain'),leafRelief=relief('leaf'),barkRelief=relief('bark');
+  const fibreMap=texture('plantFiber');fibreMap.repeat.set(3,2);
   // Paired paper/cloth/porcelain skins have explicit reverse faces. Rendering
   // those skins double-sided duplicates hidden faces and muddies the creases.
   const mat=o=>new T.MeshPhysicalMaterial({side:T.FrontSide,...o});
@@ -119,7 +120,7 @@ export function makeMaterials(){
     branch:mat({color:'#817c5e',map:maps.grain,bumpMap:grain,bumpScale:.011,roughness:.98}),
     bark:mat({color:'#a8997e',map:maps.bark,bumpMap:barkRelief,bumpScale:.028,roughness:.98}),
     moss:mat({color:'#74843b',map:maps.leaf,bumpMap:grain,bumpScale:.026,roughness:1}),
-    globeFiber:mat({color:'#f8faf2',map:texture('plantFiber'),vertexColors:true,bumpMap:grain,bumpScale:.014,roughness:.98}),
+    globeFiber:mat({color:'#f8faf2',map:fibreMap,vertexColors:true,bumpMap:grain,bumpScale:.014,roughness:.98}),
     bud:mat({color:'#843e50',map:maps.grain,roughness:.83}),
     flower:mat({color:'#dbc54b',roughness:.62}),
     seedGold:mat({color:'#ae873b',map:maps.grain,roughness:.51,metalness:.12}),

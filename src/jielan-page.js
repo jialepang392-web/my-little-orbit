@@ -13,7 +13,7 @@ await waitForLiveView(stage);
 stage.setAttribute('aria-busy','true');
 const slowNotice=setTimeout(()=>{if(canvas.dataset.ready!=='true')status.textContent='三维材料仍在加载，高清图版可以先看。';},12000);
 try{
-  const {createJielanViewer}=await import('./jielan/viewer.js?v=0220');
+  const {createJielanViewer}=await import('./jielan/viewer.js?v=0230');
   viewer=createJielanViewer(canvas,{onReady(){
     canvas.dataset.ready='true';stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');
     buttons.forEach(button=>button.disabled=false);status.textContent='拖动旋转 · 滚轮缩放 · 方向键亦可调整视角';
