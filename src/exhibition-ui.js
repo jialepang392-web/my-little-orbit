@@ -151,7 +151,7 @@ document.addEventListener('orbit:inspect',event=>openItem(event.detail?.index||0
 // Hidden navigation gets genuinely small thumbnails instead of 1600px covers.
 for(const image of document.querySelectorAll('.orbit-choice img,.orbit-neighbour img')){
   const link=image.closest('a'),id=link?.dataset.orbitChoice||link?.dataset.orbitNext||link?.dataset.orbitPrev;
-  if(id==='jielan'){image.src='./assets/jielan/cover-768.webp?v=0210';image.decoding='async';}
-  else if(names[id]){const artworkEdition=id==='poem'?'0210':new URL(image.getAttribute('src'),location.href).searchParams.get('v')||edition;image.src=`./assets/exhibition/${id}-192.webp?v=${artworkEdition}`;image.srcset=`./assets/exhibition/${id}-192.webp?v=${artworkEdition} 192w, ./assets/exhibition/${id}-480.webp?v=${artworkEdition} 480w`;image.sizes='(max-width:700px) 125px, 155px';image.decoding='async';}
+  if(id==='jielan'){image.src='./assets/jielan/cover-768.webp?v=0220';image.decoding='async';}
+  else if(names[id]){const artworkEdition=id==='poem'?'0220':new URL(image.getAttribute('src'),location.href).searchParams.get('v')||edition;image.src=`./assets/exhibition/${id}-192.webp?v=${artworkEdition}`;image.srcset=`./assets/exhibition/${id}-192.webp?v=${artworkEdition} 192w, ./assets/exhibition/${id}-480.webp?v=${artworkEdition} 480w`;image.sizes='(max-width:700px) 125px, 155px';image.decoding='async';}
 }
 window.addEventListener('pageshow',()=>{document.dispatchEvent(new CustomEvent('orbit:pause',{detail:{paused:reasons.size>0}}));});

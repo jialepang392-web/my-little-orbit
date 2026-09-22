@@ -1,8 +1,8 @@
 import * as T from 'three';
 
-/** Material studies for the real assemblage, not images of the artwork.
- * All maps are deterministic local canvas textures; no reference pixels or
- * font files are shipped. Scalar relief maps have their own linear color space.
+/** Real material surfaces. Two generated atlases supply eight macro studies;
+ * geometry and small supplementary maps remain authored locally.
+ * No whole-artwork image is projected onto the sculpture.
  */
 export function makeMaterials(){
   const textures=[];let seed=200021;
@@ -81,14 +81,12 @@ export function makeMaterials(){
       x.strokeStyle='#96723e1b';x.lineWidth=6;x.beginPath();x.ellipse(356,349,91,70,.3,.15,4.7);x.stroke();
       if(kind==='menu'){
         // One small real paper label, not text tiled across a spherical skin.
-        x.fillStyle='#365943';x.font='106px "Kaiti SC", STKaiti, KaiTi, serif';x.fillText('芥兰',106,188);
-        x.fillStyle='#4b6350b0';x.font='italic 27px Georgia, serif';x.fillText('little things, still warm',86,249);
-        x.strokeStyle='#426147a0';x.lineWidth=1.6;x.beginPath();x.moveTo(88,297);x.bezierCurveTo(184,304,287,280,409,289);x.stroke();
-        x.fillStyle='#68684a9a';x.font='15px monospace';x.fillText('05   /   JIE LAN',105,385);
+        x.fillStyle='#355f43';x.font='bold 173px "Kaiti SC", STKaiti, KaiTi, serif';x.fillText('芥兰',74,250);
+        x.fillStyle='#426449';x.font='italic 49px Georgia, serif';x.fillText('Kale Planet',106,331);
+        x.strokeStyle='#48654899';x.lineWidth=2;x.beginPath();x.moveTo(70,375);x.bezierCurveTo(184,383,315,357,441,365);x.stroke();
       }else if(kind==='receipt'){
-        x.fillStyle='#746651a0';x.font='14px monospace';x.fillText('18 / TABLE',79,72);
-        for(let j=0;j<13;j++){x.fillRect(76,114+j*22,52+rnd()*151,1);x.fillRect(333,114+j*22,20+rnd()*43,1);}
-        x.font='italic 21px Georgia, serif';x.fillText('a place kept for you',78,452);
+        x.fillStyle='#4e664d';x.font='italic 49px Georgia, serif';
+        ['Vegetables','People','Memories','in orbit...'].forEach((s,i)=>x.fillText(s,84-i*3,137+i*78));
       }else{
         x.strokeStyle=kind==='verso'?'#59634036':'#54704675';x.fillStyle='#61794d25';x.lineWidth=1.1;
         for(let j=0;j<(kind==='verso'?1:3);j++){const bx=110+j*125;x.beginPath();x.moveTo(bx,433);x.quadraticCurveTo(bx+32,267,bx+10,110+j*41);x.stroke();for(let k=0;k<7;k++)for(const s of [-1,1]){const y=175+k*32+j*7;x.beginPath();x.ellipse(bx+s*15,y,8,21,s*.6,0,TAU);x.fill();x.stroke();}}
@@ -140,13 +138,34 @@ export function makeMaterials(){
     violet:mat({color:'#684467',bumpMap:grain,bumpScale:.003,roughness:.39,metalness:.02,clearcoat:.33,clearcoatRoughness:.29}),
     brass:mat({color:'#a49064',metalness:.79,roughness:.35,bumpMap:grain,bumpScale:.002}),
     warmCore:mat({color:'#edbd63',emissive:'#d99135',emissiveIntensity:.55,roughness:.25,metalness:.08}),
-    specimenGlass:mat({side:T.DoubleSide,color:'#e9e0c8',transparent:true,opacity:.16,depthWrite:false,forceSinglePass:true,transmission:0,roughness:.12,metalness:.08,envMapIntensity:.55,clearcoat:.82,clearcoatRoughness:.13}),
+    specimenGlass:mat({side:T.DoubleSide,color:'#fffdf1',transmission:0,opacity:.43,transparent:true,depthWrite:false,forceSinglePass:true,roughness:.022,metalness:.96,envMapIntensity:2.4,clearcoat:1,clearcoatRoughness:.025}),
     dew:mat({color:'#ffffff',transmission:1,opacity:1,thickness:.028,ior:1.333,roughness:.035,envMapIntensity:.55,clearcoat:.15}),
-    glassEdge:mat({side:T.DoubleSide,color:'#cdd4c8',metalness:.04,roughness:.34,transparent:true,opacity:.24,depthWrite:false,forceSinglePass:true}),
+    glassEdge:mat({side:T.DoubleSide,color:'#ececd8',metalness:.24,roughness:.12,transparent:true,opacity:.68,depthWrite:false,forceSinglePass:true,envMapIntensity:1.9}),
+    glassRim:mat({color:'#b09a68',metalness:.70,roughness:.09,transparent:true,opacity:.80,depthWrite:false,clearcoat:1,envMapIntensity:1.8}),
+    glassLip:mat({side:T.DoubleSide,color:'#c9c0a0',metalness:.60,roughness:.04,transparent:true,opacity:.30,depthWrite:false,forceSinglePass:true,clearcoat:1,envMapIntensity:1.6}),
     // This second, very thin membrane is a non-refracting transparent layer.
     // Keep it separate from the physical glass pocket for stable orbit sorting.
-    film:mat({side:T.DoubleSide,color:'#c6d3bb',transparent:true,opacity:.055,depthWrite:false,forceSinglePass:true,transmission:0,roughness:.50,clearcoat:0,clearcoatRoughness:.5,iridescence:0})
+    film:mat({side:T.DoubleSide,color:'#e0e8d4',transparent:true,opacity:.13,depthWrite:false,forceSinglePass:true,transmission:0,roughness:.11,metalness:.09,clearcoat:.8,clearcoatRoughness:.10,iridescence:.08})
   };
+  const ready=new Promise((resolve,reject)=>new T.TextureLoader().load(new URL('../../assets/jielan/reference-material-atlas.png',import.meta.url).href,atlas=>{
+    atlas.colorSpace=T.SRGBColorSpace;atlas.anisotropy=8;textures.push(atlas);
+    function quadrant(x,y,color=true){const t=atlas.clone();t.colorSpace=color?T.SRGBColorSpace:T.NoColorSpace;t.repeat.set(.499,.499);t.offset.set(x*.5+.0005,y*.5+.0005);t.needsUpdate=true;textures.push(t);return t;}
+    const leafMap=quadrant(0,1),leafBump=quadrant(0,1,false),linenMap=quadrant(1,1),linenBump=quadrant(1,1,false),woodMap=quadrant(0,0),woodBump=quadrant(0,0,false),roseMap=quadrant(1,0),roseBump=quadrant(1,0,false);
+    for(const [key,color] of [['leaf','#f6f9dc'],['leafDark','#c7d3b5'],['leafPale','#ffffff'],['young','#dce8a2']]){Object.assign(materials[key],{map:leafMap,bumpMap:leafBump,bumpScale:.003,roughness:.48,clearcoat:.27,clearcoatRoughness:.29});materials[key].color.set(color);materials[key].needsUpdate=true;}
+    for(const [key,color] of [['linen','#edf2e4'],['linenReverse','#d0dbcc'],['linenPale','#ffffff']]){Object.assign(materials[key],{map:linenMap,bumpMap:linenBump,bumpScale:.005,roughness:1,sheen:.18});materials[key].color.set(color);materials[key].needsUpdate=true;}
+    for(const key of ['bark','branch']){Object.assign(materials[key],{map:woodMap,bumpMap:woodBump,bumpScale:.037,roughness:1});materials[key].color.set(key==='bark'?'#eee3cc':'#b7b18c');materials[key].needsUpdate=true;}
+    Object.assign(materials.roseLinen,{map:roseMap,bumpMap:roseBump,bumpScale:.004,roughness:1,sheen:.15});materials.roseLinen.color.set('#f2dcda');materials.roseLinen.needsUpdate=true;resolve();
+  },undefined,reject));
+  const objectReady=new Promise((resolve,reject)=>new T.TextureLoader().load(new URL('../../assets/jielan/reference-object-atlas.png',import.meta.url).href,atlas=>{
+    atlas.colorSpace=T.SRGBColorSpace;atlas.anisotropy=8;textures.push(atlas);
+    const quadrant=(x,y)=>{const t=atlas.clone();t.repeat.set(.499,.499);t.offset.set(x*.5+.0005,y*.5+.0005);t.needsUpdate=true;textures.push(t);return t;};
+    materials.menu.map=quadrant(0,1);materials.menu.needsUpdate=true;
+    materials.blue.map=quadrant(1,1);materials.blue.color.set('#ffffff');materials.blue.roughness=.29;materials.blue.needsUpdate=true;
+    materials.silver.map=quadrant(0,0);materials.silver.color.set('#eeeeea');materials.silver.roughness=.28;materials.silver.needsUpdate=true;
+    const amber=quadrant(1,0);
+    for(const key of ['amber','seedGold']){materials[key].map=amber;materials[key].color.set('#ffffff');materials[key].roughness=.21;materials[key].metalness=.24;materials[key].clearcoat=.88;materials[key].clearcoatRoughness=.09;materials[key].emissive.set('#a46b1f');materials[key].emissiveIntensity=.17;materials[key].needsUpdate=true;}
+    resolve();
+  },undefined,reject));
   for(const [name,material] of Object.entries(materials))material.name=`Jielan / ${name}`;
-  return {...materials,dispose(){Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}};
+  return {...materials,ready:Promise.all([ready,objectReady]),dispose(){Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}};
 }

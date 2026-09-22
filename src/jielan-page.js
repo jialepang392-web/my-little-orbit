@@ -11,16 +11,14 @@ function stopTurn(){turn=false;viewer.setTurn(false);toggle('#rotate-toggle',fal
 document.addEventListener('orbit:pause',event=>viewer?.suspend(Boolean(event.detail.paused)));
 await waitForLiveView(stage);
 stage.setAttribute('aria-busy','true');
+const slowNotice=setTimeout(()=>{if(canvas.dataset.ready!=='true')status.textContent='三维材料仍在加载，高清图版可以先看。';},12000);
 try{
-  let timer;
-  const {createJielanViewer}=await Promise.race([
-    import('./jielan/viewer.js?v=0210'),
-    new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Scene load timeout')),25000);})
-  ]).finally(()=>clearTimeout(timer));
+  const {createJielanViewer}=await import('./jielan/viewer.js?v=0220');
   viewer=createJielanViewer(canvas,{onReady(){
     canvas.dataset.ready='true';stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');
     buttons.forEach(button=>button.disabled=false);status.textContent='拖动旋转 · 滚轮缩放 · 方向键亦可调整视角';
   },onError:fail});
+  await viewer.ready;
   document.querySelector('#rotate-toggle').addEventListener('click',()=>{turn=!turn;viewer.setTurn(turn);toggle('#rotate-toggle',turn,'停止转动','缓慢转动');});
   document.querySelector('#layers-toggle').addEventListener('click',()=>{separated=!separated;viewer.setSeparated(separated?1:0);toggle('#layers-toggle',separated,'合拢材料','展开材料');});
   document.querySelector('#light-toggle').addEventListener('click',()=>{light=!light;viewer.setLight(light);toggle('#light-toggle',light,'恢复暖光','银光观察');});
@@ -47,6 +45,6 @@ try{
   });
   if(new URLSearchParams(location.search).get('build')==='1')window.jielanBuild=viewer;
   viewer.suspend(document.body.dataset.exhibitPaused==='true');
-}catch(error){console.warn('Jie Lan:',error.message);fail();}
+}catch(error){console.warn('Jie Lan:',error.message);fail();}finally{clearTimeout(slowNotice);}
 window.addEventListener('pagehide',event=>{if(event.persisted)viewer?.suspend(true);else viewer?.dispose();});
 window.addEventListener('pageshow',event=>{if(event.persisted)viewer?.suspend(document.body.dataset.exhibitPaused==='true');});

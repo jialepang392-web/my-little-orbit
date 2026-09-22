@@ -213,13 +213,13 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   schedule();
   return { navigateTo,cancelNavigation,setDirection,reset,setPaused,setLowPower,setDusk,setView,setDetail,
     ready:landscape.ready,
-    stats(){return {...canvas.dataset,sceneVersion:'0.21.0',bodyAxes:[1,1,1],surfaceAxisRadii:[[1,0,0],[0,1,0],[0,0,1]].map(n=>surfaceRadius(new T.Vector3(...n))),cameraPosition:camera.position.toArray(),cameraTarget:inspection?.target??[0,0,0],cameraFov:camera.fov};},
+    stats(){return {...canvas.dataset,sceneVersion:'0.22.0',bodyAxes:[1,1,1],surfaceAxisRadii:[[1,0,0],[0,1,0],[0,0,1]].map(n=>surfaceRadius(new T.Vector3(...n))),cameraPosition:camera.position.toArray(),cameraTarget:inspection?.target??[0,0,0],cameraFov:camera.fov};},
     async capture(){await landscape.ready;applyCamera();renderer.render(scene,camera);return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Garden capture failed')),'image/png'));},
     async exportGLB(){
       await landscape.ready;
       const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');
       const sculpture=new T.Group();sculpture.name='IF-LONGING-WERE-A-POEM';
-      sculpture.userData={title:'思念若是一首诗',sceneVersion:'0.21.0',bodyAxes:[1,1,1],landmarks:8,edition:'Static sculpture snapshot; no walking, lights or animated water. Ground uses authored vertex colours without the browser-only triplanar grain shader.'};
+      sculpture.userData={title:'思念若是一首诗',sceneVersion:'0.22.0',bodyAxes:[1,1,1],landmarks:8,edition:'Static sculpture snapshot; no walking, lights or animated water. Ground uses authored vertex colours without the browser-only triplanar grain shader.'};
       for(const child of scene.children){
         if(!child.visible||child.isLight||child.isCamera||child===stars||child===clouds||child===targetMarker)continue;
         sculpture.add(child.clone(true));

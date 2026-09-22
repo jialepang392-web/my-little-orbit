@@ -121,9 +121,12 @@ function setReading(value){
   if(!reading&&worldState==='failed'){$('#scene-status').hidden=false;}
 }
 async function bootWorld(){
-  if(worldState!=='idle')return;worldState='loading';let timeout;
+  if(worldState!=='idle')return;worldState='loading';
+  const status=$('#scene-status');
+  status.hidden=false;status.classList.remove('error');
+  const slowNotice=setTimeout(()=>{if(worldState==='loading')status.textContent='三维资源仍在加载，请稍候；高清图版和文章可以先看。';},12000);
   try{
-    const module=await Promise.race([import('./world.js?v=0210'),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('3D 依赖下载超时，文章仍可阅读。')),15000);})]);
+    const module=await import('./world.js?v=0220');
     world=module.createWorld({canvas,labelLayer:$('#landmark-labels'),reducedMotion,onNearby:setNearby,onNotice:toast,
       onNavigation:updateJourney,
       onArrival:(id)=>{void openLocation(id,true);},
@@ -135,7 +138,7 @@ async function bootWorld(){
     pauseWorld();
     if(pendingDestination&&!reading&&!dialog.open){const id=pendingDestination;pendingDestination=null;navigate(id);}
   }catch(error){worldState='failed';$('#scene-status').classList.add('error');$('#scene-status').textContent=error.message||'3D 场景加载失败，请使用纯阅读模式。';toast('星球场景未能加载，已切换到仍可使用的文章列表。');setReading(true);}
-  finally{clearTimeout(timeout);}
+  finally{clearTimeout(slowNotice);}
 }
 
 for(const item of LANDMARKS){
