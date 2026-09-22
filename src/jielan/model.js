@@ -234,8 +234,64 @@ export function makeJielan(){
   for(const g of [paper,porcelain,silver])reshape(g,p=>wrap(p,coreRadius+.095));
   pocket.position.z+=.14;
   orbit.scale.setScalar(.87);
+  // Each folio is an actual curved sheet with a turned free edge and a visible
+  // reverse. Small offsets expose the seams while the round body stays intact.
+  const folios=layer('11 / offset botanical folios and stitched material joints',[.025,.02,.11]);
+  const inlays=layer('12 / porcelain offcuts, herb specimens and brass clips',[-.025,-.015,.16]);
+  const gatherings=layer('13 / branching seed pods and small dried flower gatherings',[.015,.04,.055]);
+  const sagePaper=m.verso.clone(),rosePaper=m.paper.clone();sagePaper.color.set('#a4b89d');rosePaper.color.set('#c9a5a1');owned.push(sagePaper,rosePaper);
+  function folio(direction,radius,w,h,angle,material,seed,curl=.12){
+    const n=V(direction).normalize(),g=local(folios,n.clone().multiplyScalar(radius).add(coreCenter).toArray());
+    g.quaternion.setFromUnitVectors(V([0,0,1]),n);g.rotateZ(angle);
+    const f=(u,v)=>{const s=u-.5,t=v-.5,edge=.0025*Math.sin(v*47+seed)+.0015*Math.sin(v*79+seed*.7),torn=.0025*Math.sin(u*43+seed)+.0015*Math.cos(u*83-seed),taper=material===m.blue?.58+.42*v:seed===146?.60+.40*v:1,x=s*w*taper+edge*(u**10+(1-u)**10),y=t*h+torn*(v**10+(1-v)**10),sag=-(x*x+y*y)/(2*radius),lift=curl*u**10*v**5+.025*(1-v)**12*u**3+.007*Math.sin(u*8+v*4+seed);return [x,y,sag+lift];};
+    skin(g,f,material,material===m.blue?m.ceramicBack:m.verso,material===m.blue?.020:.0035,32,26);
+    g.updateWorldMatrix(true,false);return {n,point:(u,v,lift=0)=>V(f(u,v)).add(V([0,0,lift])).applyMatrix4(g.matrixWorld)};
+  }
+  const folioSets=[
+    {n:[-.31,-.36,1],r:1.49,w:.58,h:.34,a:-.24,m:m.paper},
+    {n:[.49,.66,.73],r:1.43,w:.56,h:.30,a:.32,m:sagePaper},
+    {n:[-.94,.12,.53],r:1.40,w:.20,h:.34,a:-.33,m:m.verso},
+    {n:[1,.07,.42],r:1.40,w:.19,h:.32,a:-.15,m:m.paper},
+    {n:[.16,-.99,.53],r:1.43,w:.40,h:.13,a:-.24,m:m.linenPale},
+    {n:[.55,.35,-.84],r:1.44,w:.70,h:.40,a:.38,m:m.paper},
+    {n:[-.67,-.44,-.74],r:1.44,w:.35,h:.55,a:-.31,m:sagePaper}
+  ];
+  const exposedSheets=[],stitches=[],clips=[];
+  folioSets.forEach((s,i)=>{
+    const under=folio(s.n,s.r-.060,s.w*1.16,s.h*1.10,s.a-.11,i%2?m.linenPale:rosePaper,100+i,.05);
+    folio(s.n,s.r-.024,s.w*1.05,s.h*.95,s.a+.07,i%3===1?m.blue:m.verso,120+i,.065);
+    const top=folio(s.n,s.r+.015,s.w*.86,s.h*.86,s.a,s.m,140+i,.11);top.under=under;exposedSheets.push(top);
+    for(let j=0;j<7;j++){const v=.16+j*.097,p=top.point(.10,v,.007),q=under.point(.07,v+.014,.005);stitches.push(tube([p.toArray(),p.clone().lerp(q,.5).addScaledVector(top.n,.026).toArray(),q.toArray()],.0026,7,.82,5));}
+    for(let j=0;j<2;j++){const u=.52+j*.13,p=top.point(u,.89,.007),q=under.point(u,.97,.005);clips.push(tube([p.clone().addScaledVector(top.n,-.007).toArray(),p.clone().addScaledVector(top.n,.016).toArray(),q.clone().addScaledVector(top.n,.019).toArray(),q.clone().addScaledVector(top.n,-.010).toArray()],.004,14,.95,6));}
+  });
+  batch(inlays,stitches,m.roseThread,'forty-nine irregular stitches joining the folio seams');
+  batch(inlays,clips,m.brass,'fourteen small bent brass fasteners across lifted edges');
+  const specimenVeins=[];
+  for(const id of [0,1,5,6]){
+    const s=exposedSheets[id];for(let j=0;j<5;j++){
+      const u=(id===0?.10:.30)+(j%2)*.22,v=.26+j*.095,sign=j%2?1:-1;
+      mesh(inlays,surface((x,y)=>s.point(u+sign*y*.14+(x-.5)*.115*Math.sin(y*Math.PI),v+y*.18,.012+.018*Math.sin(y*Math.PI)).toArray(),10,18),j%3?m.young:m.leafPale,'small pressed herb on an elevated botanical folio');
+      specimenVeins.push(tube([(j===0?s.under.point(.06,v-.06,.008):s.point(.36,v-.06,.010)).toArray(),s.point(u,v,.020).toArray(),s.point(u+sign*.14,v+.18,.014).toArray()],.0025,14,.23,5));
+    }
+  }
+  batch(inlays,specimenVeins,m.branch,'fine stems attached to the botanical paper specimens');
+  // An interrupted diagonal of blue glaze and wine-red petals links the new
+  // paper groups to the existing porcelain and warm glass pocket.
+  const chips=[{n:[-.74,-.51,.62],a:.53},{n:[.43,.50,.81],a:-.34},{n:[.80,-.57,.29],a:.37},{n:[-.22,.38,-1],a:.21}];
+  chips.forEach((s,i)=>{folio(s.n,1.435,.29+(i%2)*.04,.15,s.a,m.blue,180+i,.10);});
+  const littleStems=[],pods=[],driedPetals=[],quietPetals=[],ochreSeeds=[];
+  const fadedFlower=m.bud.clone();fadedFlower.color.set('#735953');owned.push(fadedFlower);
+  [[-.80,-.29,1.07],[.78,.67,.82],[.13,-1.02,.88],[.76,.28,-.96],[-.74,-.48,-.96]].forEach((p,i)=>{
+    const base=V(p).sub(coreCenter).normalize().multiplyScalar(1.39).add(coreCenter),n=base.clone().sub(coreCenter).normalize(),axis=V([-.20+(i%3)*.12,1,.10]).addScaledVector(n,-n.y).normalize(),across=axis.clone().cross(n).normalize();
+    for(let j=0;j<(i===1?7:3);j++){const tip=base.clone().addScaledVector(axis,.12+j*.036).addScaledVector(across,.11*Math.sin(j*2.4+i)).addScaledVector(n,.025+(j%3)*.028),mid=base.clone().lerp(tip,.60).addScaledVector(n,.025);littleStems.push(tube([base.toArray(),mid.toArray(),tip.toArray()],.0038,13,.32,5));
+      if(j%2)pods.push(oval(tip.toArray(),[.020,.031,.019],j*.7,12));
+      else for(let k=0;k<5;k++){const a=k*TAU/5,at=tip.clone().addScaledVector(across,.023*Math.cos(a)).addScaledVector(axis,.023*Math.sin(a));(i===1?driedPetals:quietPetals).push(oval(at.toArray(),[.019,.026,.008],a+i*.2,10));}
+      ochreSeeds.push(oval(tip.clone().addScaledVector(n,.008).toArray(),[.010,.011,.008],0,10));
+    }
+  });
+  batch(gatherings,littleStems,m.branch,'five branching dried botanical gatherings');batch(gatherings,pods,m.seedGold,'seven small matte seed pods');batch(gatherings,driedPetals,m.bud,'wine-red flower accent above the upper folio');batch(gatherings,quietPetals,fadedFlower,'muted dried petals inside the secondary joins');batch(gatherings,ochreSeeds,m.flower,'small ochre flower centers');
   groups.forEach(g=>g.userData.restPosition=g.position.toArray());
   let meshCount=0,triangleCount=0;root.traverse(o=>{if(o.isMesh){meshCount++;triangleCount+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3;}});
-  root.userData={title:'芥兰',englishTitle:'Kale Planet',version:'0.23.0',artRevision:22,solidCore:true,bodyRadius:coreRadius,bodyCenter:coreCenter.toArray(),bodyAxes:[1,1,1],leafCount,leafClusters:3,seedSprigs:joints.length,netVeils:5,porcelainFragments:4,woodForks:9,structuralRoots:84,sideClothFolds:5,seedGlassGap,seedLayout,meshCount,triangleCount,layers:groups.map(g=>g.name),detailTargets:{leaves:[-.23,.68,1.20],linen:[.51,-.71,1.08],glass:[.65,-.69,1.58],paper:[.48,.17,1.45],utensils:[-.09,-.50,1.44],rearSeam:[-.25,.12,-1.30]},structure:'Visible rough spherical botanical body with equal axes. Kale, root fibres, turned porcelain and folded linen follow one shared volume; shorter crown and tails, smaller lifted paper and a recessed glass bowl preserve a readable main body at thumbnail size. Every material is geometry with independent depth and reverse surfaces.',referenceBasis:'Two user botanical concept references. Two generated eight-material macro atlases are applied to curved surfaces; no complete reference image plane or spherical artwork projection.',back:'Independent radial roots, moss, reverse foliage, porcelain, paper and cloth continue around the volume.',visualStatus:'Spherical-body revision; independent thumbnail and six-view assessment is recorded separately and does not represent user approval.'};
+  root.userData={title:'芥兰',englishTitle:'Kale Planet',version:'0.24.0',artRevision:23,solidCore:true,bodyRadius:coreRadius,bodyCenter:coreCenter.toArray(),bodyAxes:[1,1,1],leafCount,leafClusters:3,seedSprigs:joints.length,netVeils:5,porcelainFragments:4,woodForks:9,structuralRoots:84,sideClothFolds:5,collageFolioSets:7,layeredSheets:21,porcelainOffcuts:4,pressedHerbs:20,seamStitches:49,brassFasteners:14,botanicalGatherings:5,smallSeedPods:7,seedGlassGap,seedLayout,meshCount,triangleCount,layers:groups.map(g=>g.name),detailTargets:{leaves:[.10,.75,1.22],linen:[-.50,-.55,1.30],glass:[.65,-.69,1.58],paper:[.48,.17,1.45],utensils:[-.09,-.50,1.44],rearSeam:[-.25,.12,-1.30]},structure:'Visible rough spherical botanical body with equal axes. Two primary collage nodes connect lifted papers, linen, blue porcelain, pressed herbs and botanical gatherings. Smaller tapered fragments and narrow seams continue around the sides and back. Fine stitches and brass fasteners bridge different sheets; physical gaps, curled corners and reverse faces create depth while the shared round volume stays readable at thumbnail size.',referenceBasis:'Two user botanical concept references. Two generated eight-material macro atlases are applied to curved surfaces; no complete reference image plane or spherical artwork projection.',back:'Independent radial roots, moss, reverse foliage, porcelain, layered folios, pressed herbs and cloth continue around the volume.',visualStatus:'Layered-collage revision preserving the spherical main body; independent thumbnail and six-view assessment is recorded separately and does not represent user approval.'};
   return {root,groups,ready:m.ready,setSeparated(amount){const a=T.MathUtils.clamp(Number(amount)||0,0,1);groups.forEach(g=>g.position.fromArray(g.userData.restPosition).addScaledVector(V(g.userData.separation),a));},dispose(){const geos=new Set();root.traverse(o=>{if(o.geometry)geos.add(o.geometry);});geos.forEach(g=>g.dispose());owned.forEach(x=>x.dispose());ownedTextures.forEach(t=>t.dispose());m.dispose();}};
 }
