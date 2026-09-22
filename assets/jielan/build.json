@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "exported": true,
   "sourceHashes": {
     "assets/jielan/opening.svg": "5c6e0553c5ed640837f804abfe17811ea11fc45f8a9a5254e5dd278b680eafcc",
@@ -9,24 +9,24 @@
     "exhibition-editorial.css": "fdab349bf4b377cdc6774dd25729f745294a4e4abd32e648564b5b85f1ec9d70",
     "exhibition-mobile.css": "37bae45ca68cdbeda48e70dfea9cae7a439c612862028b0702920e83f5c58709",
     "exhibition-polish.css": "d414ed6141a6d314082df987f7237cea8cd0e0cea991d8892f8a1790a0dfa19b",
-    "jielan.css": "dbdb675a4d48092380e4ce2475d3e5f4639446feb05b25eb7f3df133b8d1ee87",
-    "jielan.html": "df4a6f07eade202ca3c885f555bf2627821ee5a89c5821388ed8719fbb54f3f6",
+    "jielan.css": "eb3ee82aecb064b25a228b247ac51fbe78199ebf65d0783c86f63a01350ce37a",
+    "jielan.html": "514ba6d0bd0578a522642c8e3f1c0bee46b9f93e4d80635a135456c3a4780af8",
     "orbit-navigation.css": "4598f85842dfd0774d1e722cff3098e7d327dfa50c6198279aff2113b5508fef",
     "src/exhibition-dialog.js": "ffc19fabf34d60d0a43721b8ff475462075d48386c86a3d138aa809f88869e64",
     "src/exhibition-state.js": "88b6e1f72cdbb9d37b04a2b5be73358ae62cd1028b4d69cfa6e2b1582f39fbb1",
-    "src/exhibition-ui.js": "f28c2bbff4920b6f6b95e63df8e4db09c5752dd1f01d619c8a377d40353890a3",
+    "src/exhibition-ui.js": "17199521e386995d864bdbd50122ef65b333b119c86c1683d4e221164341b252",
     "src/exhibition-zoom.js": "e5431ed2f87ee48a2a8a5199b51c2a93b1713519092dba97a90f10f0b685d5c5",
-    "src/jielan-page.js": "171dc8955959506c8643d9f7173a23dd4232e9b06b4581e424263b27d5d35acf",
-    "src/jielan/materials.js": "e8ff91ecddf96860221f879998e79b467e01b90affdff9f67eafe04210f6a979",
-    "src/jielan/model.js": "83bcbacac93d4944c947b3c78834c981af8dc56fa865775b389543ce92b4a7fe",
-    "src/jielan/viewer.js": "bd0e00fd3bf7828fddfd7d75e7c7734c5e5bb42c965697591c068ab791c1c212",
+    "src/jielan-page.js": "c5948f34b2541227d5a1da8924b11db1c53786e79bf553a8db37df74940f580d",
+    "src/jielan/materials.js": "b7a6afda38570665431279c5392b546a2045a4f7abeb63908b4b84aa423ddba9",
+    "src/jielan/model.js": "4c2f9a50a88b96c94fd9e89a2c8f3a3020539a3e0f5fd3e4cbaf1dc3f1d1b07f",
+    "src/jielan/viewer.js": "987a475225dc5038d00bc8aab6ed0bf78cc47049cfa11d71cc4034cea8ef4852",
     "src/orbit-navigation.js": "bc57f6e35a6e42d8156ffdf7bfce6b4fc5c2d171c118f174397fc9a46f20ceee",
     "src/visit-ui.js": "8ebca3f1662c87f7806bf3b435913310940bcd5d94b9c01d1e9e1531db0578dd",
     "visit-ui.css": "1b910df9728c905b7bd1d3da937fb79055433c21c21dc7a96fbedb73b8de0256"
   },
   "generatorHashes": {
-    "scripts/build_jielan_orbit.py": "9c90e9ae55d8bbfbb51bcf14d6f02c60f3849c29c5a0239ce0dcbc9309f712ed",
-    "scripts/jielan_orbit_common.py": "2b84f58205f494a9bed1e8e659e01c46d30501c9c9dd3a23503453bff544cd5c"
+    "scripts/build_jielan_0200.py": "093a17a35ab22654515f63f6eb6b72c15da55d4324d69378890a24d59b5ea9ff",
+    "scripts/jielan_0200_common.py": "193d62c207ee934401ccc7c069d92fb00e3eac06cedbab95e0623667685a114d"
   },
   "views": {
     "front": {
@@ -34,35 +34,43 @@
         "engine": "three.js r180",
         "ready": "true",
         "title": "芥兰",
-        "version": "0.19.0",
-        "frames": "6",
-        "layers": "8",
-        "drawCalls": "350",
-        "triangles": "1408752",
+        "version": "0.20.0",
+        "frames": "5",
+        "layers": "10",
+        "drawCalls": "264",
+        "triangles": "842288",
         "autoRotate": "false",
         "separated": "false",
         "separation": "0.000",
         "light": "studio",
         "view": "front",
         "detail": "",
-        "camera": "2.7413,1.1747,13.0092",
-        "bounds": "5.065070292466942,5.0299655924710756,3.844321411096324",
-        "leafCount": "30"
+        "camera": "0.9676,0.6786,7.7632",
+        "bounds": "3.933895041648869,3.748405203778102,3.218778437221065",
+        "leafCount": "32",
+        "modelMeshes": "134",
+        "modelTriangles": "425842",
+        "artRevision": "15",
+        "worldRotation": "0.000000",
+        "inView": "true",
+        "visibleSurface": "true",
+        "suspended": "false",
+        "study": "false"
       },
       "alphaBounds": [
-        342,
-        539,
-        1982,
-        1991
+        278,
+        265,
+        2187,
+        2281
       ],
       "size": [
         2400,
         2400
       ],
-      "silhouetteAspect": 1.1294765840220387,
+      "silhouetteAspect": 0.9469246031746031,
       "occupancy": [
-        0.6833333333333333,
-        0.605
+        0.7954166666666667,
+        0.84
       ]
     },
     "side": {
@@ -70,35 +78,43 @@
         "engine": "three.js r180",
         "ready": "true",
         "title": "芥兰",
-        "version": "0.19.0",
-        "frames": "7",
-        "layers": "8",
-        "drawCalls": "350",
-        "triangles": "1408752",
+        "version": "0.20.0",
+        "frames": "6",
+        "layers": "10",
+        "drawCalls": "264",
+        "triangles": "842288",
         "autoRotate": "false",
         "separated": "false",
         "separation": "0.000",
         "light": "studio",
         "view": "side",
         "detail": "",
-        "camera": "13.0413,0.4247,0.4592",
-        "bounds": "5.065070292466942,5.0299655924710756,3.844321411096324",
-        "leafCount": "30"
+        "camera": "7.7966,0.4800,0.2055",
+        "bounds": "3.933895041648869,3.748405203778102,3.218778437221065",
+        "leafCount": "32",
+        "modelMeshes": "134",
+        "modelTriangles": "425842",
+        "artRevision": "15",
+        "worldRotation": "0.000000",
+        "inView": "true",
+        "visibleSurface": "true",
+        "suspended": "false",
+        "study": "false"
       },
       "alphaBounds": [
-        461,
-        558,
-        1946,
-        1939
+        378,
+        316,
+        2002,
+        2281
       ],
       "size": [
         2400,
         2400
       ],
-      "silhouetteAspect": 1.0753077480086894,
+      "silhouetteAspect": 0.8264631043256997,
       "occupancy": [
-        0.61875,
-        0.5754166666666667
+        0.6766666666666666,
+        0.81875
       ]
     },
     "back": {
@@ -106,35 +122,43 @@
         "engine": "three.js r180",
         "ready": "true",
         "title": "芥兰",
-        "version": "0.19.0",
-        "frames": "8",
-        "layers": "8",
-        "drawCalls": "350",
-        "triangles": "1408752",
+        "version": "0.20.0",
+        "frames": "7",
+        "layers": "10",
+        "drawCalls": "264",
+        "triangles": "842288",
         "autoRotate": "false",
         "separated": "false",
         "separation": "0.000",
         "light": "studio",
         "view": "back",
         "detail": "",
-        "camera": "-0.5087,0.4247,-12.9908",
-        "bounds": "5.065070292466942,5.0299655924710756,3.844321411096324",
-        "leafCount": "30"
+        "camera": "-0.9918,0.4635,-7.6452",
+        "bounds": "3.933895041648869,3.748405203778102,3.218778437221065",
+        "leafCount": "32",
+        "modelMeshes": "134",
+        "modelTriangles": "425842",
+        "artRevision": "15",
+        "worldRotation": "0.000000",
+        "inView": "true",
+        "visibleSurface": "true",
+        "suspended": "false",
+        "study": "false"
       },
       "alphaBounds": [
-        434,
-        501,
-        1964,
-        1879
+        119,
+        200,
+        2090,
+        2076
       ],
       "size": [
         2400,
         2400
       ],
-      "silhouetteAspect": 1.1103047895500726,
+      "silhouetteAspect": 1.050639658848614,
       "occupancy": [
-        0.6375,
-        0.5741666666666667
+        0.82125,
+        0.7816666666666666
       ]
     },
     "leaves": {
@@ -142,20 +166,72 @@
         "engine": "three.js r180",
         "ready": "true",
         "title": "芥兰",
-        "version": "0.19.0",
-        "frames": "9",
-        "layers": "8",
-        "drawCalls": "326",
-        "triangles": "1395840",
+        "version": "0.20.0",
+        "frames": "8",
+        "layers": "10",
+        "drawCalls": "183",
+        "triangles": "685900",
         "autoRotate": "false",
         "separated": "false",
         "separation": "0.000",
         "light": "studio",
         "view": "back",
         "detail": "leaves",
-        "camera": "-1.7500,1.3000,4.4000",
-        "bounds": "5.065070292466942,5.0299655924710756,3.844321411096324",
-        "leafCount": "30"
+        "camera": "-1.4000,1.3700,3.4130",
+        "bounds": "3.933895041648869,3.748405203778102,3.218778437221065",
+        "leafCount": "32",
+        "modelMeshes": "134",
+        "modelTriangles": "425842",
+        "artRevision": "15",
+        "worldRotation": "0.000000",
+        "inView": "true",
+        "visibleSurface": "true",
+        "suspended": "false",
+        "study": "false"
+      },
+      "alphaBounds": [
+        0,
+        30,
+        2400,
+        2400
+      ],
+      "size": [
+        2400,
+        2400
+      ],
+      "silhouetteAspect": 1.0126582278481013,
+      "occupancy": [
+        1.0,
+        0.9875
+      ]
+    },
+    "linen": {
+      "stats": {
+        "engine": "three.js r180",
+        "ready": "true",
+        "title": "芥兰",
+        "version": "0.20.0",
+        "frames": "9",
+        "layers": "10",
+        "drawCalls": "258",
+        "triangles": "835376",
+        "autoRotate": "false",
+        "separated": "false",
+        "separation": "0.000",
+        "light": "studio",
+        "view": "back",
+        "detail": "linen",
+        "camera": "2.3300,0.3500,3.3050",
+        "bounds": "3.933895041648869,3.748405203778102,3.218778437221065",
+        "leafCount": "32",
+        "modelMeshes": "134",
+        "modelTriangles": "425842",
+        "artRevision": "15",
+        "worldRotation": "0.000000",
+        "inView": "true",
+        "visibleSurface": "true",
+        "suspended": "false",
+        "study": "false"
       },
       "alphaBounds": [
         0,
@@ -173,61 +249,33 @@
         1.0
       ]
     },
-    "linen": {
-      "stats": {
-        "engine": "three.js r180",
-        "ready": "true",
-        "title": "芥兰",
-        "version": "0.19.0",
-        "frames": "10",
-        "layers": "8",
-        "drawCalls": "298",
-        "triangles": "1284080",
-        "autoRotate": "false",
-        "separated": "false",
-        "separation": "0.000",
-        "light": "studio",
-        "view": "back",
-        "detail": "linen",
-        "camera": "4.0500,0.8500,2.7000",
-        "bounds": "5.065070292466942,5.0299655924710756,3.844321411096324",
-        "leafCount": "30"
-      },
-      "alphaBounds": [
-        0,
-        0,
-        2245,
-        2400
-      ],
-      "size": [
-        2400,
-        2400
-      ],
-      "silhouetteAspect": 0.9354166666666667,
-      "occupancy": [
-        0.9354166666666667,
-        1.0
-      ]
-    },
     "glass": {
       "stats": {
         "engine": "three.js r180",
         "ready": "true",
         "title": "芥兰",
-        "version": "0.19.0",
-        "frames": "11",
-        "layers": "8",
-        "drawCalls": "284",
-        "triangles": "1291072",
+        "version": "0.20.0",
+        "frames": "10",
+        "layers": "10",
+        "drawCalls": "216",
+        "triangles": "753360",
         "autoRotate": "false",
         "separated": "false",
         "separation": "0.000",
         "light": "studio",
         "view": "back",
         "detail": "glass",
-        "camera": "0.6000,0.2700,3.6500",
-        "bounds": "5.065070292466942,5.0299655924710756,3.844321411096324",
-        "leafCount": "30"
+        "camera": "0.6500,-0.4200,3.7100",
+        "bounds": "3.933895041648869,3.748405203778102,3.218778437221065",
+        "leafCount": "32",
+        "modelMeshes": "134",
+        "modelTriangles": "425842",
+        "artRevision": "15",
+        "worldRotation": "0.000000",
+        "inView": "true",
+        "visibleSurface": "true",
+        "suspended": "false",
+        "study": "false"
       },
       "alphaBounds": [
         0,
@@ -262,79 +310,79 @@
     "height": 2400
   },
   "differences": {
-    "front/side": 25.762125651041668,
-    "front/back": 27.176893446180554,
-    "front/leaves": 86.46523256655094,
-    "front/linen": 72.67063621238425,
-    "front/glass": 87.56409143518518,
-    "side/back": 23.168330439814813,
-    "side/leaves": 89.75419560185185,
-    "side/linen": 75.01906105324075,
-    "side/glass": 91.13215241608798,
-    "back/leaves": 87.61859809027779,
-    "back/linen": 71.74084924768518,
-    "back/glass": 87.94595449942129,
-    "leaves/linen": 78.10595703125,
-    "leaves/glass": 73.39685510706018,
-    "linen/glass": 68.05715603298611
+    "front/side": 37.616066261574076,
+    "front/back": 36.54306821469907,
+    "front/leaves": 60.697672526041664,
+    "front/linen": 85.3077980324074,
+    "front/glass": 76.67603443287037,
+    "side/back": 21.320448133680557,
+    "side/leaves": 61.465829354745374,
+    "side/linen": 79.90292245370371,
+    "side/glass": 84.7814308449074,
+    "back/leaves": 56.77624059606482,
+    "back/linen": 81.01069697627315,
+    "back/glass": 81.08350513599538,
+    "leaves/linen": 72.90076135706018,
+    "leaves/glass": 78.9378345630787,
+    "linen/glass": 89.72370515046298
   },
   "glbReload": {
-    "meshes": 174,
-    "materials": 25,
-    "sceneVersion": "0.19.0",
+    "meshes": 134,
+    "materials": 34,
+    "sceneVersion": "0.20.0",
     "size": [
-      5.065070292466941,
-      5.0299655924710756,
-      3.844321411096324
+      3.933895041648869,
+      3.748405203778102,
+      3.2187784372210655
     ]
   },
   "artifacts": {
     "cover.webp": {
-      "sha256": "cc1edf49b4a910a6a5e07d51a0f505d956c1552af803b6647cbb29037cf5d9cd",
-      "bytes": 291486
+      "sha256": "95fd37b01c3d88387ffc0f4c28503326a8892fd66075bf5649e6170d5453396c",
+      "bytes": 371656
     },
     "cover-768.webp": {
-      "sha256": "72e271382b61c6c4ec4322fd28ed59e8530f091d487761e5325875ffd01e5fe6",
-      "bytes": 60670
+      "sha256": "7c995e0912973c2eb22a4f548cf41d4f07f81023981462b7e461d8d95c8719f5",
+      "bytes": 83630
     },
     "cover-1200.webp": {
-      "sha256": "068b40468f92cebd52f77848e49d8b9021ed0af3f1ca47a6bf1b7f505ede697a",
-      "bytes": 120896
+      "sha256": "08cd70c488b998e4f534114325bffa65689441bf2ae79d2e19e91a4a8a9f0067",
+      "bytes": 160048
     },
     "front.png": {
-      "sha256": "7902c302089f051e2726607b2a1bda2ed8c3cf7bebab11951c44c33f916ad503",
-      "bytes": 2246280
+      "sha256": "ad90fe7be65870194baa8f759fd440b19228df9be41bacdb60ff17e6607be599",
+      "bytes": 2934198
     },
     "poster.png": {
-      "sha256": "fb07b71cd834bb0026228fc53a3544081ddf5e2660faed9bb25edb2d11f9c4c6",
-      "bytes": 1986697
+      "sha256": "4fe0cbe662f70a0aa53440ff52f9d8197a329ca703f76caa35a2bedff1ebd383",
+      "bytes": 2581041
     },
     "side.webp": {
-      "sha256": "e5edfefae1e23f2ec6a95d3409ee9fa71e5a4a5190cd8fff0f8a6dc59f72bb64",
-      "bytes": 210184
+      "sha256": "f50713f560d6ed716591591bb197bc16f41a4fcd9fc529137a438b3b3b0cfb44",
+      "bytes": 308284
     },
     "back.webp": {
-      "sha256": "89729653c8580b64ba154f4e68731ee49fbdca5baf8923398b7d977263a8fdc3",
-      "bytes": 276918
+      "sha256": "12ead3d6199ffb080046b45cebd00c5cebf1042acf4c5e0843e1f1a44f6c1449",
+      "bytes": 310428
     },
     "detail-leaves.webp": {
-      "sha256": "048aa9dc74796bcf0298002cc63d5b3a44f4c8631c58b6ecbda8ff67ccb79c0c",
-      "bytes": 616886
+      "sha256": "b0fa3dc128bcc17ff0d029ccfa30637c54743c69251ba846f9a79458a5a95b36",
+      "bytes": 430712
     },
     "detail-linen.webp": {
-      "sha256": "0703c7709008c95402a79a8b4877dd821091d32fa57a3017f472affac136a4ff",
-      "bytes": 485528
+      "sha256": "e00413f00814861831dfcc01163f5fbd7d098063c13e37ea930c1a9b026213e4",
+      "bytes": 477798
     },
     "detail-glass.webp": {
-      "sha256": "35e2b96a3cc5d1a1780f7bcf17eae37470d84011bad70dcfba3b768f1b94a9b7",
-      "bytes": 534960
+      "sha256": "aee1335b121e570228eef086a538a89f9ceac623ee99bc4a19ed969d33eb448b",
+      "bytes": 466426
     },
     "jielan.glb": {
-      "sha256": "e2afca6b37731bebc2ea9f6879e4bec5a9c30cbfaaf07132d2170feb0522018d",
-      "bytes": 21868984
+      "sha256": "6d45e6f43411cbd4b3dae995de5ccd3fff129b7a45a54d20e56343456b82703a",
+      "bytes": 15807896
     }
   },
-  "sceneVersion": "0.19.0",
+  "sceneVersion": "0.20.0",
   "browser": "140.0.7339.16",
   "method": "One rebuilt orbit scene; current viewer camera presets on a square artboard without silhouette cropping; independent camera captures. GLB excludes webpage lighting and interaction.",
   "artReview": "pending"

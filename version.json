@@ -1,13 +1,13 @@
 {
-  "version": "0.19.0",
-  "date": "2026-09-21",
+  "version": "0.20.0",
+  "date": "2026-09-22",
   "pageVersions": {
-    "index": "0.19.0",
+    "index": "0.20.0",
     "yesterday-today": "0.18.0",
     "crossover": "0.18.0",
     "poem": "0.18.0",
     "rain-finale": "0.18.0",
-    "jielan": "0.19.0"
+    "jielan": "0.20.0"
   },
   "edition": "the-shape-of-what-remains",
   "exhibitionTitle": "留下的形状",
@@ -35,10 +35,11 @@
     "crossover": "0.12.3",
     "poem": "0.17.0",
     "rain-finale": "0.12.3",
-    "jielan": "0.19.0"
+    "jielan": "0.20.0"
   },
   "homepageEdition": "Paper record sleeves / five catalogue entries",
-  "scope": "JIE LAN becomes a volumetric world of broken blue porcelain, quiet paper and surrounding cloth, with leaves forming a vegetation layer. The preceding four pages and artwork bundles retain their editions.",
+  "scope": "JIE LAN is rebuilt as an asymmetric botanical assemblage: forked driftwood and roots support crumpled kale, broken porcelain fragments, torn paper, suspended sage and rose cloth, actual cutlery and a glass seed pocket. Main volume is real geometry, not a closed sphere or image plane. The preceding four pages and artwork bundles retain their editions and bytes.",
+  "jielanInteraction": "Real orbit, zoom and independent front/side/back cameras; one-click reset clears rotation, material separation, study light and closeups. Camera-space bounds fitting preserves relative zoom on resize. Resource disposal and WebGL restoration are handled in the viewer.",
   "interaction": "Direct start and browsable index; optional session-only resume; desktop sticky chapters and contact-sheet directory; mobile bottom actions and directory sheet; explicit still/live modes; secondary 3D controls; filmstrip, image status, desktop arrows and keyboard, native dialog focus and same-URL Back-to-close.",
   "mobilePresentation": "Touch devices up to 900 CSS pixels still enter through high-resolution photographs, with explicit opt-in to the original 3D scenes. Page scrolling stays native; pinch and pan are restricted to the image viewer. Dynamic viewport and safe areas are accommodated. No automatic tour, audio, account or analytics.",
   "images": "JIE LAN requires same-scene cover, transparent front, three independent material views, side, back, poster and GLB; completion is recorded in its build manifest. All four preceding artwork bundles retain their existing bytes and scene editions.",

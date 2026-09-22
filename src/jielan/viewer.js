@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {makeJielan} from './model.js?v=0190';
+import {makeJielan} from './model.js?v=0200';
 
 function studio(renderer){
   const c=document.createElement('canvas');c.width=512;c.height=256;const x=c.getContext('2d');
@@ -11,42 +11,68 @@ function studio(renderer){
 export function createJielanViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,build=new URLSearchParams(location.search).get('build')==='1';
   const renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,build?2:innerWidth<600?1.3:1.65));renderer.outputColorSpace=T.SRGBColorSpace;renderer.setClearColor('#f3f0e7',0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.94;
-  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;
+  renderer.setPixelRatio(Math.min(devicePixelRatio,build?2:innerWidth<600?1.3:1.65));renderer.outputColorSpace=T.SRGBColorSpace;renderer.setClearColor('#f3f0e7',0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02;
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(33,1,.1,60),world=makeJielan();scene.add(world.root);
-  const env=studio(renderer);scene.environment=env.texture;scene.environmentIntensity=.72;scene.add(new T.HemisphereLight('#f8f1df','#858975',1.4));
-  const key=new T.DirectionalLight('#fff4df',1.85);key.position.set(-4,7,8);key.castShadow=true;key.shadow.mapSize.set(build?2048:1024,build?2048:1024);key.shadow.radius=3.5;Object.assign(key.shadow.camera,{left:-4,right:4,top:4,bottom:-4,near:1,far:24});key.shadow.normalBias=.014;key.shadow.bias=-.00012;scene.add(key);
-  const fill=new T.DirectionalLight('#e5ebef',1.1);fill.position.set(5,3,-5);scene.add(fill);
-  const front=new T.DirectionalLight('#ffeadc',.45);front.position.set(2,-3,6);scene.add(front);
-  const controls=new OrbitControls(camera,canvas);controls.enablePan=false;controls.enableDamping=!reduced;controls.dampingFactor=.1;controls.minDistance=build?1:2;controls.maxDistance=20;controls.rotateSpeed=.6;
+  const env=studio(renderer);scene.environment=env.texture;scene.environmentIntensity=.64;scene.add(new T.HemisphereLight('#f8f1df','#77745e',.98));
+  const key=new T.DirectionalLight('#fff5e4',2.55);key.position.set(-4,7,8);key.castShadow=true;key.shadow.mapSize.set(build?2048:1024,build?2048:1024);key.shadow.radius=3.5;Object.assign(key.shadow.camera,{left:-4,right:4,top:4,bottom:-4,near:1,far:24});key.shadow.normalBias=.008;key.shadow.bias=-.00012;scene.add(key);
+  const fill=new T.DirectionalLight('#e8ede4',.85);fill.position.set(5,3,-5);scene.add(fill);
+  const front=new T.DirectionalLight('#ffe8cc',.30);front.position.set(2,-3,6);scene.add(front);
+  const controls=new OrbitControls(camera,canvas);controls.enablePan=false;controls.enableDamping=!reduced;controls.dampingFactor=.1;controls.minDistance=build?.7:1.5;controls.maxDistance=38;controls.rotateSpeed=.6;
   const box=new T.Box3().setFromObject(world.root),center=box.getCenter(new T.Vector3()),size=box.getSize(new T.Vector3());
   const clay=new T.MeshStandardMaterial({color:'#c6c2b4',roughness:.92,side:T.DoubleSide});
-  let raf=0,disposed=false,lost=false,suspended=false,turn=false,inView=true,separated=false,amount=0,last=performance.now(),frames=0,settle=0,light='studio',view='front',detail=null;
+  let raf=0,disposed=false,lost=false,suspended=false,turn=false,inView=true,separated=false,amount=0,last=performance.now(),frames=0,settle=0,light='studio',view='front',detail=null,fitDistance=0;
   const abort=new AbortController();
-  function metrics(){Object.assign(canvas.dataset,{ready:'true',title:'芥兰',version:'0.19.0',frames:String(++frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,view,detail:detail||'',camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),bounds:size.toArray().join(','),leafCount:String(world.root.userData.leafCount)});}
+  function metrics(){Object.assign(canvas.dataset,{ready:'true',title:'芥兰',version:'0.20.0',frames:String(++frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,view,detail:detail||'',camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),bounds:size.toArray().join(','),leafCount:String(world.root.userData.leafCount),modelMeshes:String(world.root.userData.meshCount),modelTriangles:String(world.root.userData.triangleCount),artRevision:String(world.root.userData.artRevision),worldRotation:world.root.rotation.y.toFixed(6),inView:String(inView),visibleSurface:String(visibleSurface()),suspended:String(suspended),study:String(scene.overrideMaterial===clay)});}
   function invalidate(){if(!raf&&!disposed&&!lost&&!suspended&&!document.hidden)raf=requestAnimationFrame(render);}
-  function render(now){raf=0;if(disposed||lost||suspended||document.hidden)return;const dt=Math.min(Math.max((now-last)/1000,.001),.1);last=now;if(turn&&inView)world.root.rotation.y+=dt*.105;const goal=Number(separated);amount=reduced?goal:T.MathUtils.damp(amount,goal,9,dt);if(Math.abs(amount-goal)<.001)amount=goal;world.setSeparated(amount);controls.update();renderer.render(scene,camera);metrics();if((turn&&inView)||amount!==goal||settle-->0)invalidate();}
-  function frame(){if(detail)return;const distance=camera.position.distanceTo(controls.target),height=Math.max(size.y*1.24,(Math.max(size.x,size.z)*1.24)/camera.aspect);camera.fov=T.MathUtils.radToDeg(2*Math.atan(height/(2*distance)));camera.updateProjectionMatrix();}
-  function setView(name){view=['front','side','back'].includes(name)?name:'front';detail=null;turn=false;world.root.rotation.set(0,0,0);controls.target.copy(center);const p=view==='back'?[-.55,.35,-13]:view==='side'?[13,.35,.45]:[2.7,1.1,13];camera.position.copy(center).add(V(p));frame();controls.update();settle=reduced?0:18;invalidate();}
-  function resize(){const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return;renderer.setSize(b.width,b.height,false);camera.aspect=b.width/b.height;frame();invalidate();}
+  // IntersectionObserver can retain the old scrolled-page intersection when
+  // a canvas is reparented into a top-layer dialog. An open immersive dialog
+  // is an explicit visible viewing surface, not an offscreen gallery element.
+  function visibleSurface(){return inView||Boolean(canvas.closest('.exhibit-immersive[open]'));}
+  function render(now){raf=0;if(disposed||lost||suspended||document.hidden)return;const dt=Math.min(Math.max((now-last)/1000,.001),.1);last=now;const visible=visibleSurface();if(turn&&visible)world.root.rotation.y+=dt*.105;const goal=Number(separated);amount=reduced?goal:T.MathUtils.damp(amount,goal,9,dt);if(Math.abs(amount-goal)<.001)amount=goal;world.setSeparated(amount);controls.update();renderer.render(scene,camera);metrics();if((turn&&visible)||amount!==goal||settle-->0)invalidate();}
+  // Fit the complete three-dimensional bounds in camera space. Unlike a
+  // width/height-only fit this accounts for the crown, tails and near-side
+  // orbit. Preserve a visitor's relative zoom on resize/fullscreen changes.
+  function frame(preserveZoom=true){
+    if(detail){camera.updateProjectionMatrix();return;}
+    const ratio=preserveZoom&&fitDistance?camera.position.distanceTo(controls.target)/fitDistance:1;
+    const dir=camera.position.clone().sub(controls.target).normalize(),right=new T.Vector3().crossVectors(camera.up,dir).normalize(),up=new T.Vector3().crossVectors(dir,right).normalize();
+    const tan=Math.tan(T.MathUtils.degToRad(33)*.5);let distance=0;
+    // Fit actual vertices, not imaginary corners of the wide orbit AABB.
+    // This retains complete tips/tails at every preset while giving the
+    // material body more space on narrow screens. Only runs on framing.
+    world.root.updateMatrixWorld(true);const p=new T.Vector3();
+    world.root.traverse(o=>{if(!o.isMesh||!o.visible)return;const a=o.geometry.attributes.position;
+      for(let i=0;i<a.count;i++){
+        p.fromBufferAttribute(a,i).applyMatrix4(o.matrixWorld).sub(controls.target);const near=p.dot(dir);
+        distance=Math.max(distance,near+Math.abs(p.dot(up))*1.11/tan,near+Math.abs(p.dot(right))*1.11/(tan*camera.aspect));
+      }
+    });
+    fitDistance=Math.max(distance,3);camera.fov=33;camera.position.copy(controls.target).addScaledVector(dir,fitDistance*ratio);camera.updateProjectionMatrix();
+  }
+  function stopInertia(){const damping=controls.enableDamping;controls.enableDamping=false;controls.update();controls.enableDamping=damping;}
+  function setView(name){stopInertia();view=['front','side','back'].includes(name)?name:'front';detail=null;turn=false;world.root.rotation.set(0,0,0);controls.target.copy(center);const p=view==='back'?[-1.3,.55,-13]:view==='side'?[13,.55,.35]:[2.0,.9,13];camera.position.copy(center).add(V(p));frame(false);controls.update();settle=reduced?0:18;invalidate();}
+  function resize(){const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return;renderer.setSize(b.width,b.height,false);camera.aspect=b.width/b.height;frame();controls.update();settle=reduced?0:2;invalidate();}
   controls.addEventListener('change',invalidate);controls.addEventListener('start',()=>{settle=20;});controls.addEventListener('end',()=>{settle=20;invalidate();});
   const sizes=new ResizeObserver(resize);sizes.observe(canvas);const visibility=new IntersectionObserver(([e])=>{inView=e.isIntersecting;if(inView)invalidate();});visibility.observe(canvas);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);raf=0;}else{last=performance.now();invalidate();}},{signal:abort.signal});
   canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();lost=true;cancelAnimationFrame(raf);raf=0;controls.enabled=false;onError(new Error('WebGL context lost'));},{signal:abort.signal});
+  canvas.addEventListener('webglcontextrestored',()=>{if(disposed)return;lost=false;controls.enabled=true;last=performance.now();settle=3;onReady();invalidate();},{signal:abort.signal});
   canvas.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.code))return;e.preventDefault();const s=new T.Spherical().setFromVector3(camera.position.clone().sub(controls.target));s.theta+=(e.code==='ArrowRight'?.13:0)-(e.code==='ArrowLeft'?.13:0);s.phi+=(e.code==='ArrowDown'?.13:0)-(e.code==='ArrowUp'?.13:0);s.makeSafe();camera.position.setFromSpherical(s).add(controls.target);controls.update();invalidate();},{signal:abort.signal});
   setView('front');resize();renderer.render(scene,camera);metrics();onReady();
   return {
     setTurn(value){turn=Boolean(value);last=performance.now();invalidate();},
     setSeparated(value){separated=Boolean(value);last=performance.now();invalidate();},
-    setLight(cool){light=cool?'cool':'studio';key.color.set(cool?'#e4ecff':'#fff4df');scene.environmentIntensity=cool?.8:.72;invalidate();},
+    setLight(cool){light=cool?'cool':'studio';key.color.set(cool?'#e4ecff':'#fff5e4');scene.environmentIntensity=cool?.74:.64;invalidate();},
     setView,
-    setDetail(name){detail=['leaves','linen','glass'].includes(name)?name:'leaves';turn=false;world.root.rotation.set(0,0,0);const views={leaves:[[-.91,.62,.81],[-1.75,1.30,4.40]],linen:[[1.05,.12,-.12],[4.05,.85,2.70]],glass:[[.16,-.14,.20],[.60,.27,3.65]]};const [target,position]=views[detail];controls.target.set(...target);camera.position.set(...position);camera.fov=33;camera.updateProjectionMatrix();controls.update();invalidate();},
+    reset(){separated=false;amount=0;world.setSeparated(0);scene.overrideMaterial=null;light='studio';key.color.set('#fff5e4');scene.environmentIntensity=.64;setView('front');},
+    setDetail(name){stopInertia();detail=['leaves','linen','glass'].includes(name)?name:'leaves';turn=false;world.root.rotation.set(0,0,0);const targets=world.root.userData.detailTargets;const offsets={leaves:[-.55,.35,3.0],linen:[1.5,.48,2.75],glass:[.3,.25,2.4]};controls.target.fromArray(targets[detail]);camera.position.copy(controls.target).add(V(offsets[detail]));camera.fov=33;camera.updateProjectionMatrix();controls.update();settle=reduced?0:18;invalidate();},
     setStudy(value){scene.overrideMaterial=value?clay:null;invalidate();},
     suspend(value){suspended=Boolean(value);if(suspended){cancelAnimationFrame(raf);raf=0;}else{last=performance.now();invalidate();}},
     async capture({background=false}={}){if(lost||disposed)throw new Error('Renderer unavailable');renderer.render(scene,camera);let target=canvas;if(background){target=document.createElement('canvas');target.width=canvas.width;target.height=canvas.height;const ctx=target.getContext('2d');ctx.fillStyle='#f3f0e7';ctx.fillRect(0,0,target.width,target.height);ctx.drawImage(canvas,0,0);}return new Promise((resolve,reject)=>target.toBlob(b=>b?resolve(b):reject(new Error('Capture failed')),'image/png'));},
     async exportGLB(){const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');const rotation=world.root.rotation.clone();try{world.root.rotation.set(0,0,0);world.setSeparated(0);world.root.updateMatrixWorld(true);return await new GLTFExporter().parseAsync(world.root,{binary:true,onlyVisible:true,maxTextureSize:512});}finally{world.root.rotation.copy(rotation);world.setSeparated(amount);invalidate();}},
     stats(){return {...canvas.dataset};},
-    dispose(){disposed=true;cancelAnimationFrame(raf);abort.abort();sizes.disconnect();visibility.disconnect();controls.dispose();world.dispose();clay.dispose();env.dispose();renderer.dispose();}
+    dispose(){if(disposed)return;disposed=true;cancelAnimationFrame(raf);abort.abort();sizes.disconnect();visibility.disconnect();controls.dispose();world.dispose();clay.dispose();key.shadow.dispose();env.dispose();scene.clear();renderer.dispose();}
   };
 }
 function V(p){return new T.Vector3(...p);}

@@ -1,70 +1,143 @@
 import * as T from 'three';
 
-/** Original deterministic, locally drawn material studies; no image/font input. */
+/** Material studies for the real assemblage, not images of the artwork.
+ * All maps are deterministic local canvas textures; no reference pixels or
+ * font files are shipped. Scalar relief maps have their own linear color space.
+ */
 export function makeMaterials(){
-  const textures=[];let seed=190032;
+  const textures=[];let seed=200021;
   const rnd=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
-  function texture(kind){
-    const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');
-    x.fillStyle=kind==='linen'?'#e8e9dc':kind==='leaf'?'#cfddad':kind==='glaze'?'#b5c7e7':'#f6efdb';x.fillRect(0,0,512,512);
-    for(let i=0;i<(kind==='leaf'?180:50);i++){const a=rnd()*512,b=rnd()*512,r=8+rnd()*55,g=x.createRadialGradient(a,b,0,a,b,r);g.addColorStop(0,kind==='leaf'?`rgba(${rnd()>.5?'76,110,38':'240,239,181'},.16)`:kind==='glaze'?'rgba(245,243,222,.18)':'rgba(128,112,70,.035)');g.addColorStop(1,'rgba(128,130,80,0)');x.fillStyle=g;x.fillRect(a-r,b-r,r*2,r*2);}
-    for(let i=0;i<22000;i++){const a=rnd()*512,b=rnd()*512;x.fillStyle=`rgba(${rnd()>.5?'255,255,240':'38,48,25'},${.025+rnd()*.08})`;x.fillRect(a,b,kind==='linen'?1:2,kind==='linen'?4:1);}
-    if(kind==='glaze'){
-      for(let i=0;i<85;i++){const a=rnd()*512,b=rnd()*512,r=3+rnd()*18,g=x.createRadialGradient(a,b,0,a,b,r);g.addColorStop(0,i%3?'rgba(51,82,147,.12)':'rgba(232,219,181,.13)');g.addColorStop(1,'rgba(180,192,218,0)');x.fillStyle=g;x.fillRect(a-r,b-r,r*2,r*2);}
-      for(let i=0;i<2600;i++){x.fillStyle=i%3?'#435d8820':'#fff5dc35';x.fillRect(rnd()*512,rnd()*512,.7+rnd(),.7+rnd());}
+  const N=512, TAU=Math.PI*2;
+  function canvas(){const c=document.createElement('canvas');c.width=c.height=N;return [c,c.getContext('2d')];}
+  function register(c,color=true){const t=new T.CanvasTexture(c);t.colorSpace=color?T.SRGBColorSpace:T.NoColorSpace;t.anisotropy=4;t.wrapS=t.wrapT=T.RepeatWrapping;textures.push(t);return t;}
+  function relief(kind){
+    const [c,x]=canvas(),d=x.createImageData(N,N);
+    for(let y=0;y<N;y++)for(let z=0;z<N;z++){
+      const a=(y*N+z)*4;let v=128;
+      if(kind==='weave'){
+        const warp=Math.pow(.5+.5*Math.cos(z*TAU/5),2),weft=Math.pow(.5+.5*Math.cos(y*TAU/5),2);
+        const over=((Math.floor(z/5)+Math.floor(y/5))%2===0);
+        v=86+77*(over?warp*.82+weft*.28:warp*.28+weft*.82)+16*rnd();
+      }else if(kind==='bark')v=106+39*Math.sin(z*.23+Math.sin(y*.025)*.8)+22*Math.sin(z*.73+y*.008)+15*rnd();
+      else if(kind==='leaf')v=122+17*Math.sin(z*.17+Math.sin(y*.047)*2)*Math.sin(y*.19)+12*rnd();
+      else v=117+22*rnd()+5*Math.sin(z*.31)*Math.sin(y*.27);
+      d.data[a]=d.data[a+1]=d.data[a+2]=Math.max(0,Math.min(255,v));d.data[a+3]=255;
     }
-    if(kind==='linen')for(let i=0;i<512;i+=2){x.strokeStyle=i%4?'#ffffff15':'#52594413';x.lineWidth=.45;x.beginPath();x.moveTo(i,0);x.bezierCurveTo(i+.8,170,i-.6,320,i,512);x.moveTo(0,i);x.lineTo(512,i+.4);x.stroke();}
-    if(kind==='leaf')for(let j=0;j<35;j++){const y=j*14+rnd()*10;x.strokeStyle='#67854925';x.lineWidth=.65;for(const side of [-1,1]){x.beginPath();x.moveTo(256,y);x.bezierCurveTo(256+side*45,y+20,256+side*140,y+27,256+side*260,y+90);x.stroke();for(let k=1;k<6;k++){x.beginPath();x.moveTo(256+side*k*36,y+k*7);x.quadraticCurveTo(256+side*(k*36+15),y+k*7+20,256+side*(k*36+25),y+k*7+40);x.stroke();}}}
-    if(['paper','menu','receipt','verso'].includes(kind)){
-      for(let i=0;i<1400;i++){x.strokeStyle='#736d4520';x.lineWidth=.45;const a=rnd()*512,b=rnd()*512;x.beginPath();x.moveTo(a,b);x.lineTo(a+1+rnd()*7,b+rnd()*3);x.stroke();}
-      x.strokeStyle='#aa855c16';x.lineWidth=7;x.beginPath();x.ellipse(350,340,90,76,.3,.1,4.5);x.stroke();x.strokeStyle=kind==='verso'?'#4f644936':'#365a3bd9';x.lineCap='round';
-      if(kind==='paper'){
-        // Quiet, original dry botanical transfers; no lettering or broad wave.
-        x.strokeStyle='#68765338';x.fillStyle='#78826416';x.lineWidth=1.1;
-        for(let j=0;j<3;j++){const bx=85+j*135;x.beginPath();x.moveTo(bx,420);x.quadraticCurveTo(bx+26,278,bx+5,135+j*34);x.stroke();for(let k=0;k<6;k++)for(const side of [-1,1]){const y=200+k*32+j*11;x.beginPath();x.ellipse(bx+side*15,y,8,23,side*.55,0,Math.PI*2);x.fill();x.stroke();}}
-      }
-      else if(kind==='menu'){x.strokeStyle='#315b3bc9';x.lineWidth=2.2;for(let j=0;j<4;j++){const y=116+j*70;for(let k=0;k<4+j%2;k++){const a=61+k*61,dy=9*Math.sin(k*2+j);x.beginPath();x.moveTo(a,y+dy);x.bezierCurveTo(a+23,y-36+dy,a-7,y+31,a+29,y-7);x.bezierCurveTo(a+49,y-23,a+20,y+23+dy,a+56,y-4);x.stroke();}}x.lineWidth=1.3;x.beginPath();x.moveTo(79,398);x.bezierCurveTo(201,368,167,433,327,382);x.stroke();}
-      else if(kind==='receipt'){x.fillStyle='#786f5866';x.font='14px monospace';x.fillText('18 / TABLE',84,75);for(let j=0;j<13;j++){x.fillRect(78,114+j*22,50+rnd()*160,1);x.fillRect(323,114+j*22,25+rnd()*40,1);}x.font='12px serif';x.fillText('STILL WARM',100,458);}
-      else{x.lineWidth=1.2;x.beginPath();x.moveTo(111,189);x.bezierCurveTo(180,127,166,250,249,218);x.moveTo(330,309);x.lineTo(362,299);x.stroke();}
-    }
-    const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.anisotropy=4;textures.push(t);return t;
+    x.putImageData(d,0,0);return register(c,false);
   }
-  const linenMap=texture('linen'),leafMap=texture('leaf'),paperMap=texture('paper'),grain=texture('grain'),glaze=texture('glaze');
-  const mat=o=>new T.MeshPhysicalMaterial({side:T.DoubleSide,...o});
+  function texture(kind){
+    const [c,x]=canvas();
+    const grounds={linen:'#e9e8d8',leaf:'#d5e2c7',glaze:'#eee7d4',bark:'#b6a183',grain:'#eee6d3',paper:'#f4e6c9',menu:'#f2e2bd',receipt:'#ede2c6',verso:'#eee0bf'};
+    x.fillStyle=grounds[kind]||grounds.grain;x.fillRect(0,0,N,N);
+    for(let i=0;i<(kind==='leaf'?145:65);i++){
+      const a=rnd()*N,b=rnd()*N,r=12+rnd()*82,g=x.createRadialGradient(a,b,0,a,b,r);
+      const ink=kind==='leaf'?(i%3?'66,99,28':'234,239,159'):kind==='bark'?'74,56,36':'137,105,53';
+      g.addColorStop(0,`rgba(${ink},${kind==='leaf'?.16:kind==='bark'?.12:.046})`);g.addColorStop(1,`rgba(${ink},0)`);x.fillStyle=g;x.fillRect(a-r,b-r,r*2,r*2);
+    }
+    for(let i=0;i<13000;i++){x.fillStyle=`rgba(${i%2?'255,255,235':'46,43,24'},${.018+rnd()*.052})`;x.fillRect(rnd()*N,rnd()*N,.7+rnd(),.6+rnd());}
+    if(kind==='linen'){
+      for(let i=0;i<N;i+=3){x.lineWidth=.7;x.strokeStyle=i%6?'#5e645518':'#fffbe960';x.beginPath();x.moveTo(i,0);x.bezierCurveTo(i+.9,170,i-.9,340,i,N);x.moveTo(0,i);x.bezierCurveTo(160,i+.7,340,i-.8,N,i);x.stroke();}
+      for(let i=0;i<500;i++){x.strokeStyle='#716f5630';x.lineWidth=.5;const a=rnd()*N,b=rnd()*N;x.beginPath();x.moveTo(a,b);x.lineTo(a+(i%2?1:4),b+(i%2?5:1));x.stroke();}
+    }
+    if(kind==='leaf'){
+      // Tiny irregular secondary reticulation only. Primary veins are the
+      // authored 3D curves, so no repeating painted ladder fights them.
+      x.lineCap='round';x.lineWidth=.55;
+      for(let j=0;j<220;j++){
+        const a=rnd()*N,b=rnd()*N,w=8+rnd()*29,h=8+rnd()*31;
+        x.strokeStyle=j%3?'#7d965c32':'#edf0c62a';x.beginPath();x.moveTo(a,b);
+        x.bezierCurveTo(a+w*.3,b+h*.05,a+w*.7,b+h*.65,a+w,b+h);x.stroke();
+        if(j%2===0){x.beginPath();x.moveTo(a+w*.5,b+h*.35);x.quadraticCurveTo(a+w*.63,b-h*.04,a+w*.9,b-h*.15);x.stroke();}
+      }
+    }
+    if(kind==='bark'){
+      for(let j=0;j<155;j++){const a=rnd()*N,b=rnd()*N;x.strokeStyle=j%3?'#594b3a72':'#e7ddbe85';x.lineWidth=.4+rnd()*2.2;x.beginPath();x.moveTo(a,b);x.bezierCurveTo(a+6*Math.sin(j),b+39,a-4,b+98,a+4,b+165);x.stroke();}
+      for(let j=0;j<10;j++){x.strokeStyle='#62503b44';x.lineWidth=1;const a=rnd()*N,b=rnd()*N;for(let k=0;k<3;k++){x.beginPath();x.ellipse(a,b,3+k*2,11+k*6,.12,0,TAU);x.stroke();}}
+    }
+    if(kind==='glaze'){
+      // Blue-white transfer fragments: the chipped rim and thickness are mesh.
+      x.strokeStyle='#21468dcc';x.fillStyle='#244b9270';
+      for(const y of [24,36,475,487]){x.lineWidth=y%2?3:1.8;x.beginPath();x.moveTo(0,y);x.lineTo(N,y);x.stroke();}
+      for(let j=0;j<9;j++){
+        const bx=18+j*61;x.lineWidth=1.5;x.beginPath();x.moveTo(bx,458);x.bezierCurveTo(bx+48,329,bx-15,231,bx+47,54);x.stroke();
+        for(let k=0;k<9;k++){
+          const y=87+k*42,cx=bx+17+17*Math.sin(y*.017+j);
+          for(const s of [-1,1]){x.beginPath();x.ellipse(cx+s*8,y,4.6,13,s*.7,0,TAU);x.fill();}
+          if(k%3===0){x.strokeStyle='#21468d9f';for(let l=0;l<5;l++){x.beginPath();x.ellipse(cx+7*Math.cos(l*TAU/5),y+7*Math.sin(l*TAU/5),4,7,l*TAU/5,0,TAU);x.stroke();}}
+        }
+      }
+      for(let i=0;i<320;i++){x.strokeStyle='#60492718';x.lineWidth=.6;const a=rnd()*N,b=rnd()*N;x.beginPath();x.moveTo(a,b);x.lineTo(a+6,b+8);x.lineTo(a+4,b+18);x.stroke();}
+    }
+    if(['paper','menu','receipt','verso'].includes(kind)){
+      for(let i=0;i<1700;i++){x.strokeStyle='#86684124';x.lineWidth=.5;const a=rnd()*N,b=rnd()*N;x.beginPath();x.moveTo(a,b);x.lineTo(a+1+rnd()*7,b+rnd()*3);x.stroke();}
+      x.strokeStyle='#96723e1b';x.lineWidth=6;x.beginPath();x.ellipse(356,349,91,70,.3,.15,4.7);x.stroke();
+      if(kind==='menu'){
+        // One small real paper label, not text tiled across a spherical skin.
+        x.fillStyle='#365943';x.font='106px "Kaiti SC", STKaiti, KaiTi, serif';x.fillText('芥兰',106,188);
+        x.fillStyle='#4b6350b0';x.font='italic 27px Georgia, serif';x.fillText('little things, still warm',86,249);
+        x.strokeStyle='#426147a0';x.lineWidth=1.6;x.beginPath();x.moveTo(88,297);x.bezierCurveTo(184,304,287,280,409,289);x.stroke();
+        x.fillStyle='#68684a9a';x.font='15px monospace';x.fillText('05   /   JIE LAN',105,385);
+      }else if(kind==='receipt'){
+        x.fillStyle='#746651a0';x.font='14px monospace';x.fillText('18 / TABLE',79,72);
+        for(let j=0;j<13;j++){x.fillRect(76,114+j*22,52+rnd()*151,1);x.fillRect(333,114+j*22,20+rnd()*43,1);}
+        x.font='italic 21px Georgia, serif';x.fillText('a place kept for you',78,452);
+      }else{
+        x.strokeStyle=kind==='verso'?'#59634036':'#54704675';x.fillStyle='#61794d25';x.lineWidth=1.1;
+        for(let j=0;j<(kind==='verso'?1:3);j++){const bx=110+j*125;x.beginPath();x.moveTo(bx,433);x.quadraticCurveTo(bx+32,267,bx+10,110+j*41);x.stroke();for(let k=0;k<7;k++)for(const s of [-1,1]){const y=175+k*32+j*7;x.beginPath();x.ellipse(bx+s*15,y,8,21,s*.6,0,TAU);x.fill();x.stroke();}}
+      }
+    }
+    return register(c);
+  }
+  const maps={linen:texture('linen'),leaf:texture('leaf'),glaze:texture('glaze'),bark:texture('bark'),paper:texture('paper'),grain:texture('grain'),menu:texture('menu'),receipt:texture('receipt'),verso:texture('verso')};
+  const weave=relief('weave'),grain=relief('grain'),leafRelief=relief('leaf'),barkRelief=relief('bark');
+  // Paired paper/cloth/porcelain skins have explicit reverse faces. Rendering
+  // those skins double-sided duplicates hidden faces and muddies the creases.
+  const mat=o=>new T.MeshPhysicalMaterial({side:T.FrontSide,...o});
   const materials={
-    blue:mat({color:'#2457ae',map:glaze,roughness:.39,roughnessMap:glaze,clearcoat:.38,clearcoatRoughness:.35,bumpMap:glaze,bumpScale:.007}),
-    porcelain:mat({color:'#e7dcc3',map:grain,roughness:.82,bumpMap:grain,bumpScale:.007}),
-    ceramicBack:mat({color:'#86a6b2',map:paperMap,roughness:.64,clearcoat:.20,clearcoatRoughness:.55,bumpMap:grain,bumpScale:.004}),
-    cream:mat({color:'#f4ead5',map:grain,roughness:.38,clearcoat:.42,clearcoatRoughness:.29,bumpMap:grain,bumpScale:.006}),
-    imprint:mat({color:'#8b8f71',roughness:.85,bumpMap:grain,bumpScale:.003}),
-    linen:mat({color:'#879b92',map:linenMap,bumpMap:linenMap,bumpScale:.006,roughness:1,sheen:.22,sheenColor:'#c2ccbb'}),
-    linenReverse:mat({color:'#a5b3a4',map:linenMap,bumpMap:linenMap,bumpScale:.01,roughness:1,sheen:.12}),
-    linenPale:mat({color:'#d5cfbb',map:linenMap,bumpMap:linenMap,bumpScale:.01,roughness:.98,sheen:.35}),
-    leaf:mat({color:'#5a8642',map:leafMap,bumpMap:leafMap,bumpScale:.008,roughness:.87,clearcoat:.015,clearcoatRoughness:.80}),
-    young:mat({color:'#789752',map:leafMap,bumpMap:leafMap,bumpScale:.007,roughness:.89,clearcoat:.01}),
-    vein:mat({color:'#63814c',roughness:.95}),
-    branch:mat({color:'#837451',map:grain,bumpMap:grain,bumpScale:.032,roughness:.96}),
-    bud:mat({color:'#733745',map:grain,roughness:.89}),
-    flower:mat({color:'#e8cc68',roughness:.88}),
-    seedGold:mat({color:'#c0a052',roughness:.92}),
-    petal:mat({color:'#eedb8b',roughness:.90}),
-    paper:mat({map:paperMap,color:'#fff5d8',roughness:.94,bumpMap:grain,bumpScale:.013}),
-    menu:mat({map:texture('menu'),roughness:.96,bumpMap:grain,bumpScale:.01}),
-    receipt:mat({map:texture('receipt'),roughness:.87,transmission:.2,thickness:.012}),
-    verso:mat({map:texture('verso'),roughness:.97,bumpMap:grain,bumpScale:.012}),
-    silver:mat({color:'#c9ceca',metalness:.72,roughness:.5,bumpMap:grain,bumpScale:.012}),
-    thread:mat({color:'#cbd1b9',roughness:.9}),
-    // Thin tinted sheets use alpha as well as transmission: the visible rear
-    // layers must not depend solely on the renderer's refraction buffer.
-    // GLB carries alphaMode BLEND plus KHR_materials_transmission; it is an
-    // authored thin-glass approximation, not a volumetric optical simulation.
-    wine:mat({color:'#81394d',transparent:true,opacity:.62,depthWrite:false,forceSinglePass:true,transmission:.3,thickness:.035,ior:1.36,roughness:.13,clearcoat:.55,attenuationColor:'#b75567',attenuationDistance:2}),
-    amber:mat({color:'#d8a550',transparent:true,opacity:.5,depthWrite:false,forceSinglePass:true,transmission:.36,thickness:.028,ior:1.38,roughness:.14,clearcoat:.45}),
-    violet:mat({color:'#665076',transparent:true,opacity:.78,transmission:.42,thickness:.16,roughness:.13,ior:1.46,clearcoat:.65}),
-    brass:mat({color:'#aa8850',metalness:.78,roughness:.32}),
-    specimenGlass:mat({color:'#b7a0af',transparent:true,opacity:.46,depthWrite:false,forceSinglePass:true,transmission:.69,thickness:.035,ior:1.39,roughness:.105,clearcoat:.62,iridescence:.10}),
-    glassEdge:mat({color:'#edece1',metalness:.32,roughness:.19,transparent:true,opacity:.82}),
-    film:mat({color:'#e1e3d4',transparent:true,opacity:.34,depthWrite:false,forceSinglePass:true,transmission:.67,thickness:.022,ior:1.34,roughness:.16,iridescence:.10,clearcoat:.50})
+    blue:mat({color:'#e0e5e8',map:maps.glaze,roughness:.29,clearcoat:.48,clearcoatRoughness:.22,bumpMap:grain,bumpScale:.003}),
+    cobalt:mat({color:'#244a8f',roughness:.30,clearcoat:.62,clearcoatRoughness:.22,bumpMap:grain,bumpScale:.003}),
+    porcelain:mat({color:'#ddceb3',map:maps.grain,roughness:.89,bumpMap:grain,bumpScale:.011}),
+    ceramicBack:mat({color:'#365c83',map:maps.grain,roughness:.48,clearcoat:.28,clearcoatRoughness:.30,bumpMap:grain,bumpScale:.004}),
+    cream:mat({color:'#f1e8ce',map:maps.grain,roughness:.43,clearcoat:.31,bumpMap:grain,bumpScale:.005}),
+    imprint:mat({color:'#627448',roughness:.88}),
+    linen:mat({color:'#889782',map:maps.linen,bumpMap:weave,bumpScale:.006,roughness:.98,sheen:.38,sheenColor:'#d9dece',sheenRoughness:.88}),
+    linenReverse:mat({color:'#a1a38b',map:maps.linen,bumpMap:weave,bumpScale:.007,roughness:1,sheen:.22,sheenColor:'#d2cfb6'}),
+    linenPale:mat({color:'#b7bca0',map:maps.linen,bumpMap:weave,bumpScale:.006,roughness:.98,sheen:.35,sheenColor:'#e1decb'}),
+    roseLinen:mat({color:'#995968',map:maps.linen,bumpMap:weave,bumpScale:.006,roughness:.97,sheen:.27,sheenColor:'#d9a3ad'}),
+    roseThread:mat({color:'#bd8994',roughness:.94,sheen:.24}),
+    leaf:mat({side:T.DoubleSide,color:'#4c7943',map:maps.leaf,bumpMap:leafRelief,bumpScale:.007,roughness:.65,clearcoat:.10,clearcoatRoughness:.48}),
+    leafDark:mat({side:T.DoubleSide,color:'#315e43',map:maps.leaf,bumpMap:leafRelief,bumpScale:.006,roughness:.72,clearcoat:.07,clearcoatRoughness:.50}),
+    leafPale:mat({side:T.DoubleSide,color:'#809d63',map:maps.leaf,bumpMap:leafRelief,bumpScale:.006,roughness:.67,clearcoat:.10,clearcoatRoughness:.47}),
+    young:mat({side:T.DoubleSide,color:'#8cab55',map:maps.leaf,bumpMap:leafRelief,bumpScale:.005,roughness:.63,clearcoat:.11,clearcoatRoughness:.45}),
+    vein:mat({color:'#9fae70',roughness:.76,clearcoat:.03}),
+    branch:mat({color:'#817c5e',map:maps.grain,bumpMap:grain,bumpScale:.011,roughness:.98}),
+    bark:mat({color:'#a8997e',map:maps.bark,bumpMap:barkRelief,bumpScale:.028,roughness:.98}),
+    moss:mat({color:'#74843b',map:maps.leaf,bumpMap:grain,bumpScale:.026,roughness:1}),
+    bud:mat({color:'#843e50',map:maps.grain,roughness:.83}),
+    flower:mat({color:'#dbc54b',roughness:.62}),
+    seedGold:mat({color:'#ae873b',map:maps.grain,roughness:.51,metalness:.12}),
+    petal:mat({color:'#eed168',roughness:.76}),
+    paper:mat({map:maps.paper,roughness:.96,bumpMap:grain,bumpScale:.012}),
+    menu:mat({map:maps.menu,roughness:.95,bumpMap:grain,bumpScale:.009}),
+    receipt:mat({map:maps.receipt,roughness:.95,bumpMap:grain,bumpScale:.008}),
+    verso:mat({map:maps.verso,roughness:.97,bumpMap:grain,bumpScale:.01}),
+    silver:mat({color:'#a8aaa1',metalness:.83,roughness:.29,bumpMap:grain,bumpScale:.003}),
+    thread:mat({color:'#bfb89e',roughness:.96}),
+    // Opaque colored seeds remain visible inside the refractive glass pocket.
+    // Mixing alpha blending and transmission for nested shells would erase
+    // their depth in the single refraction buffer used by this renderer.
+    wine:mat({color:'#6e263e',bumpMap:grain,bumpScale:.003,roughness:.36,metalness:.03,clearcoat:.38,clearcoatRoughness:.27}),
+    amber:mat({color:'#bd8d38',roughness:.18,metalness:.35,clearcoat:.7,clearcoatRoughness:.14}),
+    violet:mat({color:'#684467',bumpMap:grain,bumpScale:.003,roughness:.39,metalness:.02,clearcoat:.33,clearcoatRoughness:.29}),
+    brass:mat({color:'#a49064',metalness:.79,roughness:.35,bumpMap:grain,bumpScale:.002}),
+    warmCore:mat({color:'#edbd63',emissive:'#d99135',emissiveIntensity:.55,roughness:.25,metalness:.08}),
+    specimenGlass:mat({side:T.DoubleSide,color:'#ffffff',transmission:1,opacity:1,thickness:.016,ior:1.30,roughness:.055,envMapIntensity:.24,clearcoat:.08,clearcoatRoughness:.18}),
+    dew:mat({color:'#ffffff',transmission:1,opacity:1,thickness:.028,ior:1.333,roughness:.035,envMapIntensity:.55,clearcoat:.15}),
+    glassEdge:mat({side:T.DoubleSide,color:'#f0eee2',metalness:.04,roughness:.24,transparent:true,opacity:.32,depthWrite:false,forceSinglePass:true}),
+    // This second, very thin membrane is a non-refracting transparent layer.
+    // Keep it separate from the physical glass pocket for stable orbit sorting.
+    film:mat({side:T.DoubleSide,color:'#e0e8d7',transparent:true,opacity:.105,depthWrite:false,forceSinglePass:true,transmission:0,roughness:.30,clearcoat:.10,clearcoatRoughness:.3,iridescence:0})
   };
-  return { ...materials,dispose(){Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}};
+  for(const [name,material] of Object.entries(materials))material.name=`Jielan / ${name}`;
+  return {...materials,dispose(){Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}};
 }

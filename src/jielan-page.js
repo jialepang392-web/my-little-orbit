@@ -14,7 +14,7 @@ stage.setAttribute('aria-busy','true');
 try{
   let timer;
   const {createJielanViewer}=await Promise.race([
-    import('./jielan/viewer.js?v=0190'),
+    import('./jielan/viewer.js?v=0200'),
     new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Scene load timeout')),25000);})
   ]).finally(()=>clearTimeout(timer));
   viewer=createJielanViewer(canvas,{onReady(){
@@ -25,10 +25,21 @@ try{
   document.querySelector('#layers-toggle').addEventListener('click',()=>{separated=!separated;viewer.setSeparated(separated?1:0);toggle('#layers-toggle',separated,'合拢材料','展开材料');});
   document.querySelector('#light-toggle').addEventListener('click',()=>{light=!light;viewer.setLight(light);toggle('#light-toggle',light,'恢复暖光','银光观察');});
   document.querySelector('#study-toggle').addEventListener('click',()=>{study=!study;viewer.setStudy(study);toggle('#study-toggle',study,'回到展览','结构观察');});
-  document.querySelectorAll('[data-view],[data-detail]').forEach(button=>button.addEventListener('click',()=>{
+  // Canvas dataset.view/detail are diagnostics, not interactive buttons.
+  // Binding this handler to the canvas reset the camera on pointer release.
+  document.querySelectorAll('button[data-view],button[data-detail]').forEach(button=>button.addEventListener('click',()=>{
     stopTurn();if(button.dataset.view)viewer.setView(button.dataset.view);else viewer.setDetail(button.dataset.detail);
-    document.querySelectorAll('[data-view],[data-detail]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+    document.querySelectorAll('button[data-view],button[data-detail]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
   }));
+  document.querySelector('#reset-view').addEventListener('click',()=>{
+    turn=false;separated=false;study=false;light=false;viewer.reset();
+    toggle('#rotate-toggle',false,'停止转动','缓慢转动');
+    toggle('#layers-toggle',false,'合拢材料','展开材料');
+    toggle('#light-toggle',false,'恢复暖光','银光观察');
+    toggle('#study-toggle',false,'回到展览','结构观察');
+    document.querySelectorAll('button[data-view],button[data-detail]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.view==='front')));
+    status.textContent='已复位 · 拖动旋转 · 滚轮缩放';
+  });
   document.querySelector('#capture-image').addEventListener('click',async event=>{
     const button=event.currentTarget;button.disabled=true;
     try{const blob=await viewer.capture({background:true});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='jielan-view.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}
