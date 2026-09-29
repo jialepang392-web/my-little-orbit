@@ -8,5 +8,8 @@ export function frameSeconds(now, previous) {
 }
 
 export function shouldAnimate({paused=false,hidden=false,inViewport=true,reducedMotion=false,active=false,dirty=false}) {
-  return !paused&&!hidden&&(active||(inViewport&&(!reducedMotion||dirty)));
+  // The garden keeps moving while a route, key or drag is active. At rest it
+  // follows the same on-demand policy as the sculpture viewers: one dirty
+  // frame, then no battery/GPU work until the next visible change.
+  return !paused&&!hidden&&(active||(inViewport&&dirty));
 }

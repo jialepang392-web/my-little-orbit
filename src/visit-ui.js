@@ -3,8 +3,8 @@
  * viewing controls, W3C APG focus-returning dialogs. No reference code copied.
  */
 import { showExhibitDialog } from './exhibition-dialog.js?v=0150';
-const ids=['yesterday-today','crossover','poem','rain-finale','jielan'];
-const names=['昨天，今天','删了一百遍','思念若是一首诗','雨终曲','芥兰'];
+const ids=['yesterday-today','crossover','poem','rain-finale','jielan','falling'];
+const names=['昨天，今天','删了一百遍','思念若是一首诗','雨终曲','芥兰','在坠落时'];
 const world=document.body.dataset.orbitWorld,index=ids.indexOf(world);
 const workLink=id=>document.querySelector(`[data-orbit-choice="${id}"],.world-card[data-world="${id}"]`)?.getAttribute('href')||'./'+id+'.html';
 const workThumbnail=id=>document.querySelector(`[data-orbit-choice="${id}"] img`)?.getAttribute('src')||'./assets/exhibition/'+id+'-192.webp';
@@ -26,11 +26,11 @@ if(index>=0){
   function openDirectory(opener){
     if(!directory){
       directory=make('dialog','exhibit-dialog visit-directory');directory.id='visit-directory';
-      const heading=make('header','exhibit-dialog-header'),title=make('h2','','五件作品，五种心情');title.id='visit-directory-title';
+      const heading=make('header','exhibit-dialog-header'),title=make('h2','','六件作品，六种心情');title.id='visit-directory-title';
       directory.setAttribute('aria-labelledby',title.id);
       const close=action('关闭 ×',()=>directory.close(),'exhibit-close');close.setAttribute('aria-label','关闭作品目录');
       heading.append(title,close);
-      const note=make('p','visit-directory-note','留下的形状 / 01—05');
+      const note=make('p','visit-directory-note','留下的形状 / 01—06');
       const nav=make('nav','visit-directory-grid');nav.setAttribute('aria-label','选择作品');
       ids.forEach((id,n)=>{
         const a=link('',workLink(id),'visit-directory-item');
@@ -50,7 +50,7 @@ if(index>=0){
     summary.addEventListener('click',event=>{event.preventDefault();picker.open=false;openDirectory(summary);});
   }
   // Sticky local chapters keep long pages navigable, without scroll hijacking.
-  const stage=document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage,#jielan-stage');
+  const stage=document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage,#jielan-stage,#falling-stage');
   const studies=document.querySelector('.time-details,.detail-strip,.garden-details,.rain-details');
   const verso=document.querySelector('.time-verso,.exhibit-verso');
   const chapters=make('nav','visit-chapters');chapters.setAttribute('aria-label','本件作品的章节');

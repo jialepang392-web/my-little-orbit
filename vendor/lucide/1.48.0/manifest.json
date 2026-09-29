@@ -1,0 +1,17 @@
+{
+  "name": "Lucide",
+  "version": "1.48.0",
+  "repository": "https://github.com/lucide-icons/lucide",
+  "release": "https://github.com/lucide-icons/lucide/releases/tag/1.48.0",
+  "commit": "f53e5bfff0f909f3f451933538744330650d3ce0",
+  "license": "ISC with Feather-derived icons covered by the included MIT notice",
+  "sourcePath": "icons",
+  "files": {
+    "LICENSE": "1536a98a4e745983f12c3d8260e63abcfcda616b2e0292f537aa7460e286bcd1",
+    "icons/arrow-left.svg": "4f875176d1917e09fc3d539746ce46c733513f8eb36d19fcd8e146c06106f2ab",
+    "icons/box.svg": "f2dff1b3b5e32ebfadfeb7b89d0e706547b6d35803f8d4bcfd5d73b8b9199fc3",
+    "icons/grid-2x2.svg": "8722673f96de654ad5033c71a407809e6b72ceec01c4d5dcfcbc34aeb0f88862",
+    "icons/image.svg": "b3286ec87e68128be7140120940e43bfddd7a60ddf4aa5ddba9ace12f171b433",
+    "icons/maximize-2.svg": "1b78686af41f7527eb2842e19b5f2fc2221300af0b880e8529f2ca75d60641b7"
+  }
+}

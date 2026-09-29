@@ -26,6 +26,8 @@
 .sleeve-home .world-card.rain{--sleeve:#d9959e;--edge:#985b67;--ticket:#e5e4ec;--pen:#4c5878;margin-left:9px}
 .sleeve-home .world-card.jielan{--sleeve:#b9c297;--edge:#717e59;--ticket:#f0edda;--pen:#52632e;margin-left:-2px}
 .sleeve-home .jielan .sleeve-ticket{border:1px solid #8c98795c;border-left:5px solid #697b44;transform:rotate(2deg)}
+.sleeve-home .world-card.falling{--sleeve:#c7a6ae;--edge:#79404e;--ticket:#e6dfd8;--pen:#9b263e}
+.sleeve-home .world-card.falling h2{font:400 clamp(36px,4.5vw,62px)/1.3 'Songti SC','SimSun',serif;letter-spacing:.04em}
 .sleeve-home .jielan h2{font:500 58px/1.1 'Kaiti SC','STKaiti','Songti SC',serif;letter-spacing:.15em;margin-block:3px}
 .sleeve-surface{position:absolute;inset:0 0 2px;background:linear-gradient(100deg,#ffffff19,transparent 13%,#ffffff15 55%,#3b233c0c 98%),var(--sleeve);border-radius:2px 5px 7px 2px;box-shadow:inset 0 2px 0 #ffffff54,inset 0 -4px 0 #321c332e,inset -11px 0 15px #582c3326;mask-image:radial-gradient(circle 19px at 9% 100%,transparent 97%,#000 100%);z-index:-2}
 .sleeve-surface:before{content:'';position:absolute;inset:0;background:url('./assets/homepage/paper-grain.webp');background-size:185px;opacity:.64;mix-blend-mode:multiply}
@@ -93,4 +95,4 @@
  .sleeve-home .collection-route strong{font-size:9px}
 }
 @media(max-width:1000px){.sleeve-home .jielan h2{font-size:46px}}
-@media(max-width:600px){.sleeve-home .jielan h2{font-size:34px}.sleeve-home .jielan .sleeve-ticket{padding-top:12px;padding-bottom:12px}.sleeve-home .collection-route>a:last-child{grid-column:1/-1}}
+@media(max-width:600px){.sleeve-home .jielan h2{font-size:34px}.sleeve-home .jielan .sleeve-ticket{padding-top:12px;padding-bottom:12px}.sleeve-home .collection-route>a:last-child{grid-column:auto}}

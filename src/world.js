@@ -2,13 +2,14 @@ import * as T from 'three';
 import { LANDMARKS, landmarkById } from './data.js?v=0130';
 import { fromLatLon, seededRandom, clamp } from './math.js?v=0130';
 import { orbitFrame, dragOrbit, surfaceStep } from './navigation.js?v=0130';
-import { frameSeconds, shouldAnimate } from './runtime.js?v=0130';
+import { frameSeconds, shouldAnimate } from './runtime.js?v=0260';
 import { Stars } from './vendor/stars.js?v=0130';
 import { makeArtAvatar as makeOriginalAvatar, makeArtGuide as makeOriginalGuide, makeArtLandmark as makeOriginalLandmark, part as mesh } from './art-models.js?v=0130';
 import { makeArtAvatar as makeGardenAvatar, makeArtGuide as makeGardenGuide, makeArtLandmark as makeGardenLandmark } from './garden-models.js?v=0130';
 import { makeLandscape, surfaceRadius, placeSurface } from './landscape.js?v=0210';
 import { AssetSlots, disposeTree } from './assets.js?v=0130';
 import { makeCollageLight } from './collage-light.js?v=0160';
+import { createRenderPerformance } from './render-performance.js?v=0260';
 
 const R=5.4,UP=new T.Vector3(0,1,0);
 const initialNormal=new T.Vector3(...fromLatLon(-24,84));
@@ -18,10 +19,10 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   const blenderEdition=false,originalEdition=false;
   const historicalEdition=blenderEdition||originalEdition;
   const makeAvatar=historicalEdition?makeOriginalAvatar:makeGardenAvatar,makeGuide=historicalEdition?makeOriginalGuide:makeGardenGuide,makeLandmark=historicalEdition?makeOriginalLandmark:makeGardenLandmark;
+  const build=new URLSearchParams(location.search).get('build')==='1';
   let renderer;
-  try{renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,preserveDrawingBuffer:new URLSearchParams(location.search).get('build')==='1',powerPreference:'low-power'});}
+  try{renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,preserveDrawingBuffer:build,powerPreference:'low-power'});}
   catch(error){throw new Error('此浏览器无法启动 WebGL2。纯阅读模式仍可使用。',{cause:error});}
-  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
   renderer.setClearColor(0xdde6dd,0);renderer.outputColorSpace=T.SRGBColorSpace;
   renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.06;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
@@ -64,6 +65,7 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   let normal=initialNormal.clone(),forward=UP.clone().addScaledVector(normal,-UP.dot(normal)).normalize(),inspection=null;
   let target=null,nearbyId=null,paused=false,disposed=false,frame=0,lastTime=performance.now(),elapsed=0,zoom=1,width=1,height=1,followTraveller=true;
   let inViewport=true,dirty=true,renderedFrames=0,navigationKey='';
+  const renderPolicy=createRenderPerformance({canvas,renderer,build,maxDpr:1.5,mobileMaxDpr:1.5,adaptiveMobileMaxDpr:1.25,buildDpr:1.5,onChange:()=>{resize();invalidate();}});
   canvas.dataset.textureStatus='loading';
   void landscape.ready.then(loaded=>{if(disposed)return;canvas.dataset.textureStatus=loaded?'ready':'fallback';if(!loaded)onNotice('纸石纹理暂未加载，已保留园林造型和全部游园功能。');invalidate();});
   // Art-directed front view is independent of where the traveller starts.
@@ -74,40 +76,53 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   const ground=landscape.ground??landscape.surface??landscape.root.children.find(object=>object.isMesh);
   const targetMarker=new T.Mesh(new T.TorusGeometry(.19,.015,6,36),new T.MeshBasicMaterial({color:'#a53d36',depthWrite:false}));
   targetMarker.geometry.rotateX(Math.PI/2);targetMarker.visible=false;targetMarker.renderOrder=2;scene.add(targetMarker);
-  let surfaceClicks=0,orbitDrags=0;
+  let surfaceClicks=0,orbitDrags=0,pinchZooms=0;
   const input={up:false,down:false,left:false,right:false};
   const abort=new AbortController(),signal=abort.signal;
   const right=new T.Vector3(),movement=new T.Vector3(),axis=new T.Vector3(),rotation=new T.Quaternion(),basis=new T.Matrix4(),projected=new T.Vector3(),guideN=new T.Vector3(),screenForward=new T.Vector3();
-  let drag=null;
+  let drag=null,pinch=null;const pointers=new Map();
   const on=(element,type,handler,options={})=>element.addEventListener(type,handler,{...options,signal});
-  const clearInput=()=>{for(const key of Object.keys(input))input[key]=false;drag=null;};
+  const clearInput=()=>{for(const key of Object.keys(input))input[key]=false;drag=null;pinch=null;pointers.clear();renderPolicy.endInteraction();};
   const keyMap={KeyW:'up',ArrowUp:'up',KeyS:'down',ArrowDown:'down',KeyA:'left',ArrowLeft:'left',KeyD:'right',ArrowRight:'right'};
   on(window,'keydown',(event)=>{
     if(paused||event.altKey||event.ctrlKey||event.metaKey||event.target?.closest('input,textarea,select,[contenteditable="true"]'))return;
-    const key=keyMap[event.code];if(key){event.preventDefault();if(!input[key])startManualMovement();input[key]=true;target=null;invalidate();}
+    const key=keyMap[event.code];if(key){event.preventDefault();if(!input[key])startManualMovement();input[key]=true;target=null;renderPolicy.beginInteraction();invalidate();}
   });
-  on(window,'keyup',(event)=>{const key=keyMap[event.code];if(key){input[key]=false;invalidate();}});
+  on(window,'keyup',(event)=>{const key=keyMap[event.code];if(key){input[key]=false;renderPolicy.endInteraction();invalidate();}});
   on(window,'blur',()=>{clearInput();invalidate();});
   on(document,'visibilitychange',()=>{clearInput();if(!document.hidden&&!paused&&!disposed){lastTime=performance.now();schedule();}});
-  on(canvas,'pointerdown',(event)=>{if(event.button!==0||paused||drag)return;drag={id:event.pointerId,startX:event.clientX,startY:event.clientY,x:event.clientX,y:event.clientY,moved:false};canvas.setPointerCapture(event.pointerId);canvas.focus({preventScroll:true});});
+  on(canvas,'pointerdown',(event)=>{
+    if(event.button!==0||paused||pointers.has(event.pointerId)||pointers.size>=2)return;
+    pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});renderPolicy.beginInteraction();canvas.setPointerCapture(event.pointerId);canvas.focus({preventScroll:true});
+    if(pointers.size===1)drag={id:event.pointerId,startX:event.clientX,startY:event.clientY,x:event.clientX,y:event.clientY,moved:false};
+    else{const [a,b]=[...pointers.values()];pinch={distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),zoom};if(drag)drag.moved=true;pinchZooms++;invalidate();}
+  });
   on(canvas,'pointermove',(event)=>{
-    if(!drag||drag.id!==event.pointerId||paused)return;
+    if(paused||!pointers.has(event.pointerId))return;
+    pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
+    if(pinch&&pointers.size>=2){const [a,b]=[...pointers.values()],distance=Math.max(1,Math.hypot(a.x-b.x,a.y-b.y));zoom=clamp(pinch.zoom*pinch.distance/distance,.8,1.4);renderPolicy.noteInteraction();invalidate();return;}
+    if(!drag||drag.id!==event.pointerId)return;
     if(!drag.moved&&Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)<6)return;
     if(!drag.moved){drag.moved=true;orbitDrags++;}
-    orbit=dragOrbit(orbit,event.clientX-drag.x,event.clientY-drag.y);drag.x=event.clientX;drag.y=event.clientY;followTraveller=false;invalidate();
+    orbit=dragOrbit(orbit,event.clientX-drag.x,event.clientY-drag.y);drag.x=event.clientX;drag.y=event.clientY;followTraveller=false;renderPolicy.noteInteraction();invalidate();
   });
-  on(canvas,'pointerup',(event)=>{
-    if(!drag||drag.id!==event.pointerId)return;
-    const clicked=!drag.moved&&Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)<6;drag=null;
+  function finishPointer(event,allowClick){
+    if(!pointers.has(event.pointerId))return;
+    const wasPinching=Boolean(pinch),clicked=allowClick&&!wasPinching&&drag?.id===event.pointerId&&!drag.moved&&Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)<6;
+    pointers.delete(event.pointerId);
     if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);
+    if(wasPinching){pinch=null;if(pointers.size===1){const [id,point]=pointers.entries().next().value;drag={id,startX:point.x,startY:point.y,x:point.x,y:point.y,moved:true};}else drag=null;}
+    else if(drag?.id===event.pointerId)drag=null;
+    if(pointers.size)renderPolicy.beginInteraction();else renderPolicy.endInteraction();
     if(clicked&&!paused)navigateToSurface(event.clientX,event.clientY);else invalidate();
-  });
-  for(const type of ['pointercancel','lostpointercapture'])on(canvas,type,()=>{drag=null;});
-  on(canvas,'wheel',(event)=>{if(paused)return;event.preventDefault();zoom=clamp(zoom+event.deltaY*.0006,.8,1.4);invalidate();},{passive:false});
+  }
+  on(canvas,'pointerup',event=>finishPointer(event,true));
+  for(const type of ['pointercancel','lostpointercapture'])on(canvas,type,event=>finishPointer(event,false));
+  on(canvas,'wheel',(event)=>{if(paused)return;event.preventDefault();zoom=clamp(zoom+event.deltaY*.0006,.8,1.4);renderPolicy.noteInteraction();invalidate();},{passive:false});
   on(canvas,'webglcontextlost',(event)=>{event.preventDefault();setPaused(true);onError('3D 图形上下文已丢失。可以继续阅读文章，刷新页面可重试场景。');});
   for(const label of labels)on(label.element,'click',()=>navigateTo(label.id));
 
-  function resize(){const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;width=rect.width;height=rect.height;renderer.setSize(width,height,false);camera.aspect=width/height;camera.fov=inspection?.fov??(width/height<.9?43:34.5);camera.updateProjectionMatrix();invalidate();}
+  function resize(){const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;const changed=renderPolicy.resize(rect.width,rect.height),aspect=rect.width/rect.height,fov=inspection?.fov??(aspect<.9?43:34.5);width=rect.width;height=rect.height;if(!changed&&Math.abs(camera.aspect-aspect)<1e-6&&camera.fov===fov)return;camera.aspect=aspect;camera.fov=fov;camera.updateProjectionMatrix();invalidate();}
   const observer=new ResizeObserver(resize);observer.observe(canvas);resize();
   const visibilityObserver=new IntersectionObserver(([entry])=>{inViewport=entry.isIntersecting;canvas.dataset.inViewport=String(inViewport);invalidate();});visibilityObserver.observe(canvas);
   function focusTraveller(){
@@ -141,11 +156,11 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
     camera.updateMatrixWorld();
   }
   function setPaused(value){paused=Boolean(value);clearInput();canvas.dataset.paused=String(paused);if(paused){cancelAnimationFrame(frame);frame=0;}else{lastTime=performance.now();invalidate();}}
-  function setLowPower(value){renderer.setPixelRatio(value?1:Math.min(devicePixelRatio,1.5));renderer.shadowMap.enabled=!value;clouds.visible=historicalEdition&&!value;landscape.setLowPower?.(value);resize();}
-  function setDusk(value){dusk=Boolean(value);sun.color.set(dusk?'#edc9ad':'#fff8e5');sun.intensity=dusk?1.5:2.65;hemisphere.color.set(dusk?'#bac8d2':'#eef3e5');hemisphere.intensity=dusk?.9:1.3;stars.visible=dusk;canvas.dataset.dusk=String(dusk);invalidate();}
+  function setLowPower(value){renderPolicy.setLowPower(value);renderer.shadowMap.enabled=!value;clouds.visible=historicalEdition&&!value;landscape.setLowPower?.(value);renderPolicy.invalidateShadow();resize();invalidate();}
+  function setDusk(value){dusk=Boolean(value);sun.color.set(dusk?'#edc9ad':'#fff8e5');sun.intensity=dusk?1.5:2.65;hemisphere.color.set(dusk?'#bac8d2':'#eef3e5');hemisphere.intensity=dusk?.9:1.3;stars.visible=dusk;canvas.dataset.dusk=String(dusk);renderPolicy.invalidateShadow();invalidate();}
   function invalidate(){dirty=true;if(!frame)lastTime=performance.now();schedule();}
   function schedule(){
-    const active=Boolean(target||drag||Object.values(input).some(Boolean));
+    const active=Boolean(target||drag||pinch||pointers.size||Object.values(input).some(Boolean));
     // A canvas moved into the dialog is visible even when its old document
     // IntersectionObserver entry is offscreen. Wheel/reset invalidations
     // must render there after the active pointer drag has ended.
@@ -170,6 +185,7 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
       else {movement.fromArray(planned.tangent);step=planned.step;}
     }
     const moving=step>0;
+    if(moving||drag||Object.values(input).some(Boolean))renderPolicy.noteInteraction();
     if(moving){
       const yaw=-Math.atan2(movement.dot(right),movement.dot(forward));avatar.visual.rotation.y=yaw;
       axis.crossVectors(normal,movement).normalize();rotation.setFromAxisAngle(axis,step);normal.applyQuaternion(rotation).normalize();forward.applyQuaternion(rotation).normalize();
@@ -199,14 +215,9 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
     const nextKey=target?`${target.kind}/${target.id}/${completion}`:'idle';
     if(nextKey!==navigationKey){navigationKey=nextKey;onNavigation(target?{id:target.id,kind:target.kind,completion}:null);}
     if(!reducedMotion)clouds.rotation.y=elapsed*.008;
-    renderer.render(scene,camera);
-    canvas.dataset.frame=String(++renderedFrames);
-    canvas.dataset.drawCalls=String(renderer.info.render.calls);canvas.dataset.triangles=String(renderer.info.render.triangles);
-    canvas.dataset.avatarAction=assets.entries.find(a=>a.id==='avatar')?.active?.getClip().name??(moving?'Walk':'Idle');
-    canvas.dataset.ready='true';canvas.dataset.position=normal.toArray().map((v)=>v.toFixed(4)).join(',');
-    canvas.dataset.camera=orbit.outward.map(value=>value.toFixed(6)).join(',');canvas.dataset.cameraUp=orbit.up.map(value=>value.toFixed(6)).join(',');
-    canvas.dataset.zoom=zoom.toFixed(3);canvas.dataset.navigation=target?.kind??(moving?'manual':'idle');canvas.dataset.target=target?.normal.toArray().map(value=>value.toFixed(6)).join(',')??'';
-    canvas.dataset.targetLandmark=target?.id??'';canvas.dataset.surfaceClicks=String(surfaceClicks);canvas.dataset.orbitDrags=String(orbitDrags);canvas.dataset.cameraFollow=String(followTraveller);
+    renderPolicy.beforeRender(now,moving||Boolean(drag));renderer.render(scene,camera);renderedFrames++;
+    const navigationMode=target?.kind??(moving?'manual':'idle');
+    if(renderPolicy.shouldWriteDiagnostics(now,renderedFrames===1||navigationMode!==canvas.dataset.navigation))Object.assign(canvas.dataset,{frame:String(renderedFrames),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),avatarAction:assets.entries.find(a=>a.id==='avatar')?.active?.getClip().name??(moving?'Walk':'Idle'),ready:'true',position:normal.toArray().map((v)=>v.toFixed(4)).join(','),camera:orbit.outward.map(value=>value.toFixed(6)).join(','),cameraUp:orbit.up.map(value=>value.toFixed(6)).join(','),zoom:zoom.toFixed(3),navigation:navigationMode,target:target?.normal.toArray().map(value=>value.toFixed(6)).join(',')??'',targetLandmark:target?.id??'',surfaceClicks:String(surfaceClicks),orbitDrags:String(orbitDrags),pinchZooms:String(pinchZooms),cameraFollow:String(followTraveller)});
     if(arrival)onArrival(arrival);
     schedule();
   }
@@ -214,7 +225,7 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
   return { navigateTo,cancelNavigation,setDirection,reset,setPaused,setLowPower,setDusk,setView,setDetail,
     ready:landscape.ready,
     stats(){return {...canvas.dataset,sceneVersion:'0.22.0',bodyAxes:[1,1,1],surfaceAxisRadii:[[1,0,0],[0,1,0],[0,0,1]].map(n=>surfaceRadius(new T.Vector3(...n))),cameraPosition:camera.position.toArray(),cameraTarget:inspection?.target??[0,0,0],cameraFov:camera.fov};},
-    async capture(){await landscape.ready;applyCamera();renderer.render(scene,camera);return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Garden capture failed')),'image/png'));},
+    async capture(){await landscape.ready;applyCamera();renderPolicy.invalidateShadow();renderPolicy.beforeRender(performance.now());renderer.render(scene,camera);return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Garden capture failed')),'image/png'));},
     async exportGLB(){
       await landscape.ready;
       const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');
@@ -231,6 +242,6 @@ export function createWorld({canvas,labelLayer,onNearby=()=>{},onArrival=()=>{},
       finally{exportedMaterials.forEach(m=>m.dispose());}
     },
     getNearby:()=>nearbyId,
-    dispose(){disposed=true;cancelAnimationFrame(frame);abort.abort();observer.disconnect();visibilityObserver.disconnect();assets.dispose();disposeTree(scene);studioLight.dispose();labels.forEach((label)=>label.element.remove());renderer.dispose();}
+    dispose(){disposed=true;cancelAnimationFrame(frame);abort.abort();observer.disconnect();visibilityObserver.disconnect();renderPolicy.dispose();assets.dispose();disposeTree(scene);studioLight.dispose();labels.forEach((label)=>label.element.remove());renderer.dispose();}
   };
 }

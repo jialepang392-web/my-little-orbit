@@ -4,7 +4,7 @@ import { escapeHtml, renderMarkdown } from './markdown.js?v=0130';
 import { downloadPostcard } from './postcard.js?v=0130';
 import { artImage } from './art-paths.js?v=0130';
 import { iconSvg } from './illustrations.js?v=0130';
-import { waitForLiveView } from './exhibition-state.js?v=0130';
+import { waitForLiveView } from './exhibition-state.js?v=0260';
 
 const $=(selector)=>document.querySelector(selector);
 let storage=null;try{storage=window.localStorage;}catch{/* Private/blocked storage: session-only progress. */}
@@ -126,7 +126,7 @@ async function bootWorld(){
   status.hidden=false;status.classList.remove('error');
   const slowNotice=setTimeout(()=>{if(worldState==='loading')status.textContent='三维资源仍在加载，请稍候；高清图版和文章可以先看。';},12000);
   try{
-    const module=await import('./world.js?v=0220');
+    const module=await import('./world.js?v=0260');
     world=module.createWorld({canvas,labelLayer:$('#landmark-labels'),reducedMotion,onNearby:setNearby,onNotice:toast,
       onNavigation:updateJourney,
       onArrival:(id)=>{void openLocation(id,true);},

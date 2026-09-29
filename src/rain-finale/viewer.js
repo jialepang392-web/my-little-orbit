@@ -7,6 +7,7 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { seededRandom } from '../math.js?v=0130';
 import { makeRainFinale } from './model.js?v=0130';
+import { createRenderPerformance } from '../render-performance.js?v=0260';
 
 function studio(renderer){
   const c=Object.assign(document.createElement('canvas'),{width:1024,height:512}),ctx=c.getContext('2d');
@@ -24,8 +25,9 @@ function atmosphere(){
 
 export function createRainViewer(canvas,{glyphs={},onReady=()=>{},onError=()=>{}}={}){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const build=new URLSearchParams(location.search).get('build')==='1';
   const renderer=new T.WebGLRenderer({canvas,antialias:true,powerPreference:'low-power',preserveDrawingBuffer:false});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor('#090b10');renderer.outputColorSpace=T.SRGBColorSpace;
+  renderer.setClearColor('#090b10');renderer.outputColorSpace=T.SRGBColorSpace;
   renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.92;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.info.autoReset=false;
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(35,1,.1,70);camera.position.set(0,.22,13.2);
@@ -47,58 +49,60 @@ export function createRainViewer(canvas,{glyphs={},onReady=()=>{},onError=()=>{}
   for(let i=0;i<96;i++)rainSeeds.push({x:(random()-.5)*15,y:(random()-.5)*12,z:-4+random()*8,length:.13+random()*.45,speed:.35+random()*.45});
   const rainGeo=new T.BufferGeometry();rainGeo.setAttribute('position',new T.BufferAttribute(rainPositions,3));
   const rain=new T.LineSegments(rainGeo,new T.LineBasicMaterial({color:'#7b8ba9',transparent:true,opacity:.3,depthWrite:false}));rain.visible=false;scene.add(rain);
-  let animationTime=0,turn=false,raining=false,separated=false,separation=0,lightMode='blue',frame=0,last=performance.now(),disposed=false,lost=false,suspended=false,inView=true,settle=0,renderCount=0,detailFov=null;
+  let animationTime=0,turn=false,raining=false,separated=false,separation=0,lightMode='blue',frame=0,last=performance.now(),disposed=false,lost=false,suspended=false,inView=true,renderCount=0,detailFov=null;
   const signals=new AbortController();
   const geometryStats={triangles:0,meshes:0};world.root.traverse(o=>{if(o.isMesh){geometryStats.meshes++;geometryStats.triangles+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3;}});
+  const renderPolicy=createRenderPerformance({canvas,renderer,build,maxDpr:1.5,mobileMaxDpr:1.5,adaptiveMobileMaxDpr:1.2,buildDpr:1.5,onChange:()=>{resize();invalidate();}});
+  function visibleSurface(){return inView||Boolean(canvas.closest('.exhibit-immersive[open]'));}
   function updateRain(time){
     rainSeeds.forEach((s,i)=>{
       const y=((s.y-time*s.speed+60)%12)-6,x=s.x-(6-y)*.30,k=i*6;
       rainPositions.set([x,y,s.z,x-s.length*.32,y-s.length,s.z],k);
     });rainGeo.attributes.position.needsUpdate=true;
   }
-  function draw(){renderer.info.reset();composer.render();canvas.dataset.ready='true';canvas.dataset.title='雨终曲';canvas.dataset.frames=String(++renderCount);canvas.dataset.layers=String(world.root.userData.layers);canvas.dataset.triangles=String(geometryStats.triangles);canvas.dataset.meshes=String(geometryStats.meshes);canvas.dataset.drawCalls=String(renderer.info.render.calls);canvas.dataset.camera=camera.position.toArray().map(x=>x.toFixed(4)).join(',');canvas.dataset.autoRotate=String(turn);canvas.dataset.rain=String(raining);canvas.dataset.separated=String(separated);canvas.dataset.light=lightMode;canvas.dataset.rotation=world.root.rotation.y.toFixed(5);}
+  function draw(now=performance.now(),force=false){renderer.info.reset();renderPolicy.beforeRender(now,turn&&visibleSurface()||separation!==Number(separated));composer.render();renderCount++;if(!renderPolicy.shouldWriteDiagnostics(now,force))return;canvas.dataset.ready='true';canvas.dataset.title='雨终曲';canvas.dataset.frames=String(renderCount);canvas.dataset.layers=String(world.root.userData.layers);canvas.dataset.triangles=String(geometryStats.triangles);canvas.dataset.meshes=String(geometryStats.meshes);canvas.dataset.drawCalls=String(renderer.info.render.calls);canvas.dataset.camera=camera.position.toArray().map(x=>x.toFixed(4)).join(',');canvas.dataset.autoRotate=String(turn);canvas.dataset.rain=String(raining);canvas.dataset.separated=String(separated);canvas.dataset.light=lightMode;canvas.dataset.rotation=world.root.rotation.y.toFixed(5);}
   function invalidate(){if(!frame&&!disposed&&!lost&&!suspended&&!document.hidden)frame=requestAnimationFrame(render);}
   function render(now){
     frame=0;if(disposed||lost||suspended||document.hidden)return;
     const dt=Math.min((now-last)/1000,.07);last=now;
-    if(turn&&inView)world.root.rotation.y+=dt*.105;
-    if(raining&&inView){animationTime+=dt;updateRain(animationTime);}
-    const target=Number(separated);separation=reduced?target:T.MathUtils.damp(separation,target,7,dt);if(Math.abs(separation-target)<.002)separation=target;world.setSeparated(separation);
-    control.update();draw();
-    if(((turn||raining)&&inView)||separation!==target||settle-->0)invalidate();
+    const visible=visibleSurface(),rotating=turn&&visible;if(rotating)world.root.rotation.y+=dt*.105;
+    if(raining&&visible){animationTime+=dt;updateRain(animationTime);}
+    const target=Number(separated),prior=separation;separation=reduced?target:T.MathUtils.damp(separation,target,7,dt);if(Math.abs(separation-target)<.002)separation=target;const separating=separation!==prior;if(separating)world.setSeparated(separation);
+    const controlsChanged=control.update();if(controlsChanged)renderPolicy.noteInteraction();draw(now);
+    if(((turn||raining)&&visible)||separation!==target||controlsChanged)invalidate();
   }
-  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);composer.setSize(r.width,r.height);camera.aspect=r.width/r.height;camera.fov=detailFov??(camera.aspect<.85?49:35);camera.updateProjectionMatrix();invalidate();}
-  control.addEventListener('change',invalidate);control.addEventListener('start',()=>{settle=20;last=performance.now();});control.addEventListener('end',()=>{settle=reduced?1:24;invalidate();});
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;const changed=renderPolicy.resize(r.width,r.height,(w,h,dpr)=>{composer.setPixelRatio(dpr);composer.setSize(w,h);}),aspect=r.width/r.height,fov=detailFov??(aspect<.85?49:35);if(!changed&&Math.abs(camera.aspect-aspect)<1e-6&&camera.fov===fov)return;camera.aspect=aspect;camera.fov=fov;camera.updateProjectionMatrix();invalidate();}
+  control.addEventListener('change',invalidate);control.addEventListener('start',()=>{renderPolicy.beginInteraction();last=performance.now();});control.addEventListener('end',()=>{renderPolicy.endInteraction();invalidate();});
   const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(canvas);
   const visibility=new IntersectionObserver(([entry])=>{inView=entry.isIntersecting;if(inView){last=performance.now();invalidate();}});visibility.observe(canvas);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else{last=performance.now();invalidate();}},{signal:signals.signal});
   canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();lost=true;cancelAnimationFrame(frame);frame=0;control.enabled=false;onError();},{signal:signals.signal});
   canvas.addEventListener('keydown',e=>{
     if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Equal','Minus'].includes(e.code))return;e.preventDefault();
-    const s=new T.Spherical().setFromVector3(camera.position.clone().sub(control.target));
+    renderPolicy.noteInteraction();const s=new T.Spherical().setFromVector3(camera.position.clone().sub(control.target));
     if(e.code==='ArrowLeft')s.theta-=.14;if(e.code==='ArrowRight')s.theta+=.14;if(e.code==='ArrowUp')s.phi-=.14;if(e.code==='ArrowDown')s.phi+=.14;
     if(e.code==='Equal')s.radius=Math.max(control.minDistance,s.radius-.7);if(e.code==='Minus')s.radius=Math.min(control.maxDistance,s.radius+.7);
     s.makeSafe();camera.position.setFromSpherical(s).add(control.target);control.update();invalidate();
   },{signal:signals.signal});
-  updateRain(0);resize();draw();onReady();
+  updateRain(0);resize();draw(performance.now(),true);onReady();
   return {
     setTurn(value){turn=Boolean(value);last=performance.now();invalidate();},
     setRain(value){raining=Boolean(value);rain.visible=raining;last=performance.now();invalidate();},
-    setSeparated(value){separated=Boolean(value);last=performance.now();settle=2;invalidate();},
-    setLight(value){lightMode=value==='silver'?'silver':'blue';const silver=lightMode==='silver';blue.intensity=silver?3:16;ice.intensity=silver?2:8;key.color.set(silver?'#f0eeed':'#e2e8ff');rim.color.set(silver?'#acb4c9':'#b2c0df');scene.environmentIntensity=silver?1.02:.88;bloom.strength=silver?.20:.38;invalidate();},
-    setView(kind){turn=false;world.root.rotation.set(0,0,0);detailFov=null;control.minDistance=8;control.target.set(0,.1,0);camera.position.set(...(kind==='back'?[0,.22,-13.2]:kind==='side'?[13.2,.7,.2]:kind==='detail'?[-2.0,.2,8.1]:[0,.22,13.2]));resize();control.update();settle=reduced?1:24;invalidate();},
+    setSeparated(value){separated=Boolean(value);last=performance.now();invalidate();},
+    setLight(value){lightMode=value==='silver'?'silver':'blue';const silver=lightMode==='silver';blue.intensity=silver?3:16;ice.intensity=silver?2:8;key.color.set(silver?'#f0eeed':'#e2e8ff');rim.color.set(silver?'#acb4c9':'#b2c0df');scene.environmentIntensity=silver?1.02:.88;bloom.strength=silver?.20:.38;renderPolicy.invalidateShadow();invalidate();},
+    setView(kind){turn=false;world.root.rotation.set(0,0,0);detailFov=null;control.minDistance=8;control.target.set(0,.1,0);camera.position.set(...(kind==='back'?[0,.22,-13.2]:kind==='side'?[13.2,.7,.2]:kind==='detail'?[-2.0,.2,8.1]:[0,.22,13.2]));resize();control.update();renderPolicy.invalidateShadow();invalidate();},
     setDetail(kind){
       const views={light:{target:[-1.6,-.1,2.4],position:[-5.2,.85,7.4],fov:28},veil:{target:[1.75,.67,2.20],position:[5.7,2.4,6.7],fov:27},coda:{target:[.26,-2.45,1.9],position:[1.9,-4.3,6.4],fov:27}};
-      const view=views[kind];if(!view)throw new Error('Unknown rain study');turn=false;world.root.rotation.set(0,0,0);control.minDistance=1;control.target.set(...view.target);camera.position.set(...view.position);detailFov=view.fov;resize();control.update();settle=1;invalidate();
+      const view=views[kind];if(!view)throw new Error('Unknown rain study');turn=false;world.root.rotation.set(0,0,0);control.minDistance=1;control.target.set(...view.target);camera.position.set(...view.position);detailFov=view.fov;resize();control.update();renderPolicy.invalidateShadow();invalidate();
     },
     suspend(value){suspended=Boolean(value);if(suspended){cancelAnimationFrame(frame);frame=0;}else{last=performance.now();invalidate();}},
-    async capture(){if(disposed||lost)throw new Error('Viewer unavailable');draw();return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('PNG capture failed')),'image/png'));},
+    async capture(){if(disposed||lost)throw new Error('Viewer unavailable');renderPolicy.invalidateShadow();draw(performance.now(),true);return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('PNG capture failed')),'image/png'));},
     async exportGLB(){
       const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js'),rotation=world.root.rotation.clone();
       try{world.root.rotation.set(0,0,0);world.setSeparated(0);world.root.updateMatrixWorld(true);return await new GLTFExporter().parseAsync(world.root,{binary:true,onlyVisible:true,maxTextureSize:1024});}
       finally{world.root.rotation.copy(rotation);world.setSeparated(separation);invalidate();}
     },
     stats(){return {...canvas.dataset,sceneVersion:world.root.userData.sceneVersion,cameraTarget:control.target.toArray(),cameraFov:camera.fov};},
-    dispose(){disposed=true;cancelAnimationFrame(frame);signals.abort();resizeObserver.disconnect();visibility.disconnect();control.dispose();world.dispose();env.dispose();haze.geometry.dispose();haze.material.map.dispose();haze.material.dispose();rainGeo.dispose();rain.material.dispose();bloom.dispose();output.dispose();grade.dispose();composer.dispose();renderer.dispose();}
+    dispose(){disposed=true;cancelAnimationFrame(frame);signals.abort();resizeObserver.disconnect();visibility.disconnect();renderPolicy.dispose();control.dispose();world.dispose();env.dispose();haze.geometry.dispose();haze.material.map.dispose();haze.material.dispose();rainGeo.dispose();rain.material.dispose();bloom.dispose();output.dispose();grade.dispose();composer.dispose();renderer.dispose();}
   };
 }

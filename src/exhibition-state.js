@@ -1,9 +1,9 @@
-/** Resolve entry mode once; the UI and lazy scene loader share the same state. */
+/** Shared entry policy: show the artwork immediately, initialize 3D on request. */
 export function chooseStillView(search,{compactTouch=false,saveData=false}={}){
   const query=new URLSearchParams(search);
   if(query.get('build')==='1'||query.get('view')==='live')return false;
   if(query.get('view')==='still')return true;
-  return compactTouch||saveData;
+  return true;
 }
 export const initialStillView=chooseStillView(location.search,{
   compactTouch:matchMedia('(max-width: 900px) and (pointer: coarse)').matches,

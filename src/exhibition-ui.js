@@ -1,10 +1,10 @@
 /** Common exhibition tools. Native navigation and images remain usable without JS. */
-import { initialStillView } from './exhibition-state.js?v=0130';
+import { initialStillView } from './exhibition-state.js?v=0260';
 import { createImageZoom } from './exhibition-zoom.js?v=0130';
 import { showExhibitDialog } from './exhibition-dialog.js?v=0150';
 const world=document.body.dataset.orbitWorld;
-const names={'yesterday-today':'昨天，今天',crossover:'删了一百遍',poem:'思念若是一首诗','rain-finale':'雨终曲',jielan:'芥兰'};
-const stage=document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage,#jielan-stage');
+const names={'yesterday-today':'昨天，今天',crossover:'删了一百遍',poem:'思念若是一首诗','rain-finale':'雨终曲',jielan:'芥兰',falling:'在坠落时'};
+const stage=document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage,#jielan-stage,#falling-stage');
 const controls=document.querySelector('.time-controls,.model-controls,.world-controls,.rain-controls');
 const edition=(document.querySelector('meta[name="orbit-version"]')?.content||'0.12.0').replaceAll('.','');
 if(world==='poem'){
@@ -64,8 +64,9 @@ if(stage&&controls){
   // photographs. Starting a route must reveal the live scene, not run it hidden.
   document.addEventListener('orbit:explore',()=>{if(still)setStill(false);adjustments.open=true;});
   const canvas=stage.querySelector('canvas');
-  if(canvas)new MutationObserver(updateHint).observe(canvas,{attributes:true,attributeFilter:['data-ready']});
-  if(world==='poem'&&canvas){const observer=new MutationObserver(()=>{if(canvas.dataset.ready==='true')stage.classList.add('is-ready');});observer.observe(canvas,{attributes:true,attributeFilter:['data-ready']});if(canvas.dataset.ready==='true')stage.classList.add('is-ready');}
+  // Renderers expose readiness every frame. Only a transition should rewrite
+  // the visible hint or trigger a layout while a visitor rotates the artwork.
+  if(canvas){let previousReady=canvas.dataset.ready;const observer=new MutationObserver(()=>{const ready=canvas.dataset.ready;if(ready===previousReady)return;previousReady=ready;if(world==='poem'&&ready==='true')stage.classList.add('is-ready');updateHint();});observer.observe(canvas,{attributes:true,attributeFilter:['data-ready']});if(world==='poem'&&previousReady==='true')stage.classList.add('is-ready');}
   // Actions always return to the real scene, keeping native button state intact.
   controls.addEventListener('click',event=>{if(still&&event.target.closest('button'))setStill(false);},true);
   // Garden rendering correctly sleeps offscreen. A profile/verso command
@@ -81,7 +82,13 @@ const figures=[...document.querySelectorAll('.time-details figure,.time-verso fi
 const detailItems=figures.map(figure=>({figure,img:figure.querySelector('img'),caption:figure.querySelector('figcaption')?.textContent?.trim()||''})).filter(x=>x.img);
 const front=stage?.querySelector('.time-poster,.concept-poster,.rain-poster,.garden-poster');
 const items=front?[{img:front,caption:'完整作品 / '+names[world]},...detailItems]:detailItems;
-let lightbox,current=0,trigger=null,imageZoom,loadSerial=0;
+let lightbox,current=0,trigger=null,imageZoom,loadSerial=0,preloadTimer=0;
+const warmedPlates=new Map();
+function warmNeighbour(){
+  clearTimeout(preloadTimer);
+  if(navigator.connection?.saveData||/2g/.test(navigator.connection?.effectiveType||''))return;
+  preloadTimer=setTimeout(()=>{if(!lightbox?.open||items.length<2)return;const src=originalImage(items[(current+1)%items.length]);if(warmedPlates.has(src))return;const image=new Image();image.decoding='async';image.src=src;warmedPlates.set(src,image);while(warmedPlates.size>2)warmedPlates.delete(warmedPlates.keys().next().value);image.decode().catch(()=>{});},250);
+}
 function plateLabel(item,index){
   if(index===0&&front)return '全貌';
   const path=item.img.getAttribute('src')||'';
@@ -111,7 +118,7 @@ function displayItem(i){
   lightbox.querySelectorAll('.exhibit-filmstrip button').forEach((b,index)=>b.setAttribute('aria-pressed',String(index===current)));
   const selected=lightbox.querySelector('.exhibit-filmstrip button[aria-pressed="true"]');
   selected?.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
-  target.decode().then(()=>{if(request!==loadSerial)return;status.hidden=true;lightbox.querySelector('.exhibit-image-main').setAttribute('aria-busy','false');imageZoom.fit();}).catch(()=>{});
+  target.decode().then(()=>{if(request!==loadSerial||!lightbox.open)return;status.hidden=true;lightbox.querySelector('.exhibit-image-main').setAttribute('aria-busy','false');imageZoom.fit();warmNeighbour();}).catch(()=>{});
 }
 function openItem(i,opener){
   if(!lightbox){
@@ -137,7 +144,7 @@ function openItem(i,opener){
     const next=button('→',()=>displayItem(current+1),'exhibit-edge-arrow exhibit-edge-next');next.setAttribute('aria-label','下一张图版');
     lightbox.append(previous,next);
     lightbox.addEventListener('keydown',e=>{imageZoom.key(e);if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();e.stopPropagation();displayItem(current+(e.key==='ArrowRight'?1:-1));}});
-    lightbox.addEventListener('close',()=>{imageZoom.reset();pause('image',false);document.body.classList.remove('exhibit-modal-open');trigger?.focus({preventScroll:true});});
+    lightbox.addEventListener('close',()=>{loadSerial++;clearTimeout(preloadTimer);imageZoom.reset();pause('image',false);document.body.classList.remove('exhibit-modal-open');trigger?.focus({preventScroll:true});});
     image.addEventListener('error',()=>{
       const fallback=items[current].img.src;
       if(image.src!==fallback){image.src=fallback;link.href=fallback;image.decode().then(()=>{status.hidden=true;main.setAttribute('aria-busy','false');imageZoom.fit();}).catch(()=>{});}

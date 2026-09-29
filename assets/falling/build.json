@@ -1,0 +1,148 @@
+{
+  "version": "0.26.0",
+  "sceneVersion": "0.26.0",
+  "title": "在坠落时",
+  "created": "2026-09-29T13:46:43.688371+00:00",
+  "status": "passed",
+  "exported": true,
+  "buildLabel": "r04-runtime-final",
+  "buildScriptSha256": "77eba3b0172df2669dc5a8bc71a007efb4c75b2bae7a1bb0838b32c72d5e19ce",
+  "sourceHashes": {
+    "falling.html": "eb43b222cba977acc72aca9dabc75d79c4a6cd025e015e46ddf1be34681b7c49",
+    "falling.css": "9ecbcc1695478593def08a5f27358d7fc0bccbda3568f2d0ec86fe25e40f6bdf",
+    "src/falling-page.js": "e3aa1ae27514d22bfc0acbd0e08f06a121202ade8edeab8bcc4edd373b86db3c",
+    "src/falling/model.js": "8d75dbb026c0939d456c837497f68196e5714619ec200c2610ed1ae1ec38ac80",
+    "src/falling/materials.js": "88715faac3d095e468e24932a1bbcf5f3b431ab15f296fa4e0e4b5bf8bbea626",
+    "src/falling/viewer.js": "538b2d22be0fc7ba9a79aad0b38903ae5c7c946b0912ffa92204c802a5573da8",
+    "src/render-performance.js": "efcb230da5f9b1a333234f773a92e48dbfec0b417e613f769c30ebb4d3d27c0b"
+  },
+  "stats": {
+    "engine": "three.js r180",
+    "renderDpr": "2.000",
+    "renderWidth": "2048",
+    "renderHeight": "2048",
+    "qualityMode": "build",
+    "shadowMode": "continuous",
+    "ready": "true",
+    "title": "在坠落时",
+    "version": "0.26.0",
+    "view": "front",
+    "detail": "",
+    "frames": "10",
+    "solidCore": true,
+    "bodyRadius": 1.205,
+    "bodyAxes": [
+      1,
+      1,
+      1
+    ],
+    "layers": "12",
+    "drawCalls": "384",
+    "triangles": "1308148",
+    "modelMeshes": "198",
+    "modelTriangles": "694232",
+    "beads": "408",
+    "petals": "792",
+    "autoRotate": "false",
+    "moment": "false",
+    "separated": "false",
+    "separation": "0.0000",
+    "camera": "0.0927,0.4077,7.4135",
+    "worldRotation": "0.00000",
+    "study": "false",
+    "light": "studio",
+    "suspended": "false",
+    "visibleSurface": "true",
+    "slug": "falling",
+    "sceneVersion": "0.26.0",
+    "artRevision": 4,
+    "beadCount": 408,
+    "petalCount": 792,
+    "structureGroups": 12,
+    "referenceUse": "Original geometry and procedural surfaces interpreting the user-supplied black/silver/crimson assemblage; no copied reference pixels, artist names or logos.",
+    "detailTargets": {
+      "threads": [
+        -0.21,
+        0.52,
+        1.28
+      ],
+      "flowers": [
+        -0.16,
+        -0.87,
+        1.08
+      ],
+      "fault": [
+        0.72,
+        -0.16,
+        1.14
+      ]
+    },
+    "meshCount": 198,
+    "triangleCount": 694232
+  },
+  "glbReload": {
+    "meshes": 198,
+    "triangles": 694232,
+    "children": 1
+  },
+  "renderer": "ANGLE (Intel, ANGLE Metal Renderer: Intel(R) Iris(TM) Plus Graphics, Unspecified Version)",
+  "assets": {
+    "cover.webp": {
+      "sha256": "dc708dfd1ffbe2a8640ed683bf2c3644694c5384c8d6a7f82c77978dc988a5f9",
+      "bytes": 674086
+    },
+    "side.webp": {
+      "sha256": "a7cbd1ae03b4e07066b06776cc6a084e416384a901df0e74eecf29a1f7510c1e",
+      "bytes": 342886
+    },
+    "back.webp": {
+      "sha256": "05c7a033ddfdfa17369a1959ec5b0bdbe4128f6f6ec48ced5608dcfa2539645a",
+      "bytes": 486124
+    },
+    "detail-threads.webp": {
+      "sha256": "6ca8341aa357c5b78382689e01991366c10cc0025379ab3edbb81cc508dcbaa1",
+      "bytes": 1101206
+    },
+    "detail-flowers.webp": {
+      "sha256": "9c968309f937ac5872cee1ffcf870e7c9fb9f5ea0d7b98d796a9cb05d9acc338",
+      "bytes": 666302
+    },
+    "detail-fault.webp": {
+      "sha256": "986d6e741fc808b7b72a3d01cfc27791c93807072d9a5e09b2b0849c651ba534",
+      "bytes": 968770
+    },
+    "poster.png": {
+      "sha256": "712e0b25b024c66168cdea33eb2bd608b56a554956d9805eeff96b2e3918e413",
+      "bytes": 5332410
+    },
+    "transparent-front.png": {
+      "sha256": "f3bcf945d90d1119572c70cfa0a06a59bcefd809a848d053b8623a3f91353cbd",
+      "bytes": 3998765
+    },
+    "falling.glb": {
+      "sha256": "edbe40414e6e6ef4cf7c5fb2bfe26997e59a1611f980601918f700677ace0a44",
+      "bytes": 24618944
+    },
+    "cover-192.webp": {
+      "sha256": "05c88bef2c3a23f36ec4e4e8666cb6229c0e30867599dfa29e585b51c0bc55c1",
+      "bytes": 10704
+    },
+    "cover-300.webp": {
+      "sha256": "cb181ae35785c3943dc9e66c133f4487ddcc6db1b6a30ec2f7332918aa00098e",
+      "bytes": 23360
+    },
+    "cover-480.webp": {
+      "sha256": "24e7aaff05b94c0eac8c3b7faac69b21871b01c5d19b6390673acf8e80f10253",
+      "bytes": 51950
+    },
+    "cover-768.webp": {
+      "sha256": "d7c76dcddbbb9596789c62e94f69ea729aa5796516c4032ce5c0995836eb43e4",
+      "bytes": 115724
+    },
+    "cover-1200.webp": {
+      "sha256": "214e6b6bdd18032745afc5d20eb173f4a523fdc2acdb6a4f9f92a372a0617dc7",
+      "bytes": 241768
+    }
+  },
+  "provenance": "All plates and GLB are exports of the same original interactive scene. No reference artwork pixels or generated whole-artwork images are used."
+}

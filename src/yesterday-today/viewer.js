@@ -1,6 +1,7 @@
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { makeYesterdayToday } from './model.js?v=0130';
+import { createRenderPerformance } from '../render-performance.js?v=0260';
 
 function studio(renderer){
   const c=document.createElement('canvas');c.width=1024;c.height=512;const x=c.getContext('2d');
@@ -15,7 +16,7 @@ export function createYesterdayViewer(canvas,{onReady=()=>{},onError=()=>{}}={})
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const build=new URLSearchParams(location.search).get('build')==='1';
   const renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,build?2:innerWidth<600?1.3:1.65));renderer.outputColorSpace=T.SRGBColorSpace;
+  renderer.outputColorSpace=T.SRGBColorSpace;
   renderer.setClearColor('#f2eee7',0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(33,1,.1,60);camera.position.set(1.45,.86,13.15);
@@ -28,41 +29,43 @@ export function createYesterdayViewer(canvas,{onReady=()=>{},onError=()=>{}}={})
   const front=new T.DirectionalLight('#fce7f1',.45);front.position.set(2,-2,8);scene.add(front);
   const controls=new OrbitControls(camera,canvas);controls.target.set(0,.06,0);controls.enablePan=false;controls.enableDamping=!reduced;controls.dampingFactor=.09;controls.minDistance=build?1.5:5;controls.maxDistance=23;controls.rotateSpeed=.58;
   const clay=new T.MeshStandardMaterial({color:'#c6beb8',roughness:.94,side:T.DoubleSide});
-  let raf=0,last=performance.now(),frames=0,disposed=false,lost=false,suspended=false,inView=true,turn=false,separated=false,amount=0,light='studio',settle=0;
+  let raf=0,last=performance.now(),frames=0,disposed=false,lost=false,suspended=false,inView=true,turn=false,separated=false,amount=0,light='studio';
   const abort=new AbortController();
-  function metrics(){Object.assign(canvas.dataset,{ready:'true',title:'昨天，今天',version:world.root.userData.version,wrapTreatment:world.root.userData.wrapTreatment,centerTreatment:world.root.userData.centerTreatment,centerHasText:String(world.root.userData.centerHasText),frames:String(++frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),coreAxes:world.root.userData.coreAxes.join(','),labelRadius:String(world.root.userData.labelRadius)});}
+  const renderPolicy=createRenderPerformance({canvas,renderer,build,maxDpr:1.65,mobileMaxDpr:1.3,buildDpr:2,onChange:()=>{resize();invalidate();}});
+  function visibleSurface(){return inView||Boolean(canvas.closest('.exhibit-immersive[open]'));}
+  function metrics(now,force=false){frames++;if(!renderPolicy.shouldWriteDiagnostics(now,force))return;Object.assign(canvas.dataset,{ready:'true',title:'昨天，今天',version:world.root.userData.version,wrapTreatment:world.root.userData.wrapTreatment,centerTreatment:world.root.userData.centerTreatment,centerHasText:String(world.root.userData.centerHasText),frames:String(frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),coreAxes:world.root.userData.coreAxes.join(','),labelRadius:String(world.root.userData.labelRadius)});}
   function invalidate(){if(!raf&&!disposed&&!lost&&!suspended&&!document.hidden)raf=requestAnimationFrame(render);}
   function render(now){
     raf=0;if(disposed||lost||suspended||document.hidden)return;
     const dt=Math.min(Math.max((now-last)/1000,.001),.1);last=now;
-    if(turn&&inView)world.root.rotation.y+=dt*.105;
-    const goal=Number(separated);amount=reduced?goal:T.MathUtils.damp(amount,goal,9,dt);if(Math.abs(amount-goal)<.001)amount=goal;world.setSeparated(amount);
-    controls.update();renderer.render(scene,camera);metrics();
-    if((turn&&inView)||amount!==goal||settle-->0)invalidate();
+    const rotating=turn&&visibleSurface();if(rotating)world.root.rotation.y+=dt*.105;
+    const goal=Number(separated),prior=amount;amount=reduced?goal:T.MathUtils.damp(amount,goal,9,dt);if(Math.abs(amount-goal)<.001)amount=goal;const separating=amount!==prior;if(separating)world.setSeparated(amount);
+    const controlsChanged=controls.update();if(controlsChanged)renderPolicy.noteInteraction();renderPolicy.beforeRender(now,rotating||separating);renderer.render(scene,camera);metrics(now);
+    if(rotating||amount!==goal||controlsChanged)invalidate();
   }
   function frame(){camera.fov=T.MathUtils.radToDeg(2*Math.atan(Math.max(7.35,6.7/camera.aspect)/(2*13.33)));camera.updateProjectionMatrix();}
-  function resize(){const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return;renderer.setSize(b.width,b.height,false);camera.aspect=b.width/b.height;frame();invalidate();}
-  controls.addEventListener('change',invalidate);controls.addEventListener('start',()=>{settle=reduced?0:22;});controls.addEventListener('end',()=>{settle=reduced?0:22;invalidate();});
+  function resize(){const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return;const changed=renderPolicy.resize(b.width,b.height),aspect=b.width/b.height;if(!changed&&Math.abs(camera.aspect-aspect)<1e-6)return;camera.aspect=aspect;frame();invalidate();}
+  controls.addEventListener('change',invalidate);controls.addEventListener('start',()=>renderPolicy.beginInteraction());controls.addEventListener('end',()=>{renderPolicy.endInteraction();invalidate();});
   const sizes=new ResizeObserver(resize);sizes.observe(canvas);
   const visibility=new IntersectionObserver(([e])=>{inView=e.isIntersecting;if(inView){last=performance.now();invalidate();}});visibility.observe(canvas);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);raf=0;}else{last=performance.now();invalidate();}},{signal:abort.signal});
   canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();lost=true;cancelAnimationFrame(raf);raf=0;controls.enabled=false;onError();},{signal:abort.signal});
   canvas.addEventListener('keydown',e=>{
     if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.code))return;e.preventDefault();
-    const s=new T.Spherical().setFromVector3(camera.position.clone().sub(controls.target));
+    renderPolicy.noteInteraction();const s=new T.Spherical().setFromVector3(camera.position.clone().sub(controls.target));
     s.theta+=(e.code==='ArrowRight'?.13:0)-(e.code==='ArrowLeft'?.13:0);s.phi+=(e.code==='ArrowDown'?.13:0)-(e.code==='ArrowUp'?.13:0);s.makeSafe();camera.position.setFromSpherical(s).add(controls.target);controls.update();invalidate();
   },{signal:abort.signal});
-  resize();renderer.render(scene,camera);metrics();onReady();
+  resize();renderPolicy.beforeRender(performance.now());renderer.render(scene,camera);metrics(performance.now(),true);onReady();
   return {
     setTurn(value){turn=Boolean(value);last=performance.now();invalidate();},
     setSeparated(value){separated=Boolean(value);last=performance.now();invalidate();},
-    setLight(cool){light=cool?'cool':'studio';key.color.set(cool?'#dde4ff':'#fff1e3');fill.color.set(cool?'#ecc4dc':'#c6c3ef');scene.environmentIntensity=cool?.91:.78;invalidate();},
-    setView(view){turn=false;world.root.rotation.set(0,0,0);controls.target.set(0,.06,0);camera.position.set(...(view==='back'?[-2.4,1.45,-13.1]:view==='side'?[13.25,1.1,.5]:[1.45,.86,13.15]));frame();controls.update();settle=reduced?0:24;invalidate();},
-    setDetail(name){turn=false;world.root.rotation.set(0,0,0);const views={record:[[-.24,.06,2.05],[.63,.49,6.65]],conduit:[[.97,1.02,1.79],[2.8,2.48,5.38]],feather:[[-.30,-1.47,1.78],[.45,-.85,5.23]]};const [target,position]=views[name]||views.record;controls.target.set(...target);camera.position.set(...position);camera.fov=33;camera.updateProjectionMatrix();controls.update();invalidate();},
+    setLight(cool){light=cool?'cool':'studio';key.color.set(cool?'#dde4ff':'#fff1e3');fill.color.set(cool?'#ecc4dc':'#c6c3ef');scene.environmentIntensity=cool?.91:.78;renderPolicy.invalidateShadow();invalidate();},
+    setView(view){turn=false;world.root.rotation.set(0,0,0);controls.target.set(0,.06,0);camera.position.set(...(view==='back'?[-2.4,1.45,-13.1]:view==='side'?[13.25,1.1,.5]:[1.45,.86,13.15]));frame();controls.update();renderPolicy.invalidateShadow();invalidate();},
+    setDetail(name){turn=false;world.root.rotation.set(0,0,0);const views={record:[[-.24,.06,2.05],[.63,.49,6.65]],conduit:[[.97,1.02,1.79],[2.8,2.48,5.38]],feather:[[-.30,-1.47,1.78],[.45,-.85,5.23]]};const [target,position]=views[name]||views.record;controls.target.set(...target);camera.position.set(...position);camera.fov=33;camera.updateProjectionMatrix();controls.update();renderPolicy.invalidateShadow();invalidate();},
     setStudy(value){scene.overrideMaterial=value?clay:null;invalidate();},
     suspend(value){suspended=Boolean(value);if(suspended){cancelAnimationFrame(raf);raf=0;}else{last=performance.now();invalidate();}},
     async capture({background=false}={}){
-      if(lost||disposed)throw new Error('Renderer unavailable');renderer.render(scene,camera);let target=canvas;
+      if(lost||disposed)throw new Error('Renderer unavailable');renderPolicy.invalidateShadow();renderPolicy.beforeRender(performance.now());renderer.render(scene,camera);let target=canvas;
       if(background){target=document.createElement('canvas');target.width=canvas.width;target.height=canvas.height;const ctx=target.getContext('2d');ctx.fillStyle='#f2eee7';ctx.fillRect(0,0,target.width,target.height);ctx.drawImage(canvas,0,0);}
       return new Promise((resolve,reject)=>target.toBlob(b=>b?resolve(b):reject(new Error('Capture failed')),'image/png'));
     },
@@ -72,6 +75,6 @@ export function createYesterdayViewer(canvas,{onReady=()=>{},onError=()=>{}}={})
       finally{world.root.rotation.copy(rotation);world.setSeparated(amount);invalidate();}
     },
     stats(){return {...canvas.dataset};},
-    dispose(){disposed=true;cancelAnimationFrame(raf);abort.abort();sizes.disconnect();visibility.disconnect();controls.dispose();world.dispose();clay.dispose();env.dispose();renderer.dispose();}
+    dispose(){disposed=true;cancelAnimationFrame(raf);abort.abort();sizes.disconnect();visibility.disconnect();renderPolicy.dispose();controls.dispose();world.dispose();clay.dispose();env.dispose();renderer.dispose();}
   };
 }

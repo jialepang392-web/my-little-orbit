@@ -1,0 +1,717 @@
+/* My Little Orbit — experience revision 0.25.0
+ * A quieter editorial index and static-first artwork viewing hierarchy.
+ */
+:root {
+  --experience-ink: #272528;
+  --experience-paper: #ebe7e1;
+  --experience-rule: color-mix(in srgb, currentColor 20%, transparent);
+  --experience-focus: #8c4f68;
+  --experience-radius: 3px;
+}
+
+html { scroll-padding-top: 76px; }
+body { text-rendering: optimizeLegibility; }
+button, a, summary { -webkit-tap-highlight-color: transparent; }
+button, summary, a { touch-action: manipulation; }
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--experience-focus) !important;
+  outline-offset: 3px !important;
+}
+.experience-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+}
+
+/* Collection index ------------------------------------------------------- */
+.sleeve-home .collection-header {
+  width: min(1440px, calc(100% - 64px));
+  max-width: none;
+  height: 72px;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+.sleeve-home .collection-main {
+  width: min(1440px, calc(100% - 64px));
+  max-width: none;
+  padding-inline: 0;
+}
+.sleeve-intro {
+  min-height: min(650px, calc(100svh - 168px));
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  align-content: center;
+  column-gap: clamp(42px, 8vw, 130px);
+  padding-block: clamp(42px, 5vw, 72px) 34px;
+}
+.experience-edition {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  font: 9px/1.5 "Courier New", monospace;
+  letter-spacing: .13em;
+  color: #756a6d;
+}
+.sleeve-home .masthead-art { align-self: center; }
+.sleeve-home .masthead-art h1 { max-width: 900px; }
+.sleeve-home .four-mark { opacity: .82; }
+.sleeve-home .album-identity {
+  align-self: center;
+  padding-top: 0;
+  border-left: 1px solid var(--line);
+  padding-left: clamp(22px, 3vw, 42px);
+}
+.sleeve-home .opening-note {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(240px, .8fr) minmax(250px, 1fr) auto;
+  align-items: end;
+  gap: 32px;
+  width: 100%;
+  max-width: none;
+  margin-top: clamp(24px, 4vh, 42px);
+  padding: 20px 0 0;
+  border-top: 1px solid var(--line);
+}
+.sleeve-home .opening-note > p,
+.sleeve-home .opening-note > span { margin: 0; }
+.sleeve-home .opening-note .visit-arrival-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.sleeve-home .opening-note .visit-start,
+.sleeve-home .opening-note .exhibition-entry {
+  min-height: 48px;
+  margin: 0;
+}
+
+.sleeve-home .collection-route {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 0 36px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 78%, white);
+}
+.sleeve-home .collection-route > a:nth-child(n) {
+  min-height: 68px;
+  padding: 10px 15px;
+  border-right: 1px solid var(--line);
+}
+.sleeve-home .collection-route > a:last-child { border-right: 0; }
+.sleeve-home .collection-route > a[aria-current="step"] {
+  background: color-mix(in srgb, #a87480 12%, transparent);
+}
+.sleeve-home .collection-route small {
+  max-width: none;
+  font-size: 8px;
+}
+.sleeve-home .collection-route strong { font-size: 13px; }
+.sleeve-home .works-heading {
+  padding: 18px 0 26px;
+  border-top: 1px solid var(--line);
+}
+
+.sleeve-home .world-grid.sleeve-stack {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 28px;
+  padding: 0;
+  filter: none;
+}
+.sleeve-home .world-card,
+.sleeve-home .world-card.cross,
+.sleeve-home .world-card.poem,
+.sleeve-home .world-card.rain,
+.sleeve-home .world-card.jielan {
+  --card-surface: color-mix(in srgb, var(--ticket) 88%, var(--paper));
+  grid-column: span 6;
+  display: grid;
+  grid-template-rows: minmax(360px, 1fr) auto;
+  width: auto;
+  height: auto;
+  min-height: 610px;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--edge) 32%, transparent);
+  border-radius: var(--experience-radius);
+  background: var(--card-surface);
+  box-shadow: 0 16px 40px #3c293118;
+  isolation: isolate;
+}
+.sleeve-home .world-card.yesterday {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1.2fr) minmax(330px, .8fr);
+  grid-template-rows: minmax(520px, 66vh);
+  min-height: 560px;
+}
+.sleeve-home .sleeve-surface { display: none; }
+.sleeve-home .world-card.falling {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1.15fr) minmax(330px, .85fr);
+  grid-template-rows: minmax(490px, 60vh);
+  min-height: 530px;
+}
+.sleeve-home .world-card.falling .sleeve-ticket {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 1px solid color-mix(in srgb, var(--edge) 22%, transparent);
+  padding: clamp(30px, 4vw, 58px);
+}
+@media (max-width: 760px) {
+  .sleeve-home .world-card.falling { grid-template-columns: 1fr; grid-template-rows: minmax(320px, 65vw) auto; min-height: 0; }
+  .sleeve-home .world-card.falling .sleeve-ticket { padding: 24px; border-left: 0; }
+  .sleeve-home .world-card.falling h2 { font-size: 42px; }
+}
+.sleeve-home .sleeve-catalogue {
+  z-index: 4;
+  top: 18px;
+  right: 18px;
+  color: color-mix(in srgb, var(--pen) 68%, transparent);
+  background: color-mix(in srgb, var(--card-surface) 82%, transparent);
+  padding: 5px 7px;
+}
+.sleeve-home .sleeve-spine { display: none; }
+.sleeve-home .world-card .world-art,
+.sleeve-home .cross .world-art,
+.sleeve-home .poem .world-art,
+.sleeve-home .rain .world-art {
+  position: relative;
+  inset: auto;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+  padding: clamp(22px, 4vw, 54px);
+  overflow: hidden;
+  border: 0;
+  transform: none;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--sleeve) 30%, #e9e4df);
+}
+.sleeve-home .world-art::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid color-mix(in srgb, var(--edge) 18%, transparent);
+  pointer-events: none;
+}
+.sleeve-home .world-art img {
+  position: relative;
+  inset: auto;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border: 0;
+  transition: transform .45s cubic-bezier(.2, .7, .3, 1);
+}
+.sleeve-home .print-number {
+  z-index: 2;
+  left: 20px;
+  bottom: 17px;
+  font-size: 8px;
+}
+.sleeve-home .sleeve-ticket,
+.sleeve-home .cross .sleeve-ticket,
+.sleeve-home .poem .sleeve-ticket,
+.sleeve-home .rain .sleeve-ticket,
+.sleeve-home .jielan .sleeve-ticket {
+  position: relative;
+  inset: auto;
+  z-index: 2;
+  width: auto;
+  min-height: 0;
+  padding: 26px 29px 28px;
+  clip-path: none;
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, var(--edge) 22%, transparent);
+  border-left: 0;
+  transform: none;
+  box-shadow: none;
+  background: var(--card-surface);
+}
+.sleeve-home .world-card.yesterday .sleeve-ticket {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top: 0;
+  border-left: 1px solid color-mix(in srgb, var(--edge) 22%, transparent);
+  padding: clamp(32px, 5vw, 68px);
+}
+.sleeve-home .sleeve-ticket::before,
+.sleeve-home .ticket-pearl::after,
+.sleeve-home .ticket-silver h2::after { display: none; }
+.sleeve-home .world-card h2 img { height: clamp(48px, 6vw, 74px); }
+.sleeve-home .poem h2 img { max-width: 100%; }
+.sleeve-home .jielan h2 { font-size: clamp(44px, 5vw, 68px); }
+.sleeve-home .ticket-english { margin-top: 8px; }
+.sleeve-home .world-description { max-width: 34em; }
+.sleeve-home .world-card .world-meta { margin-top: 18px; padding-top: 13px; }
+.sleeve-home .ticket-enter {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+}
+.sleeve-home .world-card:hover .world-art,
+.sleeve-home .world-card.cross:hover .world-art,
+.sleeve-home .world-card.rain:hover .world-art,
+.sleeve-home .world-card:hover .sleeve-ticket { transform: none; box-shadow: none; }
+@media (hover:hover) and (pointer:fine) {
+  .sleeve-home .world-card:hover .world-art img { transform: scale(1.025); }
+  .sleeve-home .world-card:hover .ticket-enter { text-decoration: underline; text-underline-offset: 4px; }
+}
+.sleeve-home .collection-note.sleeve-liner {
+  margin: clamp(64px, 9vw, 120px) 0 48px;
+  transform: none;
+  box-shadow: none;
+  border: 1px solid var(--line);
+}
+
+@media (min-width: 1001px) {
+  .sleeve-intro {
+    min-height: 460px;
+    padding-block: 30px 20px;
+  }
+  .sleeve-home .masthead-art h1 { max-width: 780px; }
+  .sleeve-home .opening-note {
+    margin-top: 16px;
+    padding-top: 12px;
+  }
+}
+
+/* Artwork rooms --------------------------------------------------------- */
+body[data-orbit-world] {
+  --experience-focus: var(--exhibit-accent, #8c4f68);
+}
+body[data-orbit-world] .collection-header {
+  width: min(1360px, calc(100% - 64px));
+  height: 70px;
+  margin-inline: auto;
+}
+body[data-orbit-world].experience-ready .collection-header nav { display: none; }
+body[data-orbit-world] .collection-brand { font-size: 13px; }
+body[data-orbit-world] .collection-brand .mark { font-size: 27px; }
+body[data-orbit-world] .collection-brand small { margin-top: 4px; }
+body[data-orbit-world] .orbit-wayfinder {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  min-height: 58px;
+  background: color-mix(in srgb, var(--exhibit-surface, #efede8) 90%, transparent);
+  border-top: 0;
+  backdrop-filter: blur(18px) saturate(.85);
+  -webkit-backdrop-filter: blur(18px) saturate(.85);
+}
+body[data-orbit-world] .orbit-breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+body[data-orbit-world] .orbit-picker > summary {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+body[data-orbit-world] .orbit-picker-panel {
+  max-height: min(720px, calc(100svh - 74px));
+  overflow: auto;
+}
+body[data-orbit-world] .orbit-choice,
+body[data-orbit-world] .orbit-neighbour { min-height: 44px; }
+
+body[data-orbit-world] .exhibit-options {
+  position: relative;
+  z-index: 12;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: center;
+  justify-content: start;
+  gap: 8px;
+  min-height: 68px;
+  margin: 16px 0 12px;
+  padding: 9px;
+  border: 1px solid var(--exhibit-rule);
+  border-radius: var(--experience-radius);
+  background: color-mix(in srgb, var(--exhibit-surface) 86%, transparent);
+  box-shadow: 0 8px 28px color-mix(in srgb, var(--exhibit-text) 7%, transparent);
+}
+body[data-orbit-world] .exhibit-view-modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 2px;
+}
+body[data-orbit-world] .exhibit-options button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 116px;
+  min-height: 46px;
+  padding: 9px 14px;
+  border-radius: 2px;
+  font-weight: 560;
+  letter-spacing: .02em;
+}
+body[data-orbit-world] .exhibit-options .view-still[aria-pressed="true"],
+body[data-orbit-world] .exhibit-options .view-live[aria-pressed="true"] {
+  color: var(--exhibit-surface);
+  background: var(--exhibit-text);
+  border-color: var(--exhibit-text);
+}
+body[data-orbit-world] .exhibit-options .exhibit-enter-live {
+  border-color: color-mix(in srgb, var(--exhibit-accent) 55%, var(--exhibit-rule));
+}
+body[data-orbit-world] .exhibit-options .exhibit-mode-hint {
+  grid-column: 4;
+  grid-row: 1;
+  max-width: 36em;
+  margin: 0 8px 0 12px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--exhibit-text) 68%, transparent);
+}
+body[data-orbit-world].experience-ready .exhibit-options .exhibit-mode-hint,
+body[data-orbit-world].experience-ready .hero-inspect {
+  display: none !important;
+}
+
+body[data-orbit-world] :is(.time-stage,.concept-stage,.world-stage,.rain-stage,.jielan-stage) {
+  position: relative;
+  width: 100%;
+  height: min(72svh, 820px);
+  min-height: 540px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--exhibit-text) 16%, transparent);
+  border-radius: var(--experience-radius);
+  box-shadow: 0 22px 60px color-mix(in srgb, var(--exhibit-text) 11%, transparent);
+}
+body[data-orbit-world="poem"] .world-stage { height: min(72svh, 820px); }
+.experience-stage-guide {
+  position: absolute;
+  z-index: 7;
+  left: 14px;
+  bottom: 14px;
+  max-width: calc(100% - 28px);
+  margin: 0;
+  padding: 9px 12px;
+  border: 1px solid color-mix(in srgb, var(--exhibit-text) 18%, transparent);
+  border-radius: 999px;
+  color: var(--exhibit-text);
+  background: color-mix(in srgb, var(--exhibit-surface) 88%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font: 10px/1.4 -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  letter-spacing: .03em;
+  pointer-events: none;
+}
+body[data-orbit-view="live"] .experience-stage-guide { opacity: .86; }
+
+body[data-orbit-world] .exhibit-adjustments {
+  margin: 10px 0 36px;
+  border: 1px solid var(--exhibit-rule);
+  border-radius: var(--experience-radius);
+  background: color-mix(in srgb, var(--exhibit-surface) 80%, transparent);
+}
+body[data-orbit-world] .exhibit-adjustments > summary {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 9px 14px;
+  cursor: pointer;
+  font-size: 11px;
+  letter-spacing: .04em;
+}
+body[data-orbit-world] .exhibit-adjustments[open] > summary {
+  border-bottom: 1px solid var(--exhibit-rule);
+}
+body[data-orbit-world] :is(.time-buttons,.control-buttons,.scene-toolbar) button,
+body[data-orbit-world] :is(.time-buttons,.control-buttons,.scene-toolbar) .tool-button {
+  min-height: 44px;
+}
+body[data-orbit-world] .detail-open:focus-visible {
+  outline-offset: -4px !important;
+}
+body[data-orbit-world] :is(.time-details,.detail-strip,.rain-details,.garden-detail-grid) figure {
+  scroll-margin-top: 92px;
+}
+body[data-orbit-world] :is(.time-details,.detail-strip,.rain-details,.garden-detail-grid) img {
+  border-radius: 2px;
+}
+body[data-orbit-world] .orbit-continuation-heading a {
+  display: flex;
+  align-items: center;
+}
+body[data-orbit-world] .orbit-continuation-heading a { gap: 7px; }
+
+.rain-page .experience-icon { filter: invert(1); }
+.rain-page .exhibit-options .view-still[aria-pressed="true"] .experience-icon,
+.rain-page .exhibit-options .view-live[aria-pressed="true"] .experience-icon { filter: none; }
+.rain-page .experience-stage-guide {
+  color: #edf3ff;
+  background: #090d14d9;
+  border-color: #b9c8e63d;
+}
+
+@media (max-width: 1000px) {
+  .sleeve-home .collection-header,
+  .sleeve-home .collection-main { width: min(100% - 44px, 1440px); }
+  .sleeve-intro { min-height: auto; padding-top: 70px; }
+  .sleeve-home .opening-note { grid-template-columns: 1fr 1fr; }
+  .sleeve-home .opening-note .visit-arrival-actions { grid-column: 1 / -1; justify-content: flex-start; }
+  .sleeve-home .world-card,
+  .sleeve-home .world-card.cross,
+  .sleeve-home .world-card.poem,
+  .sleeve-home .world-card.rain,
+  .sleeve-home .world-card.jielan { min-height: 560px; }
+  .sleeve-home .world-card.yesterday {
+    grid-template-rows: minmax(460px, 60vh);
+    min-height: 520px;
+  }
+  body[data-orbit-world] .exhibit-options {
+    grid-template-columns: auto auto auto;
+  }
+  body[data-orbit-world] .exhibit-options .exhibit-mode-hint { margin-left: 4px; }
+}
+
+@media (max-width: 720px) {
+  html { scroll-padding-top: 64px; }
+  .sleeve-home .collection-header,
+  .sleeve-home .collection-main {
+    width: calc(100% - 36px);
+    margin-inline: auto;
+    padding-inline: 0;
+  }
+  .sleeve-home .collection-header { height: 62px; }
+  .sleeve-home .collection-header nav a:first-child { display: inline-flex; }
+  .sleeve-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 96px;
+    column-gap: 16px;
+    padding: 54px 0 30px;
+  }
+  .experience-edition {
+    top: 20px;
+    color: #5e5659;
+    font-size: 10px;
+  }
+  .sleeve-home .album-identity { padding-left: 14px; }
+  .sleeve-home .album-identity > p { font-size: 18px; }
+  .sleeve-home .opening-note {
+    display: block;
+    max-width: none;
+    margin-top: 26px;
+    padding-top: 22px;
+  }
+  .sleeve-home .opening-note > p { font-size: 16px; }
+  .sleeve-home .opening-note > span { display: block; margin-top: 10px; font-size: 10px; }
+  .sleeve-home .opening-note .visit-arrival-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 18px;
+  }
+  .sleeve-home .opening-note .visit-start,
+  .sleeve-home .opening-note .exhibition-entry {
+    width: auto;
+    justify-content: center;
+    padding-inline: 10px;
+  }
+  .sleeve-home .collection-route {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow: visible;
+    border-inline: 1px solid var(--line);
+  }
+  .sleeve-home .collection-route > a:nth-child(n) {
+    min-width: 0;
+    min-height: 62px;
+    padding: 10px 11px;
+    border-bottom: 1px solid var(--line);
+  }
+  .sleeve-home .collection-route > a:nth-child(2n) { border-right: 0; }
+  .sleeve-home .collection-route > a:last-child {
+    grid-column: auto;
+    border-right: 0;
+    border-bottom: 0;
+  }
+  .sleeve-home .collection-route > a:nth-last-child(2) { border-bottom: 0; }
+  .sleeve-home .collection-route small {
+    max-width: 24px;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #665d60;
+    font-size: 9px;
+  }
+  .sleeve-home .collection-route strong {
+    color: #443d40;
+    font-size: 12px;
+  }
+  .sleeve-home .works-heading { padding-bottom: 20px; }
+  .sleeve-home .works-heading :is(h2,span) {
+    color: #51494c;
+    font-size: 9px;
+  }
+  .sleeve-home .works-heading > span:last-child { font-size: 9px; }
+  .sleeve-home .world-grid.sleeve-stack { display: grid; grid-template-columns: 1fr; gap: 22px; }
+  .sleeve-home .world-card,
+  .sleeve-home .world-card.cross,
+  .sleeve-home .world-card.poem,
+  .sleeve-home .world-card.rain,
+  .sleeve-home .world-card.jielan,
+  .sleeve-home .world-card.yesterday {
+    grid-column: 1;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(320px, 74vw) auto;
+    min-height: 0;
+  }
+  .sleeve-home .world-card .world-art,
+  .sleeve-home .cross .world-art,
+  .sleeve-home .poem .world-art,
+  .sleeve-home .rain .world-art {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    min-height: 0;
+    padding: 22px;
+    transform: none;
+  }
+  .sleeve-home .sleeve-ticket,
+  .sleeve-home .cross .sleeve-ticket,
+  .sleeve-home .poem .sleeve-ticket,
+  .sleeve-home .rain .sleeve-ticket,
+  .sleeve-home .jielan .sleeve-ticket,
+  .sleeve-home .world-card.yesterday .sleeve-ticket {
+    position: relative;
+    inset: auto;
+    width: auto;
+    padding: 20px 21px 22px;
+    border: 0;
+    border-top: 1px solid color-mix(in srgb, var(--edge) 22%, transparent);
+    transform: none;
+  }
+  .sleeve-home .world-card h2 img { height: 42px; }
+  .sleeve-home .jielan h2 { font-size: 42px; }
+  .sleeve-home .world-description { white-space: normal; font-size: 11px; }
+  .sleeve-home .world-card .world-meta {
+    color: color-mix(in srgb, var(--pen) 86%, #292326);
+    white-space: normal;
+    font-size: 10px;
+    line-height: 1.6;
+  }
+  .sleeve-home .ticket-top {
+    color: color-mix(in srgb, var(--pen) 76%, #292326);
+    font-size: 9px;
+  }
+  .sleeve-home .print-number {
+    color: color-mix(in srgb, var(--pen) 74%, #292326);
+    font-size: 9px;
+  }
+  .sleeve-home .sleeve-catalogue {
+    top: 13px;
+    right: 13px;
+    color: color-mix(in srgb, var(--pen) 78%, #292326);
+    font-size: 8px;
+  }
+  .sleeve-home .collection-note.sleeve-liner { margin-top: 52px; padding: 24px 22px; }
+  .sleeve-home .collection-footer { margin-inline: 18px; }
+
+  body[data-orbit-world] .collection-header {
+    width: calc(100% - 36px);
+    height: 58px;
+    margin-inline: auto;
+  }
+  body[data-orbit-world] .orbit-wayfinder {
+    min-height: 56px;
+    padding-inline: 0;
+  }
+  body[data-orbit-world] .orbit-breadcrumb > span { display: none; }
+  body[data-orbit-world] .orbit-picker-panel { width: min(100vw - 28px, 520px); }
+  body[data-orbit-world] .exhibit-options {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 7px;
+    min-height: 0;
+    margin: 12px 0 9px;
+    padding: 7px;
+  }
+  body[data-orbit-world] .exhibit-view-modes { grid-column: 1 / -1; }
+  body[data-orbit-world] .exhibit-options button {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding-inline: 9px;
+    font-size: 10px;
+  }
+  body[data-orbit-world] .exhibit-options .exhibit-mode-hint {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    max-width: none;
+    margin: 2px 5px 0;
+    text-align: center;
+    font-size: 9px;
+  }
+  body[data-orbit-view="still"] .exhibit-options .exhibit-inspect { grid-column: 1 / -1; }
+  body[data-orbit-world] :is(.time-stage,.concept-stage,.world-stage,.rain-stage,.jielan-stage),
+  body[data-orbit-world="poem"] .world-stage {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1 / 1.08;
+    border-radius: 2px;
+  }
+  .experience-stage-guide {
+    left: 10px;
+    bottom: 10px;
+    max-width: calc(100% - 20px);
+    padding: 7px 10px;
+    font-size: 9px;
+  }
+  body[data-orbit-world] .exhibit-adjustments { margin-bottom: 28px; }
+  body[data-orbit-world].experience-ready.visit-room { padding-bottom: 0; }
+  body[data-orbit-world].experience-ready .visit-dock { display: none !important; }
+}
+
+@media (max-width: 380px) {
+  .sleeve-home .collection-header,
+  .sleeve-home .collection-main,
+  body[data-orbit-world] .collection-header { width: calc(100% - 28px); }
+  .sleeve-intro { grid-template-columns: minmax(0, 1fr) 82px; }
+  .sleeve-home .album-stamp { display: none; }
+  .sleeve-home .opening-note .visit-arrival-actions { grid-template-columns: 1fr; }
+  .sleeve-home .collection-route { margin-inline: 0; padding-inline: 0; }
+  .sleeve-home .world-card,
+  .sleeve-home .world-card.yesterday { grid-template-rows: minmax(280px, 84vw) auto; }
+  body[data-orbit-world] .exhibit-options button { font-size: 9px; }
+  body[data-orbit-world] .exhibit-options button .experience-icon { width: 15px; height: 15px; }
+}
+
+@media (scripting: none) {
+  body[data-orbit-world] :is(.time-controls,.model-controls,.rain-controls,.world-controls),
+  body[data-orbit-world] canvas { display: none !important; }
+  body[data-orbit-world] .orbit-wayfinder { position: relative; }
+  body[data-orbit-world] .collection-header nav { display: flex; }
+  body[data-orbit-world] :is(.time-poster,.concept-poster,.garden-poster,.rain-poster,.jielan-poster) {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .sleeve-home .world-art img,
+  .experience-stage-guide,
+  body[data-orbit-world] .exhibit-options * { transition: none !important; animation: none !important; }
+}
