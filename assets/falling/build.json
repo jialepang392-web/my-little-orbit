@@ -1,21 +1,22 @@
 {
-  "version": "0.28.0",
-  "sceneVersion": "0.28.0",
-  "title": "在坠落时",
   "status": "passed",
+  "version": "0.29.0",
+  "sceneVersion": "0.29.0",
+  "title": "在坠落时",
   "exported": true,
-  "created": "2026-09-30T12:01:28.188890+00:00",
-  "buildLabel": "dense-final",
+  "created": "2026-09-30T14:30:14.753520+00:00",
+  "buildLabel": "reference-staged",
   "sourceHashes": {
-    "falling.html": "72376dc20af0b94fdc2e08876d1dad5cb1fc9e58a03c6d9a655312d8f1aef2ed",
+    "falling.html": "8f0bcfbde3ddb5f676e2b46b842b9aaabb6bb86d3a274d0e251779429a04db07",
     "falling.css": "9ecbcc1695478593def08a5f27358d7fc0bccbda3568f2d0ec86fe25e40f6bdf",
-    "src/falling-page.js": "fbc33eb78ada3d4aeeedc4448ebe653615cb13db9bc8f24f94a2371bc0a9a3fc",
-    "src/falling/model.js": "728551a6e1612bdfad954a60f77729119b3390f27c0cba512220f36a1043b69a",
-    "src/falling/materials.js": "5f33d9bf76343daa1eac9f9675166472605ce180dd98c89e7b1d38f05d5fb745",
-    "src/falling/viewer.js": "684a5b66d27f6cbd2c4773bbfadf4a4107cc7345dd6845bd7f359dd998015d78",
+    "src/falling-page.js": "5732316aa6496720336459ce340a1ab917cead9778e2790a63b57099d36f40f0",
+    "src/falling/model.js": "8a49f279548396a3238c2e9bf284d49f17b7a5ef9bf5242a8197545e5811a32e",
+    "src/falling/materials.js": "826ce5059347a8113c1d11a84b776f36748d60bbcdab9e0c24a5c483468a6019",
+    "src/falling/viewer.js": "be16559a5d7ba549ba4d5ba666ad7c67dbbb40b18dc2e6fa33caa1936d9a049e",
     "src/render-performance.js": "efcb230da5f9b1a333234f773a92e48dbfec0b417e613f769c30ebb4d3d27c0b"
   },
-  "buildScriptSha256": "bc9c5500230eb66b16c99f47eaad6b17b0de4eb2fae2879030b14ac824c6979e",
+  "buildScriptSha256": "adab40ebba22b87b2131e73953a37fb61b591799493772b406dee1097b4ba322",
+  "finishScriptSha256": "7c26098ab6441e53aeabf29b457f7494d04f056282b76e5e1add818c9a750d20",
   "stats": {
     "engine": "three.js r180",
     "renderDpr": "2.000",
@@ -25,133 +26,134 @@
     "shadowMode": "continuous",
     "ready": "true",
     "title": "在坠落时",
-    "version": "0.28.0",
+    "version": "0.29.0",
     "view": "front",
     "detail": "",
-    "frames": "9",
+    "frames": "11",
     "solidCore": true,
-    "bodyRadius": 1.065,
+    "bodyRadius": 1.12,
     "bodyAxes": [
       1,
       1,
       1
     ],
-    "layers": "10",
-    "drawCalls": "144",
-    "triangles": "1660152",
-    "modelMeshes": "72",
-    "modelTriangles": "830076",
-    "beads": "450",
-    "petals": "715",
+    "layers": "11",
+    "drawCalls": "154",
+    "triangles": "3019320",
+    "modelMeshes": "77",
+    "modelTriangles": "1509660",
+    "beads": "1168",
+    "petals": "2026",
     "autoRotate": "false",
     "moment": "false",
     "separated": "false",
     "separation": "0.0000",
-    "camera": "0.0869,0.3825,6.9542",
+    "camera": "0.0858,0.3775,6.8631",
     "worldRotation": "0.00000",
     "study": "false",
     "light": "studio",
     "suspended": "false",
     "visibleSurface": "true",
     "slug": "falling",
-    "sceneVersion": "0.28.0",
-    "artRevision": 13,
-    "composition": "high-density stitched assemblage / weak spherical mass / rooted broken perimeter",
-    "patchCount": 312,
-    "beadCount": 450,
-    "petalCount": 715,
-    "flowerCount": 29,
-    "stitchCount": 252,
-    "fragmentCount": 312,
-    "chainCount": 7,
-    "knotCount": 39,
-    "structureGroups": 10,
-    "frontFlowerGroups": 6,
-    "chainComposition": "seven interlinked bead paths, parallel red fibres and six local knots continuing over both flanks and the reverse",
+    "sceneVersion": "0.29.0",
+    "artRevision": 14,
+    "composition": "reference-directed torn silver textiles, diagonal crimson tow, dense glass rings, dry flowers, rock fault and a recessed broken red ground",
+    "patchCount": 331,
+    "beadCount": 1168,
+    "petalCount": 2026,
+    "flowerCount": 21,
+    "stitchCount": 124,
+    "fragmentCount": 286,
+    "chainCount": 12,
+    "fiberCount": 4330,
+    "knotCount": 31,
+    "structureGroups": 11,
+    "frontFlowerGroups": 4,
     "detailTargets": {
       "threads": [
-        -0.14,
-        0.26,
-        1.44
+        -0.29,
+        0.11,
+        1.46
       ],
       "flowers": [
-        0.07,
-        -0.78,
-        1.31
+        -0.28,
+        -0.81,
+        1.17
       ],
       "fault": [
-        0.71,
-        0.19,
-        1.18
+        0.98,
+        0.15,
+        1.12
       ]
     },
-    "referenceUse": "Original actual 3D carbon, foil, grey-pink remnants, flower, mesh and red-fibre assemblage. No generated images, reference pixels or photograph replacement.",
-    "meshCount": 72,
-    "triangleCount": 830076,
-    "exportPrimitiveCount": 72
+    "referenceUse": "The supplied image informs original 3D material relationships and composition. No source image pixels, artist names, external fonts, AI image generation or image-plane replacement.",
+    "meshCount": 77,
+    "triangleCount": 1509660,
+    "exportPrimitiveCount": 77
   },
   "glbReload": {
-    "meshes": 72,
-    "triangles": 830076,
-    "bad": 0
+    "meshes": 77,
+    "triangles": 1509660,
+    "bad": 0,
+    "version": "0.29.0"
   },
   "assets": {
     "cover.webp": {
-      "sha256": "69acd9002661a555c9528ccc02da8a663d3973496e87fa777507ba5142af87a7",
-      "bytes": 501142
+      "sha256": "6cc7300f64976b3b909332cbfbcf1117c9d39130a0b8942c46f597aa672a98d2",
+      "bytes": 1037324
     },
     "side.webp": {
-      "sha256": "594fcc78c0ba2efea061a530611e5cb098a1eb35768644f86f1047208552a568",
-      "bytes": 352800
+      "sha256": "7e47eb494ea046a870c87e8fff89193dfc27251723d0ea49bbf572c475b62b3e",
+      "bytes": 845432
     },
     "back.webp": {
-      "sha256": "c9470089bca2098e4432209901f23f231816b8f2c58b6fb098c67674ff3c4670",
-      "bytes": 429062
+      "sha256": "9e4312463b4b1d19a4fa7d39c00ff7d86a41f2e933b73f358dc182fcf3945aec",
+      "bytes": 1082438
     },
     "detail-threads.webp": {
-      "sha256": "c91d78c97b87e02a79f2aef3336e7c79f9f32c0f7863bbbf2d437657115e7eb0",
-      "bytes": 706092
+      "sha256": "8d78495cca1c754f7ad3b51eefbfd8e07fcfaa1961e038c1c96e4ec60684c28e",
+      "bytes": 2056310
     },
     "detail-flowers.webp": {
-      "sha256": "d578e50af54fb7d809e69157648d78b94742760e2f37bfa63f58aa31ddf8012a",
-      "bytes": 421774
+      "sha256": "c5f298eb949daa6ed347c3e94f74926c6f9591d19c154da0d642b04264ea79bc",
+      "bytes": 1427522
     },
     "detail-fault.webp": {
-      "sha256": "0ed9df2e26656a529bc761ed6b9eb9cf274dc3b353006f0c79d5ca5c124f6a01",
-      "bytes": 668056
+      "sha256": "832d3e00b67828448b6419dac3f25059354dfb5b48c9fbec5e72d944f233beff",
+      "bytes": 1568022
     },
     "poster.png": {
-      "sha256": "eb7a3511e78882426e29d4bc6983dd843665e7f774010659de09c3406fc2718e",
-      "bytes": 4812537
+      "sha256": "8b7c89b149ee4a1e1016b5353225573b4188d8d0a1be4b9a71834b2a54f1e9ea",
+      "bytes": 7247901
     },
     "transparent-front.png": {
-      "sha256": "8e319c03a516a702b5cf884fbb33eb19a5e8f037450f5f663f2e979590bc15d8",
-      "bytes": 3587898
+      "sha256": "9e27b7d6ca4534338ad36637c12138ebb5d635e1a155e193547e2e8854a92c4f",
+      "bytes": 5392958
     },
     "falling.glb": {
-      "sha256": "4a76ec0ed83f4184f47b871464bb42579381725262358b91da30d4934b5e9723",
-      "bytes": 32959852
+      "sha256": "0e4b7d72ca0285c9d4a14ca3dfd1f2abde852f02f0fbea9c47fb12f1a1f7f4ee",
+      "bytes": 83313940
     },
     "cover-192.webp": {
-      "sha256": "1806f5360c0b958a6d2a930aed733466e44a3c9789d321be0648b9af7ddb9ca5",
-      "bytes": 11286
+      "sha256": "81d3da13c7548fa583dfbb44e9d5aabc1ac8b4538437520846ae36c971bb3062",
+      "bytes": 12372
     },
     "cover-300.webp": {
-      "sha256": "ce173a1309d0b6af480f6da285f1e07ad4ddd1d415800823b5abceaec4bf4f6d",
-      "bytes": 23512
+      "sha256": "83491b6efb588188f91bbca732428e48252aec1d8d3bbc7adc821ed3a3f49212",
+      "bytes": 27308
     },
     "cover-480.webp": {
-      "sha256": "d6f16ad56b751182fec04f8bfd57c5b3cd3ac3d49ca57c13840ff004d4d1c6c3",
-      "bytes": 49582
+      "sha256": "b3068c68c616346769bef7bce5bae8704c98fbc5e51c146d6ee5ba89b09e2463",
+      "bytes": 64358
     },
     "cover-768.webp": {
-      "sha256": "17319b1d32d6f45fcc244f17ff95f9638f261d8c3a0d7d9070da4b852a080678",
-      "bytes": 104324
+      "sha256": "21ef6a59bc1092e2d885d3a34573c61bb0a96da724973a39aa2cc40f4ddc8ea5",
+      "bytes": 154500
     },
     "cover-1200.webp": {
-      "sha256": "ebb50c22ef723994ccbe57e3b1dcf42e02dc620f00b2d977869effcd44822d10",
-      "bytes": 206932
+      "sha256": "f9a11f9d284bed340de32fda7aff8423ca7d6717f7500da530f4f72a4b44fc26",
+      "bytes": 358248
     }
   },
-  "provenance": "All six plates, cover sizes, poster and GLB exported from the same interactive high-density assemblage. No image generation, reference pixels or replacement artwork."
+  "provenance": "All plates, covers, poster and GLB come from the identical hash-frozen actual scene. Original builder and separate HTTP-stream reload verifier are both recorded. No generated substitute image, source-image projection or published reference pixels."
 }

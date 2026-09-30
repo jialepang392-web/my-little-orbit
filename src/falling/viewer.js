@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {makeFalling} from './model.js?v=0280';
+import {makeFalling} from './model.js?v=0290';
 import {createRenderPerformance} from '../render-performance.js?v=0260';
 
 const PAPER='#eeece6';
@@ -18,8 +18,8 @@ export function createFallingViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(33,1,.1,70),world=makeFalling();scene.add(world.root);
   const env=environment(renderer);scene.environment=env.texture;scene.environmentIntensity=.78;
   scene.add(new T.HemisphereLight('#f9f6ed','#747079',.92));
-  const key=new T.DirectionalLight('#fff7ed',2.60);key.position.set(-4,6,7);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.normalBias=.008;key.shadow.bias=-.00012;key.shadow.radius=3;Object.assign(key.shadow.camera,{left:-3,right:3,top:3,bottom:-3,near:1,far:23});scene.add(key);
-  const fill=new T.DirectionalLight('#dce2ed',.70);fill.position.set(4,3,3);scene.add(fill);
+  const key=new T.DirectionalLight('#fff7ed',2.10);key.position.set(-4,6,7);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.normalBias=.008;key.shadow.bias=-.00012;key.shadow.radius=3;Object.assign(key.shadow.camera,{left:-3,right:3,top:3,bottom:-3,near:1,far:23});scene.add(key);
+  const fill=new T.DirectionalLight('#dce2ed',.90);fill.position.set(4,3,3);scene.add(fill);
   const edge=new T.DirectionalLight('#f8e6da',.34);edge.position.set(-3,-2,-5);scene.add(edge);
   const reverse=new T.DirectionalLight('#e2e7f0',1.15);reverse.position.set(3.5,3.0,-5);scene.add(reverse);
   const controls=new OrbitControls(camera,canvas);controls.enablePan=false;controls.enableDamping=!reduced;controls.dampingFactor=.11;controls.rotateSpeed=.62;controls.minDistance=build?.65:1.45;controls.maxDistance=35;
@@ -28,7 +28,7 @@ export function createFallingViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
   let raf=0,disposed=false,lost=false,suspended=false,inView=true,ready=false,turn=false,moment=false,separated=false,amount=0,fitDistance=0,detail=null,view='front',light='studio',frames=0,last=performance.now(),time=0;
   const policy=createRenderPerformance({canvas,renderer,build,maxDpr:1.6,mobileMaxDpr:1.3,buildDpr:2,onChange:()=>{resize();invalidate();}});
   function visible(){return inView||Boolean(canvas.closest('.exhibit-immersive[open]'));}
-  function diagnostics(now,force=false){if(!policy.shouldWriteDiagnostics(now,force))return;Object.assign(canvas.dataset,{ready:String(ready),title:'在坠落时',version:'0.28.0',view,detail:detail||'',frames:String(frames),solidCore:'true',bodyRadius:String(world.root.userData.bodyRadius),bodyAxes:'1,1,1',layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),modelMeshes:String(world.root.userData.meshCount),modelTriangles:String(world.root.userData.triangleCount),beads:String(world.root.userData.beadCount),petals:String(world.root.userData.petalCount),autoRotate:String(turn),moment:String(moment),separated:String(separated),separation:amount.toFixed(4),camera:camera.position.toArray().map(x=>x.toFixed(4)).join(','),worldRotation:world.root.rotation.y.toFixed(5),study:String(scene.overrideMaterial===clay),light,suspended:String(suspended),visibleSurface:String(visible())});}
+  function diagnostics(now,force=false){if(!policy.shouldWriteDiagnostics(now,force))return;Object.assign(canvas.dataset,{ready:String(ready),title:'在坠落时',version:'0.29.0',view,detail:detail||'',frames:String(frames),solidCore:'true',bodyRadius:String(world.root.userData.bodyRadius),bodyAxes:'1,1,1',layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),modelMeshes:String(world.root.userData.meshCount),modelTriangles:String(world.root.userData.triangleCount),beads:String(world.root.userData.beadCount),petals:String(world.root.userData.petalCount),autoRotate:String(turn),moment:String(moment),separated:String(separated),separation:amount.toFixed(4),camera:camera.position.toArray().map(x=>x.toFixed(4)).join(','),worldRotation:world.root.rotation.y.toFixed(5),study:String(scene.overrideMaterial===clay),light,suspended:String(suspended),visibleSurface:String(visible())});}
   function invalidate(){if(!raf&&!disposed&&!lost&&!suspended&&!document.hidden)raf=requestAnimationFrame(render);}
   function render(now){
     raf=0;if(disposed||lost||suspended||document.hidden)return;const dt=Math.min((now-last)/1000,.08);last=now;time+=dt;
