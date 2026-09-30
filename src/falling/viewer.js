@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {makeFalling} from './model.js?v=0260';
+import {makeFalling} from './model.js?v=0270';
 import {createRenderPerformance} from '../render-performance.js?v=0260';
 
 const PAPER='#eeece6';
@@ -17,9 +17,9 @@ export function createFallingViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(33,1,.1,70),world=makeFalling();scene.add(world.root);
   const env=environment(renderer);scene.environment=env.texture;scene.environmentIntensity=.68;
-  scene.add(new T.HemisphereLight('#f9f6ed','#747079',.75));
-  const key=new T.DirectionalLight('#fff7ed',3.05);key.position.set(-4,6,7);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.normalBias=.008;key.shadow.bias=-.00012;key.shadow.radius=3;Object.assign(key.shadow.camera,{left:-3,right:3,top:3,bottom:-3,near:1,far:23});scene.add(key);
-  const fill=new T.DirectionalLight('#dce2ed',.85);fill.position.set(4,2,-4);scene.add(fill);
+  scene.add(new T.HemisphereLight('#f9f6ed','#747079',.92));
+  const key=new T.DirectionalLight('#fff7ed',2.60);key.position.set(-4,6,7);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.normalBias=.008;key.shadow.bias=-.00012;key.shadow.radius=3;Object.assign(key.shadow.camera,{left:-3,right:3,top:3,bottom:-3,near:1,far:23});scene.add(key);
+  const fill=new T.DirectionalLight('#dce2ed',.70);fill.position.set(4,3,3);scene.add(fill);
   const edge=new T.DirectionalLight('#f8e6da',.34);edge.position.set(-3,-2,-5);scene.add(edge);
   const controls=new OrbitControls(camera,canvas);controls.enablePan=false;controls.enableDamping=!reduced;controls.dampingFactor=.11;controls.rotateSpeed=.62;controls.minDistance=build?.65:1.45;controls.maxDistance=35;
   const clay=new T.MeshStandardMaterial({color:'#b6b0a8',roughness:.9,side:T.DoubleSide});
@@ -27,7 +27,7 @@ export function createFallingViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
   let raf=0,disposed=false,lost=false,suspended=false,inView=true,ready=false,turn=false,moment=false,separated=false,amount=0,fitDistance=0,detail=null,view='front',light='studio',frames=0,last=performance.now(),time=0;
   const policy=createRenderPerformance({canvas,renderer,build,maxDpr:1.6,mobileMaxDpr:1.3,buildDpr:2,onChange:()=>{resize();invalidate();}});
   function visible(){return inView||Boolean(canvas.closest('.exhibit-immersive[open]'));}
-  function diagnostics(now,force=false){if(!policy.shouldWriteDiagnostics(now,force))return;Object.assign(canvas.dataset,{ready:String(ready),title:'在坠落时',version:'0.26.0',view,detail:detail||'',frames:String(frames),solidCore:'true',bodyRadius:String(world.root.userData.bodyRadius),bodyAxes:'1,1,1',layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),modelMeshes:String(world.root.userData.meshCount),modelTriangles:String(world.root.userData.triangleCount),beads:String(world.root.userData.beadCount),petals:String(world.root.userData.petalCount),autoRotate:String(turn),moment:String(moment),separated:String(separated),separation:amount.toFixed(4),camera:camera.position.toArray().map(x=>x.toFixed(4)).join(','),worldRotation:world.root.rotation.y.toFixed(5),study:String(scene.overrideMaterial===clay),light,suspended:String(suspended),visibleSurface:String(visible())});}
+  function diagnostics(now,force=false){if(!policy.shouldWriteDiagnostics(now,force))return;Object.assign(canvas.dataset,{ready:String(ready),title:'在坠落时',version:'0.27.0',view,detail:detail||'',frames:String(frames),solidCore:'true',bodyRadius:String(world.root.userData.bodyRadius),bodyAxes:'1,1,1',layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),modelMeshes:String(world.root.userData.meshCount),modelTriangles:String(world.root.userData.triangleCount),beads:String(world.root.userData.beadCount),petals:String(world.root.userData.petalCount),autoRotate:String(turn),moment:String(moment),separated:String(separated),separation:amount.toFixed(4),camera:camera.position.toArray().map(x=>x.toFixed(4)).join(','),worldRotation:world.root.rotation.y.toFixed(5),study:String(scene.overrideMaterial===clay),light,suspended:String(suspended),visibleSurface:String(visible())});}
   function invalidate(){if(!raf&&!disposed&&!lost&&!suspended&&!document.hidden)raf=requestAnimationFrame(render);}
   function render(now){
     raf=0;if(disposed||lost||suspended||document.hidden)return;const dt=Math.min((now-last)/1000,.08);last=now;time+=dt;
@@ -64,7 +64,7 @@ export function createFallingViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
     setSeparated(value){separated=Boolean(value);last=performance.now();invalidate();},
     setStudy(value){scene.overrideMaterial=value?clay:null;policy.invalidateShadow();diagnostics(performance.now(),true);invalidate();},
     setLight(value){light=value?'silver':'studio';key.color.set(value?'#e5edff':'#fff7ed');scene.environmentIntensity=value?.87:.68;policy.invalidateShadow();diagnostics(performance.now(),true);invalidate();},
-    setDetail(name){stop();detail=Object.hasOwn(world.root.userData.detailTargets,name)?name:'threads';world.root.rotation.set(0,0,0);controls.target.fromArray(world.root.userData.detailTargets[detail]);const offsets={threads:[-.23,.13,2.70],flowers:[-.08,.19,2.70],fault:[.36,.12,2.55]};camera.position.copy(controls.target).add(new T.Vector3(...offsets[detail]));camera.fov=33;camera.updateProjectionMatrix();controls.update();diagnostics(performance.now(),true);invalidate();},
+    setDetail(name){stop();detail=Object.hasOwn(world.root.userData.detailTargets,name)?name:'threads';world.root.rotation.set(0,0,0);controls.target.fromArray(world.root.userData.detailTargets[detail]);const offsets={threads:[-.20,.13,2.18],flowers:[-.10,.18,2.05],fault:[.44,.14,2.16]};camera.position.copy(controls.target).add(new T.Vector3(...offsets[detail]));camera.fov=33;camera.updateProjectionMatrix();controls.update();diagnostics(performance.now(),true);invalidate();},
     reset(){moment=false;separated=false;amount=0;world.setSeparated(0);world.setMoment(0);scene.overrideMaterial=null;light='studio';key.color.set('#fff7ed');scene.environmentIntensity=.68;setView('front');},
     suspend(value){suspended=Boolean(value);if(suspended){cancelAnimationFrame(raf);raf=0;}else{last=performance.now();invalidate();}diagnostics(performance.now(),true);},
     stats(){diagnostics(performance.now(),true);return {...canvas.dataset,...world.root.userData};},

@@ -1,21 +1,21 @@
 {
-  "version": "0.26.0",
-  "sceneVersion": "0.26.0",
+  "version": "0.27.0",
+  "sceneVersion": "0.27.0",
   "title": "在坠落时",
-  "created": "2026-09-29T13:46:43.688371+00:00",
   "status": "passed",
   "exported": true,
-  "buildLabel": "r04-runtime-final",
-  "buildScriptSha256": "77eba3b0172df2669dc5a8bc71a007efb4c75b2bae7a1bb0838b32c72d5e19ce",
+  "created": "2026-09-30T04:27:50.918969+00:00",
+  "buildLabel": "completed-assembly",
   "sourceHashes": {
-    "falling.html": "eb43b222cba977acc72aca9dabc75d79c4a6cd025e015e46ddf1be34681b7c49",
+    "falling.html": "842e8599ba216d87a223c1caddf6fa0fc65ffb936cf4fb2ee79acd3be6bcd129",
     "falling.css": "9ecbcc1695478593def08a5f27358d7fc0bccbda3568f2d0ec86fe25e40f6bdf",
-    "src/falling-page.js": "e3aa1ae27514d22bfc0acbd0e08f06a121202ade8edeab8bcc4edd373b86db3c",
-    "src/falling/model.js": "8d75dbb026c0939d456c837497f68196e5714619ec200c2610ed1ae1ec38ac80",
-    "src/falling/materials.js": "88715faac3d095e468e24932a1bbcf5f3b431ab15f296fa4e0e4b5bf8bbea626",
-    "src/falling/viewer.js": "538b2d22be0fc7ba9a79aad0b38903ae5c7c946b0912ffa92204c802a5573da8",
+    "src/falling-page.js": "196596601e3edead072ef87bd4615570750894edab4a92344375d0d3617bedb8",
+    "src/falling/model.js": "e6cba3003ccf5cb2ea2ae4b6deec12a09c2ecc831386d0a3d31bf6d0332ddd55",
+    "src/falling/materials.js": "d0b3c795474f05fcdccd55457ee3d89e9a6d61a71176752f07b0923f8dac706f",
+    "src/falling/viewer.js": "5509faa8ba9cccdda592639e3f74d00cdbbec0c285fe7fbebb810ff0ee637d4e",
     "src/render-performance.js": "efcb230da5f9b1a333234f773a92e48dbfec0b417e613f769c30ebb4d3d27c0b"
   },
+  "buildScriptSha256": "3ffcc458dbaddd8ecf2ca800db3db4132243882196f21901711d384716e1ca61",
   "stats": {
     "engine": "three.js r180",
     "renderDpr": "2.000",
@@ -25,124 +25,126 @@
     "shadowMode": "continuous",
     "ready": "true",
     "title": "在坠落时",
-    "version": "0.26.0",
+    "version": "0.27.0",
     "view": "front",
     "detail": "",
     "frames": "10",
     "solidCore": true,
-    "bodyRadius": 1.205,
+    "bodyRadius": 1.275,
     "bodyAxes": [
       1,
       1,
       1
     ],
-    "layers": "12",
-    "drawCalls": "384",
-    "triangles": "1308148",
-    "modelMeshes": "198",
-    "modelTriangles": "694232",
-    "beads": "408",
-    "petals": "792",
+    "layers": "10",
+    "drawCalls": "244",
+    "triangles": "809672",
+    "modelMeshes": "85",
+    "modelTriangles": "404836",
+    "beads": "125",
+    "petals": "212",
     "autoRotate": "false",
     "moment": "false",
     "separated": "false",
     "separation": "0.0000",
-    "camera": "0.0927,0.4077,7.4135",
+    "camera": "0.0894,0.3933,7.1515",
     "worldRotation": "0.00000",
     "study": "false",
     "light": "studio",
     "suspended": "false",
     "visibleSurface": "true",
     "slug": "falling",
-    "sceneVersion": "0.26.0",
-    "artRevision": 4,
-    "beadCount": 408,
-    "petalCount": 792,
-    "structureGroups": 12,
-    "referenceUse": "Original geometry and procedural surfaces interpreting the user-supplied black/silver/crimson assemblage; no copied reference pixels, artist names or logos.",
+    "sceneVersion": "0.27.0",
+    "artRevision": 12,
+    "beadCount": 125,
+    "petalCount": 212,
+    "structureGroups": 10,
+    "frontFlowerGroups": 2,
+    "chainComposition": "one falling front strand and one quieter strand returning around the flank to the back",
     "detailTargets": {
       "threads": [
-        -0.21,
-        0.52,
-        1.28
+        -0.1,
+        0.34,
+        1.33
       ],
       "flowers": [
-        -0.16,
-        -0.87,
-        1.08
+        0.12,
+        -0.86,
+        1.11
       ],
       "fault": [
-        0.72,
-        -0.16,
-        1.14
+        0.79,
+        0.17,
+        1.02
       ]
     },
-    "meshCount": 198,
-    "triangleCount": 694232
+    "referenceUse": "Original folded carbon, cloth, foil, ruby and dry-flower assemblage based on the user reference, refined through actual three-dimensional front/side/back views. No reference pixels or generated replacement artwork.",
+    "meshCount": 85,
+    "triangleCount": 404836,
+    "exportPrimitiveCount": 122
   },
   "glbReload": {
-    "meshes": 198,
-    "triangles": 694232,
-    "children": 1
+    "meshes": 122,
+    "triangles": 404836,
+    "bad": 0
   },
-  "renderer": "ANGLE (Intel, ANGLE Metal Renderer: Intel(R) Iris(TM) Plus Graphics, Unspecified Version)",
   "assets": {
     "cover.webp": {
-      "sha256": "dc708dfd1ffbe2a8640ed683bf2c3644694c5384c8d6a7f82c77978dc988a5f9",
-      "bytes": 674086
+      "sha256": "5fd9c1ecf040e27d51acce83ed0a207e7b4a65b72a046d99e67760aa42721ceb",
+      "bytes": 250692
     },
     "side.webp": {
-      "sha256": "a7cbd1ae03b4e07066b06776cc6a084e416384a901df0e74eecf29a1f7510c1e",
-      "bytes": 342886
+      "sha256": "27e8620bdb7ea974b9ba682f33cdc4d0807433a1e7c4f2cebf70cd2711606a9b",
+      "bytes": 181738
     },
     "back.webp": {
-      "sha256": "05c7a033ddfdfa17369a1959ec5b0bdbe4128f6f6ec48ced5608dcfa2539645a",
-      "bytes": 486124
+      "sha256": "f3ab23a0f16961a6a89be654482b19ca2d450d555b828858b3dad5010620dd0b",
+      "bytes": 186268
     },
     "detail-threads.webp": {
-      "sha256": "6ca8341aa357c5b78382689e01991366c10cc0025379ab3edbb81cc508dcbaa1",
-      "bytes": 1101206
+      "sha256": "49ef3317d3502f52171c6fed7cd0f498b746a55d7d38fab8c68d6821bbd49966",
+      "bytes": 639660
     },
     "detail-flowers.webp": {
-      "sha256": "9c968309f937ac5872cee1ffcf870e7c9fb9f5ea0d7b98d796a9cb05d9acc338",
-      "bytes": 666302
+      "sha256": "4728d9ad059d207978ea64942cb5277dc6858486bde9cbb4629388609797409a",
+      "bytes": 223654
     },
     "detail-fault.webp": {
-      "sha256": "986d6e741fc808b7b72a3d01cfc27791c93807072d9a5e09b2b0849c651ba534",
-      "bytes": 968770
+      "sha256": "9e24967fae6f48c7aabce89add2c88e6864063b2dfd488a4bcf9ae6e102f6d6e",
+      "bytes": 394754
     },
     "poster.png": {
-      "sha256": "712e0b25b024c66168cdea33eb2bd608b56a554956d9805eeff96b2e3918e413",
-      "bytes": 5332410
+      "sha256": "70c39bdb5f72620ff6a99e94264420516c3941c1b6cbd08a4055f5fab258e379",
+      "bytes": 3551038
     },
     "transparent-front.png": {
-      "sha256": "f3bcf945d90d1119572c70cfa0a06a59bcefd809a848d053b8623a3f91353cbd",
-      "bytes": 3998765
+      "sha256": "9c60388294d07e537ab02dce1ac8b4815b643ad3d898612da4400892e6045cf4",
+      "bytes": 2629839
     },
     "falling.glb": {
-      "sha256": "edbe40414e6e6ef4cf7c5fb2bfe26997e59a1611f980601918f700677ace0a44",
-      "bytes": 24618944
+      "sha256": "49294beceaec71eb25142cfb8a48695f054e6f2c95dbf49f89e5a8c040834fe4",
+      "bytes": 21616568
     },
     "cover-192.webp": {
-      "sha256": "05c88bef2c3a23f36ec4e4e8666cb6229c0e30867599dfa29e585b51c0bc55c1",
-      "bytes": 10704
+      "sha256": "e14c4bfc9e7f5fe2f39eb8f9976f1130b2ddaac108484b07dc089c3f7d65c17e",
+      "bytes": 6420
     },
     "cover-300.webp": {
-      "sha256": "cb181ae35785c3943dc9e66c133f4487ddcc6db1b6a30ec2f7332918aa00098e",
-      "bytes": 23360
+      "sha256": "6ccbcc81a234a1f92189520349ff647d318f4548d2e0af36a15b2f2fd6dfdbc4",
+      "bytes": 12618
     },
     "cover-480.webp": {
-      "sha256": "24e7aaff05b94c0eac8c3b7faac69b21871b01c5d19b6390673acf8e80f10253",
-      "bytes": 51950
+      "sha256": "852e71c35e1b993acc4dbc2cec27fe7dc1b48c57f0f29910e0869309b1c6dba0",
+      "bytes": 25128
     },
     "cover-768.webp": {
-      "sha256": "d7c76dcddbbb9596789c62e94f69ea729aa5796516c4032ce5c0995836eb43e4",
-      "bytes": 115724
+      "sha256": "688a097b5d6aeabac18c942a1e0255d4cc0a596172fa224295a36d8f1aa934f1",
+      "bytes": 51404
     },
     "cover-1200.webp": {
-      "sha256": "214e6b6bdd18032745afc5d20eb173f4a523fdc2acdb6a4f9f92a372a0617dc7",
-      "bytes": 241768
+      "sha256": "cb744dba7bd472d4fc2af042dbdd282f1cdc6ce02ffa788669777920172afca6",
+      "bytes": 101024
     }
   },
-  "provenance": "All plates and GLB are exports of the same original interactive scene. No reference artwork pixels or generated whole-artwork images are used."
+  "provenance": "All six plates, cover sizes, poster and GLB exported from the same actual interactive model. No AI image generation, reference-pixel projection or photo replacement."
 }

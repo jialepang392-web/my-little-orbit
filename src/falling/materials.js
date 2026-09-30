@@ -1,73 +1,67 @@
 import * as T from 'three';
 
-// Original, seeded material studies. No reference-image pixels or remote assets.
-export function random(seed=601){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-function canvas(size=768){const c=document.createElement('canvas');c.width=c.height=size;return[c,c.getContext('2d')];}
-function texture(c,color=true){const t=new T.CanvasTexture(c);t.colorSpace=color?T.SRGBColorSpace:T.NoColorSpace;t.anisotropy=4;return t;}
-function surface(kind,seed){
-  const [c,x]=canvas(),r=random(seed),n=c.width;
-  const bases={paper:[214,206,192],black:[37,35,37],silver:[146,146,146],red:[133,20,36],slate:[63,57,63],linen:[174,170,164]};
-  const base=bases[kind],image=x.createImageData(n,n);
+export function random(seed=2709){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function canvas(n=1024){const c=document.createElement('canvas');c.width=c.height=n;return [c,c.getContext('2d')];}
+function texture(c,color=true){const t=new T.CanvasTexture(c);t.colorSpace=color?T.SRGBColorSpace:T.NoColorSpace;t.anisotropy=8;return t;}
+function study(kind,seed){
+  const[c,x]=canvas(),n=c.width,r=random(seed),data=x.createImageData(n,n);
+  const base={wine:[92,31,45],carbon:[39,37,41],silver:[187,184,181],ivory:[213,205,190],petal:[239,226,197],linen:[146,141,134]}[kind];
   for(let y=0;y<n;y++)for(let a=0;a<n;a++){
-    const weave=(Math.sin(a*2.4)+Math.sin(y*2.3))*1.8;
-    const fold=Math.sin(a*.017+y*.014)*7+Math.sin(a*.031-y*.009)*4;
-    const v=(r()-.5)*(kind==='silver'?38:22)+fold+weave;
-    const p=(y*n+a)*4;for(let k=0;k<3;k++)image.data[p+k]=Math.max(0,Math.min(255,base[k]+v));image.data[p+3]=255;
+    const grain=(r()-.5)*(kind==='silver'?23:16),cloud=Math.sin(a*.012+y*.007)*Math.cos(y*.009)*3.0;
+    const warp=Math.sin(a*Math.PI*.50)*Math.sin(y*Math.PI*.52)*1.7;
+    const g=grain+cloud+(kind==='wine'||kind==='linen'?warp:0),index=(y*n+a)*4;
+    for(let k=0;k<3;k++)data.data[index+k]=Math.max(0,Math.min(255,base[k]+g));data.data[index+3]=255;
+  }x.putImageData(data,0,0);
+  x.lineWidth=.35;
+  for(let i=0;i<1900;i++){
+    const a=r()*n,b=r()*n,w=kind==='silver'?10+r()*70:2+r()*15;
+    x.strokeStyle=r()>.5?'rgba(255,249,230,.09)':'rgba(30,17,27,.09)';x.beginPath();x.moveTo(a,b);x.lineTo(a+w,b+(r()-.5)*1.3);x.stroke();
   }
-  x.putImageData(image,0,0);
-  for(let i=0;i<2400;i++){
-    const a=r()*n,b=r()*n,l=2+r()*28;
-    x.strokeStyle=r()>.5?'rgba(250,239,224,.14)':'rgba(17,13,20,.14)';x.lineWidth=.25+r()*.65;x.beginPath();x.moveTo(a,b);x.lineTo(a+l,b+(r()-.5)*5);x.stroke();
+  if(kind==='wine'||kind==='linen'){
+    for(let i=0;i<n;i+=4){x.strokeStyle=i%8===0?'#f4dac40b':'#11091316';x.lineWidth=.5;x.beginPath();x.moveTo(i,0);x.lineTo(i+Math.sin(i)*.8,n);x.stroke();x.beginPath();x.moveTo(0,i);x.lineTo(n,i+.6);x.stroke();}
   }
-  if(kind==='silver'||kind==='black'){
-    for(let i=0;i<26;i++){
-      const a=r()*n,b=r()*n;const grad=x.createLinearGradient(a,b,a+70,b+30);grad.addColorStop(0,'#f7f1e700');grad.addColorStop(.45,kind==='silver'?'#ece9e833':'#fff7e90e');grad.addColorStop(.5,'#08071055');grad.addColorStop(1,'#16141a00');x.fillStyle=grad;x.beginPath();x.moveTo(a,b);x.lineTo(a-90+r()*220,b+90+r()*260);x.lineTo(a+110,b+220);x.closePath();x.fill();
-    }
-  }
-  if(kind==='linen'){
-    x.lineWidth=1.0;
-    for(let i=0;i<n;i+=5){x.strokeStyle=i%10?'#e5dfcb55':'#403e3866';x.beginPath();x.moveTo(i,0);x.lineTo(i+2,n);x.stroke();x.beginPath();x.moveTo(0,i);x.lineTo(n,i+2);x.stroke();}
-  }
-  if(kind==='slate'){
-    x.strokeStyle='#e7dbb188';x.lineWidth=.65;
-    for(let i=0;i<31;i++){const a=180+r()*400,b=100+r()*550;x.beginPath();x.moveTo(a,b);x.lineTo(a-55+r()*100,b+60+r()*180);x.stroke();}
-    x.save();x.translate(n*.24,n*.48);x.rotate(-.13);x.strokeStyle='#e8dfc199';x.lineWidth=.9;x.font='300 96px serif';x.scale(.66,1.35);x.strokeText('在坠落时',0,0);x.restore();
-    x.fillStyle='#d7cbb580';x.font='17px serif';x.fillText('STILL / FALLING',70,652);x.font='11px monospace';x.fillText('006     A MOMENT HELD TOGETHER',70,678);
+  if(kind==='petal'){
+    for(let i=0;i<85;i++){const a=r()*n;x.lineWidth=.5;x.strokeStyle='#b1a28530';x.beginPath();x.moveTo(a,0);x.bezierCurveTo(a-30,n*.3,a+40,n*.7,a+15,n);x.stroke();}
+    const fade=x.createLinearGradient(0,0,0,n);fade.addColorStop(0,'#9b684e65');fade.addColorStop(.40,'#a08d6520');fade.addColorStop(1,'#fff9e320');x.fillStyle=fade;x.fillRect(0,0,n,n);
   }
   return texture(c);
 }
-function printTexture(){const[c,x]=canvas();x.fillStyle='#211e22';x.fillRect(0,0,768,768);x.save();x.translate(10,40);x.rotate(-.06);x.scale(.7,1.58);x.font='300 230px serif';x.strokeStyle='#d8d4cd';x.lineWidth=1.3;x.strokeText('在坠',-34,170);x.strokeText('落时',28,400);x.restore();const r=random(699);for(let i=0;i<1300;i++){x.fillStyle=r()>.5?'#f7ead70b':'#00000022';x.fillRect(r()*768,r()*768,r()*30+1,.5);}return texture(c);}
+function print(){
+  const[c,x]=canvas();x.fillStyle='#232128';x.fillRect(0,0,1024,1024);
+  x.save();x.translate(40,60);x.scale(.70,1.52);x.font='300 216px serif';x.strokeStyle='#d8d0c9';x.lineWidth=.65;x.strokeText('在坠',-12,160);x.strokeText('落时',100,335);x.restore();
+  const r=random(271);for(let i=0;i<36;i++){const a=r()*1024,b=r()*1024;x.strokeStyle='#d2cec45a';x.lineWidth=.45;x.beginPath();x.moveTo(a,b);x.lineTo(a+6+r()*14,b-22-r()*50);x.stroke();}
+  return texture(c);
+}
+function inscribed(){const[c,x]=canvas();x.fillStyle='#302c32';x.fillRect(0,0,1024,1024);x.save();x.translate(92,385);x.scale(.88,1.1);x.font='300 116px serif';x.fillStyle='#bcb5a6';x.fillText('在坠落时',0,0);x.font='25px serif';x.fillStyle='#928780';x.fillText('STILL / FALLING',10,64);x.restore();x.strokeStyle='#bcb5a64a';x.lineWidth=1;x.beginPath();x.moveTo(108,527);x.lineTo(741,506);x.stroke();return texture(c);}
 export function makeMaterials(){
-  const maps={};for(const[k,i]of ['paper','black','silver','red','slate','linen'].map((k,i)=>[k,i]))maps[k]=surface(k,601+i*29);maps.print=printTexture();
-  const m={};
-  const make=(name,options)=>{const mat=new T.MeshStandardMaterial({name:'falling-'+name,side:T.DoubleSide,...options});m[name]=mat;return mat;};
-  make('core',{color:'#40131e',map:maps.red,bumpMap:maps.red,bumpScale:.009,roughness:.97});
-  make('velvet',{color:'#cf2946',map:maps.red,bumpMap:maps.linen,bumpScale:.006,roughness:.95});
-  make('black',{map:maps.black,bumpMap:maps.silver,bumpScale:.004,roughness:.82,metalness:.12});
-  make('printed',{map:maps.print,bumpMap:maps.black,bumpScale:.002,roughness:.86});
-  make('silver',{map:maps.silver,bumpMap:maps.silver,bumpScale:.004,metalness:.82,roughness:.49});
-  make('paleSilver',{color:'#d8d5d0',map:maps.silver,bumpMap:maps.silver,bumpScale:.003,metalness:.65,roughness:.57});
-  make('linen',{map:maps.linen,bumpMap:maps.linen,bumpScale:.005,roughness:.96});
-  make('paper',{map:maps.paper,bumpMap:maps.paper,bumpScale:.0025,roughness:.93});
-  make('ink',{color:'#2f2833',metalness:.14,roughness:.68});
-  make('slate',{map:maps.slate,bumpMap:maps.slate,bumpScale:.0006,metalness:.18,roughness:.81});
-  make('thread',{color:'#a9a09b',metalness:.7,roughness:.47});
-  make('darkThread',{color:'#292329',roughness:.88});
-  make('redThread',{color:'#94142c',roughness:.82});
-  make('stone',{color:'#a7aeb1',map:maps.paper,roughness:.96,bumpMap:maps.paper,bumpScale:.003,flatShading:true});
-  make('roseStone',{color:'#b78b87',map:maps.paper,roughness:.91,bumpMap:maps.paper,bumpScale:.003,flatShading:true});
-  make('driedStem',{color:'#847555',roughness:.88});
-  make('petalIvory',{color:'#cbb891',map:maps.paper,roughness:.9,bumpMap:maps.linen,bumpScale:.0015});
-  make('petalPale',{color:'#ded3c1',map:maps.paper,roughness:.91,bumpMap:maps.paper,bumpScale:.0015});
-  make('petalOchre',{color:'#cd984c',map:maps.paper,roughness:.92,bumpMap:maps.linen,bumpScale:.0015});
-  make('petalRust',{color:'#b67e5b',map:maps.paper,roughness:.92,bumpMap:maps.linen,bumpScale:.0015});
-  make('seed',{color:'#80632d',roughness:.88});
-  m.ruby=new T.MeshPhysicalMaterial({name:'falling-ruby-glass',color:'#b60026',metalness:.28,roughness:.19,clearcoat:1,clearcoatRoughness:.14,transmission:.15,thickness:.12,ior:1.48,attenuationColor:new T.Color('#8e001a'),attenuationDistance:.5});
-  m.garnet=new T.MeshPhysicalMaterial({name:'falling-garnet',color:'#620c25',metalness:.42,roughness:.25,clearcoat:.85});
-  m.crimsonGlass=new T.MeshPhysicalMaterial({name:'falling-crimson-film',color:'#ad122e',side:T.DoubleSide,metalness:.16,roughness:.38,transparent:true,opacity:.56,depthWrite:false,clearcoat:.65});
-  m.seedWing=new T.MeshStandardMaterial({name:'falling-dried-translucent-wing',color:'#c7b7a1',roughness:.89,side:T.DoubleSide,transparent:true,opacity:.40,depthWrite:false});
-  m.amethyst=new T.MeshPhysicalMaterial({name:'falling-amethyst-remnant',color:'#745082',metalness:.10,roughness:.24,clearcoat:1,transmission:.44,thickness:.025,side:T.DoubleSide});
-  m.cobalt=new T.MeshPhysicalMaterial({name:'falling-inkblue-remnant',color:'#345b94',metalness:.12,roughness:.22,clearcoat:1,transmission:.44,thickness:.025,side:T.DoubleSide});
-  m.glass=new T.MeshPhysicalMaterial({name:'falling-smoke-glass',color:'#a7a2a0',roughness:.16,metalness:.18,transmission:.36,thickness:.07,ior:1.43,side:T.DoubleSide,clearcoat:1});
-  return {m,maps,dispose(){Object.values(m).forEach(x=>x.dispose());Object.values(maps).forEach(x=>x.dispose());}};
+  const maps={};for(const[k,i]of ['wine','carbon','silver','ivory','petal','linen'].map((k,i)=>[k,i]))maps[k]=study(k,2700+i*19);maps.print=print();maps.inscribed=inscribed();
+  const m={};const make=(name,settings,physical=false)=>m[name]=new (physical?T.MeshPhysicalMaterial:T.MeshStandardMaterial)({name:'falling-027-'+name,side:T.DoubleSide,...settings});
+  make('core',{color:'#bdadb0',map:maps.wine,bumpMap:maps.wine,bumpScale:.0017,roughness:.92,sheen:.42,sheenColor:new T.Color('#9b5364'),sheenRoughness:.84},true);
+  make('silk',{color:'#d3aeac',map:maps.wine,bumpMap:maps.wine,bumpScale:.002,roughness:.86,sheen:.8,sheenColor:new T.Color('#b97682'),sheenRoughness:.65},true);
+  make('darkSilk',{color:'#967677',map:maps.wine,roughness:.93,sheen:.7,sheenColor:new T.Color('#ac526b')},true);
+  make('black',{map:maps.carbon,roughness:.90,bumpMap:maps.carbon,bumpScale:.0015,metalness:.12});
+  make('graphite',{map:maps.carbon,color:'#e6e0e3',roughness:.82,metalness:.24,bumpMap:maps.carbon,bumpScale:.001});
+  make('print',{map:maps.print,roughness:.86,metalness:.03});
+  make('label',{map:maps.inscribed,roughness:.73,metalness:.20});
+  make('silver',{map:maps.silver,metalness:.87,roughness:.52,bumpMap:maps.silver,bumpScale:.0021});
+  make('silverBack',{map:maps.silver,color:'#a2a1a6',roughness:.62,metalness:.70});
+  make('paper',{map:maps.ivory,roughness:.98,bumpMap:maps.ivory,bumpScale:.002});
+  make('linen',{map:maps.linen,roughness:.98,bumpMap:maps.linen,bumpScale:.0028});
+  make('thread',{color:'#b7ada6',roughness:.56,metalness:.55});
+  make('blackThread',{color:'#383038',roughness:.97});
+  make('redThread',{color:'#79162d',roughness:.9});
+  make('stem',{color:'#8e7c63',roughness:.91});
+  make('seed',{color:'#92774d',roughness:.86});
+  make('petal',{map:maps.petal,color:'#e8ded0',roughness:.91,bumpMap:maps.petal,bumpScale:.001});
+  make('petalShadow',{map:maps.petal,color:'#bca79b',roughness:.93});
+  make('ochre',{map:maps.petal,color:'#c2a678',roughness:.94,bumpMap:maps.petal,bumpScale:.001});
+  make('ochreShadow',{map:maps.petal,color:'#ae8e68',roughness:.96});
+  make('rose',{map:maps.petal,color:'#bf968c',roughness:.96});
+  make('stone',{color:'#b1ada8',map:maps.ivory,roughness:.94,flatShading:true});
+  make('roseStone',{color:'#bba69f',map:maps.ivory,roughness:.96,flatShading:true});
+  make('ruby',{color:'#af1439',roughness:.19,metalness:.16,clearcoat:1,clearcoatRoughness:.12,transmission:.28,ior:1.47,thickness:.11,attenuationDistance:.5,attenuationColor:new T.Color('#700d25')},true);
+  make('garnet',{color:'#5e162f',roughness:.23,metalness:.21,clearcoat:1},true);
+  make('film',{color:'#ae6473',roughness:.35,metalness:.14,transparent:true,opacity:.30,depthWrite:false,clearcoat:.8},true);
+  make('wing',{color:'#d9cdb2',roughness:.96,transparent:true,opacity:.16,depthWrite:false});
+  return {m,maps,dispose(){Object.values(m).forEach(a=>a.dispose());Object.values(maps).forEach(a=>a.dispose());}};
 }
