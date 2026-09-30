@@ -1,149 +1,205 @@
 import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-import {makeMaterials,random} from './materials.js?v=0270';
+import {makeMaterials,random} from './materials.js?v=0280';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z),TAU=Math.PI*2;
 const S=(lon,lat,r=1.3)=>V(r*Math.cos(lat)*Math.sin(lon),r*Math.sin(lat),r*Math.cos(lat)*Math.cos(lon));
-const curve=pts=>new T.CatmullRomCurve3(pts.map(p=>p.isVector3?p:V(...p)));
-const tube=(pts,r=.003,n=28,s=4)=>new T.TubeGeometry(curve(pts),n,r,s,false);
-function grid(fn,nu=24,nv=32,thickness=0,radial=true){
+const curve=pts=>new T.CatmullRomCurve3(pts.map(p=>p.isVector3?p.clone():V(...p)));
+const tube=(pts,r=.003,n=24,s=4)=>new T.TubeGeometry(curve(pts),n,r,s,false);
+function grid(fn,nu=16,nv=20,thickness=0){
   const xyz=[],uv=[],face=[],back=[],edge=[],count=(nu+1)*(nv+1);
-  for(let side=0;side<(thickness?2:1);side++)for(let j=0;j<=nv;j++)for(let i=0;i<=nu;i++){const p=fn(i/nu,j/nv);if(side){if(radial)p.addScaledVector(p.clone().normalize(),-thickness);else p.z-=thickness;}xyz.push(...p.toArray());uv.push(i/nu,j/nv);}
+  for(let side=0;side<(thickness?2:1);side++)for(let j=0;j<=nv;j++)for(let i=0;i<=nu;i++){const p=fn(i/nu,j/nv);if(side)p.z-=thickness;xyz.push(...p.toArray());uv.push(i/nu,j/nv);}
   for(let j=0;j<nv;j++)for(let i=0;i<nu;i++){const a=j*(nu+1)+i,b=a+1,c=a+nu+1,d=c+1;face.push(a,b,d,a,d,c);if(thickness)back.push(a+count,d+count,b+count,a+count,c+count,d+count);}
   if(thickness){const rim=[];for(let i=0;i<=nu;i++)rim.push(i);for(let j=1;j<=nv;j++)rim.push(j*(nu+1)+nu);for(let i=nu-1;i>=0;i--)rim.push(nv*(nu+1)+i);for(let j=nv-1;j>0;j--)rim.push(j*(nu+1));for(let i=0;i<rim.length;i++){const a=rim[i],b=rim[(i+1)%rim.length];edge.push(a,a+count,b+count,a,b+count,b);}}
   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(xyz,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex([...face,...back,...edge]);g.computeVertexNormals();if(thickness){g.addGroup(0,face.length,0);g.addGroup(face.length,back.length+edge.length,1);}return g;
 }
-function pose(g,p,n,roll=0){const q=new T.Quaternion().setFromUnitVectors(V(0,0,1),n.clone().normalize()).multiply(new T.Quaternion().setFromAxisAngle(V(0,0,1),roll));g.applyQuaternion(q);g.translate(...p.toArray());return g;}
-function petal(length,width,lift,seed){const r=random(seed),lean=(r()-.5)*.26,curl=.14+r()*.25;return grid((a,t)=>{const u=a*2-1,w=width*Math.pow(Math.sin(t*Math.PI*.78),.64)*(1+u*lean),tip=.85+.15*Math.sqrt(Math.max(0,1-u*u));return V(u*w+lean*width*t*t,t*length*tip,lift*Math.sin(t*Math.PI*.67)+u*u*width*curl*t+Math.pow(t,6)*width*.18*Math.sin(u*4+seed)+.0014*Math.sin(t*17+u*5));},12,20);}
+function frame(n,roll=0){return new T.Quaternion().setFromUnitVectors(V(0,0,1),n.clone().normalize()).multiply(new T.Quaternion().setFromAxisAngle(V(0,0,1),roll));}
+function pose(g,p,n,roll=0){g.applyQuaternion(frame(n,roll));g.translate(...p.toArray());return g;}
+function petal(length,width,lift,seed){return grid((a,t)=>{const u=a*2-1,w=width*Math.pow(Math.sin(t*Math.PI*.87),.64)*(1+.12*u*Math.sin(seed));return V(u*w+.12*width*Math.sin(seed)*t*t,t*length*(.86+.14*Math.sqrt(Math.max(0,1-u*u))),lift*Math.sin(t*Math.PI*.71)+u*u*width*.27*t+Math.pow(t,5)*width*.26*Math.sin(u*3+seed));},8,13);}
 
 export function makeFalling(){
-  const root=new T.Group();root.name='在坠落时 / A held fall';const{m,dispose:disposeMaterials}=makeMaterials(),r=random(273011),owned=new Set(),groups=[];
+  const root=new T.Group();root.name='在坠落时 / Sewn gravity';const{m,dispose:disposeMaterials}=makeMaterials(),r=random(280930),owned=new Set(),groups=[],buckets=new Map();
   function group(name,offset){const g=new T.Group();g.name=name;g.userData.offset=offset;root.add(g);groups.push(g);return g;}
   function add(name,g,mat,parent,shadow=true){owned.add(g);const o=new T.Mesh(g,mat);o.name=name;o.castShadow=shadow;o.receiveShadow=true;parent.add(o);return o;}
-  function batch(name,gs,mat,parent,shadow=false){if(!gs.length)return;const g=mergeGeometries(gs,false);gs.forEach(p=>p.dispose());return add(name,g,mat,parent,shadow);}
-  const core=group('01 / 酒红实体',[0,0,0]),cloth=group('02 / 被收拢的织物',[0,-.035,.018]),black=group('03 / 黑纸的肩与转折',[-.05,.04,.075]),silver=group('04 / 两处银箔断口',[.06,.02,.085]),gauze=group('05 / 层间银网',[.02,.03,.13]),botanic=group('06 / 两处干花',[-.035,-.03,.11]),ruby=group('07 / 两道红珠',[.025,-.04,.10]),back=group('08 / 背面的折页',[-.025,.03,-.11]),inscription=group('09 / 收起的铭痕',[0,.02,.09]),tail=group('10 / 一角悬垂',[.03,-.07,.025]);
-  const ball=new T.SphereGeometry(1.275,112,80),position=ball.attributes.position;
-  for(let i=0;i<position.count;i++){const p=V().fromBufferAttribute(position,i),n=p.clone().normalize(),d=.012*Math.sin(n.x*9+n.z*6)*Math.sin(n.y*11-n.z*4)+.003*Math.sin(n.x*27+n.y*19);p.multiplyScalar(1+d/1.275);position.setXYZ(i,...p.toArray());}ball.computeVertexNormals();add('closed equal-axis wine body',ball,m.core,core);
-
-  // Irregular folded pelts occupy unequal regions. These are curved material
-  // surfaces with backs and raised free edges, not uniform globe tiles.
-  function patch(name,lon,lat,w,h,angle,mat,parent,{radius=1.30,crease=.055,edgeLift=.05,seed=1,thickness=.010}={}){
-    const ca=Math.cos(angle),sa=Math.sin(angle),phase=seed*.73;
-    const surface=(a,b)=>{
-      const u=a*2-1,v=b*2-1,shape=.86+.075*Math.sin(b*5+phase)+.035*Math.sin(b*13+phase);
-      const xx=u*w*.5*shape+.008*Math.sin(b*37+phase)*Math.pow(Math.abs(u),8),yy=v*h*.5+.009*Math.sin(a*39+phase)*Math.pow(Math.abs(v),8);
-      const x=xx*ca-yy*sa,y=xx*sa+yy*ca;
-      const folds=crease*(.68*Math.abs(u+.19)-.17+.32*Math.abs(v-u*.43-.07))+.0045*Math.sin(b*16+a*7+phase)+.0025*Math.sin(b*43-a*15+phase);
-      const free=edgeLift*(Math.pow(Math.max(0,u),5)*(.34+.66*Math.sin(b*Math.PI))+.24*Math.pow(Math.max(0,v),7));
-      return S(lon+x/radius,lat+y/radius,radius+folds+free);
-    };
-    add(name,grid(surface,34,38,thickness),[mat,mat===m.silver?m.silverBack:mat===m.black||mat===m.graphite||mat===m.print?m.linen:mat],parent);return surface;
-  }
-  // A contiguous body stays visible between the two denser diagonal groups.
-  patch('wine drape, left lower',-.52,-.27,1.05,1.15,-.25,m.silk,cloth,{radius:1.291,crease:.035,edgeLift:.028,seed:4});
-  patch('wine seam, right upper',.36,.48,.84,.98,.38,m.darkSilk,cloth,{radius:1.292,crease:.037,edgeLift:.025,seed:7});
-  patch('wine reverse gathered fold',2.69,-.28,1.05,1.12,-.30,m.silk,cloth,{radius:1.293,crease:.035,edgeLift:.028,seed:11});
-  patch('broad black shoulder',-.58,.73,.89,.91,-.47,m.black,black,{radius:1.335,crease:.050,edgeLift:.075,seed:19});
-  patch('upper carbon overlap',.12,.89,.54,.77,.45,m.graphite,black,{radius:1.321,crease:.055,edgeLift:.087,seed:22});
-  patch('right black turning face',.92,.13,.80,1.13,-.21,m.black,black,{radius:1.323,crease:.067,edgeLift:.110,seed:29});
-  patch('right shoulder gripping paper',.79,.55,.64,.69,.51,m.graphite,black,{radius:1.378,crease:.055,edgeLift:.075,seed:34});
-  patch('left lower folded carbon',-.91,-.40,.64,.84,-.47,m.black,black,{radius:1.335,crease:.068,edgeLift:.089,seed:41});
-  patch('lower half, turned black paper',-.25,-.90,.91,.58,.34,m.black,black,{radius:1.320,crease:.047,edgeLift:.070,seed:47});
-  patch('side cloth compressed beneath the graphite',1.63,.16,1.22,1.28,-.31,m.linen,cloth,{radius:1.311,crease:.032,edgeLift:.051,seed:45});
-  patch('rear right turn, tying front to back',1.62,.04,1.05,1.21,.43,m.graphite,black,{radius:1.351,crease:.050,edgeLift:.071,seed:49});
-  patch('side upper black fold joins the shoulder',1.42,.71,.82,.70,.41,m.black,black,{radius:1.34,crease:.048,edgeLift:.062,seed:48});
-  patch('side silver fold into the reverse',1.97,.08,.34,.91,.47,m.silver,silver,{radius:1.355,crease:.044,edgeLift:.068,seed:50,thickness:.004});
-  patch('lettered offcut caught in the side fold',1.68,.14,.52,.62,-.36,m.print,black,{radius:1.406,crease:.039,edgeLift:.047,seed:53});
-
-  // The center is a compact, offset material fold. No oversized emblem or
-  // text plaque masks the spherical mass; lettering sits in a narrow scrap.
-  patch('carbon page through the seam',-.12,.29,.79,.64,-.48,m.graphite,black,{radius:1.344,crease:.049,edgeLift:.064,seed:51});
-  const upperMetal=patch('upper worked silver, rooted beneath carbon',.30,.50,.51,.91,.46,m.silver,silver,{radius:1.346,crease:.041,edgeLift:.080,seed:58,thickness:.004});
-  patch('upper paper backing exposed at one edge',.32,.50,.56,.88,.44,m.linen,silver,{radius:1.322,crease:.040,edgeLift:.069,seed:58,thickness:.008});
-  patch('slanted charcoal leaf gripping silver',.18,.30,.50,.48,-.64,m.black,black,{radius:1.439,crease:.030,edgeLift:.031,seed:60});
-  const lowerMetal=patch('lower silver fold caught in cloth',-.65,-.56,.75,.49,.36,m.silver,silver,{radius:1.359,crease:.048,edgeLift:.071,seed:67,thickness:.004});
-  patch('small cloth margin beneath lower foil',-.70,-.57,.81,.52,.34,m.linen,cloth,{radius:1.330,crease:.04,edgeLift:.068,seed:67});
-  patch('lower dark tuck over foil',-.96,-.62,.37,.56,-.12,m.black,black,{radius:1.406,crease:.029,edgeLift:.039,seed:71});
-  patch('short silver return on far flank',1.20,-.14,.20,.63,-.14,m.silver,silver,{radius:1.353,crease:.037,edgeLift:.056,seed:78,thickness:.004});
-  patch('small inscribed sliver',-.26,.12,.34,.16,-.41,m.label,inscription,{radius:1.429,crease:.010,edgeLift:.009,seed:83,thickness:.006});
-
-  function loosePage(name,p,n,w,h,roll,mat,parent,seed,lift=.06){
-    const g=grid((a,t)=>{const u=a*2-1,width=w*(.43+.045*Math.sin(t*8+seed)),x=u*width+.006*Math.sin(t*31+seed)*Math.pow(Math.abs(u),6),y=(t-.5)*h+.008*Math.sin(a*29+seed)*Math.pow(Math.abs(t*2-1),7),z=.08*Math.abs(u-.12)+lift*t*t+.022*Math.abs(t*2-u*.5-.42);return V(x,y,z);},24,34,.007,false);
-    return add(name,pose(g,V(...p),V(...n),roll),[mat,mat===m.silver?m.silverBack:m.linen],parent);
-  }
-  loosePage('one torn printed corner',[-.65,1.13,.40],[-.2,.12,1],.40,.56,.33,m.print,black,90,.09);
-  loosePage('small turned silver crown edge',[-.41,1.19,.46],[.1,.2,1],.22,.40,-.26,m.silver,silver,95,.085);
-  loosePage('hanging lower graphite corner',[-.59,-1.18,.49],[-.25,-.2,1],.31,.45,-.42,m.black,tail,103,.048);
-  loosePage('the underside of that corner',[-.58,-1.18,.47],[-.25,-.2,1],.35,.43,-.41,m.linen,tail,103,.036);
-
-  function net(name,points,width,parent,seed){
-    const path=curve(points),lines=[],rng=random(seed);
-    const f=(u,t)=>{const p=path.getPoint(t),d=path.getTangent(t),n=p.clone().normalize(),side=new T.Vector3().crossVectors(d,n).normalize(),span=width*(.19+.29*Math.sin(Math.PI*t)+.045*Math.sin(t*15+seed));return p.addScaledVector(side,u*span).addScaledVector(n,.026*Math.sin(t*Math.PI)+.009*Math.sin(t*15+u*8));};
-    for(let i=0;i<19;i++){const pts=[],start=rng()*.023,end=.99-rng()*.10;for(let j=0;j<28;j++)pts.push(f(i/18*2-1,start+(end-start)*j/27));lines.push(tube(pts,.0015+rng()*.00065,32,3));}
-    for(let j=1;j<30;j++){if(j%10===3)continue;const pts=[];for(let i=0;i<12;i++)pts.push(f((i/11*2-1)*(j%11===4?.74:1),(j+.19*Math.sin(i*2+seed))/35));lines.push(tube(pts,.0015,14,3));}
-    batch(name,lines,m.thread,parent);
-  }
-  net('folded silver mesh at central grip',[[-.76,.45,1.08],[-.55,.26,1.29],[-.40,-.04,1.37],[-.23,-.28,1.29]],.26,gauze,116);
-  net('compressed lower veil',[[-.98,-.23,.91],[-.91,-.53,1.13],[-.57,-.75,1.21],[-.21,-.81,1.20]],.28,gauze,118);
-  net('side weave links both halves',[[1.19,.54,.41],[1.41,.21,.07],[1.39,-.10,-.16],[1.13,-.46,-.57]],.31,gauze,119);
-  const stitches=[],rims=[];
-  for(const [surface,count]of [[upperMetal,8],[lowerMetal,6]]){
-    for(let i=0;i<count;i++){const t=.20+i*.07,p=surface(.93,t),q=surface(.80,t+.025);stitches.push(tube([p,p.clone().lerp(q,.5).multiplyScalar(1.009),q],.0025,8,3));}
-    const pts=[];for(let j=5;j<=35;j++)pts.push(surface(.98,j/40));rims.push(tube(pts,.0016,35,3));
-  }
-  batch('visible fastening at material contact',stitches,m.thread,silver);batch('two very thin metallic cut edges',rims,m.thread,silver);
-
-  let beadCount=0;
-  function chain(name,points,size,step,parent=ruby){
-    const path=curve(points),count=Math.floor(path.getLength()/step),ring=[],light=[],dark=[];add(name+' fine core thread',new T.TubeGeometry(path,count*3,.0025,4,false),m.redThread,parent,false);
-    for(let i=0;i<=count;i++){const t=i/count,p=path.getPointAt(t),d=path.getTangentAt(t);let n=p.clone().normalize();n.addScaledVector(d,-n.dot(d));if(n.length()<.1)n=V(0,0,1);n.normalize();const x=new T.Vector3().crossVectors(d,n).normalize();n.crossVectors(x,d).normalize();const q=new T.Quaternion().setFromRotationMatrix(new T.Matrix4().makeBasis(x,d,n)),rr=size*(.83+r()*.22);let g;
-      if(i%5===0||i%7===3){g=new T.SphereGeometry(rr*.88,14,10);g.scale(.93,1.12,.83);g.applyQuaternion(q);g.translate(...p.toArray());(i%7===3?dark:light).push(g);}else{g=new T.TorusGeometry(rr,rr*.22,7,20);g.scale(.91,1.08,1);g.rotateY(i%2?.39:-.31);g.applyQuaternion(q);g.translate(...p.toArray());ring.push(g);}beadCount++;}
-    batch(name+' glass loops',ring,m.ruby,parent);batch(name+' wine beads',light,m.ruby,parent);batch(name+' darker seeds',dark,m.garnet,parent);
-  }
-  chain('main falling strand',[[-.68,1.39,.42],[-.64,.98,1.01],[-.45,.57,1.40],[-.27,.33,1.59],[.02,.10,1.64],[.38,-.17,1.54],[.80,-.58,1.18],[1.03,-1.07,.75],[.97,-1.49,.49],[.73,-1.77,.31]],.025,.061);
-  chain('quieter strand turning to the back',[[-1.18,-.20,.69],[-1.33,-.48,.43],[-1.26,-.74,-.10],[-1.02,-.85,-.57],[-.59,-.76,-1.01],[-.17,-.48,-1.31],[.12,-.32,-1.39]],.0185,.069);
-  const drop=new T.LatheGeometry([new T.Vector2(0,-.07),new T.Vector2(.016,-.064),new T.Vector2(.027,-.041),new T.Vector2(.023,-.011),new T.Vector2(.012,.024),new T.Vector2(.006,.050)],24);drop.translate(.73,-1.83,.31);add('single weighted garnet end',drop,m.ruby,ruby);
-  const pins=[];for(const p of [[-.68,1.39,.42],[-1.18,-.20,.69],[.12,-.32,-1.39]]){const g=new T.TorusGeometry(.025,.0036,6,18);pose(g,V(...p),V(...p));pins.push(g);}batch('three fastening eyes',pins,m.thread,ruby);
-
-  let petalCount=0;
-  function flower(name,p,n,size,kind,seed,parent=botanic){
-    const rng=random(seed),origin=V(...p),normal=V(...n).normalize(),q=new T.Quaternion().setFromUnitVectors(V(0,0,1),normal),parts=[[],[],[]],seeds=[];
-    const mats=kind==='ivory'?[m.petal,m.petal,m.petalShadow]:kind==='rose'?[m.rose,m.petalShadow,m.rose]:[m.ochre,m.ochre,m.ochreShadow],counts=[17,15,12,9];
-    for(let tier=0;tier<4;tier++)for(let i=0;i<counts[tier];i++){
-      const a=TAU*i/counts[tier]+tier*.46+(rng()-.5)*.22,rad=size*(.12+tier*.006),length=size*(.94-tier*.155)*(.84+rng()*.29),width=size*(.19-tier*.023)*(.85+rng()*.33),g=petal(length,width,size*(.09+tier*.042),seed+i*13+tier*97);
-      g.rotateX((rng()-.5)*.41);g.rotateY((rng()-.5)*.17);g.rotateZ(-a);g.translate(Math.sin(a)*rad,Math.cos(a)*rad,size*tier*.029+(rng()-.5)*size*.036);g.applyQuaternion(q);g.translate(...origin.toArray());parts[Math.floor(rng()*3)].push(g);petalCount++;
+  function collect(g,mat,parent,name='material fragments',shadow=true){if(!g.index)g.setIndex(Array.from({length:g.attributes.position.count},(_,i)=>i));const key=parent.uuid+'/'+mat.uuid+'/'+shadow;let b=buckets.get(key);if(!b){b={gs:[],mat,parent,name,shadow};buckets.set(key,b);}b.gs.push(g);}
+  function collectSheet(geometry,materials,parent,name){
+    // Merge like materials within each structural layer, retaining distinct
+    // fronts, backs and cut edges without hundreds of per-sheet draw calls.
+    for(const part of geometry.groups){
+      const remap=new Map(),indices=[],arrays={};for(const key of Object.keys(geometry.attributes))arrays[key]=[];
+      for(let k=part.start;k<part.start+part.count;k++){
+        const source=geometry.index.getX(k);let dest=remap.get(source);
+        if(dest===undefined){dest=remap.size;remap.set(source,dest);for(const [key,attr]of Object.entries(geometry.attributes))for(let c=0;c<attr.itemSize;c++)arrays[key].push(attr.array[source*attr.itemSize+c]);}
+        indices.push(dest);
+      }
+      const g=new T.BufferGeometry();for(const[key,values]of Object.entries(arrays))g.setAttribute(key,new T.Float32BufferAttribute(values,geometry.attributes[key].itemSize));g.setIndex(indices);collect(g,materials[part.materialIndex],parent,name);
     }
-    parts.forEach((gs,i)=>batch(name+' curled petals '+i,gs,mats[i],parent,true));
-    for(let i=0;i<80;i++){const a=rng()*TAU,rad=Math.sqrt(rng())*size*.185,p=V(Math.cos(a)*rad,Math.sin(a)*rad,size*(.10+Math.sqrt(Math.max(0,1-rad/(size*.20)))*.083)).applyQuaternion(q).add(origin),g=new T.IcosahedronGeometry(size*(.020+rng()*.011),1);g.scale(.8,1,.72);g.translate(...p.toArray());seeds.push(g);}batch(name+' dry seed heart',seeds,m.seed,parent);
-    add(name+' buried stem',tube([origin.clone().addScaledVector(normal,-.22),origin.clone().add(V(-.03,-.07,-.03)),origin],.007,16,4),m.stem,parent);
+    geometry.dispose();
   }
-  flower('small ochre tucked at shoulder',[-.70,.71,1.12],[-.24,.28,1],.170,'ochre',153);
-  flower('main ivory in the lower fold',[.19,-.87,1.15],[.12,-.38,1],.278,'ivory',167);
-  flower('half hidden rose beside ivory',[-.11,-.98,1.02],[-.29,-.22,1],.113,'rose',175);
-  function leaf(name,p,n,len,width,roll,parent,seed){const g=petal(len,width,len*.13,seed);pose(g,V(...p),V(...n),roll);add(name,g,m.petalShadow,parent,false);const q=new T.Quaternion().setFromUnitVectors(V(0,0,1),V(...n).normalize()).multiply(new T.Quaternion().setFromAxisAngle(V(0,0,1),roll)),lines=[];for(let i=0;i<6;i++){const t=.24+i*.10;for(const s of [-1,1]){const a=V(0,t*len,.02).applyQuaternion(q).add(V(...p)),b=V(s*width*.8,(t+.1)*len,.032).applyQuaternion(q).add(V(...p));lines.push(tube([a,b],.0012,7,3));}}batch(name+' veins',lines,m.stem,parent);}
-  leaf('one dry remnant at the upper seam',[-.52,.49,1.24],[-.1,.1,1],.25,.042,-.56,botanic,181);
-  leaf('turned petal at the lower seam',[.38,-.75,1.09],[.3,-.3,1],.30,.046,.89,botanic,186);
-  const twigs=[];for(const [aa,bb]of [[[-.75,.66,1.13],[-.88,1.04,.82]],[[.22,-.86,1.12],[.65,-.68,1.05]]]){const a=V(...aa),b=V(...bb);twigs.push(tube([a,a.clone().lerp(b,.5).add(V(.04,.01,.01)),b],.0035,19,4));for(let i=0;i<6;i++){const p=a.clone().lerp(b,.29+i*.1);twigs.push(tube([p,p.clone().add(V((i%2?-1:1)*.035,.055,.015))],.0013,7,3));}}batch('two restrained dried stems',twigs,m.stem,botanic);
-
-  patch('reverse cloth compression',-2.91,.56,.73,.91,.38,m.darkSilk,cloth,{radius:1.299,crease:.050,edgeLift:.035,seed:191});
-  patch('reverse cloth across lower seam',2.73,-.60,.91,.66,-.37,m.darkSilk,cloth,{radius:1.302,crease:.044,edgeLift:.033,seed:194});
-  // The reverse is constructed with its own overlap and one quiet flower,
-  // continuing the same carbon/cloth/silver contact around the actual volume.
-  patch('rear upper charcoal shoulder',2.37,.60,1.04,1.00,-.41,m.black,back,{radius:1.33,crease:.050,edgeLift:.077,seed:201});
-  patch('rear left folded graphite',-2.49,.09,.85,1.0,.34,m.graphite,back,{radius:1.325,crease:.057,edgeLift:.084,seed:207});
-  patch('rear lower black return',2.83,-.70,1.08,.74,.25,m.black,back,{radius:1.326,crease:.050,edgeLift:.075,seed:214});
-  patch('back silver hinge',2.95,.24,.56,.84,.47,m.silver,back,{radius:1.34,crease:.052,edgeLift:.095,seed:220,thickness:.004});
-  patch('linen below the hinge',2.97,.24,.63,.88,.44,m.linen,back,{radius:1.313,crease:.045,edgeLift:.095,seed:220});
-  patch('back dark paper gripping the hinge',3.13,.11,.64,.62,-.42,m.black,back,{radius:1.397,crease:.045,edgeLift:.091,seed:226});
-  patch('lettered reverse page meeting the hinge',3.33,.03,.45,.78,.48,m.print,back,{radius:1.374,crease:.036,edgeLift:.071,seed:228});
-  loosePage('rear turned carbon leaf',[-.50,-.41,-1.10],[-.3,-.1,-1],.35,.51,.32,m.black,back,229,.064);
-  net('rear woven contact',[[.54,.64,-1.18],[.13,.39,-1.40],[-.09,.04,-1.49],[-.42,-.42,-1.31]],.32,back,230);
-  flower('quiet rear faded ivory',[.39,.60,-1.13],[.21,.3,-1],.186,'ivory',239,back);
-  leaf('rear dried leaf',[.50,.46,-1.14],[.1,.2,-1],.26,.048,.77,back,246);
-  const backStitch=[];for(let i=0;i<7;i++){const t=i/6,p=V(.01-t*.24,.20-t*.4,-1.44);backStitch.push(tube([p.clone().add(V(-.029,.005,0)),p.clone().add(V(0,.012,-.018)),p.clone().add(V(.027,-.01,0))],.0025,8,3));}batch('seven stitches holding the reverse',backStitch,m.thread,back);
-  const stone=[],rose=[];for(let i=0;i<9;i++){const t=i/8,p=S(1.07+(r()-.5)*.17,.14-t*.35,1.354),g=new T.IcosahedronGeometry(.032+r()*.018,1);g.scale(1,.48,.22);g.rotateZ(r()*3);g.translate(...p.toArray());(i%5?stone:rose).push(g);}batch('mineral seam partly hidden by carbon',stone,m.stone,silver,true);batch('two quiet rose fragments',rose,m.roseStone,silver,true);
-  const fine=[];for(const [a,b]of [[[.72,-.76,1.0],[.84,-1.03,.83]],[[-.58,1.1,.64],[-.77,1.43,.48]]])fine.push(tube([a,V(...a).lerp(V(...b),.5).add(V(.04,.012,.0)),b],.0018,20,3));batch('two fine free ends',fine,m.blackThread,inscription);
-
-  root.userData={title:'在坠落时',slug:'falling',sceneVersion:'0.27.0',artRevision:12,solidCore:true,bodyRadius:1.275,bodyAxes:[1,1,1],beadCount,petalCount,structureGroups:groups.length,frontFlowerGroups:2,chainComposition:'one falling front strand and one quieter strand returning around the flank to the back',detailTargets:{threads:[-.10,.34,1.33],flowers:[.12,-.86,1.11],fault:[.79,.17,1.02]},referenceUse:'Original folded carbon, cloth, foil, ruby and dry-flower assemblage based on the user reference, refined through actual three-dimensional front/side/back views. No reference pixels or generated replacement artwork.'};
+  function flush(){for(const b of buckets.values()){const g=mergeGeometries(b.gs,false);if(!g)throw new Error('Incompatible assemblage geometry: '+b.name);b.gs.forEach(g=>g.dispose());add(b.name,g,b.mat,b.parent,b.shadow);}buckets.clear();}
+  const core=group('01 / 遮蔽的暗芯',[0,0,0]),cloth=group('02 / 灰粉与酒红衬层',[0,-.027,.012]),black=group('03 / 交错黑纸骨架',[-.04,.03,.055]),silver=group('04 / 银箔反折与冷边',[.035,.023,.070]),gauze=group('05 / 缝口与纤维',[.012,.014,.09]),botanic=group('06 / 夹生于层间的花',[-.022,-.015,.08]),ruby=group('07 / 缠接的红色线索',[.022,-.033,.065]),back=group('08 / 背向的拼接体',[-.02,.016,-.073]),inscription=group('09 / 嵌入与覆印',[0,.01,.068]),tail=group('10 / 松动的边缘',[.024,-.047,.016]);
+  // This internal equal-axis support is deliberately recessed. The perceived
+  // volume comes from interlocking sheets, not an exposed round shell.
+  const ball=new T.SphereGeometry(1.065,64,48),pa=ball.attributes.position;
+  for(let i=0;i<pa.count;i++){const p=V().fromBufferAttribute(pa,i),n=p.clone().normalize(),d=.018*Math.sin(n.x*11+n.z*7)*Math.sin(n.y*9-n.z*5);p.multiplyScalar(1+d/1.065);pa.setXYZ(i,...p.toArray());}ball.computeVertexNormals();add('recessed dark equal-axis support',ball,m.core,core);
+  let patchCount=0,beadCount=0,petalCount=0,flowerCount=0,stitchCount=0,fragmentCount=0,chainCount=0;
+  // Each independently cut sheet bends around its own tangent frame. Angular
+  // folds, unequal cut corners and lifted edges prevent a tiled globe reading.
+  function patch(name,lon,lat,w,h,roll,mat,parent,{radius=1.27,fold=.07,lift=.10,seed=1,thickness=.006,wrap=.24}={}){
+    const origin=S(lon,lat,radius),q=frame(origin,roll),phase=seed*.89;
+    const surface=(a,b)=>{const u=a*2-1,v=b*2-1,trim=1-.19*Math.max(0,v-.23)-.13*Math.max(0,-v-.58),x=u*w*.5*trim+.016*w*Math.sin(b*21+phase)*Math.pow(Math.abs(u),7),y=v*h*.5+.022*h*Math.sin(a*17+phase)*Math.pow(Math.abs(v),9);
+      const crease=fold*(.70*Math.abs(u-v*.31-.10)+.45*Math.max(0,v+u*.51-.25)-.18),free=lift*(Math.pow(Math.max(0,u),4)*(.25+.75*Math.sin(b*Math.PI))+.27*Math.pow(Math.max(0,v),5));
+      const z=crease+free-wrap*(x*x+y*y)+.003*Math.sin(b*19+a*11+phase);return V(x,y,z);
+    };
+    let g=grid(surface,16,20,thickness);g.applyQuaternion(q);g.translate(...origin.toArray());
+    const backing=mat===m.silver||mat===m.edgeSilver?m.silverBack:mat===m.black||mat===m.graphite||mat===m.print?m.paperBack:mat;
+    collectSheet(g,[mat,backing],parent,name+' / merged matching faces');patchCount++;
+    return (a,b)=>surface(a,b).applyQuaternion(q).add(origin);
+  }
+  // Compressed dark underlaps: overlapping irregular material surfaces rather
+  // than one continuous exposed ball. Different meridians do not share seams.
+  for(let band=0;band<3;band++)for(let i=0;i<8;i++){
+    const lon=i*TAU/8+band*.36,lat=[-.68,.03,.70][band]+(r()-.5)*.16;
+    patch('buried cloth/carbon underlap '+band+'-'+i,lon,lat,.99+r()*.15,1.06,(r()-.5)*1.5,(i+band)%4===0?m.darkSilk:m.black,cloth,{radius:1.12+r()*.028,fold:.055,lift:.045,seed:20+band*8+i});
+  }
+  // Hand-composed unequal knots. Front is an overlapping broken diagonal;
+  // the two flanks and reverse have their own similarly dense assemblies.
+  const knots=[
+    [-.70,.78,-.72,1.04],[-.19,.64,.31,.88],[.39,.76,-.55,.89],[.84,.38,.52,.93],
+    [-.67,.28,-.39,.98],[-.13,.17,.68,1.05],[.37,.01,-.43,.97],[.74,-.29,.48,.85],
+    [-.83,-.32,.55,.95],[-.36,-.48,-.62,.99],[.13,-.70,.28,.91],[-.30,-.93,-.23,.79],
+    [1.38,.54,-.62,.91],[1.62,.02,.44,1.03],[1.53,-.62,-.48,.92],
+    [-1.44,.49,.55,.88],[-1.66,-.13,-.49,.92],[-1.46,-.65,.41,.82],
+    [2.20,.57,.55,.91],[2.56,-.02,-.65,.98],[2.49,-.62,.29,.89],
+    [3.01,.73,-.43,.89],[3.23,.16,.36,1.01],[-2.61,.50,-.66,.87],[-2.73,-.31,.48,.99],[3.02,-.66,-.31,.91],
+    [1.25,.14,-.73,.72],[1.92,.34,.63,.75],[1.85,-.32,-.28,.78],[1.19,-.45,.86,.68],
+    [-1.22,-.09,.26,.67],[-1.91,.15,-.74,.79],[-1.82,-.46,.43,.73],
+    [2.85,.27,-.88,.72],[-2.88,.01,.69,.76],[2.83,-.21,-.56,.75],[-2.28,-.03,.35,.66],
+    [-.15,-.20,.80,.68],[.30,-.33,-.76,.62]
+  ];
+  const contacts=[];
+  knots.forEach(([lon,lat,a,s],i)=>{
+    const rear=Math.cos(lon)<-.25,parent=rear?back:black,base=(i>=26?1.32:1.235)+(i%4)*.017;
+    const common={seed:100+i*17,wrap:.21};
+    patch('fold knot '+i+' / grey-pink backing',lon-.045,lat-.027,.65*s,.73*s,a+.10,i%3===0?m.dustRose:m.linen,rear?back:cloth,{...common,radius:base-.028,fold:.055,lift:.075});
+    patch('fold knot '+i+' / carbon load-bearing face',lon,lat,.70*s,.77*s,a,m.black,parent,{...common,radius:base,fold:.12,lift:.12});
+    const metal=patch('fold knot '+i+' / narrow silver underturn',lon+.09,lat+.025,.24*s,.69*s,a+.24,i%4===0?m.edgeSilver:m.silver,rear?back:silver,{...common,radius:base+.044,fold:.086,lift:.14,thickness:.003});
+    patch('fold knot '+i+' / graphite interleaf',lon-.086,lat-.086,.50*s,.44*s,a-.51,i%6===1?m.print:m.graphite,parent,{...common,seed:109+i*17,radius:base+.097,fold:.083,lift:.09});
+    patch('fold knot '+i+' / ash or faded rose offcut',lon+.012,lat-.17,.30*s,.32*s,a+.73,i%3===1?m.dustRose:m.ash,rear?back:cloth,{...common,seed:116+i*17,radius:base+.113,fold:.075,lift:.082});
+    patch('fold knot '+i+' / black interrupted cap',lon-.03,lat-.11,.28*s,.38*s,a-.28,m.black,parent,{...common,radius:base+.158,fold:.09,lift:.10});
+    if(i%3!==0)patch('fold knot '+i+' / sharp silver lip',lon-.16,lat+.09,.10*s,.36*s,a-.55,m.edgeSilver,rear?back:silver,{...common,radius:base+.13,fold:.08,lift:.13,thickness:.003});
+    contacts.push({lon,lat,a,s,metal,parent:rear?back:gauze});
+  });
+  // Larger narrow charcoal ribs tie knots together without blanking the core.
+  for(const [lon,lat,w,h,a]of [[-.44,.98,.30,.82,-.52],[.31,.42,.30,.81,.60],[-.58,-.08,.28,.83,-.65],[.55,-.65,.31,.75,.75],[1.80,.27,.29,.93,-.26],[2.92,-.20,.32,.95,.36],[-2.49,-.14,.30,.85,-.54]])
+    patch('long folded carbon bridge',lon,lat,w,h,a,m.black,Math.cos(lon)<0?back:black,{radius:1.40,fold:.10,lift:.17,seed:287+Math.round(lon*10)});
+  // Free margins break the outline but remain rooted inside the material mass.
+  const margins=[[-.70,1.06,.30,.67,-.50],[-.10,1.20,.21,.48,.45],[.51,1.02,.25,.62,-.38],[1.19,.75,.28,.61,.51],[-1.39,.24,.23,.74,-.30],[1.43,-.23,.27,.65,.42],[-.88,-.91,.27,.56,-.65],[.21,-1.05,.19,.63,.17],[-1.78,.80,.24,.55,.32],[2.15,.87,.28,.62,-.31],[2.94,1.06,.20,.47,.61],[-2.27,-.82,.25,.61,-.45],[2.30,-.88,.21,.50,.47]];
+  margins.forEach(([lon,lat,w,h,a],i)=>{
+    patch('rooted broken silhouette '+i,lon,lat,w,h,a,i%4===1?m.silver:i%4===2?m.print:m.black,Math.cos(lon)<0?back:tail,{radius:1.35,fold:.13,lift:.25,wrap:.08,seed:340+i});
+    if(i%2===0)patch('exposed underside of margin '+i,lon+.017,lat-.025,w*1.05,h*.83,a+.035,m.dustRose,Math.cos(lon)<0?back:cloth,{radius:1.31,fold:.10,lift:.19,seed:340+i});
+  });
+  // Thread lattices are narrow irregular torn webs, folded into contact zones.
+  function net(name,points,width,parent,seed){
+    const path=curve(points),rng=random(seed);
+    const f=(u,t)=>{const p=path.getPoint(t),d=path.getTangent(t),n=p.clone().normalize(),side=new T.Vector3().crossVectors(d,n).normalize(),span=width*(.14+.34*Math.sin(Math.PI*t)+.052*Math.sin(t*12+seed));return p.addScaledVector(side,u*span).addScaledVector(n,.019*Math.sin(t*Math.PI)+.014*Math.sin(t*12+u*7));};
+    for(let i=0;i<14;i++){const start=rng()*.045,end=.98-rng()*.14,pts=[];for(let j=0;j<16;j++)pts.push(f(i/13*2-1,start+(end-start)*j/15));collect(tube(pts,.0017+rng()*.00065,24,3),i%5===1?m.blackThread:m.thread,parent,name,false);}
+    for(let j=1;j<22;j++){if(j%7===3)continue;const pts=[];for(let i=0;i<8;i++)pts.push(f(i/7*2-1,(j+.28*Math.sin(i+seed))/25));collect(tube(pts,.0015,13,3),m.thread,parent,name,false);}
+  }
+  contacts.forEach(({lon,lat,a,s,metal,parent},i)=>{
+    for(let j=0;j<5+(i%4);j++){const t=.15+j*.091,p=metal(.77,t),q=metal(.97,t+.032),mid=p.clone().lerp(q,.5).multiplyScalar(1.012);collect(tube([p,mid,q],.0022,7,3),i%3===0?m.redThread:m.thread,parent,'cross-material sewing',false);stitchCount++;}
+    if(i%2===0){const pts=[];for(let j=1;j<17;j++)pts.push(metal(.992,j/18));collect(tube(pts,.0021,22,3),m.edgeSilver,parent,'cold cut edges',false);}
+    if(i%3!==1)net('torn mesh inside seams',[S(lon-.13,lat+.24,1.38),S(lon-.17,lat+.08,1.48),S(lon+.05,lat-.12,1.49),S(lon+.14,lat-.24,1.36)],.24*s,parent,410+i);
+    // Offcuts, tiny inset mineral bits, flakes and folded staples stay near a
+    // seam, never uniformly sprayed into the surrounding air.
+    for(let j=0;j<8;j++){
+      const lo=lon-.15+(r()-.5)*.20,la=lat+.14+(r()-.5)*.34,p=S(lo,la,1.40+r()*.10),g=new T.IcosahedronGeometry(.025+r()*.039,0);g.scale(.65+r()*.8,.30+r()*.52,.12+r()*.22);g.rotateZ(r()*TAU);pose(g,p,p,(r()-.5)*2);collect(g,j%4===0?m.roseStone:j%3===0?m.edgeSilver:m.stone,parent,'embedded flakes and mineral offcuts');fragmentCount++;
+    }
+    if(i%2===0){const p=metal(.70,.42),g=new T.TorusGeometry(.022,.003,4,12);pose(g,p,p,.7);collect(g,m.oldGold,parent,'crooked little binding eyes',false);}
+  });
+  // Several red trajectories share actual fastening nodes. They alternate
+  // exposed arcs with buried segments rather than circling the whole globe.
+  function chain(name,points,size,step,parent=ruby){
+    const path=curve(points),count=Math.max(2,Math.floor(path.getLength()/step));chainCount++;
+    collect(new T.TubeGeometry(path,count*2,.0028,4,false),m.redThread,parent,'ruby support threads',false);
+    for(let i=0;i<=count;i++){
+      const t=Math.min(1,Math.max(0,(i+(r()-.5)*.28)/count)),p=path.getPointAt(t),d=path.getTangentAt(t),rr=size*(.65+r()*.60);let g;
+      if(i%7===2||i%11===0){g=new T.TorusGeometry(rr,rr*.25,5,13);pose(g,p,p,(r()-.5)*1.4);}else{g=new T.SphereGeometry(rr*.80,9,7);g.scale(.74,1.15+r()*.4,.78);g.applyQuaternion(new T.Quaternion().setFromUnitVectors(V(0,1,0),d));g.translate(...p.toArray());}
+      collect(g,i%6===1?m.garnet:m.ruby,parent,name,false);beadCount++;
+    }
+  }
+  const redPaths=[
+    [[-.58,1.37,.56],[-.72,.99,1.17],[-.48,.60,1.47],[-.19,.34,1.65],[.20,.12,1.65],[.60,-.16,1.46],[.98,-.65,1.04],[1.04,-1.15,.72],[.91,-1.63,.48]],
+    [[.54,1.29,.66],[.77,.82,1.20],[.53,.57,1.48],[.14,.48,1.65],[-.35,.24,1.61],[-.68,-.15,1.40],[-.88,-.58,1.15]],
+    [[-1.17,.58,.67],[-.96,.29,1.14],[-.82,-.10,1.43],[-.58,-.41,1.51],[-.12,-.54,1.59],[.35,-.62,1.49],[.78,-.82,1.10]],
+    [[1.28,.70,.25],[1.45,.23,.44],[1.50,-.20,.13],[1.38,-.58,-.22],[1.10,-.78,-.65],[.61,-.66,-1.20],[.24,-.24,-1.46]],
+    [[-.93,-.61,1.12],[-1.24,-.69,.69],[-1.45,-.36,.19],[-1.48,.02,-.29],[-1.24,.43,-.79],[-.87,.72,-1.08]],
+    [[.65,1.11,-.64],[.77,.73,-1.15],[.42,.42,-1.49],[.06,.01,-1.61],[-.51,-.30,-1.42],[-.81,-.85,-.97],[-.72,-1.40,-.60]],
+    [[-1.03,.61,-.95],[-.66,.39,-1.38],[-.27,.28,-1.61],[.11,.21,-1.64],[.57,-.04,-1.46],[1.05,-.34,-1.01]]
+  ];
+  redPaths.forEach((pts,i)=>{
+    // Enter below a paper lip, then return to the surface; the two ends fall free.
+    for(let j=1;j<pts.length-1;j++)if((i===0&&[2,5].includes(j))||(i!==0&&j%2===1)){
+      const p=V(...pts[j]);if(Math.abs(p.y)<1.25&&p.length()>1.46){p.setLength(1.39+(j%3)*.025);pts[j]=p.toArray();}
+    }
+    chain('red path '+i,pts,[.021,.014,.016,.016,.014,.019,.014][i],[.053,.052,.051,.061,.059,.054,.057][i]);
+  });
+  redPaths.forEach((pts,i)=>{
+    for(let j=0;j<(i<3?3:2);j++){
+      const shifted=pts.map((p,k)=>V(...p).add(V(.008+j*.011,Math.sin(k*1.2+j)*.025,.014*Math.cos(k+j))));
+      collect(tube(shifted,.0022+j*.0005,90,3),j%2?m.rustThread:m.redThread,ruby,'parallel crimson fibres',false);
+    }
+  });
+  // Local loops and short fallen threads: visible network without airborne chaos.
+  for(const [lon,lat,sz]of [[-.26,.28,.18],[.48,.04,.14],[-.56,-.54,.16],[1.52,.13,.15],[2.94,.12,.19],[-2.68,-.39,.14]]){
+    const p=S(lon,lat,1.55),q=frame(p,.4),pts=[];for(let j=0;j<24;j++){const a=j/23*TAU*1.55;pts.push(V(Math.cos(a)*sz*(1-j*.010),Math.sin(a)*sz*.58-j*.001,.007*Math.sin(a*2)).applyQuaternion(q).add(p));}collect(tube(pts,.0036,58,4),m.redThread,ruby,'local red knot loops',false);
+  }
+  for(const [i,p]of redPaths.map((pts,i)=>[i,pts.at(-1)])){
+    const origin=V(...p);for(let j=0;j<3;j++){const end=origin.clone().add(V((j-1)*.042,-.09-j*.027,.018*j));collect(tube([origin,origin.clone().lerp(end,.5).add(V(.013,0,.018)),end],.0016,12,3),m.rustThread,ruby,'frayed thread ends',false);}
+    if(i===0||i===5){const g=new T.SphereGeometry(.025,12,9);g.scale(.62,1.9,.63);g.translate(...origin.clone().add(V(0,-.055,0)).toArray());collect(g,m.ruby,ruby,'unequal garnet weights');}
+  }
+  // Flowers are sewn into folds, not pasted as identical rosettes. Different
+  // tiers, damaged petals, turns and sizes create irregular partial blooms.
+  function flower(name,lon,lat,size,kind,seed,{radius=1.44,tilt=.12,tiers=3}={}){
+    const rng=random(seed),origin=S(lon,lat,radius),normal=origin.clone().normalize().add(V(tilt,-tilt*.6,.03)).normalize(),q=frame(normal,rng()*TAU),parent=Math.cos(lon)<-.20?back:botanic;
+    const mats=kind==='ivory'?[m.petal,m.petalShadow,m.petal]:kind==='rose'?[m.rose,m.petalShadow,m.rose]:kind==='rust'?[m.rustPetal,m.ochreShadow,m.rose]:[m.ochre,m.ochreShadow,m.ochre];flowerCount++;
+    for(let tier=0;tier<tiers;tier++){
+      const count=10+Math.floor(rng()*7)-tier*2;
+      for(let i=0;i<count;i++){
+        if(rng()<.11)continue;
+        const a=TAU*i/count+tier*.59+(rng()-.5)*.38,length=size*(1-tier*.21)*(.69+rng()*.45),width=size*(.20-tier*.020)*(.70+rng()*.52),g=petal(length,width,size*(.06+tier*.048),seed+i*11+tier*71);
+        g.rotateX((rng()-.5)*.86);g.rotateY((rng()-.5)*.36);g.rotateZ(-a);g.translate(Math.sin(a)*size*.08,Math.cos(a)*size*.08,size*tier*.032);g.applyQuaternion(q);g.translate(...origin.toArray());collect(g,mats[Math.floor(rng()*3)],parent,'irregular pressed and folded petals');petalCount++;
+      }
+    }
+    for(let i=0;i<25;i++){const a=rng()*TAU,rr=Math.sqrt(rng())*size*.17,p=V(Math.cos(a)*rr,Math.sin(a)*rr,size*.10).applyQuaternion(q).add(origin),g=new T.IcosahedronGeometry(size*(.020+rng()*.026),0);g.scale(.75,1,.72);g.translate(...p.toArray());collect(g,m.seed,parent,'aged flower hearts');}
+    const buried=S(lon-.055,lat-.16,1.21);collect(tube([buried,S(lon-.034,lat-.08,1.37),origin],.0045,14,4),m.stem,parent,'stems rooted under layers');
+  }
+  const blooms=[
+    [-.69,.75,.180,'ochre'],[-.51,.63,.107,'ivory'],[-.87,.58,.086,'rose'],
+    [-.08,.32,.137,'ivory'],[.12,.22,.086,'rose'],[.31,.09,.077,'ochre'],
+    [.70,.48,.133,'ivory'],[.90,.27,.076,'rust'],
+    [-.63,-.44,.116,'rose'],[-.79,-.63,.086,'ochre'],
+    [.11,-.75,.205,'ivory'],[-.15,-.83,.105,'ochre'],[.38,-.64,.101,'rose'],[.27,-.97,.070,'rust'],
+    [1.42,.50,.135,'ochre'],[1.58,.29,.082,'ivory'],[1.56,-.46,.149,'ivory'],[1.72,-.67,.079,'rose'],
+    [-1.50,.15,.140,'rose'],[-1.38,.35,.082,'ivory'],[-1.45,-.56,.117,'ochre'],
+    [2.41,.57,.171,'ivory'],[2.61,.43,.092,'ochre'],[3.17,.18,.133,'rose'],[3.35,.34,.081,'ivory'],
+    [2.77,-.53,.163,'ochre'],[2.99,-.70,.087,'rose'],[-2.68,-.30,.131,'ivory'],[-2.40,-.48,.075,'rust']
+  ];
+  blooms.forEach(([lo,la,size,kind],i)=>flower('seam flower '+i,lo,la,size,kind,610+i*29,{radius:1.47+(i%3)*.014,tilt:(i%2?-.22:.18),tiers:size>.13?3:2}));
+  // Dry leaves, broken stems, husks and fibre tufts emerge from those exact
+  // seams. Directions vary; no radial repeated starburst around the ball.
+  blooms.filter((_,i)=>i%2===0).forEach(([lon,lat,size],i)=>{
+    const p=S(lon,lat,1.43),q=frame(p,(i%2?-.6:.7)),parent=Math.cos(lon)<-.2?back:botanic;
+    for(let j=0;j<3;j++){
+      const len=.16+r()*.15,w=.018+r()*.021,g=petal(len,w,.026,720+i*7+j);g.rotateZ((j-1)*.7);g.translate((j-1)*.055,-.035,-.02);g.applyQuaternion(q);g.translate(...p.toArray());collect(g,j===1?m.ochreShadow:m.petalShadow,parent,'dried leaf offcuts');
+      const a=V((j-1)*.04,0,-.04).applyQuaternion(q).add(p),b=V((j-1)*.12,.22+r()*.22,.014).applyQuaternion(q).add(p);
+      collect(tube([a,a.clone().lerp(b,.55).add(V(.025,0,.018)),b],.0022,17,3),m.stem,parent,'bent dried sprays',false);
+      for(let k=0;k<4;k++){const t=.30+k*.17,c=a.clone().lerp(b,t),end=c.clone().add(V((k%2?1:-1)*.035,.035,.018));collect(tube([c,end],.0012,6,3),m.stem,parent,'fine seed twigs',false);const g=new T.IcosahedronGeometry(.009+r()*.009,0);g.scale(.6,1.6,.7);g.translate(...end.toArray());collect(g,m.oldGold,parent,'small dry pods',false);}
+    }
+    for(let j=0;j<5;j++){const end=V((r()-.5)*.23,.13+r()*.22,(r()-.5)*.08).applyQuaternion(q).add(p);collect(tube([p,p.clone().lerp(end,.5).add(V(.025,.016,.024)),end],.0013,16,3),j%3?m.blackThread:m.thread,parent,'fine loose fibres',false);}
+  });
+  patch('partly buried title remnant',-.37,.05,.19,.27,-.69,m.print,inscription,{radius:1.51,fold:.042,lift:.06,seed:801});
+  flush();
+  root.userData={title:'在坠落时',slug:'falling',sceneVersion:'0.28.0',artRevision:13,solidCore:true,bodyRadius:1.065,bodyAxes:[1,1,1],composition:'high-density stitched assemblage / weak spherical mass / rooted broken perimeter',patchCount,beadCount,petalCount,flowerCount,stitchCount,fragmentCount,chainCount,knotCount:knots.length,structureGroups:groups.length,frontFlowerGroups:6,chainComposition:'seven interlinked bead paths, parallel red fibres and six local knots continuing over both flanks and the reverse',detailTargets:{threads:[-.14,.26,1.44],flowers:[.07,-.78,1.31],fault:[.71,.19,1.18]},referenceUse:'Original actual 3D carbon, foil, grey-pink remnants, flower, mesh and red-fibre assemblage. No generated images, reference pixels or photograph replacement.'};
   let meshCount=0,triangleCount=0,exportPrimitiveCount=0;root.traverse(o=>{if(o.isMesh){meshCount++;triangleCount+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3;exportPrimitiveCount+=Array.isArray(o.material)?o.geometry.groups.length:1;}});Object.assign(root.userData,{meshCount,triangleCount,exportPrimitiveCount});let spread=0;
-  return {root,groups,ready:Promise.resolve(),setSeparated(value){spread=value;groups.forEach(g=>g.position.fromArray(g.userData.offset).multiplyScalar(value));},setMoment(t){tail.rotation.z=Math.sin(t*.3)*.012;tail.position.y=tail.userData.offset[1]*spread-Math.sin(t*.42)*.011;},dispose(){owned.forEach(g=>g.dispose());disposeMaterials();}};
+  return {root,groups,ready:Promise.resolve(),setSeparated(value){spread=value;groups.forEach(g=>g.position.fromArray(g.userData.offset).multiplyScalar(value));},setMoment(t){tail.rotation.z=Math.sin(t*.3)*.008;tail.position.y=tail.userData.offset[1]*spread-Math.sin(t*.42)*.008;},dispose(){owned.forEach(g=>g.dispose());disposeMaterials();}};
 }

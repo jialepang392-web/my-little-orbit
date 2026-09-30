@@ -5,7 +5,7 @@ function canvas(n=1024){const c=document.createElement('canvas');c.width=c.heigh
 function texture(c,color=true){const t=new T.CanvasTexture(c);t.colorSpace=color?T.SRGBColorSpace:T.NoColorSpace;t.anisotropy=8;return t;}
 function study(kind,seed){
   const[c,x]=canvas(),n=c.width,r=random(seed),data=x.createImageData(n,n);
-  const base={wine:[92,31,45],carbon:[39,37,41],silver:[187,184,181],ivory:[213,205,190],petal:[239,226,197],linen:[146,141,134]}[kind];
+  const base={wine:[92,31,45],carbon:[23,22,27],silver:[208,211,217],ivory:[213,205,190],petal:[239,226,197],linen:[146,141,134]}[kind];
   for(let y=0;y<n;y++)for(let a=0;a<n;a++){
     const grain=(r()-.5)*(kind==='silver'?23:16),cloud=Math.sin(a*.012+y*.007)*Math.cos(y*.009)*3.0;
     const warp=Math.sin(a*Math.PI*.50)*Math.sin(y*Math.PI*.52)*1.7;
@@ -35,21 +35,28 @@ function print(){
 function inscribed(){const[c,x]=canvas();x.fillStyle='#302c32';x.fillRect(0,0,1024,1024);x.save();x.translate(92,385);x.scale(.88,1.1);x.font='300 116px serif';x.fillStyle='#bcb5a6';x.fillText('在坠落时',0,0);x.font='25px serif';x.fillStyle='#928780';x.fillText('STILL / FALLING',10,64);x.restore();x.strokeStyle='#bcb5a64a';x.lineWidth=1;x.beginPath();x.moveTo(108,527);x.lineTo(741,506);x.stroke();return texture(c);}
 export function makeMaterials(){
   const maps={};for(const[k,i]of ['wine','carbon','silver','ivory','petal','linen'].map((k,i)=>[k,i]))maps[k]=study(k,2700+i*19);maps.print=print();maps.inscribed=inscribed();
-  const m={};const make=(name,settings,physical=false)=>m[name]=new (physical?T.MeshPhysicalMaterial:T.MeshStandardMaterial)({name:'falling-027-'+name,side:T.DoubleSide,...settings});
-  make('core',{color:'#bdadb0',map:maps.wine,bumpMap:maps.wine,bumpScale:.0017,roughness:.92,sheen:.42,sheenColor:new T.Color('#9b5364'),sheenRoughness:.84},true);
+  const m={};const make=(name,settings,physical=false)=>m[name]=new (physical?T.MeshPhysicalMaterial:T.MeshStandardMaterial)({name:'falling-028-'+name,side:T.DoubleSide,...settings});
+  make('core',{color:'#352e39',map:maps.wine,bumpMap:maps.wine,bumpScale:.003,roughness:.97});
   make('silk',{color:'#d3aeac',map:maps.wine,bumpMap:maps.wine,bumpScale:.002,roughness:.86,sheen:.8,sheenColor:new T.Color('#b97682'),sheenRoughness:.65},true);
   make('darkSilk',{color:'#967677',map:maps.wine,roughness:.93,sheen:.7,sheenColor:new T.Color('#ac526b')},true);
-  make('black',{map:maps.carbon,roughness:.90,bumpMap:maps.carbon,bumpScale:.0015,metalness:.12});
-  make('graphite',{map:maps.carbon,color:'#e6e0e3',roughness:.82,metalness:.24,bumpMap:maps.carbon,bumpScale:.001});
+  make('black',{map:maps.carbon,roughness:.82,bumpMap:maps.carbon,bumpScale:.0018,metalness:.06});
+  make('graphite',{color:'#35343d',roughness:.57,metalness:.32,bumpMap:maps.carbon,bumpScale:.0016});
   make('print',{map:maps.print,roughness:.86,metalness:.03});
   make('label',{map:maps.inscribed,roughness:.73,metalness:.20});
-  make('silver',{map:maps.silver,metalness:.87,roughness:.52,bumpMap:maps.silver,bumpScale:.0021});
-  make('silverBack',{map:maps.silver,color:'#a2a1a6',roughness:.62,metalness:.70});
+  make('silver',{map:maps.silver,metalness:.94,roughness:.29,bumpMap:maps.silver,bumpScale:.0016});
+  make('edgeSilver',{color:'#e2e8ef',metalness:.96,roughness:.20});
+  make('silverBack',{map:maps.silver,color:'#83899a',roughness:.46,metalness:.81});
+  make('paperBack',{color:'#5e5559',map:maps.linen,roughness:.98});
+  make('dustRose',{color:'#c8a5ac',map:maps.ivory,roughness:.97,bumpMap:maps.linen,bumpScale:.0028});
+  make('ash',{color:'#8e939e',map:maps.ivory,roughness:.91,bumpMap:maps.linen,bumpScale:.002});
   make('paper',{map:maps.ivory,roughness:.98,bumpMap:maps.ivory,bumpScale:.002});
   make('linen',{map:maps.linen,roughness:.98,bumpMap:maps.linen,bumpScale:.0028});
   make('thread',{color:'#b7ada6',roughness:.56,metalness:.55});
   make('blackThread',{color:'#383038',roughness:.97});
-  make('redThread',{color:'#79162d',roughness:.9});
+  make('redThread',{color:'#a41534',roughness:.78});
+  make('rustThread',{color:'#853348',roughness:.95});
+  make('oldGold',{color:'#99805e',roughness:.69,metalness:.30});
+  make('rustPetal',{map:maps.petal,color:'#9b6158',roughness:.98});
   make('stem',{color:'#8e7c63',roughness:.91});
   make('seed',{color:'#92774d',roughness:.86});
   make('petal',{map:maps.petal,color:'#e8ded0',roughness:.91,bumpMap:maps.petal,bumpScale:.001});
@@ -57,7 +64,7 @@ export function makeMaterials(){
   make('ochre',{map:maps.petal,color:'#c2a678',roughness:.94,bumpMap:maps.petal,bumpScale:.001});
   make('ochreShadow',{map:maps.petal,color:'#ae8e68',roughness:.96});
   make('rose',{map:maps.petal,color:'#bf968c',roughness:.96});
-  make('stone',{color:'#b1ada8',map:maps.ivory,roughness:.94,flatShading:true});
+  make('stone',{color:'#8d8989',map:maps.ivory,roughness:.94,flatShading:true});
   make('roseStone',{color:'#bba69f',map:maps.ivory,roughness:.96,flatShading:true});
   make('ruby',{color:'#af1439',roughness:.19,metalness:.16,clearcoat:1,clearcoatRoughness:.12,transmission:.28,ior:1.47,thickness:.11,attenuationDistance:.5,attenuationColor:new T.Color('#700d25')},true);
   make('garnet',{color:'#5e162f',roughness:.23,metalness:.21,clearcoat:1},true);

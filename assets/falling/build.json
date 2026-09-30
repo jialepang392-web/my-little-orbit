@@ -1,21 +1,21 @@
 {
-  "version": "0.27.0",
-  "sceneVersion": "0.27.0",
+  "version": "0.28.0",
+  "sceneVersion": "0.28.0",
   "title": "在坠落时",
   "status": "passed",
   "exported": true,
-  "created": "2026-09-30T04:27:50.918969+00:00",
-  "buildLabel": "completed-assembly",
+  "created": "2026-09-30T12:01:28.188890+00:00",
+  "buildLabel": "dense-final",
   "sourceHashes": {
-    "falling.html": "842e8599ba216d87a223c1caddf6fa0fc65ffb936cf4fb2ee79acd3be6bcd129",
+    "falling.html": "72376dc20af0b94fdc2e08876d1dad5cb1fc9e58a03c6d9a655312d8f1aef2ed",
     "falling.css": "9ecbcc1695478593def08a5f27358d7fc0bccbda3568f2d0ec86fe25e40f6bdf",
-    "src/falling-page.js": "196596601e3edead072ef87bd4615570750894edab4a92344375d0d3617bedb8",
-    "src/falling/model.js": "e6cba3003ccf5cb2ea2ae4b6deec12a09c2ecc831386d0a3d31bf6d0332ddd55",
-    "src/falling/materials.js": "d0b3c795474f05fcdccd55457ee3d89e9a6d61a71176752f07b0923f8dac706f",
-    "src/falling/viewer.js": "5509faa8ba9cccdda592639e3f74d00cdbbec0c285fe7fbebb810ff0ee637d4e",
+    "src/falling-page.js": "fbc33eb78ada3d4aeeedc4448ebe653615cb13db9bc8f24f94a2371bc0a9a3fc",
+    "src/falling/model.js": "728551a6e1612bdfad954a60f77729119b3390f27c0cba512220f36a1043b69a",
+    "src/falling/materials.js": "5f33d9bf76343daa1eac9f9675166472605ce180dd98c89e7b1d38f05d5fb745",
+    "src/falling/viewer.js": "684a5b66d27f6cbd2c4773bbfadf4a4107cc7345dd6845bd7f359dd998015d78",
     "src/render-performance.js": "efcb230da5f9b1a333234f773a92e48dbfec0b417e613f769c30ebb4d3d27c0b"
   },
-  "buildScriptSha256": "3ffcc458dbaddd8ecf2ca800db3db4132243882196f21901711d384716e1ca61",
+  "buildScriptSha256": "bc9c5500230eb66b16c99f47eaad6b17b0de4eb2fae2879030b14ac824c6979e",
   "stats": {
     "engine": "three.js r180",
     "renderDpr": "2.000",
@@ -25,126 +25,133 @@
     "shadowMode": "continuous",
     "ready": "true",
     "title": "在坠落时",
-    "version": "0.27.0",
+    "version": "0.28.0",
     "view": "front",
     "detail": "",
-    "frames": "10",
+    "frames": "9",
     "solidCore": true,
-    "bodyRadius": 1.275,
+    "bodyRadius": 1.065,
     "bodyAxes": [
       1,
       1,
       1
     ],
     "layers": "10",
-    "drawCalls": "244",
-    "triangles": "809672",
-    "modelMeshes": "85",
-    "modelTriangles": "404836",
-    "beads": "125",
-    "petals": "212",
+    "drawCalls": "144",
+    "triangles": "1660152",
+    "modelMeshes": "72",
+    "modelTriangles": "830076",
+    "beads": "450",
+    "petals": "715",
     "autoRotate": "false",
     "moment": "false",
     "separated": "false",
     "separation": "0.0000",
-    "camera": "0.0894,0.3933,7.1515",
+    "camera": "0.0869,0.3825,6.9542",
     "worldRotation": "0.00000",
     "study": "false",
     "light": "studio",
     "suspended": "false",
     "visibleSurface": "true",
     "slug": "falling",
-    "sceneVersion": "0.27.0",
-    "artRevision": 12,
-    "beadCount": 125,
-    "petalCount": 212,
+    "sceneVersion": "0.28.0",
+    "artRevision": 13,
+    "composition": "high-density stitched assemblage / weak spherical mass / rooted broken perimeter",
+    "patchCount": 312,
+    "beadCount": 450,
+    "petalCount": 715,
+    "flowerCount": 29,
+    "stitchCount": 252,
+    "fragmentCount": 312,
+    "chainCount": 7,
+    "knotCount": 39,
     "structureGroups": 10,
-    "frontFlowerGroups": 2,
-    "chainComposition": "one falling front strand and one quieter strand returning around the flank to the back",
+    "frontFlowerGroups": 6,
+    "chainComposition": "seven interlinked bead paths, parallel red fibres and six local knots continuing over both flanks and the reverse",
     "detailTargets": {
       "threads": [
-        -0.1,
-        0.34,
-        1.33
+        -0.14,
+        0.26,
+        1.44
       ],
       "flowers": [
-        0.12,
-        -0.86,
-        1.11
+        0.07,
+        -0.78,
+        1.31
       ],
       "fault": [
-        0.79,
-        0.17,
-        1.02
+        0.71,
+        0.19,
+        1.18
       ]
     },
-    "referenceUse": "Original folded carbon, cloth, foil, ruby and dry-flower assemblage based on the user reference, refined through actual three-dimensional front/side/back views. No reference pixels or generated replacement artwork.",
-    "meshCount": 85,
-    "triangleCount": 404836,
-    "exportPrimitiveCount": 122
+    "referenceUse": "Original actual 3D carbon, foil, grey-pink remnants, flower, mesh and red-fibre assemblage. No generated images, reference pixels or photograph replacement.",
+    "meshCount": 72,
+    "triangleCount": 830076,
+    "exportPrimitiveCount": 72
   },
   "glbReload": {
-    "meshes": 122,
-    "triangles": 404836,
+    "meshes": 72,
+    "triangles": 830076,
     "bad": 0
   },
   "assets": {
     "cover.webp": {
-      "sha256": "5fd9c1ecf040e27d51acce83ed0a207e7b4a65b72a046d99e67760aa42721ceb",
-      "bytes": 250692
+      "sha256": "69acd9002661a555c9528ccc02da8a663d3973496e87fa777507ba5142af87a7",
+      "bytes": 501142
     },
     "side.webp": {
-      "sha256": "27e8620bdb7ea974b9ba682f33cdc4d0807433a1e7c4f2cebf70cd2711606a9b",
-      "bytes": 181738
+      "sha256": "594fcc78c0ba2efea061a530611e5cb098a1eb35768644f86f1047208552a568",
+      "bytes": 352800
     },
     "back.webp": {
-      "sha256": "f3ab23a0f16961a6a89be654482b19ca2d450d555b828858b3dad5010620dd0b",
-      "bytes": 186268
+      "sha256": "c9470089bca2098e4432209901f23f231816b8f2c58b6fb098c67674ff3c4670",
+      "bytes": 429062
     },
     "detail-threads.webp": {
-      "sha256": "49ef3317d3502f52171c6fed7cd0f498b746a55d7d38fab8c68d6821bbd49966",
-      "bytes": 639660
+      "sha256": "c91d78c97b87e02a79f2aef3336e7c79f9f32c0f7863bbbf2d437657115e7eb0",
+      "bytes": 706092
     },
     "detail-flowers.webp": {
-      "sha256": "4728d9ad059d207978ea64942cb5277dc6858486bde9cbb4629388609797409a",
-      "bytes": 223654
+      "sha256": "d578e50af54fb7d809e69157648d78b94742760e2f37bfa63f58aa31ddf8012a",
+      "bytes": 421774
     },
     "detail-fault.webp": {
-      "sha256": "9e24967fae6f48c7aabce89add2c88e6864063b2dfd488a4bcf9ae6e102f6d6e",
-      "bytes": 394754
+      "sha256": "0ed9df2e26656a529bc761ed6b9eb9cf274dc3b353006f0c79d5ca5c124f6a01",
+      "bytes": 668056
     },
     "poster.png": {
-      "sha256": "70c39bdb5f72620ff6a99e94264420516c3941c1b6cbd08a4055f5fab258e379",
-      "bytes": 3551038
+      "sha256": "eb7a3511e78882426e29d4bc6983dd843665e7f774010659de09c3406fc2718e",
+      "bytes": 4812537
     },
     "transparent-front.png": {
-      "sha256": "9c60388294d07e537ab02dce1ac8b4815b643ad3d898612da4400892e6045cf4",
-      "bytes": 2629839
+      "sha256": "8e319c03a516a702b5cf884fbb33eb19a5e8f037450f5f663f2e979590bc15d8",
+      "bytes": 3587898
     },
     "falling.glb": {
-      "sha256": "49294beceaec71eb25142cfb8a48695f054e6f2c95dbf49f89e5a8c040834fe4",
-      "bytes": 21616568
+      "sha256": "4a76ec0ed83f4184f47b871464bb42579381725262358b91da30d4934b5e9723",
+      "bytes": 32959852
     },
     "cover-192.webp": {
-      "sha256": "e14c4bfc9e7f5fe2f39eb8f9976f1130b2ddaac108484b07dc089c3f7d65c17e",
-      "bytes": 6420
+      "sha256": "1806f5360c0b958a6d2a930aed733466e44a3c9789d321be0648b9af7ddb9ca5",
+      "bytes": 11286
     },
     "cover-300.webp": {
-      "sha256": "6ccbcc81a234a1f92189520349ff647d318f4548d2e0af36a15b2f2fd6dfdbc4",
-      "bytes": 12618
+      "sha256": "ce173a1309d0b6af480f6da285f1e07ad4ddd1d415800823b5abceaec4bf4f6d",
+      "bytes": 23512
     },
     "cover-480.webp": {
-      "sha256": "852e71c35e1b993acc4dbc2cec27fe7dc1b48c57f0f29910e0869309b1c6dba0",
-      "bytes": 25128
+      "sha256": "d6f16ad56b751182fec04f8bfd57c5b3cd3ac3d49ca57c13840ff004d4d1c6c3",
+      "bytes": 49582
     },
     "cover-768.webp": {
-      "sha256": "688a097b5d6aeabac18c942a1e0255d4cc0a596172fa224295a36d8f1aa934f1",
-      "bytes": 51404
+      "sha256": "17319b1d32d6f45fcc244f17ff95f9638f261d8c3a0d7d9070da4b852a080678",
+      "bytes": 104324
     },
     "cover-1200.webp": {
-      "sha256": "cb744dba7bd472d4fc2af042dbdd282f1cdc6ce02ffa788669777920172afca6",
-      "bytes": 101024
+      "sha256": "ebb50c22ef723994ccbe57e3b1dcf42e02dc620f00b2d977869effcd44822d10",
+      "bytes": 206932
     }
   },
-  "provenance": "All six plates, cover sizes, poster and GLB exported from the same actual interactive model. No AI image generation, reference-pixel projection or photo replacement."
+  "provenance": "All six plates, cover sizes, poster and GLB exported from the same interactive high-density assemblage. No image generation, reference pixels or replacement artwork."
 }
