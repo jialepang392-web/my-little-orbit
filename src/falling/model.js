@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-import {makeMaterials,random} from './materials.js?v=0290';
+import {makeMaterials,random} from './materials.js?v=0300';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z),TAU=Math.PI*2;
 const S=(lo,la,r=1.3)=>V(r*Math.cos(la)*Math.sin(lo),r*Math.sin(la),r*Math.cos(la)*Math.cos(lo));
 const curve=ps=>new T.CatmullRomCurve3(ps.map(p=>p.isVector3?p.clone():V(...p)));
@@ -13,11 +13,11 @@ function grid(fn,nu=12,nv=22,thickness=0){
   if(thickness){const rim=[];for(let i=0;i<=nu;i++)rim.push(i);for(let j=1;j<=nv;j++)rim.push(j*(nu+1)+nu);for(let i=nu-1;i>=0;i--)rim.push(nv*(nu+1)+i);for(let j=nv-1;j>0;j--)rim.push(j*(nu+1));for(let i=0;i<rim.length;i++){const a=rim[i],b=rim[(i+1)%rim.length];ix.push(a,b+count,b,a,a+count,b+count);}}
   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(ix);g.computeVertexNormals();return g;
 }
-function tube(ps,r=.002,n=24,s=3){return new T.TubeGeometry(curve(ps),n,r,s,false);}
+function tube(ps,r=.002,n=24,s=3){return new T.TubeGeometry(curve(ps),r<.0017?Math.min(n,16):n,r,s,false);}
 const hash=(x,y,z)=>{const q=Math.sin(x*13.17+y*51.83+z*27.11)*43847.2;return q-Math.floor(q);};
 
 export function makeFalling(){
-  const root=new T.Group();root.name='在坠落时 / Textile gravity';const{m,dispose:disposeMaterials}=makeMaterials(),r=random(290930),groups=[],owned=new Set(),buckets=new Map();
+  const root=new T.Group();root.name='在坠落时 / Gathered depth';const{m,dispose:disposeMaterials}=makeMaterials(),r=random(290930),groups=[],owned=new Set(),buckets=new Map();
   function group(name,offset){const g=new T.Group();g.name=name;g.userData.offset=offset;root.add(g);groups.push(g);return g;}
   function collect(g,mat,parent,name='woven fragments',shadow=true){
     if(!g.index)g.setIndex(Array.from({length:g.attributes.position.count},(_,i)=>i));
@@ -76,9 +76,9 @@ export function makeFalling(){
   // A few long strips set the reference's directional reach and ragged border.
   const margins=[[-.85,1.12,.22,.99,.20],[-.42,1.13,.17,.97,.38],[.21,1.17,.21,1.06,-.44],[.64,.95,.25,.94,-.59],[-1.21,.10,.21,1.04,-.79],[-.95,-.79,.19,1.03,-.77],[.27,-1.17,.25,.94,.42],[.60,-1.02,.17,1.02,.35],[1.22,-.10,.18,.90,-.73],[2.18,.86,.20,.99,-.36],[3.00,1.14,.19,.84,.41],[-2.39,-.77,.23,.93,-.56],[-1.59,.87,.14,.88,.29]];
   margins.forEach(([lo,la,w,h,a],i)=>{const p=patch('long black-edged woven shreds '+i,lo,la,w,h,a,i%4===0?m.black:m.silverCloth,Math.cos(lo)<-.2?reverse:tail,{radius:1.34,seed:901+i,crease:.10,curl:.12,taper:.63,wrap:.10,fray:i%4===0?0:18});});
-  // Small central printed fragment is partly concealed by actual silk, veins
-  // and threads. Only the artwork title is used; no artist/brand attribution.
-  sheet('buried oblique inscription',V(-.02,.15,1.49),V(-.05,.09,1),.58,.76,-.31,m.label,label,{seed:980,crease:.021,curl:.01,taper:.035,wrap:.02});
+  // The old broad flat plaque made the entire sculpture read as a disc.
+  // Lettering is now a small bent remnant, held in a deep material recess.
+  sheet('bent inscription inside the seam',V(-.24,.21,1.47),V(-.28,.19,1),.25,.49,-.46,m.darkPrint,label,{seed:980,crease:.085,curl:.10,taper:.14,wrap:.34});
   // Mesh veils combine an alpha-cut woven surface and broken 3D threads.
   function veil(name,points,width,parent,seed){
     const path=curve(points),rng=random(seed),fn=(u,t)=>{const p=path.getPoint(t),d=path.getTangent(t),n=p.clone().normalize(),side=new T.Vector3().crossVectors(d,n).normalize(),span=width*(.20+.32*Math.sin(Math.PI*t)+.06*Math.sin(t*15+seed));return p.addScaledVector(side,(u*2-1)*span).addScaledVector(n,.015*Math.sin(t*22+u*8));};
@@ -130,7 +130,13 @@ export function makeFalling(){
     [[-1.48,.34,-.45],[-1.59,-.08,-.07],[-1.32,-.69,.25],[-.99,-1.24,.50]],
     [[-.87,-1.22,.73],[-.50,-.94,1.17],[-.16,-.65,1.44],[.24,-.35,1.59],[.56,-.04,1.41]]
   ];
-  strands.forEach((ps,i)=>{chain('uneven glass-ring strand '+i,ps,i%3===0?.025:.0185,i%3===0?.044:.041);if(i<2||i===5){const q=ps.map((p,j)=>V(...p).add(V(.022*Math.sin(j),-.025,.028)));chain('clustered secondary ring run '+i,q,.0155,.043);}});
+  strands.forEach((ps,i)=>{
+    // Pull straight antennae back into hooked hanging ends. Interior arcs
+    // alternate deep and shallow attachments instead of one frontal net.
+    const points=ps.map((p,j)=>{const v=V(...p);if(j===0||j===ps.length-1){v.multiplyScalar(.87);v.y-=j===ps.length-1?.13:.04;v.z+=Math.sign(v.z)*.06;}else if(Math.abs(v.z)>.8){v.z+=Math.sign(v.z)*(.10+.11*Math.sin(j*1.7+i));v.x+=.05*Math.sin(j+i*.8);}return v;});
+    chain('uneven glass-ring strand '+i,points,i%3===0?.025:.0185,i%3===0?.044:.041);
+    if(i<2||i===5){const q=points.map((p,j)=>p.clone().add(V(.022*Math.sin(j),-.025,.028)));chain('clustered secondary ring run '+i,q,.0155,.043);}
+  });
   // Actual rock banks are placed in a right-hand diagonal fault, with rose
   // inclusions and black shards, not isolated generic pebbles scattered evenly.
   function rock(p,size,kind,parent,seed){const g=new T.IcosahedronGeometry(size,1),pa=g.attributes.position;for(let j=0;j<pa.count;j++){const v=V().fromBufferAttribute(pa,j),n=v.clone().normalize(),f=.77+hash(n.x+seed,n.y,n.z)*.45;v.multiplyScalar(f);pa.setXYZ(j,...v.toArray());}g.computeVertexNormals();g.scale(.65+r()*.62,.58+r()*.65,.27+r()*.33);g.rotateX(r()*TAU);g.rotateY(r()*TAU);g.rotateZ(r()*TAU);g.translate(...p.toArray());collect(g,kind,parent,'irregular granular rock fault');fragmentCount++;}
@@ -153,17 +159,17 @@ export function makeFalling(){
     for(let i=0;i<47;i++){const a=rng()*TAU,d=Math.sqrt(rng())*size*.18,z=size*(.19-.35*d),point=V(Math.cos(a)*d,Math.sin(a)*d,z).applyQuaternion(q).add(p),g=new T.IcosahedronGeometry(size*(.014+rng()*.019),0);g.scale(.7,1.4,.75);g.translate(...point.toArray());collect(g,m.seed,parent,'tiny dry seed heart');}
     const start=p.clone().multiplyScalar(.83).add(V(-.05,-.12,0));collect(tube([start,p.clone().lerp(start,.40).add(V(.025,0,.02)),p],.0048,13,4),m.stem,parent,'stems buried beneath cloth');
   }
-  const blooms=[[-.51,.84,.19,'ochre',1.45],[-.80,.06,.16,'ochre',1.46],[-.52,-.37,.128,'ochre',1.52],[-.20,-.72,.218,'ivory',1.49],[-.46,-.83,.184,'rust',1.46],[.01,-.96,.181,'rose',1.43],[.10,-.61,.13,'ivory',1.47],[-.84,-.58,.092,'rust',1.49],
+  const blooms=[[-.51,.84,.19,'ochre',1.45],[-.80,.06,.16,'ochre',1.46],[-.52,-.37,.128,'ochre',1.52],[-.20,-.65,.238,'ivory',1.71],[-.43,-.74,.184,'rust',1.67],[.03,-.83,.162,'rose',1.69],[.11,-.57,.125,'ivory',1.72],[-.84,-.58,.092,'rust',1.49],
     [1.48,.55,.169,'ochre',1.46],[1.60,-.43,.189,'ivory',1.45],[1.78,-.62,.124,'rose',1.44],[-1.48,.16,.165,'rust',1.46],[-1.56,-.58,.148,'ochre',1.45],
     [2.57,.69,.190,'ochre',1.46],[2.91,.02,.168,'ivory',1.47],[3.16,-.68,.205,'ivory',1.46],[-2.91,-.86,.151,'rose',1.45],[-2.64,-.45,.171,'rust',1.47],[2.33,-.33,.136,'ochre',1.47],[1.27,-.18,.101,'rose',1.50],[-1.82,.40,.11,'ivory',1.49]];
-  blooms.forEach(([lo,la,size,kind,radius],i)=>{const p=S(lo,la,radius),n=Math.cos(lo)>.42?V(Math.sin(lo)*.25,(i%3-1)*.12,1):Math.cos(lo)<-.5?V(Math.sin(lo)*.22,.08,-1):p.clone().normalize();flower(p,n,size,kind,Math.cos(lo)<-.2?reverse:flowers,1800+i*31,i%4===0?6:5);});
+  blooms.forEach(([lo,la,size,kind,radius],i)=>{const nearFlowerPositions={3:[-.23,-.72,1.65],4:[-.53,-.88,1.44],5:[.04,-.94,1.43],6:[.06,-.61,1.66]},p=nearFlowerPositions[i]?V(...nearFlowerPositions[i]):S(lo,la,radius),n=Math.cos(lo)>.42?V(Math.sin(lo)*.25,(i%3-1)*.12,1):Math.cos(lo)<-.5?V(Math.sin(lo)*.22,.08,-1):p.clone().normalize();flower(p,n,size,kind,Math.cos(lo)<-.2?reverse:flowers,1800+i*31,i%4===0?6:5);});
   // Broad dried petal skeletons / seed fans, clearly present in the reference.
   function skeleton(p,n,length,width,angle,parent,seed){
     const rng=random(seed),q=frame(n,angle),local=(x,y,z=0)=>V(x,y,z).applyQuaternion(q).add(p);
     collect(tube([local(0,-.08),local(.015,length*.38,.024),local(0,length,.07)],.0018,24,4),m.stem,parent,'skeletonized leaf midrib',false);
     const film=grid((u,t)=>{const s=u*2-1;return V(s*width*Math.sin(t*Math.PI*.91),t*length,.10*s*s*width+.07*t*t);},12,19);film.applyQuaternion(q);film.translate(...p.toArray());collect(film,m.leafFilm,parent,'faint dry membrane between leaf veins',false);
     for(let side of [-1,1])for(let i=0;i<15;i++){
-      const t=.08+i*.049,span=width*Math.pow(Math.sin(t*Math.PI*.91),.62),ps=[local(0,t*length,.025*t),local(side*span*.55,(t+.12)*length,.04),local(side*span,(t+.20)*length,.06+.02*rng())];collect(tube(ps,.0010+rng()*.0006,16,3),i%5?m.stem:m.thread,parent,'branching translucent leaf veins',false);fiberCount++;
+      const t=.08+i*.049+(rng()-.5)*.025,span=width*Math.pow(Math.sin(t*Math.PI*.91),.62)*(.83+rng()*.25),ps=[local(0,t*length,.025*t),local(side*span*.55,(t+.12)*length,.04),local(side*span,(t+.20)*length,.06+.02*rng())];collect(tube(ps,.0010+rng()*.0006,16,3),i%5?m.stem:m.thread,parent,'branching translucent leaf veins',false);fiberCount++;
       if(i===7){const g=petal(length*.22,width*.13,.02,seed+i);g.rotateZ(side*.65);pose(g,ps[1],n,angle);collect(g,m.petalBack,parent,'partial tissue retained on dry vein',false);}
     }
     for(let j=0;j<9;j++){const s=j/8*2-1,ps=[p,local(s*width*.6,length*.6,.02),local(s*width,length,.05)];collect(tube(ps,.00085,20,3),m.darkThread,parent,'fine leaf membrane tracery',false);fiberCount++;}
@@ -174,8 +180,97 @@ export function makeFalling(){
     const p=S(lo,la,1.5),q=frame(p,.4),par=Math.cos(lo)<0?reverse:flowers;
     for(let i=0;i<11;i++){const length=.20+r()*.33,g=grid((u,t)=>{const a=t*5.4+i,rad=.035+.018*Math.sin(t*8+i);return V(Math.sin(a)*rad+(u-.5)*.015,-length*t,Math.cos(a)*rad+.08*t*t);},3,24);g.applyQuaternion(q);g.translate(...p.toArray());collect(g,i%4?m.oldLeaf:m.petalBack,par,'twisted dried grass remnants');}
   }
+  // Sculptural packets: folded cavities, return lips, mineral ribs and
+  // rooted flowers occupy genuinely different depths over the whole mass.
+  // No nonuniform root scaling, billboard or camera-facing shell is used.
+  const volumes=[
+    [-.42,.42,.72,-.57,1.40], [.21,.47,.70,.59,1.42], [.68,.18,.61,-.42,1.41],
+    [-.37,-.06,.64,.43,1.48], [.17,-.19,.75,-.66,1.47], [-.55,-.50,.64,.51,1.43],
+    [.26,-.64,.64,-.28,1.43], [-1.03,.03,.55,.73,1.39], [.04,.94,.52,-.61,1.40],
+    [1.28,.49,.63,.66,1.40], [1.63,.03,.77,-.49,1.43], [1.39,-.48,.71,.38,1.41],
+    [-1.41,.40,.67,-.65,1.42], [-1.70,-.12,.73,.49,1.42], [-1.39,-.63,.57,-.39,1.41],
+    [2.19,.46,.67,-.60,1.43], [2.66,.23,.75,.51,1.46], [3.18,.54,.65,-.43,1.43],
+    [-2.61,.06,.73,.69,1.43], [3.06,-.31,.77,-.52,1.47], [2.48,-.64,.62,.36,1.43],[-2.64,-.56,.69,-.56,1.43],
+    [.25,1.25,.49,.21,1.46], [2.68,1.24,.49,-.40,1.46], [-1.61,1.18,.43,.73,1.45],
+    [-.23,-1.25,.52,-.39,1.48], [2.57,-1.24,.50,.44,1.46]
+  ];
+  function foldedVolume(lo,la,size,angle,radius,index){
+    const origin=S(lo,la,radius),q=frame(origin,angle),rear=Math.cos(lo)<-.23,par=rear?reverse:textile,rng=random(300100+index*53);
+    const project=p=>p.applyQuaternion(q).add(origin),baseZ=.0;
+    // Curved C-shaped interleaves bend from a buried foot to an outward lip
+    // and return towards the mass; the intermediate bulge casts real shadows.
+    for(let k=0;k<5;k++){
+      const h=size*(.64+rng()*.38),w=size*(.29+rng()*.20),shift=(k-2)*size*.085,peak=size*(.26+rng()*.12),turn=(k-2)*.43+(rng()-.5)*.52;
+      const foldKnots=[-.025,.12+rng()*.10,.39,.54,.30+rng()*.10,.09,-.035];
+      const ridge=t=>{const a=Math.min(5,Math.floor(t*6)),f=t*6-a;return T.MathUtils.lerp(foldKnots[a],foldKnots[a+1],f);};
+      const fn=(u,t)=>{const b=u*2-1,v=t*2-1,cut=.89-.23*Math.max(0,v)+.08*Math.sin(t*29+index+k)+.034*Math.sin(t*81+k),xx=b*w*.5*cut+shift+.055*size*Math.sin(t*7+k),yy=(t-.50)*h+.014*size*Math.sin(u*55+index)*Math.pow(Math.abs(v),7);
+        const z=baseZ+peak*ridge(t)*(1.25-.44*b*b)+.068*size*Math.abs(b-v*.61+.15)+.035*size*Math.abs(Math.sin(t*19+u*9+index))-.028*size*b*b+.030*size*Math.sin(t*49+u*21+k);
+        const x=xx*Math.cos(turn)-yy*Math.sin(turn),y=xx*Math.sin(turn)+yy*Math.cos(turn);return V(x,y,z);};
+      const mat=k===0?m.black:k===3?m.silverDark:index%5===2&&k===4?m.dustRose:m.silverCloth,g=grid(fn,12,28,.003);g.applyQuaternion(q);g.translate(...origin.toArray());collect(g,mat,par,'angular raised ragged pleats around a material socket');patchCount++;
+      const world=(u,t)=>project(fn(u,t));
+      const edge=[];for(let j=0;j<=25;j++)edge.push(world(.99,j/25));collect(tube(edge,.0015,29,3),k===1?m.edgeSilver:m.darkThread,par,'thin frayed edges on raised pleats',false);
+      for(let j=0;j<11;j++){const t=.12+rng()*.72,p=world(k%2,t),end=p.clone().add(V((rng()-.5)*.038,.016+rng()*.032,(rng()-.5)*.028).applyQuaternion(q));collect(tube([p,p.clone().lerp(end,.5).add(V(.002,0,.007)),end],.00085,7,3),m.thread,par,'loose fibres on raised folded lips',false);fiberCount++;}
+      if(k===1||k===4)for(let j=0;j<4;j++){const a=world(.17,.20+j*.13),b=world(.81,.20+j*.13);collect(tube([a,a.clone().lerp(b,.5).addScaledVector(origin.clone().normalize(),.018),b],.0018,8,3),j%2?m.redThread:m.thread,par,'binding stitches across return folds',false);stitchCount++;}
+    }
+    // Ragged graphite / silver-rose interleaves bridge the packet to its
+    // neighbours at a different depth and orientation, not parallel plates.
+    for(let k=0;k<4;k++){
+      const p=project(V((k-1.5)*size*.12,(k%2?-.2:.15)*size,.14*size)),n=origin.clone().normalize().add(V(.27*Math.sin(k+index),-.15,.07)).normalize();
+      sheet('short folded interleaf in relief packet',p,n,size*(.18+rng()*.10),size*(.36+rng()*.17),angle+(k-1.5)*.91,k===1?m.dustRose:k===2?m.ash:k===3?m.silver:m.black,par,{seed:301100+index*17+k,crease:.08,curl:.045,taper:.54,fray:5});
+    }
+    // Small chipped mass interrupts the large textile planes. Facets have
+    // thick bodies and shadows; pink mineral joins black mica and silver.
+    for(let k=0;k<8;k++){
+      const p=project(V((rng()-.5)*size*.25,(rng()-.5)*size*.52,size*(.18+rng()*.12)));
+      rock(p,size*(.055+rng()*.069),k%4===0?m.roseStone:k%3===0?m.darkStone:m.stone,rear?reverse:gravel,302000+index*13+k);
+    }
+    // Not all packets contain the same ornament: partial flowers, a folded
+    // membrane, wire hitch and embedded metallic pin vary by material node.
+    if(index%3===0||index===4){const p=project(V(-size*.18,-size*.20,size*.36)),n=origin.clone().normalize().add(V(.12,-.16,.11)).normalize();flower(p,n,size*(index===4?.21:.17),index%2?'rose':index===4?'ivory':'ochre',rear?reverse:flowers,303000+index*31,4);}
+    if(index%4===1){const p=project(V(-size*.08,size*.01,size*.39));skeleton(p,origin.clone().normalize(),size*.48,size*.16,angle+.64,rear?reverse:flowers,303900+index);}
+    if(index%2===0){const ps=[project(V(-size*.31,size*.25,0)),project(V(-size*.05,size*.18,size*.45)),project(V(size*.22,-size*.17,size*.32)),project(V(size*.36,-size*.36,-size*.03))];chain('glass rings sinking behind raised folds',ps,.014+size*.006,.043,rear?reverse:ruby);tow('short tangled crimson ligature',ps,size*.11,23,rear?reverse:fiber,304000+index);}
+    const wire=[];for(let k=0;k<15;k++){const t=k/14,az=t*TAU*1.08;wire.push(project(V(size*(.13+Math.cos(az)*.063),size*(-.05+Math.sin(az)*.12),size*(.32+.075*Math.sin(az+.4)))));}collect(tube(wire,.0018,25,3),index%3?m.thread:m.redThread,par,'asymmetric seam hitch',false);
+  }
+  volumes.forEach(([lo,la,size,angle,radius],i)=>foldedVolume(lo,la,size*(Math.abs(Math.cos(lo))<.45?.87:1),angle,radius,i));
+  // Small splintered quills, seed husks and torn leaf films articulate the
+  // central depth transitions without opening the overall aggregate.
+  for(const [lo,la,sz]of [[-.63,.50,.27],[.47,.40,.25],[-.33,-.26,.23],[.67,-.44,.26],[1.66,.11,.24],[2.77,-.25,.28],[-2.57,.33,.23]]){
+    const p=S(lo,la,1.62),q=frame(p,lo*.8),par=Math.cos(lo)<-.2?reverse:flowers;
+    for(let i=0;i<6;i++){
+      const len=sz*(.65+r()*.55),base=p.clone().add(V((i-3)*.027,-.04,0).applyQuaternion(q)),tip=base.clone().add(V((i-2)*.042,len,.03).applyQuaternion(q));collect(tube([base,base.clone().lerp(tip,.55).addScaledVector(p.clone().normalize(),.05),tip],.0016,17,3),m.stem,par,'embedded bristled seed spines',false);
+      for(let j=0;j<4;j++){const t=.34+j*.15,pos=base.clone().lerp(tip,t),g=new T.IcosahedronGeometry(.013+r()*.008,0);g.scale(.75,1.7,.64);g.translate(...pos.toArray());collect(g,j%2?m.oldLeaf:m.seed,par,'uneven dried husks along the quills',false);fragmentCount++;}
+    }
+  }
+  // Convex nested folios close the broad, apparently empty central fields.
+  // They are local irregular masses made of overlapping curved fragments,
+  // not a uniformly scaled sphere or a paper disc on the front.
+  const folios=[[.02,.11,.57,.43],[.66,-.37,.43,.33],[-.57,.38,.44,.32],[1.54,.02,.57,.39],[-1.55,-.05,.56,.38],[3.05,.09,.56,.42],[-2.54,-.35,.43,.33]];
+  folios.forEach(([lo,la,size,depth],index)=>{
+    const center=S(lo,la,1.28),q=frame(center,index*.61),par=Math.cos(lo)<-.23?reverse:textile,rng=random(308010+index*131);
+    const project=p=>p.applyQuaternion(q).add(center);
+    for(let row=0;row<5;row++)for(let col=0;col<6;col++){
+      const x0=-1.11+col*.44+(rng()-.5)*.34,y0=-.77+row*.39+(rng()-.5)*.25,ww=.41+rng()*.24,hh=.53+rng()*.27,rad=1+(rng()-.5)*.17,skew=(rng()-.5)*2.3;
+      const fn=(u,t)=>{const b=u*2-1,v=t*2-1,xx=b*ww*.5,yy=v*hh*.5,lon=x0+xx*Math.cos(skew)-yy*Math.sin(skew)+.052*Math.sin(t*29+index)*Math.pow(Math.abs(b),6),lat=y0+xx*Math.sin(skew)+yy*Math.cos(skew)+.04*Math.sin(u*31+col)*Math.pow(Math.abs(v),6),wrinkle=.086*Math.abs(b+v*.53)+.038*Math.sin(t*19+u*11+col)+.028*Math.sin(t*41-u*23+index),rr=rad+wrinkle+.14*Math.pow(Math.max(0,b),4)+.07*Math.pow(Math.abs(v),7);return project(V(size*rr*Math.cos(lat)*Math.sin(lon),size*rr*Math.sin(lat),depth*rr*Math.cos(lat)*Math.cos(lon)));};
+      const mat=(row+col+index)%7===0?m.black:(row*3+col+index)%5===0?m.ash:col%3?m.silverDark:m.silverCloth;
+      collect(grid(fn,10,17),mat,par,'crumpled skewed fragments with deep independent cut edges');patchCount++;
+      if(col%2){const ps=[];for(let j=0;j<14;j++)ps.push(fn(1,j/13));collect(tube(ps,.0016,19,3),m.darkThread,par,'broken folds on the convex folio',false);}
+      for(let k=0;k<4;k++){const p=fn(k%2,rng()),n=center.clone().normalize(),end=p.clone().add(V((rng()-.5)*.06,(rng()-.5)*.05,(rng()-.5)*.05));collect(tube([p,p.clone().lerp(end,.5).addScaledVector(n,.014),end],.0008,8,3),m.thread,par,'lifted fibres on inner curved scraps',false);fiberCount++;}
+    }
+    const ps=[project(V(-size*.83,size*.42,depth*.38)),project(V(-size*.34,size*.16,depth*1.03)),project(V(size*.16,-size*.06,depth*1.12)),project(V(size*.73,-size*.44,depth*.75)),project(V(size*.91,-size*.64,depth*.10))];
+    chain('ruby bindings pass over convex volume then reenter seam',ps,.017,.046,Math.cos(lo)<-.23?reverse:ruby);
+    tow('crimson felt around convex folio',ps,size*.13,34,Math.cos(lo)<-.23?reverse:fiber,309000+index*17);
+    const torn=[project(V(-size*.61,size*.62,depth*.22)),project(V(-size*.37,size*.24,depth*.99)),project(V(-size*.01,-size*.26,depth*1.10)),project(V(size*.38,-size*.72,depth*.47))];veil('mesh clasp hugging rounded folio',torn,size*.24,par,309500+index*31);
+    if(index<3||index===5){const p=project(V(size*.29,-size*.21,depth*.94));flower(p,center.clone().normalize().add(V(.1,.1,.2)).normalize(),index===0?.118:.09,index===0?'ivory':index===5?'rose':'rust',Math.cos(lo)<-.23?reverse:flowers,309900+index*37,4);}
+  });
+  // Unequal small fold crossings break up the main mass; the near material
+  // actually covers the distant layer and interrupts its silhouette.
+  for(const [p,n,w,h,a,mat]of [[[-.24,.37,1.72],[-.2,.2,1],.13,.61,-.71,m.black],[[.16,.13,1.76],[.15,.1,1],.18,.66,.41,m.silverCloth],[[-.19,-.15,1.76],[-.1,-.1,1],.14,.49,-.48,m.silver],[[.42,-.29,1.64],[.3,-.15,1],.11,.46,.61,m.dustRose]])sheet('cross-layer remnant at the foreground crest',V(...p),V(...n),w,h,a,mat,textile,{seed:311000+Math.round(p[0]*100),crease:.065,curl:.065,taper:.5,fray:14});
+  skeleton(V(-.48,.22,1.75),V(-.22,.1,1),.43,.18,-.67,flowers,312501);
+  skeleton(V(.44,-.38,1.65),V(.2,-.1,1),.38,.13,.39,flowers,312511);
   flush();
-  root.userData={title:'在坠落时',slug:'falling',sceneVersion:'0.29.0',artRevision:14,solidCore:true,bodyRadius:1.12,bodyAxes:[1,1,1],composition:'reference-directed torn silver textiles, diagonal crimson tow, dense glass rings, dry flowers, rock fault and a recessed broken red ground',patchCount,beadCount,petalCount,flowerCount,stitchCount,fragmentCount,chainCount,fiberCount,knotCount:sites.length,structureGroups:groups.length,frontFlowerGroups:4,detailTargets:{threads:[-.29,.11,1.46],flowers:[-.28,-.81,1.17],fault:[.98,.15,1.12]},referenceUse:'The supplied image informs original 3D material relationships and composition. No source image pixels, artist names, external fonts, AI image generation or image-plane replacement.'};
+  // Measure real occupied depth, not the camera or an inflated empty bounding box.
+  const dimensions=new T.Box3().setFromObject(root).getSize(V()).toArray();
+  root.userData={title:'在坠落时',slug:'falling',sceneVersion:'0.30.0',artRevision:15,solidCore:true,bodyRadius:1.12,bodyAxes:[1,1,1],volumetricNodes:volumes.length+folios.length,convexFolioMasses:folios.length,dimensions,rootScale:[1,1,1],composition:'dense all-around angular folded packets, convex crumpled interiors, recessed seams, mineral ribs and flowers at staggered depths; no flat central plaque, uniformly scaled root or front-only ribbons',patchCount,beadCount,petalCount,flowerCount,stitchCount,fragmentCount,chainCount,fiberCount,knotCount:sites.length,structureGroups:groups.length,frontFlowerGroups:6,detailTargets:{threads:[-.17,.17,1.70],flowers:[-.21,-.73,1.58],fault:[.87,.13,1.39]},referenceUse:'The supplied image informs original 3D material relationships and composition. No source image pixels, artist names, external fonts, AI image generation or image-plane replacement.'};
   let meshCount=0,triangleCount=0;root.traverse(o=>{if(o.isMesh){meshCount++;triangleCount+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3;}});Object.assign(root.userData,{meshCount,triangleCount,exportPrimitiveCount:meshCount});let spread=0;
   return{root,groups,ready:Promise.resolve(),setSeparated(value){spread=value;groups.forEach(g=>g.position.fromArray(g.userData.offset).multiplyScalar(value));},setMoment(t){tail.rotation.z=Math.sin(t*.28)*.006;tail.position.y=tail.userData.offset[1]*spread-Math.sin(t*.37)*.008;},dispose(){owned.forEach(g=>g.dispose());disposeMaterials();}};
 }

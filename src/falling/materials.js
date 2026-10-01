@@ -30,17 +30,17 @@ function gauzeMap(){const[c,x]=canvas(),r=random(29381);x.clearRect(0,0,1024,102
 export function makeMaterials(){
   const cloth=textile([168,175,178],2901),carbon=textile([28,29,31],2902),paper=textile([122,119,122],2903,{weave:false}),red=textile([191,31,47],2904),stone=textile([142,146,147],2905,{weave:false,stone:true});
   const maps={cloth:cloth.map,clothNormal:cloth.normal,clothRough:cloth.rough,carbon:carbon.map,carbonNormal:carbon.normal,carbonRough:carbon.rough,paper:paper.map,paperNormal:paper.normal,paperRough:paper.rough,red:red.map,redNormal:red.normal,redRough:red.rough,stone:stone.map,stoneNormal:stone.normal,stoneRough:stone.rough,petal:petalMap(),label:lettering(),gauze:gauzeMap()};
-  const m={};function make(name,settings,physical=false){m[name]=new(physical?T.MeshPhysicalMaterial:T.MeshStandardMaterial)({name:'falling-029-'+name,side:T.DoubleSide,...settings});return m[name];}
+  const m={};function make(name,settings,physical=false){m[name]=new(physical?T.MeshPhysicalMaterial:T.MeshStandardMaterial)({name:'falling-030-'+name,side:T.DoubleSide,...settings});return m[name];}
   const woven={map:maps.cloth,normalMap:maps.clothNormal,normalScale:new T.Vector2(.75,.75),roughnessMap:maps.clothRough};
   const black={map:maps.carbon,normalMap:maps.carbonNormal,normalScale:new T.Vector2(.65,.65),roughnessMap:maps.carbonRough};
   const rock={map:maps.stone,normalMap:maps.stoneNormal,normalScale:new T.Vector2(.9,.9),roughnessMap:maps.stoneRough};
   make('core',{map:maps.carbon,color:'#b7a5ab',normalMap:maps.carbonNormal,roughness:.99});
   make('redCloth',{map:maps.red,normalMap:maps.redNormal,roughnessMap:maps.redRough,roughness:.94,color:'#ee929a'});
   make('black',{...black,roughness:.91,metalness:.02});make('charcoal',{...black,color:'#9c9fa4',roughness:.98});
-  make('silverCloth',{...woven,metalness:.31,roughness:.87});make('silverDark',{...woven,color:'#797c89',metalness:.32,roughness:.94});
-  make('silver',{...woven,color:'#e3e4e2',normalScale:new T.Vector2(.36,.36),metalness:.85,roughness:.51});
+  make('silverCloth',{...woven,metalness:.37,roughness:.79});make('silverDark',{...woven,color:'#828695',metalness:.40,roughness:.84});
+  make('silver',{...woven,color:'#e3e8eb',normalScale:new T.Vector2(.36,.36),metalness:.87,roughness:.42});
   make('edgeSilver',{color:'#bbc2c5',metalness:.83,roughness:.43});
-  make('dustRose',{map:maps.paper,color:'#d5b2b9',normalMap:maps.paperNormal,roughness:.99});
+  make('dustRose',{map:maps.paper,color:'#dbbbc0',normalMap:maps.paperNormal,roughness:.97});
   make('ash',{map:maps.paper,color:'#bfc4cb',normalMap:maps.paperNormal,roughness:.98});
   make('paperBack',{...black,roughness:.98,color:'#d2c9c4'});
   make('darkPrint',{map:maps.label,color:'#6a6465',normalMap:maps.paperNormal,roughness:.97});
@@ -48,7 +48,7 @@ export function makeMaterials(){
   make('stone',{...rock,roughness:1,color:'#b2bac1'});make('roseStone',{...rock,roughness:1,color:'#b58486'});make('darkStone',{...rock,roughness:.95,color:'#53565c'});
   make('ivory',{map:maps.petal,color:'#fff2da',roughness:.97});make('ochre',{map:maps.petal,color:'#fbbb48',roughness:.94});make('rustPetal',{map:maps.petal,color:'#bd744d',roughness:.97});make('rose',{map:maps.petal,color:'#d8b2b1',roughness:.98});make('petalBack',{map:maps.petal,color:'#b19d85',roughness:.99});
   make('leafFilm',{color:'#b7a194',roughness:.99,transparent:true,opacity:.15,depthWrite:false});
-  make('seed',{color:'#92754b',roughness:.98});make('stem',{color:'#8b7558',roughness:1});make('oldLeaf',{map:maps.petal,color:'#9c8f62',roughness:.96});
+  make('seed',{color:'#92754b',roughness:.98});make('stem',{color:'#8b7d75',roughness:1});make('oldLeaf',{map:maps.petal,color:'#9e9082',roughness:.96});
   make('thread',{color:'#9fa7a5',roughness:.72,metalness:.31});make('darkThread',{color:'#252429',roughness:.98});
   make('fiber',{color:'#752031',roughness:.99});make('fiberLight',{color:'#9c2940',roughness:.96});make('redThread',{color:'#b61632',roughness:.77});
   make('coral',{map:maps.red,color:'#efb7b4',normalMap:maps.redNormal,roughness:.67});

@@ -1,22 +1,21 @@
 {
   "status": "passed",
-  "version": "0.29.0",
-  "sceneVersion": "0.29.0",
+  "version": "0.30.0",
+  "sceneVersion": "0.30.0",
   "title": "在坠落时",
   "exported": true,
-  "created": "2026-09-30T14:30:14.753520+00:00",
-  "buildLabel": "reference-staged",
+  "created": "2026-10-01T03:11:19.418657+00:00",
+  "buildLabel": "depth-complete",
   "sourceHashes": {
-    "falling.html": "8f0bcfbde3ddb5f676e2b46b842b9aaabb6bb86d3a274d0e251779429a04db07",
+    "falling.html": "4dce1f7937c93c1361a4f5f78ac1000d1313eb30446ff9636e104c2622cdd072",
     "falling.css": "9ecbcc1695478593def08a5f27358d7fc0bccbda3568f2d0ec86fe25e40f6bdf",
-    "src/falling-page.js": "5732316aa6496720336459ce340a1ab917cead9778e2790a63b57099d36f40f0",
-    "src/falling/model.js": "8a49f279548396a3238c2e9bf284d49f17b7a5ef9bf5242a8197545e5811a32e",
-    "src/falling/materials.js": "826ce5059347a8113c1d11a84b776f36748d60bbcdab9e0c24a5c483468a6019",
-    "src/falling/viewer.js": "be16559a5d7ba549ba4d5ba666ad7c67dbbb40b18dc2e6fa33caa1936d9a049e",
+    "src/falling-page.js": "035e795b6076a6288071f64a809deca8729a491adf8069804c0266ffcfd4f3d0",
+    "src/falling/model.js": "f3d1665dc4496dcf3e88a7e4ae8b4e896e62069bb6c7db16087cbd2db5609afd",
+    "src/falling/materials.js": "c9452f1a7a55c6a0f39a8a7baed512e071fe6ab61f0b17d30a7dbf60449beb18",
+    "src/falling/viewer.js": "7e4dff7696ebc376e584c2c33ceb31e3007c5d869af822ecb556bfd1986585b8",
     "src/render-performance.js": "efcb230da5f9b1a333234f773a92e48dbfec0b417e613f769c30ebb4d3d27c0b"
   },
-  "buildScriptSha256": "adab40ebba22b87b2131e73953a37fb61b591799493772b406dee1097b4ba322",
-  "finishScriptSha256": "7c26098ab6441e53aeabf29b457f7494d04f056282b76e5e1add818c9a750d20",
+  "buildScriptSha256": "c83eb0e667d3b7039afbede249c2e4c1f3f69c2189ae8ee596bb3ea578246144",
   "stats": {
     "engine": "three.js r180",
     "renderDpr": "2.000",
@@ -26,7 +25,7 @@
     "shadowMode": "continuous",
     "ready": "true",
     "title": "在坠落时",
-    "version": "0.29.0",
+    "version": "0.30.0",
     "view": "front",
     "detail": "",
     "frames": "11",
@@ -38,122 +37,134 @@
       1
     ],
     "layers": "11",
-    "drawCalls": "154",
-    "triangles": "3019320",
-    "modelMeshes": "77",
-    "modelTriangles": "1509660",
-    "beads": "1168",
-    "petals": "2026",
+    "drawCalls": "176",
+    "triangles": "4858568",
+    "modelMeshes": "88",
+    "modelTriangles": "2429284",
+    "beads": "1625",
+    "petals": "3125",
     "autoRotate": "false",
     "moment": "false",
     "separated": "false",
     "separation": "0.0000",
-    "camera": "0.0858,0.3775,6.8631",
+    "camera": "1.6853,1.0873,5.9803",
     "worldRotation": "0.00000",
     "study": "false",
     "light": "studio",
     "suspended": "false",
     "visibleSurface": "true",
     "slug": "falling",
-    "sceneVersion": "0.29.0",
-    "artRevision": 14,
-    "composition": "reference-directed torn silver textiles, diagonal crimson tow, dense glass rings, dry flowers, rock fault and a recessed broken red ground",
-    "patchCount": 331,
-    "beadCount": 1168,
-    "petalCount": 2026,
-    "flowerCount": 21,
-    "stitchCount": 124,
-    "fragmentCount": 286,
-    "chainCount": 12,
-    "fiberCount": 4330,
+    "sceneVersion": "0.30.0",
+    "artRevision": 15,
+    "volumetricNodes": 34,
+    "convexFolioMasses": 7,
+    "dimensions": [
+      3.6236422061920166,
+      3.3304173946380615,
+      3.7192463874816895
+    ],
+    "rootScale": [
+      1,
+      1,
+      1
+    ],
+    "composition": "dense all-around angular folded packets, convex crumpled interiors, recessed seams, mineral ribs and flowers at staggered depths; no flat central plaque, uniformly scaled root or front-only ribbons",
+    "patchCount": 788,
+    "beadCount": 1625,
+    "petalCount": 3125,
+    "flowerCount": 35,
+    "stitchCount": 340,
+    "fragmentCount": 670,
+    "chainCount": 33,
+    "fiberCount": 9095,
     "knotCount": 31,
     "structureGroups": 11,
-    "frontFlowerGroups": 4,
+    "frontFlowerGroups": 6,
     "detailTargets": {
       "threads": [
-        -0.29,
-        0.11,
-        1.46
+        -0.17,
+        0.17,
+        1.7
       ],
       "flowers": [
-        -0.28,
-        -0.81,
-        1.17
+        -0.21,
+        -0.73,
+        1.58
       ],
       "fault": [
-        0.98,
-        0.15,
-        1.12
+        0.87,
+        0.13,
+        1.39
       ]
     },
     "referenceUse": "The supplied image informs original 3D material relationships and composition. No source image pixels, artist names, external fonts, AI image generation or image-plane replacement.",
-    "meshCount": 77,
-    "triangleCount": 1509660,
-    "exportPrimitiveCount": 77
+    "meshCount": 88,
+    "triangleCount": 2429284,
+    "exportPrimitiveCount": 88
   },
   "glbReload": {
-    "meshes": 77,
-    "triangles": 1509660,
+    "meshes": 88,
+    "triangles": 2429284,
     "bad": 0,
-    "version": "0.29.0"
+    "version": "0.30.0"
   },
   "assets": {
     "cover.webp": {
-      "sha256": "6cc7300f64976b3b909332cbfbcf1117c9d39130a0b8942c46f597aa672a98d2",
-      "bytes": 1037324
+      "sha256": "ce7107292dc64db53f5638c2c1953288e35a1ee53cb5f2e774e3d7955bc8a931",
+      "bytes": 1038798
     },
     "side.webp": {
-      "sha256": "7e47eb494ea046a870c87e8fff89193dfc27251723d0ea49bbf572c475b62b3e",
-      "bytes": 845432
+      "sha256": "b087c2f2d5c2705ef084f1d70b2aba82d0969a0c9b6bb81f6f4a6f919be9ef6a",
+      "bytes": 937344
     },
     "back.webp": {
-      "sha256": "9e4312463b4b1d19a4fa7d39c00ff7d86a41f2e933b73f358dc182fcf3945aec",
-      "bytes": 1082438
+      "sha256": "2e4c2e948c088d5e32535b404157476a99e7eb2f1c84b3d0cac169547e70c5b4",
+      "bytes": 878274
     },
     "detail-threads.webp": {
-      "sha256": "8d78495cca1c754f7ad3b51eefbfd8e07fcfaa1961e038c1c96e4ec60684c28e",
-      "bytes": 2056310
+      "sha256": "a589656327f699bfdf261923a6b94a41ae72ad0320893920e093e16e9f85bfea",
+      "bytes": 1920056
     },
     "detail-flowers.webp": {
-      "sha256": "c5f298eb949daa6ed347c3e94f74926c6f9591d19c154da0d642b04264ea79bc",
-      "bytes": 1427522
+      "sha256": "5335ab1f6419d98097084c40cdca3469771f31d2c47de667856c00f3ec342c57",
+      "bytes": 1212636
     },
     "detail-fault.webp": {
-      "sha256": "832d3e00b67828448b6419dac3f25059354dfb5b48c9fbec5e72d944f233beff",
-      "bytes": 1568022
+      "sha256": "bfee18c3f0dd62719b7df8f75b9fb5e603bf73ecde0a575ae1f68497c5e89124",
+      "bytes": 1675540
     },
     "poster.png": {
-      "sha256": "8b7c89b149ee4a1e1016b5353225573b4188d8d0a1be4b9a71834b2a54f1e9ea",
-      "bytes": 7247901
+      "sha256": "bd4b29ca03d210759ec93bc232e468e61e67b65d4f502fc14032b30a368d21b4",
+      "bytes": 7676463
     },
     "transparent-front.png": {
-      "sha256": "9e27b7d6ca4534338ad36637c12138ebb5d635e1a155e193547e2e8854a92c4f",
-      "bytes": 5392958
+      "sha256": "1a83c8bf99447a2062c84fffcf8a6fcbe5ccf081ef5c9f420e7230bf78c3bf82",
+      "bytes": 5691316
     },
     "falling.glb": {
-      "sha256": "0e4b7d72ca0285c9d4a14ca3dfd1f2abde852f02f0fbea9c47fb12f1a1f7f4ee",
-      "bytes": 83313940
+      "sha256": "f2d5554a649b5a57b62cf48614c566450479e075a5281c4a9183d18f748d99b7",
+      "bytes": 93600360
     },
     "cover-192.webp": {
-      "sha256": "81d3da13c7548fa583dfbb44e9d5aabc1ac8b4538437520846ae36c971bb3062",
-      "bytes": 12372
+      "sha256": "eac8976c0bfe4f16e5bfe37eab0a59d46b7f23377e9790ee15e8a56ec5396f1e",
+      "bytes": 13472
     },
     "cover-300.webp": {
-      "sha256": "83491b6efb588188f91bbca732428e48252aec1d8d3bbc7adc821ed3a3f49212",
-      "bytes": 27308
+      "sha256": "205e298c267ec27b65a1e8e7b448b575393cfe9da71a23c6d7e87ac24f979267",
+      "bytes": 30076
     },
     "cover-480.webp": {
-      "sha256": "b3068c68c616346769bef7bce5bae8704c98fbc5e51c146d6ee5ba89b09e2463",
-      "bytes": 64358
+      "sha256": "a3cb24e50fbfdb207718226a38e245182c58e0e8b15ec7ce46e7d40af139cbdb",
+      "bytes": 70476
     },
     "cover-768.webp": {
-      "sha256": "21ef6a59bc1092e2d885d3a34573c61bb0a96da724973a39aa2cc40f4ddc8ea5",
-      "bytes": 154500
+      "sha256": "9176e70495c66fa30ef45c4cb737f4d7d7d9025f289b9dbf1665526bde80c825",
+      "bytes": 165084
     },
     "cover-1200.webp": {
-      "sha256": "f9a11f9d284bed340de32fda7aff8423ca7d6717f7500da530f4f72a4b44fc26",
-      "bytes": 358248
+      "sha256": "bf003c6ae0b5ef44c12a749691dbb7e8545e213126e6c1c754b5890105c16c15",
+      "bytes": 365264
     }
   },
-  "provenance": "All plates, covers, poster and GLB come from the identical hash-frozen actual scene. Original builder and separate HTTP-stream reload verifier are both recorded. No generated substitute image, source-image projection or published reference pixels."
+  "provenance": "All plates, poster and geometry come from the same hash-frozen volumetric scene. GLB is reloaded using a private local HTTP stream; texture export limit is 768px. No reference-image pixels or generated substitutes."
 }
