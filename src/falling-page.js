@@ -11,7 +11,7 @@ await waitForLiveView(stage);
 stage.setAttribute('aria-busy','true');
 const notice=setTimeout(()=>{if(canvas.dataset.ready!=='true')status.textContent='正在展开黑银折片与红珠，高清图版可以先看。';},12000);
 try{
-  const {createFallingViewer}=await import('./falling/viewer.js?v=0300');
+  const {createFallingViewer}=await import('./falling/viewer.js?v=0310');
   viewer=createFallingViewer(canvas,{onReady(){stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');canvas.dataset.ready='true';buttons.forEach(b=>b.disabled=false);status.textContent='拖动旋转 · 滚轮靠近 · 方向键调整视角';},onError:fail});
   await viewer.ready;
   document.querySelector('#rotate-toggle').addEventListener('click',()=>{turn=!turn;viewer.setTurn(turn);toggle('#rotate-toggle',turn,'停止转动','缓慢转动');});

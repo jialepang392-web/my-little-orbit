@@ -1,21 +1,21 @@
 {
   "status": "passed",
-  "version": "0.30.0",
-  "sceneVersion": "0.30.0",
+  "version": "0.31.0",
+  "sceneVersion": "0.31.0",
   "title": "在坠落时",
   "exported": true,
-  "created": "2026-10-01T03:11:19.418657+00:00",
-  "buildLabel": "depth-complete",
+  "created": "2026-10-04T02:29:20.865772+00:00",
+  "buildLabel": "textile-final",
   "sourceHashes": {
-    "falling.html": "4dce1f7937c93c1361a4f5f78ac1000d1313eb30446ff9636e104c2622cdd072",
+    "falling.html": "73a5c656bcb49f7b76aa612cd057337dbde5d9adb03eb3800511bc807ee5fe0a",
     "falling.css": "9ecbcc1695478593def08a5f27358d7fc0bccbda3568f2d0ec86fe25e40f6bdf",
-    "src/falling-page.js": "035e795b6076a6288071f64a809deca8729a491adf8069804c0266ffcfd4f3d0",
-    "src/falling/model.js": "f3d1665dc4496dcf3e88a7e4ae8b4e896e62069bb6c7db16087cbd2db5609afd",
-    "src/falling/materials.js": "c9452f1a7a55c6a0f39a8a7baed512e071fe6ab61f0b17d30a7dbf60449beb18",
-    "src/falling/viewer.js": "7e4dff7696ebc376e584c2c33ceb31e3007c5d869af822ecb556bfd1986585b8",
+    "src/falling-page.js": "c43a0e1e898bffcf22334ef1e19374c01dd787769bc5c02b40fcd3ace07337be",
+    "src/falling/model.js": "de55182ff71fccf034aa7ee771408ae6c29999f9c7c7ce179e6238a3ae427085",
+    "src/falling/materials.js": "71870c659d512d160620eab3fa66775488d7743a96924ff23ecb85fa1c3f1bd4",
+    "src/falling/viewer.js": "e7965f67d9b580df7454a891b4886262f0d1d0bc160514eb8c0b30422c217fcc",
     "src/render-performance.js": "efcb230da5f9b1a333234f773a92e48dbfec0b417e613f769c30ebb4d3d27c0b"
   },
-  "buildScriptSha256": "c83eb0e667d3b7039afbede249c2e4c1f3f69c2189ae8ee596bb3ea578246144",
+  "buildScriptSha256": "a37075bcfe4690b72113d0bd81fe9ba12acafed908fab42212419a69ef32dd3d",
   "stats": {
     "engine": "three.js r180",
     "renderDpr": "2.000",
@@ -25,7 +25,7 @@
     "shadowMode": "continuous",
     "ready": "true",
     "title": "在坠落时",
-    "version": "0.30.0",
+    "version": "0.31.0",
     "view": "front",
     "detail": "",
     "frames": "11",
@@ -37,46 +37,46 @@
       1
     ],
     "layers": "11",
-    "drawCalls": "176",
-    "triangles": "4858568",
-    "modelMeshes": "88",
-    "modelTriangles": "2429284",
-    "beads": "1625",
-    "petals": "3125",
+    "drawCalls": "188",
+    "triangles": "4606172",
+    "modelMeshes": "94",
+    "modelTriangles": "2303086",
+    "beads": "1654",
+    "petals": "2955",
     "autoRotate": "false",
     "moment": "false",
     "separated": "false",
     "separation": "0.0000",
-    "camera": "1.6853,1.0873,5.9803",
+    "camera": "1.6980,1.0955,6.0252",
     "worldRotation": "0.00000",
     "study": "false",
     "light": "studio",
     "suspended": "false",
     "visibleSurface": "true",
     "slug": "falling",
-    "sceneVersion": "0.30.0",
-    "artRevision": 15,
+    "sceneVersion": "0.31.0",
+    "artRevision": 16,
     "volumetricNodes": 34,
     "convexFolioMasses": 7,
     "dimensions": [
-      3.6236422061920166,
-      3.3304173946380615,
-      3.7192463874816895
+      3.59088671207428,
+      3.478951334953308,
+      3.696358323097229
     ],
     "rootScale": [
       1,
       1,
       1
     ],
-    "composition": "dense all-around angular folded packets, convex crumpled interiors, recessed seams, mineral ribs and flowers at staggered depths; no flat central plaque, uniformly scaled root or front-only ribbons",
-    "patchCount": 788,
-    "beadCount": 1625,
-    "petalCount": 3125,
+    "composition": "layered frayed textile folds, irregular ruby glass ligatures, translucent dried leaves and cupped strawflowers; gathered weak-sphere volume with independent side and back interleaves",
+    "patchCount": 699,
+    "beadCount": 1654,
+    "petalCount": 2955,
     "flowerCount": 35,
     "stitchCount": 340,
     "fragmentCount": 670,
     "chainCount": 33,
-    "fiberCount": 9095,
+    "fiberCount": 11456,
     "knotCount": 31,
     "structureGroups": 11,
     "frontFlowerGroups": 6,
@@ -97,73 +97,73 @@
         1.39
       ]
     },
-    "referenceUse": "The supplied image informs original 3D material relationships and composition. No source image pixels, artist names, external fonts, AI image generation or image-plane replacement.",
-    "meshCount": 88,
-    "triangleCount": 2429284,
-    "exportPrimitiveCount": 88
+    "referenceUse": "The supplied image and lyrics inform original 3D material relationships, composition and the persistence of a red thread through damaged matter. No source image pixels, artist names, external fonts, AI image generation or image-plane replacement.",
+    "meshCount": 94,
+    "triangleCount": 2303086,
+    "exportPrimitiveCount": 94
   },
   "glbReload": {
-    "meshes": 88,
-    "triangles": 2429284,
+    "meshes": 94,
+    "triangles": 2303086,
     "bad": 0,
-    "version": "0.30.0"
+    "version": "0.31.0"
   },
   "assets": {
     "cover.webp": {
-      "sha256": "ce7107292dc64db53f5638c2c1953288e35a1ee53cb5f2e774e3d7955bc8a931",
-      "bytes": 1038798
+      "sha256": "8749152233c9ecb4fa9408e430a186ad3ad071bac827d33c8dfc1647b94ff48a",
+      "bytes": 1041230
     },
     "side.webp": {
-      "sha256": "b087c2f2d5c2705ef084f1d70b2aba82d0969a0c9b6bb81f6f4a6f919be9ef6a",
-      "bytes": 937344
+      "sha256": "741935ef4b9242a0b4ca5827eaef815a0eb2b4f9385bcd082e396652ce1fd802",
+      "bytes": 800144
     },
     "back.webp": {
-      "sha256": "2e4c2e948c088d5e32535b404157476a99e7eb2f1c84b3d0cac169547e70c5b4",
-      "bytes": 878274
+      "sha256": "8c557272e8ef5e1d197685771791aba50951611a8d84a9b0a82134760dfcd52d",
+      "bytes": 907746
     },
     "detail-threads.webp": {
-      "sha256": "a589656327f699bfdf261923a6b94a41ae72ad0320893920e093e16e9f85bfea",
-      "bytes": 1920056
+      "sha256": "3baeda1dae3c52c138bddce3ae57821f22a1b324e8cc86c5c5729a0a6d444a7e",
+      "bytes": 1661000
     },
     "detail-flowers.webp": {
-      "sha256": "5335ab1f6419d98097084c40cdca3469771f31d2c47de667856c00f3ec342c57",
-      "bytes": 1212636
+      "sha256": "baf921dec415a5f96f62bbc3bf6ba6452af9c8179d738eeba4bc9e78b23f31e3",
+      "bytes": 1040978
     },
     "detail-fault.webp": {
-      "sha256": "bfee18c3f0dd62719b7df8f75b9fb5e603bf73ecde0a575ae1f68497c5e89124",
-      "bytes": 1675540
+      "sha256": "dcfd34d623b49eb9d0bc915c257f1dc0327c22443c696e94af045e7face62010",
+      "bytes": 1628904
     },
     "poster.png": {
-      "sha256": "bd4b29ca03d210759ec93bc232e468e61e67b65d4f502fc14032b30a368d21b4",
-      "bytes": 7676463
+      "sha256": "2373178b1a8d1c67c451875832f0213586da9abdbf010c7bd5d83c9f02ff604c",
+      "bytes": 7749855
     },
     "transparent-front.png": {
-      "sha256": "1a83c8bf99447a2062c84fffcf8a6fcbe5ccf081ef5c9f420e7230bf78c3bf82",
-      "bytes": 5691316
+      "sha256": "4dad5d033dbda09ef473a3ff796b678b1cc3fc212a2a6d3bbb9574d06ccbf81f",
+      "bytes": 5772424
     },
     "falling.glb": {
-      "sha256": "f2d5554a649b5a57b62cf48614c566450479e075a5281c4a9183d18f748d99b7",
-      "bytes": 93600360
+      "sha256": "9e635638bf77ed09aceeea3010bcadb1d9e88ad01aa662674a891f36b9e8531e",
+      "bytes": 91260684
     },
     "cover-192.webp": {
-      "sha256": "eac8976c0bfe4f16e5bfe37eab0a59d46b7f23377e9790ee15e8a56ec5396f1e",
-      "bytes": 13472
+      "sha256": "c17d38dbdc482dc7570854e36d1ea51a7157135af531a6b1edf71d2e4f9f814a",
+      "bytes": 13484
     },
     "cover-300.webp": {
-      "sha256": "205e298c267ec27b65a1e8e7b448b575393cfe9da71a23c6d7e87ac24f979267",
-      "bytes": 30076
+      "sha256": "629ffa2bb4ddb734b7be73864784d52c684f8659d2f3cc1fd3994f852728f2c9",
+      "bytes": 29602
     },
     "cover-480.webp": {
-      "sha256": "a3cb24e50fbfdb207718226a38e245182c58e0e8b15ec7ce46e7d40af139cbdb",
-      "bytes": 70476
+      "sha256": "b8edbe951443c83decb69058f0a486e18d7d5bbaf4a8dd20ed73595495bad090",
+      "bytes": 69650
     },
     "cover-768.webp": {
-      "sha256": "9176e70495c66fa30ef45c4cb737f4d7d7d9025f289b9dbf1665526bde80c825",
-      "bytes": 165084
+      "sha256": "a51f7b619079a7b422cb6a4f5205c1937c4d1f366c6e0478be73a580333bbcad",
+      "bytes": 161490
     },
     "cover-1200.webp": {
-      "sha256": "bf003c6ae0b5ef44c12a749691dbb7e8545e213126e6c1c754b5890105c16c15",
-      "bytes": 365264
+      "sha256": "9b22f304ebe9d0ebc8b9337f9d82690d2403120c5133f0ebc1d1af3157781858",
+      "bytes": 360170
     }
   },
   "provenance": "All plates, poster and geometry come from the same hash-frozen volumetric scene. GLB is reloaded using a private local HTTP stream; texture export limit is 768px. No reference-image pixels or generated substitutes."
