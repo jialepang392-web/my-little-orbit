@@ -1,7 +1,7 @@
 {
-  "version": "0.31.0",
+  "version": "0.32.0",
   "date": "2026-10-04",
-  "pageVersions": {"index":"0.31.0","yesterday-today":"0.27.0","crossover":"0.27.0","poem":"0.27.0","rain-finale":"0.27.0","jielan":"0.27.0","falling":"0.31.0"},
+  "pageVersions": {"index":"0.32.0","yesterday-today":"0.27.0","crossover":"0.27.0","poem":"0.27.0","rain-finale":"0.27.0","jielan":"0.32.0","falling":"0.31.0"},
   "edition": "the-shape-of-what-remains",
   "exhibitionTitle": "留下的形状",
   "worlds": ["yesterday-today","crossover","poem","rain-finale","jielan","falling"],
@@ -9,16 +9,16 @@
   "archived": ["forest"],
   "sceneVersion": "mixed-see-sceneVersions",
   "contentVersion": "0.12.3",
-  "sceneVersions": {"yesterday-today":"0.12.3","crossover":"0.12.3","poem":"0.22.0","rain-finale":"0.12.3","jielan":"0.24.0","falling":"0.31.0"},
+  "sceneVersions": {"yesterday-today":"0.12.3","crossover":"0.12.3","poem":"0.22.0","rain-finale":"0.12.3","jielan":"0.32.0","falling":"0.31.0"},
   "homepageEdition": "Six catalogue entries / Still Falling",
-  "scope": "Reference-led refinement of Still Falling: wider folded and frayed silver-grey textiles, irregular dark ruby glass links, pale cupped strawflowers, torn translucent dry calyces, seed umbels, visible red backing and long cloth tongues. The continuous red ligatures and fragile botanicals interpret the supplied lyrics. The gathered weak-sphere volume retains independent side and back layers, an equal-axis core and root, and the previous camera. All five earlier artwork pages, runtimes and asset bundles retain their exact source bytes.",
+  "scope": "Reference-led Jielan refinement: long green leaves, saturated cobalt fragments, fine silver fibre veils, a small oval note, a split bill, silver cutlery, softly folded sage cloth and a transparent botanical parcel. The visible equal-axis body retains round shoulders and belly, with physical seams around every side. Lyrics inform a calm farewell and care for ordinary life. All other five artwork pages, runtimes and asset bundles retain exact source bytes, including Still Falling 0.31.0.",
   "runtimeVersion": "0.25.0",
   "fallingInteraction": "Explicit 3D entry, orbit and zoom, keyboard rotation, independent front/side/back views and three closeups, material separation, restrained fragment movement, neutral/cool light, structural inspection, complete reset and view capture. The original canvas moves into the immersive dialog; offscreen and hidden-document rendering pauses.",
   "jielanInteraction": "Real orbit, zoom and independent front/side/back cameras; one-click reset clears rotation, material separation, study light and closeups. Camera-space bounds fitting preserves relative zoom on resize. Resource disposal and WebGL restoration are handled in the viewer.",
   "interaction": "Six-work native navigation, optional session-only resume, desktop chapters and directory, mobile bottom actions, high-resolution image viewer with filmstrip and zoom, native dialog focus and Back-to-close.",
   "mobilePresentation": "All devices first display the complete high-resolution artwork. Visitors explicitly start 3D; view=live and build=1 preserve direct live access. Page scrolling stays native, with pinch and pan restricted to the viewing surface. No automatic tour, audio, account or analytics.",
-  "images": "Still Falling has same-scene cover, three independent closeups, side/back views, poster and GLB with a build manifest. All existing artwork bundles retain their bytes and scene editions. No source-reference image is used as the new artwork or projected over a sphere.",
+  "images": "Jielan has same-scene cover, three independent closeups, side/back views, poster and GLB with a build manifest. Other artwork bundles retain their bytes and scene editions. No complete source-reference image is used as the new artwork or projected over a sphere.",
   "modelLimitations": "GLB files contain static geometry/material snapshots, not webpage lighting, motion, interaction or audio. Rendering uses original procedural material studies; it does not claim scanned materials or photographic reconstruction.",
   "references": ["https://www.rijksmuseum.nl/en/stories/themes/vermeer/story/closer-to-johannes-vermeer","https://photoswipe.com/","https://github.com/codrops/GridToSlider","https://github.com/lucide-icons/lucide/tree/1.48.0","https://github.com/mrdoob/three.js/tree/r180","https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/"],
-  "referenceUse": "The new user-provided crimson/black/silver collage informs material relationships and composition only. No reference pixels, artist names, logos or font files are published. Prior design references, five licensed Lucide SVG icons and verified local Three.js 0.180.0 dependencies retain their recorded provenance."
+  "referenceUse": "The user-provided green/cobalt collage and Jielan lyrics inform material relationships and composition. No complete reference image, artist names, logos, full lyrics or font files are published. Existing macro material atlases, licensed icons and local Three.js 0.180.0 retain their recorded provenance."
 }

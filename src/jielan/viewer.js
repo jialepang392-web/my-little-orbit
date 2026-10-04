@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {makeJielan} from './model.js?v=0240';
+import {makeJielan} from './model.js?v=0320';
 import {createRenderPerformance} from '../render-performance.js?v=0260';
 
 function studio(renderer){
@@ -18,20 +18,21 @@ export function createJielanViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
   const env=studio(renderer);scene.environment=env.texture;scene.environmentIntensity=.38;scene.add(new T.HemisphereLight('#f8f1df','#64634e',.30));
   const key=new T.DirectionalLight('#fff5e4',2.55);key.position.set(-6,7,4);key.castShadow=true;key.shadow.mapSize.set(build?2048:1024,build?2048:1024);key.shadow.radius=3.5;Object.assign(key.shadow.camera,{left:-4,right:4,top:4,bottom:-4,near:1,far:24});key.shadow.normalBias=.008;key.shadow.bias=-.00012;scene.add(key);
   const fill=new T.DirectionalLight('#e8ede4',.60);fill.position.set(5,3,-5);scene.add(fill);
-  const front=new T.DirectionalLight('#ffe8cc',.08);front.position.set(2,-3,6);scene.add(front);
+  const front=new T.DirectionalLight('#f1f2e9',.32);front.position.set(2,-1,6);scene.add(front);
   const controls=new OrbitControls(camera,canvas);controls.enablePan=false;controls.enableDamping=!reduced;controls.dampingFactor=.1;controls.minDistance=build?.7:1.5;controls.maxDistance=38;controls.rotateSpeed=.6;
   const box=new T.Box3().setFromObject(world.root),center=new T.Vector3().fromArray(world.root.userData.bodyCenter||box.getCenter(new T.Vector3()).toArray()),size=box.getSize(new T.Vector3());
   const clay=new T.MeshStandardMaterial({color:'#c6c2b4',roughness:.92,side:T.DoubleSide});
+  let diagnosticsDirty=false;
   let raf=0,disposed=false,lost=false,suspended=false,turn=false,inView=true,separated=false,assetsReady=false,amount=0,last=performance.now(),frames=0,light='studio',view='front',detail=null,fitDistance=0;
   const abort=new AbortController();
   const renderPolicy=createRenderPerformance({canvas,renderer,build,maxDpr:1.65,mobileMaxDpr:1.3,buildDpr:2,onChange:()=>{resize();invalidate();}});
-  function metrics(now,force=false){frames++;if(!renderPolicy.shouldWriteDiagnostics(now,force))return;Object.assign(canvas.dataset,{ready:String(assetsReady),title:'芥兰',version:'0.24.0',solidCore:String(world.root.userData.solidCore),bodyAxes:world.root.userData.bodyAxes.join(','),bodyRadius:String(world.root.userData.bodyRadius),frames:String(frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,view,detail:detail||'',camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),bounds:size.toArray().join(','),leafCount:String(world.root.userData.leafCount),modelMeshes:String(world.root.userData.meshCount),modelTriangles:String(world.root.userData.triangleCount),artRevision:String(world.root.userData.artRevision),worldRotation:world.root.rotation.y.toFixed(6),inView:String(inView),visibleSurface:String(visibleSurface()),suspended:String(suspended),study:String(scene.overrideMaterial===clay),fitCacheEntries:String(fitCache.size)});}
-  function invalidate(){if(!raf&&!disposed&&!lost&&!suspended&&!document.hidden)raf=requestAnimationFrame(render);}
+  function metrics(now,force=false){frames++;if(!renderPolicy.shouldWriteDiagnostics(now,force))return;Object.assign(canvas.dataset,{ready:String(assetsReady),title:'芥兰',version:world.root.userData.version,solidCore:String(world.root.userData.solidCore),bodyAxes:world.root.userData.bodyAxes.join(','),bodyRadius:String(world.root.userData.bodyRadius),frames:String(frames),layers:String(world.groups.length),drawCalls:String(renderer.info.render.calls),triangles:String(renderer.info.render.triangles),autoRotate:String(turn),separated:String(separated),separation:amount.toFixed(3),light,view,detail:detail||'',camera:camera.position.toArray().map(n=>n.toFixed(4)).join(','),bounds:size.toArray().join(','),leafCount:String(world.root.userData.leafCount),modelMeshes:String(world.root.userData.meshCount),modelTriangles:String(world.root.userData.triangleCount),artRevision:String(world.root.userData.artRevision),worldRotation:world.root.rotation.y.toFixed(6),inView:String(inView),visibleSurface:String(visibleSurface()),suspended:String(suspended),study:String(scene.overrideMaterial===clay),fitCacheEntries:String(fitCache.size)});}
+  function invalidate(force=false){if(force===true)diagnosticsDirty=true;if(!raf&&!disposed&&!lost&&!suspended&&!document.hidden)raf=requestAnimationFrame(render);}
   // IntersectionObserver can retain the old scrolled-page intersection when
   // a canvas is reparented into a top-layer dialog. An open immersive dialog
   // is an explicit visible viewing surface, not an offscreen gallery element.
   function visibleSurface(){return inView||Boolean(canvas.closest('.exhibit-immersive[open]'));}
-  function render(now){raf=0;if(disposed||lost||suspended||document.hidden)return;const dt=Math.min(Math.max((now-last)/1000,.001),.1);last=now;const visible=visibleSurface(),rotating=turn&&visible;if(rotating)world.root.rotation.y+=dt*.105;const goal=Number(separated),prior=amount;amount=reduced?goal:T.MathUtils.damp(amount,goal,9,dt);if(Math.abs(amount-goal)<.001)amount=goal;const separating=amount!==prior;if(separating)world.setSeparated(amount);const controlsChanged=controls.update();if(controlsChanged)renderPolicy.noteInteraction();renderPolicy.beforeRender(now,rotating||separating);renderer.render(scene,camera);metrics(now);if(rotating||amount!==goal||controlsChanged)invalidate();}
+  function render(now){raf=0;if(disposed||lost||suspended||document.hidden)return;const dt=Math.min(Math.max((now-last)/1000,.001),.1);last=now;const visible=visibleSurface(),rotating=turn&&visible;if(rotating)world.root.rotation.y+=dt*.105;const goal=Number(separated),prior=amount;amount=reduced?goal:T.MathUtils.damp(amount,goal,9,dt);if(Math.abs(amount-goal)<.001)amount=goal;const separating=amount!==prior;if(separating)world.setSeparated(amount);const controlsChanged=controls.update();if(controlsChanged)renderPolicy.noteInteraction();renderPolicy.beforeRender(now,rotating||separating);renderer.render(scene,camera);metrics(now,diagnosticsDirty||(amount!==prior&&amount===goal));diagnosticsDirty=false;if(rotating||amount!==goal||controlsChanged)invalidate();}
   // Fit the complete three-dimensional bounds in camera space. Unlike a
   // width/height-only fit this accounts for the crown, tails and near-side
   // orbit. Preserve a visitor's relative zoom on resize/fullscreen changes.
@@ -51,7 +52,7 @@ export function createJielanViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
     fitDistance=Math.max(distance,3);camera.fov=33;camera.position.copy(controls.target).addScaledVector(dir,fitDistance*ratio);camera.updateProjectionMatrix();
   }
   function stopInertia(){const damping=controls.enableDamping;controls.enableDamping=false;controls.update();controls.enableDamping=damping;}
-  function setView(name){stopInertia();view=['front','side','back'].includes(name)?name:'front';detail=null;turn=false;world.root.rotation.set(0,0,0);controls.target.copy(center);const p=view==='back'?[-1.3,.55,-13]:view==='side'?[13,.55,.35]:[.45,1.35,13];camera.position.copy(center).add(V(p));frame(false);controls.update();renderPolicy.invalidateShadow();invalidate();}
+  function setView(name){stopInertia();view=['front','side','back'].includes(name)?name:'front';detail=null;turn=false;world.root.rotation.set(0,0,0);controls.target.copy(center);const p=view==='back'?[-1.3,.55,-13]:view==='side'?[13,.55,.35]:[.45,1.35,13];camera.position.copy(center).add(V(p));frame(false);controls.update();renderPolicy.invalidateShadow();invalidate(true);}
   function resize(){const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return;const changed=renderPolicy.resize(b.width,b.height),aspect=b.width/b.height,aspectChanged=Math.abs(camera.aspect-aspect)>=1e-6;if(!changed&&!aspectChanged)return;camera.aspect=aspect;if(aspectChanged||!fitDistance){frame();controls.update();}invalidate();}
   controls.addEventListener('change',invalidate);controls.addEventListener('start',()=>renderPolicy.beginInteraction());controls.addEventListener('end',()=>{renderPolicy.endInteraction();invalidate();});
   const sizes=new ResizeObserver(resize);sizes.observe(canvas);const visibility=new IntersectionObserver(([e])=>{inView=e.isIntersecting;if(inView)invalidate();});visibility.observe(canvas);
@@ -70,23 +71,23 @@ export function createJielanViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
     world.root.traverse(o=>{if(!o.isMesh)return;for(const mat of [].concat(o.material)){if(mat.transparent||mat.transmission>0){if(o.visible){hidden.push(o);o.visible=false;}}if(/specimenGlass|glassEdge|silver|amber/.test(mat.name))glassMaterials.add(mat);}});
     probe.position.set(.57,-.65,1.95);scene.background=new T.Color('#eeebdf');scene.add(probe);
     try{probe.update(renderer,scene);}finally{scene.remove(probe);scene.background=priorBackground;hidden.forEach(o=>o.visible=true);}
-    glassMaterials.forEach(mat=>{mat.envMap=reflectionTarget.texture;mat.envMapIntensity=1.25;mat.needsUpdate=true;});
+    glassMaterials.forEach(mat=>{mat.envMap=reflectionTarget.texture;mat.envMapIntensity=/silver/.test(mat.name)?.58:1.25;mat.needsUpdate=true;});
     assetsReady=true;renderPolicy.invalidateShadow();renderPolicy.beforeRender(performance.now());renderer.render(scene,camera);metrics(performance.now(),true);onReady();invalidate();
   });
   ready.catch(onError);
   return {
     ready,
-    setTurn(value){turn=Boolean(value);last=performance.now();invalidate();},
-    setSeparated(value){separated=Boolean(value);last=performance.now();invalidate();},
-    setLight(cool){light=cool?'cool':'studio';key.color.set(cool?'#e4ecff':'#fff5e4');scene.environmentIntensity=cool?.54:.38;renderPolicy.invalidateShadow();invalidate();},
+    setTurn(value){turn=Boolean(value);last=performance.now();invalidate(true);},
+    setSeparated(value){separated=Boolean(value);last=performance.now();invalidate(true);},
+    setLight(cool){light=cool?'cool':'studio';key.color.set(cool?'#e4ecff':'#fff5e4');scene.environmentIntensity=cool?.54:.38;renderPolicy.invalidateShadow();invalidate(true);},
     setView,
     reset(){separated=false;amount=0;world.setSeparated(0);scene.overrideMaterial=null;light='studio';key.color.set('#fff5e4');scene.environmentIntensity=.38;renderPolicy.invalidateShadow();setView('front');},
-    setDetail(name){stopInertia();detail=['leaves','linen','glass'].includes(name)?name:'leaves';turn=false;world.root.rotation.set(0,0,0);const targets=world.root.userData.detailTargets;const offsets={leaves:[-.55,.35,3.0],linen:[-.25,.35,2.50],glass:[.3,.25,2.4]};controls.target.fromArray(targets[detail]);camera.position.copy(controls.target).add(V(offsets[detail]));camera.fov=33;camera.updateProjectionMatrix();controls.update();renderPolicy.invalidateShadow();invalidate();},
-    setStudy(value){scene.overrideMaterial=value?clay:null;invalidate();},
+    setDetail(name){stopInertia();detail=['leaves','linen','glass'].includes(name)?name:'leaves';turn=false;world.root.rotation.set(0,0,0);const targets=world.root.userData.detailTargets;const offsets={leaves:[-.55,.35,3.0],linen:[-.25,.35,2.50],glass:[.3,.25,2.4]};controls.target.fromArray(targets[detail]);camera.position.copy(controls.target).add(V(offsets[detail]));camera.fov=33;camera.updateProjectionMatrix();controls.update();renderPolicy.invalidateShadow();invalidate(true);},
+    setStudy(value){scene.overrideMaterial=value?clay:null;invalidate(true);},
     suspend(value){suspended=Boolean(value);if(suspended){cancelAnimationFrame(raf);raf=0;}else{last=performance.now();invalidate();}},
     async capture({background=false}={}){await ready;if(lost||disposed)throw new Error('Renderer unavailable');renderPolicy.invalidateShadow();renderPolicy.beforeRender(performance.now());renderer.render(scene,camera);let target=canvas;if(background){target=document.createElement('canvas');target.width=canvas.width;target.height=canvas.height;const ctx=target.getContext('2d');ctx.fillStyle='#f3f0e7';ctx.fillRect(0,0,target.width,target.height);ctx.drawImage(canvas,0,0);}return new Promise((resolve,reject)=>target.toBlob(b=>b?resolve(b):reject(new Error('Capture failed')),'image/png'));},
     async exportGLB(){await ready;const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');const rotation=world.root.rotation.clone();try{world.root.rotation.set(0,0,0);world.setSeparated(0);world.root.updateMatrixWorld(true);return await new GLTFExporter().parseAsync(world.root,{binary:true,onlyVisible:true,maxTextureSize:1536});}finally{world.root.rotation.copy(rotation);world.setSeparated(amount);invalidate();}},
-    stats(){return {...canvas.dataset};},
+    stats(){return {...canvas.dataset,...world.root.userData,sceneVersion:world.root.userData.version,rootScale:world.root.scale.toArray(),dimensions:size.toArray()};},
     dispose(){if(disposed)return;disposed=true;cancelAnimationFrame(raf);abort.abort();sizes.disconnect();visibility.disconnect();renderPolicy.dispose();controls.dispose();world.dispose();clay.dispose();key.shadow.dispose();reflectionTarget?.dispose();env.dispose();scene.clear();renderer.dispose();}
   };
 }

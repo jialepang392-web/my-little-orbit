@@ -1,375 +1,336 @@
 {
   "status": "passed",
-  "version": "0.24.0",
-  "work": "jielan",
+  "version": "0.32.0",
+  "sceneVersion": "0.32.0",
+  "title": "芥兰",
+  "exported": true,
+  "created": "2026-10-04T03:42:10.114683+00:00",
+  "buildLabel": "botanical-runtime",
   "sourceHashes": {
-    "assets/jielan/opening.svg": "5c6e0553c5ed640837f804abfe17811ea11fc45f8a9a5254e5dd278b680eafcc",
-    "assets/jielan/passage.svg": "527ada1de77ca92fce684385150e6ff45dce2021458696f3e825cc40760c2b18",
-    "assets/jielan/reference-material-atlas.png": "34f55da82a3f549a1610201acde22e5e6e8adcd3f45cbb0ccdc38026a077138e",
-    "assets/jielan/reference-object-atlas.png": "99287c4532d082b0b2eaa7a8a679ced5c994ec818cbea94779a9af63d0bc52df",
-    "collection.css": "47cf726f5b6d603144594ebdaa72ab2274e2dc1c401196a30a5b10f0c586f70e",
-    "exhibition-editorial.css": "fdab349bf4b377cdc6774dd25729f745294a4e4abd32e648564b5b85f1ec9d70",
-    "exhibition-mobile.css": "37bae45ca68cdbeda48e70dfea9cae7a439c612862028b0702920e83f5c58709",
-    "exhibition-polish.css": "d414ed6141a6d314082df987f7237cea8cd0e0cea991d8892f8a1790a0dfa19b",
+    "jielan.html": "85db6f481f67a68f040aee562084696fd09dc112c31e467ab4b03aa4cc52d824",
     "jielan.css": "eb3ee82aecb064b25a228b247ac51fbe78199ebf65d0783c86f63a01350ce37a",
-    "jielan.html": "83b8068c40864325acb67f3810f5de2d988e86a4316f8d4b30aa16bcf34848e9",
-    "orbit-navigation.css": "4598f85842dfd0774d1e722cff3098e7d327dfa50c6198279aff2113b5508fef",
-    "src/exhibition-dialog.js": "ffc19fabf34d60d0a43721b8ff475462075d48386c86a3d138aa809f88869e64",
-    "src/exhibition-state.js": "88b6e1f72cdbb9d37b04a2b5be73358ae62cd1028b4d69cfa6e2b1582f39fbb1",
-    "src/exhibition-ui.js": "e5a8f3e472da9dcac3fba67cb21887489875a92925621feff37c3216eafcc90a",
-    "src/exhibition-zoom.js": "e5431ed2f87ee48a2a8a5199b51c2a93b1713519092dba97a90f10f0b685d5c5",
-    "src/jielan-page.js": "c75c4a97c925962d471232bf4d5ee44e4c645ce1acf8c301e762c8a7a1680379",
-    "src/jielan/materials.js": "160ea9de32b230db8f37d360b36856b01cd359e66df2af36049dba3433e9067b",
-    "src/jielan/model.js": "590c4ae903c548eb79f41fa5ae09f12298b94f6883e3776f48dbede6fbc354e3",
-    "src/jielan/viewer.js": "68bebf4ec309ea4d4d9ede7537ba437607daf23b12163a262c576f5099c9964a",
-    "src/orbit-navigation.js": "bc57f6e35a6e42d8156ffdf7bfce6b4fc5c2d171c118f174397fc9a46f20ceee",
-    "src/visit-ui.js": "8ebca3f1662c87f7806bf3b435913310940bcd5d94b9c01d1e9e1531db0578dd",
-    "vendor/three/0.180.0/LICENSE": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
-    "vendor/three/0.180.0/build/three.core.js": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20",
-    "vendor/three/0.180.0/build/three.module.js": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a",
-    "vendor/three/0.180.0/examples/jsm/controls/OrbitControls.js": "b97879c748170baadeb3fb84cea1ffdf4674e283dc06042f34e2acb95a76042c",
-    "vendor/three/0.180.0/examples/jsm/exporters/GLTFExporter.js": "e7c29444454eb321b39e4c8b3062944f4fd5299a0e7483e9cb8c0594cdec829f",
-    "vendor/three/0.180.0/examples/jsm/geometries/RoundedBoxGeometry.js": "c1b7c9bd2cddff2e3f3a0723f618a3d364a47450e3d25771d21faed88410bec8",
-    "vendor/three/0.180.0/examples/jsm/loaders/GLTFLoader.js": "67ac5551fdafa6e349bd80c8f8e5e39c136d6b2fb1ad647db9abb21dc86f9e4a",
-    "vendor/three/0.180.0/examples/jsm/utils/BufferGeometryUtils.js": "fda7e946b8e0b5ab39b779206589e7a1079a22eb24efb89d7223e03fdfb1f751",
-    "vendor/three/0.180.0/manifest.json": "012ebca50112a9c40c86d6a3b7d2808bc9aef334ed4b355b0a774073e143c989",
-    "vendor/three/README.md": "0cfcbea3d52a310486d2ad1a185cf3179cfc84021fad30fc3fdc67553152484c",
-    "visit-ui.css": "1b910df9728c905b7bd1d3da937fb79055433c21c21dc7a96fbedb73b8de0256"
+    "src/jielan-page.js": "14781bbb3d9db0f149efa945956712a0a6189835f33049729e52a2b55362ce54",
+    "src/jielan/model.js": "57f9e604586b108834ae835778e803c56d5e65aa2b0f87a451ee08b629a756cd",
+    "src/jielan/materials.js": "137555c8921c78f6ca5ebc8c97bf0aaea0bf5778acd2cf9649cb6dc69a72cc56",
+    "src/jielan/viewer.js": "0debee9f9183bff1124a5e929250f40459d3b26f16abe18c169a55db5b120454",
+    "src/render-performance.js": "efcb230da5f9b1a333234f773a92e48dbfec0b417e613f769c30ebb4d3d27c0b",
+    "assets/jielan/reference-material-atlas.png": "34f55da82a3f549a1610201acde22e5e6e8adcd3f45cbb0ccdc38026a077138e",
+    "assets/jielan/reference-object-atlas.png": "99287c4532d082b0b2eaa7a8a679ced5c994ec818cbea94779a9af63d0bc52df"
   },
-  "generatorHashes": {
-    "scripts/build_reference_0220.py": "6514ce4a3f57e3a86b6b032201f9bdabd84974520fa52b03f4bead99e31141b7",
-    "scripts/reference_0220_common.py": "3a4e90eecd589e8b1059d6a9f1ec7a121e82a3360b2b63826f0589e8cd9aa844",
-    "scripts/build_round_0210.py": "fe26cd14c21b5a8e33e7e113f0fb1d2d200eeacd64c3b6803ab18226a569580c",
-    "scripts/round_0210_common.py": "b0f3e8c4dc4cc49d2173e1b0834b3bd673169e6ea72578f0dde2016abe8d870a",
-    "scripts/build_layers_0240.py": "997a02e0d57eb15e2806c6f4843173dbe41af9354ad7f6145db0a91ac044391c",
-    "scripts/layers_0240_common.py": "85eb58cedfd3bbe853c03888c584a72bd614a35a911fdde8fa857b4ef4f0aa1a"
+  "buildScriptSha256": "fc916e76b83d48f6e89b0de9b36e4753d10adae6024976fd55a5d0230f03a6c2",
+  "stats": {
+    "engine": "three.js r180",
+    "renderDpr": "2.000",
+    "renderWidth": "2048",
+    "renderHeight": "2048",
+    "qualityMode": "build",
+    "shadowMode": "continuous",
+    "ready": "true",
+    "title": "芥兰",
+    "version": "0.32.0",
+    "solidCore": true,
+    "bodyAxes": [
+      1,
+      1,
+      1
+    ],
+    "bodyRadius": 1.3,
+    "frames": "14",
+    "layers": [
+      "00 / visible rough equal-axis botanical body",
+      "01 / weathered driftwood and irregular round root cradle",
+      "02 / upright kale stems, narrow folded blades and reverse growth",
+      "03 / visible left and lower-right blue porcelain",
+      "04 / crumpled sage linen shoulder and gravity-drawn gauze",
+      "05 / small oval label and a bill divided into two slips",
+      "06 / crossed worn spoon and fork",
+      "07 / crinkled transparent parcel with yellow and violet botanicals",
+      "08 / clear suspended dew and restrained warm internal light",
+      "09 / many-branched small yellow kale flowers",
+      "10 / wide clear botanical ribbon and fine wandering orbits",
+      "14 / fine silver fibre veils crossing leaf cloth and cobalt seams",
+      "11 / offset botanical folios and stitched material joints",
+      "12 / porcelain offcuts, herb specimens and brass clips",
+      "13 / branching seed pods and small dried flower gatherings"
+    ],
+    "drawCalls": "714",
+    "triangles": "2719558",
+    "autoRotate": "false",
+    "separated": "false",
+    "separation": "0.000",
+    "light": "studio",
+    "view": "front",
+    "detail": "",
+    "camera": "0.2409,0.6227,6.9597",
+    "bounds": "3.537343897445691,3.4049784571001394,3.3219634498331136",
+    "leafCount": 39,
+    "modelMeshes": "366",
+    "modelTriangles": "1375194",
+    "artRevision": 24,
+    "worldRotation": "0.000000",
+    "inView": "true",
+    "visibleSurface": "true",
+    "suspended": "false",
+    "study": "false",
+    "fitCacheEntries": "0",
+    "englishTitle": "Kale Planet",
+    "bodyCenter": [
+      0,
+      -0.1,
+      0
+    ],
+    "leafClusters": 3,
+    "seedSprigs": 11,
+    "netVeils": 5,
+    "porcelainFragments": 4,
+    "woodForks": 9,
+    "structuralRoots": 84,
+    "sideClothFolds": 5,
+    "collageFolioSets": 7,
+    "layeredSheets": 21,
+    "porcelainOffcuts": 4,
+    "pressedHerbs": 20,
+    "seamStitches": 49,
+    "brassFasteners": 14,
+    "botanicalGatherings": 5,
+    "smallSeedPods": 7,
+    "seedGlassGap": 0.045,
+    "seedLayout": [
+      {
+        "material": "amber",
+        "center": [
+          -0.152,
+          -0.006999999999999999,
+          0.18039329584282784
+        ],
+        "radii": [
+          0.087,
+          0.09,
+          0.06
+        ],
+        "minimumLocalZGap": 0.045,
+        "radialBound": 0.47643712622888396,
+        "glassLowerBound": 0.32539329584282783
+      },
+      {
+        "material": "seedGold",
+        "center": [
+          0.03325,
+          0.1165,
+          0.20986240440105322
+        ],
+        "radii": [
+          0.078,
+          0.08,
+          0.055
+        ],
+        "minimumLocalZGap": 0.045,
+        "radialBound": 0.41241657535246773,
+        "glassLowerBound": 0.3498624044010532
+      },
+      {
+        "material": "wine",
+        "center": [
+          0.1425,
+          0.031,
+          0.20452287128580984
+        ],
+        "radii": [
+          0.07,
+          0.078,
+          0.05
+        ],
+        "minimumLocalZGap": 0.045,
+        "radialBound": 0.44060510377759,
+        "glassLowerBound": 0.3395228712858098
+      },
+      {
+        "material": "amber",
+        "center": [
+          -0.08549999999999999,
+          -0.16849999999999998,
+          0.16347451176467256
+        ],
+        "radii": [
+          0.068,
+          0.08,
+          0.052
+        ],
+        "minimumLocalZGap": 0.045,
+        "radialBound": 0.5338005206967396,
+        "glassLowerBound": 0.30047451176467255
+      },
+      {
+        "material": "wine",
+        "center": [
+          0.09974999999999999,
+          -0.14,
+          0.17227945794434243
+        ],
+        "radii": [
+          0.075,
+          0.083,
+          0.05
+        ],
+        "minimumLocalZGap": 0.045,
+        "radialBound": 0.5187653994478814,
+        "glassLowerBound": 0.3072794579443424
+      },
+      {
+        "material": "wine",
+        "center": [
+          0,
+          -0.3015,
+          0.08464815610651974
+        ],
+        "radii": [
+          0.063,
+          0.075,
+          0.046
+        ],
+        "minimumLocalZGap": 0.045,
+        "radialBound": 0.6944160067639239,
+        "glassLowerBound": 0.21564815610651974
+      },
+      {
+        "material": "seedGold",
+        "center": [
+          -0.22799999999999998,
+          -0.1495,
+          0.1050434282442835
+        ],
+        "radii": [
+          0.061,
+          0.064,
+          0.045
+        ],
+        "minimumLocalZGap": 0.045,
+        "radialBound": 0.661141668939905,
+        "glassLowerBound": 0.2350434282442835
+      },
+      {
+        "material": "wine",
+        "center": [
+          0.209,
+          -0.235,
+          0.06738173542382297
+        ],
+        "radii": [
+          0.059,
+          0.06,
+          0.041
+        ],
+        "minimumLocalZGap": 0.045,
+        "radialBound": 0.7307502748070945,
+        "glassLowerBound": 0.19338173542382298
+      }
+    ],
+    "meshCount": 366,
+    "triangleCount": 1375194,
+    "detailTargets": {
+      "leaves": [
+        -0.36,
+        0.66,
+        1.15
+      ],
+      "linen": [
+        -0.17,
+        -0.77,
+        1.4
+      ],
+      "glass": [
+        0.7,
+        -0.62,
+        1.54
+      ]
+    },
+    "structure": "Visible equal-axis botanical body, bright long leaves, cobalt ceramic fragments, fine silver fibre veils, curved oval paper, divided bill, silver cutlery, softly folded sage cloth and a crinkled transparent botanical parcel. All sides retain physical layered seams.",
+    "referenceBasis": "The supplied green and cobalt collage guides material relationships; two existing macro material atlases and original procedural studies are applied to individual meshes. No complete reference artwork is projected.",
+    "back": "Independent radial roots, moss, reverse foliage, porcelain, layered folios, pressed herbs and cloth continue around the volume.",
+    "visualStatus": "Reference-led revision; six-view assistant review is recorded separately and is not user approval.",
+    "sceneVersion": "0.32.0",
+    "silverFilaments": 900,
+    "parcelBotanicals": 5,
+    "dividedBillSlips": 2,
+    "clothBowLoops": 2,
+    "rootScale": [
+      1,
+      1,
+      1
+    ],
+    "dimensions": [
+      3.537343897445691,
+      3.4049784571001394,
+      3.3219634498331136
+    ]
   },
-  "views": {
-    "front": {
-      "stats": {
-        "engine": "three.js r180",
-        "ready": "true",
-        "title": "芥兰",
-        "version": "0.24.0",
-        "solidCore": "true",
-        "bodyAxes": "1,1,1",
-        "bodyRadius": "1.3",
-        "frames": "7",
-        "layers": "14",
-        "drawCalls": "615",
-        "triangles": "2053688",
-        "autoRotate": "false",
-        "separated": "false",
-        "separation": "0.000",
-        "light": "studio",
-        "view": "front",
-        "detail": "",
-        "camera": "0.2255,0.5765,6.5141",
-        "bounds": "3.4662773997034146,3.3332895949978836,3.2331962574406585",
-        "leafCount": "39",
-        "modelMeshes": "316",
-        "modelTriangles": "1040158",
-        "artRevision": "23",
-        "worldRotation": "0.000000",
-        "inView": "true",
-        "visibleSurface": "true",
-        "suspended": "false",
-        "study": "false"
-      },
-      "alphaBounds": [
-        156,
-        189,
-        1964,
-        1976
-      ],
-      "nativeSize": [
-        2079,
-        2079
-      ]
-    },
-    "side": {
-      "stats": {
-        "engine": "three.js r180",
-        "ready": "true",
-        "title": "芥兰",
-        "version": "0.24.0",
-        "solidCore": "true",
-        "bodyAxes": "1,1,1",
-        "bodyRadius": "1.3",
-        "frames": "8",
-        "layers": "14",
-        "drawCalls": "615",
-        "triangles": "2053688",
-        "autoRotate": "false",
-        "separated": "false",
-        "separation": "0.000",
-        "light": "studio",
-        "view": "side",
-        "detail": "",
-        "camera": "6.9951,0.1959,0.1883",
-        "bounds": "3.4662773997034146,3.3332895949978836,3.2331962574406585",
-        "leafCount": "39",
-        "modelMeshes": "316",
-        "modelTriangles": "1040158",
-        "artRevision": "23",
-        "worldRotation": "0.000000",
-        "inView": "true",
-        "visibleSurface": "true",
-        "suspended": "false",
-        "study": "false"
-      },
-      "alphaBounds": [
-        103,
-        282,
-        1803,
-        1862
-      ],
-      "nativeSize": [
-        2079,
-        2079
-      ]
-    },
-    "back": {
-      "stats": {
-        "engine": "three.js r180",
-        "ready": "true",
-        "title": "芥兰",
-        "version": "0.24.0",
-        "solidCore": "true",
-        "bodyAxes": "1,1,1",
-        "bodyRadius": "1.3",
-        "frames": "9",
-        "layers": "14",
-        "drawCalls": "615",
-        "triangles": "2053688",
-        "autoRotate": "false",
-        "separated": "false",
-        "separation": "0.000",
-        "light": "studio",
-        "view": "back",
-        "detail": "",
-        "camera": "-0.6324,0.1675,-6.3237",
-        "bounds": "3.4662773997034146,3.3332895949978836,3.2331962574406585",
-        "leafCount": "39",
-        "modelMeshes": "316",
-        "modelTriangles": "1040158",
-        "artRevision": "23",
-        "worldRotation": "0.000000",
-        "inView": "true",
-        "visibleSurface": "true",
-        "suspended": "false",
-        "study": "false"
-      },
-      "alphaBounds": [
-        103,
-        117,
-        1929,
-        1955
-      ],
-      "nativeSize": [
-        2079,
-        2079
-      ]
-    },
-    "leaves": {
-      "stats": {
-        "engine": "three.js r180",
-        "ready": "true",
-        "title": "芥兰",
-        "version": "0.24.0",
-        "solidCore": "true",
-        "bodyAxes": "1,1,1",
-        "bodyRadius": "1.3",
-        "frames": "10",
-        "layers": "14",
-        "drawCalls": "483",
-        "triangles": "1827634",
-        "autoRotate": "false",
-        "separated": "false",
-        "separation": "0.000",
-        "light": "studio",
-        "view": "back",
-        "detail": "leaves",
-        "camera": "-0.4500,1.1000,4.2200",
-        "bounds": "3.4662773997034146,3.3332895949978836,3.2331962574406585",
-        "leafCount": "39",
-        "modelMeshes": "316",
-        "modelTriangles": "1040158",
-        "artRevision": "23",
-        "worldRotation": "0.000000",
-        "inView": "true",
-        "visibleSurface": "true",
-        "suspended": "false",
-        "study": "false"
-      },
-      "alphaBounds": [
+  "glbReload": {
+    "meshes": 366,
+    "triangles": 1375194,
+    "bad": 0,
+    "version": "0.32.0",
+    "core": {
+      "name": "visible closed rough botanical body",
+      "solidCore": true,
+      "radius": 1.3,
+      "center": [
         0,
-        311,
-        2079,
-        2079
+        -0.1,
+        0
       ],
-      "nativeSize": [
-        2079,
-        2079
-      ]
-    },
-    "linen": {
-      "stats": {
-        "engine": "three.js r180",
-        "ready": "true",
-        "title": "芥兰",
-        "version": "0.24.0",
-        "solidCore": "true",
-        "bodyAxes": "1,1,1",
-        "bodyRadius": "1.3",
-        "frames": "11",
-        "layers": "14",
-        "drawCalls": "461",
-        "triangles": "1717596",
-        "autoRotate": "false",
-        "separated": "false",
-        "separation": "0.000",
-        "light": "studio",
-        "view": "back",
-        "detail": "linen",
-        "camera": "-0.7500,-0.2000,3.8000",
-        "bounds": "3.4662773997034146,3.3332895949978836,3.2331962574406585",
-        "leafCount": "39",
-        "modelMeshes": "316",
-        "modelTriangles": "1040158",
-        "artRevision": "23",
-        "worldRotation": "0.000000",
-        "inView": "true",
-        "visibleSurface": "true",
-        "suspended": "false",
-        "study": "false"
-      },
-      "alphaBounds": [
-        0,
-        0,
-        2079,
-        2079
+      "axes": [
+        1,
+        1,
+        1
       ],
-      "nativeSize": [
-        2079,
-        2079
-      ]
-    },
-    "glass": {
-      "stats": {
-        "engine": "three.js r180",
-        "ready": "true",
-        "title": "芥兰",
-        "version": "0.24.0",
-        "solidCore": "true",
-        "bodyAxes": "1,1,1",
-        "bodyRadius": "1.3",
-        "frames": "12",
-        "layers": "14",
-        "drawCalls": "467",
-        "triangles": "1736248",
-        "autoRotate": "false",
-        "separated": "false",
-        "separation": "0.000",
-        "light": "studio",
-        "view": "back",
-        "detail": "glass",
-        "camera": "0.9500,-0.4400,3.9800",
-        "bounds": "3.4662773997034146,3.3332895949978836,3.2331962574406585",
-        "leafCount": "39",
-        "modelMeshes": "316",
-        "modelTriangles": "1040158",
-        "artRevision": "23",
-        "worldRotation": "0.000000",
-        "inView": "true",
-        "visibleSurface": "true",
-        "suspended": "false",
-        "study": "false"
-      },
-      "alphaBounds": [
-        0,
-        0,
-        2079,
-        1882
-      ],
-      "nativeSize": [
-        2079,
-        2079
-      ]
+      "maximumRelief": 0.016
     }
   },
-  "errors": [],
-  "exported": true,
-  "promoted": true,
-  "startedAt": "2026-09-22T11:23:15.802961+00:00",
-  "glbReload": {
-    "sceneVersion": "0.24.0",
-    "meshes": 316,
-    "materials": 41,
-    "size": [
-      3.4662773997034146,
-      3.3332895949978836,
-      3.2331962574406585
-    ],
-    "solidCore": "visible_closed_rough_botanical_body"
-  },
-  "sceneVersion": "0.24.0",
-  "artifacts": {
+  "assets": {
     "cover.webp": {
-      "sha256": "42ad63bc7b4c893dc9e7037ddc495a83c8b3f67edf0a24e92e73920f5390bc48",
-      "bytes": 994468
-    },
-    "detail-linen.webp": {
-      "sha256": "2862cbd3202502fd2df1b181da4a9ccb94024ab91c313049be107891817626a1",
-      "bytes": 1419306
-    },
-    "poster.png": {
-      "sha256": "bbec0fbfbbe5f31d47e81e00c9b70729c7e686c770ef827c61a4232a9953d375",
-      "bytes": 5740317
-    },
-    "back.webp": {
-      "sha256": "862ef6742aafc9776c32f9d1472ad8607f0f79b72845b4bec3bd64e9e44a5a01",
-      "bytes": 938604
-    },
-    "detail-glass.webp": {
-      "sha256": "d92c2a1771e16a16799619265e7ca2b339913654e760fbf994fd0235f2618123",
-      "bytes": 1014886
+      "sha256": "63a2c043c3efa6c3b923eef9201283bf0e7b4d6c69efb61f0edfb6bf730ed3e0",
+      "bytes": 793540
     },
     "side.webp": {
-      "sha256": "f5cad4e543c96b6de304a571446ffa535335a96f02ee455bef1fed82aa2803b2",
-      "bytes": 753596
+      "sha256": "27a79b239a8909e5820274964c059c708f92704729cdbabf31c4026e4d98651d",
+      "bytes": 609802
     },
-    "jielan.glb": {
-      "sha256": "4f707a19aae6ea15bc977261838252e3d3726cc60e0ed8493f5e7d3ed76c4c7f",
-      "bytes": 38598632
-    },
-    "cover-1200.webp": {
-      "sha256": "03879f50196dc706172d924102093b8f15e2b73849209e20896b9cd4641bee82",
-      "bytes": 371984
+    "back.webp": {
+      "sha256": "6ce434e570436f0a800194e45d14ba0409f271c6afb28f952ab3ed6ea280b12e",
+      "bytes": 880956
     },
     "detail-leaves.webp": {
-      "sha256": "e90d5000a3eb8a5bfc04b571119c46562e55df78d93b07f4f95626de8ce4bd98",
-      "bytes": 1177182
+      "sha256": "60d8bdc3f5963f3322e841cbf35c1997d04b9e70de274fcb33cc693647464aca",
+      "bytes": 1223926
     },
-    "cover-768.webp": {
-      "sha256": "cd372aec17d608419d7daaaab64799a013fe624614d6f16990aa2fca022dd051",
-      "bytes": 166390
+    "detail-linen.webp": {
+      "sha256": "a5e9919804e89ec91da44b49bfe0bac575a131a9358bd4a0cd06c0d09b4944ee",
+      "bytes": 1069898
+    },
+    "detail-glass.webp": {
+      "sha256": "f37a668a5dfd6872ffb3cc2fb948c966d5e8c8c03ea16af64990e1da338bcf6a",
+      "bytes": 1016576
+    },
+    "poster.png": {
+      "sha256": "660adefc57dbfaca5f9b6ad73ff280b5cf8f36b0dd29b7954f45e4f419d8f06e",
+      "bytes": 6520524
     },
     "front.png": {
-      "sha256": "59f5891d93071810bc5dbed1295ebf17f413db886cf67c6c217093ca96b96ed7",
-      "bytes": 5043856
+      "sha256": "93ff34133858e205c4db1d26bb9addbbabab4b7dcde6ba014851085e6e205ced",
+      "bytes": 4858638
+    },
+    "jielan.glb": {
+      "sha256": "7363c45d0be741849f1d90909eb9dac7837241774e271cb3de5e5dd687e8c538",
+      "bytes": 50343728
+    },
+    "cover-768.webp": {
+      "sha256": "a9dbeb3061d88877b61613a0f84c2759a7a4d8ec02a1c7e0155f8be4606a1067",
+      "bytes": 120272
+    },
+    "cover-1200.webp": {
+      "sha256": "b3eb63b8c7cd39c8dee152220b7d68d0adda0db310b4e40ed6596c46fb2e43e3",
+      "bytes": 270766
     }
   },
-  "browser": "140.0.7339.16",
-  "finishedAt": "2026-09-22T11:24:05.077994+00:00",
-  "method": "Actual square viewer photographs; no image-plane substitution or silhouette reshaping.",
-  "thumbnailReview": {
-    "path": "test-results/layers-v0240/build/final-layered-jielan/thumbnail-300.png",
-    "sha256": "c1a121c50976a82832cfa39bb41ba17b3864b2008c920c823d7d4e37fc3073fb",
-    "width": 300,
-    "height": 300,
-    "source": "test-results/layers-v0240/build/final-layered-jielan/assets/cover.webp",
-    "sourceSha256": "42ad63bc7b4c893dc9e7037ddc495a83c8b3f67edf0a24e92e73920f5390bc48",
-    "method": "Uniform downsampling of the actual front view; no content changes."
-  }
+  "provenance": "All six plates, poster and geometry come from the same hash-frozen real scene. GLB independently reloaded by HTTP. Procedural geometry and material studies; no complete reference artwork or artist credits projected."
 }
