@@ -1,23 +1,23 @@
 {
   "status": "passed",
-  "version": "0.32.0",
-  "sceneVersion": "0.32.0",
+  "version": "0.33.0",
+  "sceneVersion": "0.33.0",
   "title": "芥兰",
   "exported": true,
-  "created": "2026-10-04T03:42:10.114683+00:00",
-  "buildLabel": "botanical-runtime",
+  "created": "2026-10-06T01:29:53.021494+00:00",
+  "buildLabel": "open-folds-final",
   "sourceHashes": {
-    "jielan.html": "85db6f481f67a68f040aee562084696fd09dc112c31e467ab4b03aa4cc52d824",
+    "jielan.html": "e57a16e45fd0d69c02ca7fef5998f8e01ffc0b8cbfd22cf8c218207f56656f1b",
     "jielan.css": "eb3ee82aecb064b25a228b247ac51fbe78199ebf65d0783c86f63a01350ce37a",
-    "src/jielan-page.js": "14781bbb3d9db0f149efa945956712a0a6189835f33049729e52a2b55362ce54",
-    "src/jielan/model.js": "57f9e604586b108834ae835778e803c56d5e65aa2b0f87a451ee08b629a756cd",
-    "src/jielan/materials.js": "137555c8921c78f6ca5ebc8c97bf0aaea0bf5778acd2cf9649cb6dc69a72cc56",
-    "src/jielan/viewer.js": "0debee9f9183bff1124a5e929250f40459d3b26f16abe18c169a55db5b120454",
+    "src/jielan-page.js": "002825748f855ce76ccc54fe771549cb5cf52df7fb2e6fb4eca98e06eff8f6bc",
+    "src/jielan/model.js": "3ce7f120b6d40e849056519ee7935edf6765fc43596f2fc1eeae83ef5e164962",
+    "src/jielan/materials.js": "f57dfd2cca81cc9824130907560a57c9c1db239cc33b43c1789c3b0fedd6e4d2",
+    "src/jielan/viewer.js": "8ca8c6a315ef83058d6b1f7de0f7b398f7dcbc5f147832da3933657e9d1dc4ee",
     "src/render-performance.js": "efcb230da5f9b1a333234f773a92e48dbfec0b417e613f769c30ebb4d3d27c0b",
     "assets/jielan/reference-material-atlas.png": "34f55da82a3f549a1610201acde22e5e6e8adcd3f45cbb0ccdc38026a077138e",
     "assets/jielan/reference-object-atlas.png": "99287c4532d082b0b2eaa7a8a679ced5c994ec818cbea94779a9af63d0bc52df"
   },
-  "buildScriptSha256": "fc916e76b83d48f6e89b0de9b36e4753d10adae6024976fd55a5d0230f03a6c2",
+  "buildScriptSha256": "ac8a0ed620f7d020d84d9684fe251a3f5dac3b6d8c9e8b746375f19dd8b10ca2",
   "stats": {
     "engine": "three.js r180",
     "renderDpr": "2.000",
@@ -27,7 +27,7 @@
     "shadowMode": "continuous",
     "ready": "true",
     "title": "芥兰",
-    "version": "0.32.0",
+    "version": "0.33.0",
     "solidCore": true,
     "bodyAxes": [
       1,
@@ -53,20 +53,20 @@
       "12 / porcelain offcuts, herb specimens and brass clips",
       "13 / branching seed pods and small dried flower gatherings"
     ],
-    "drawCalls": "714",
-    "triangles": "2719558",
+    "drawCalls": "692",
+    "triangles": "2962702",
     "autoRotate": "false",
     "separated": "false",
     "separation": "0.000",
     "light": "studio",
     "view": "front",
     "detail": "",
-    "camera": "0.2409,0.6227,6.9597",
-    "bounds": "3.537343897445691,3.4049784571001394,3.3219634498331136",
+    "camera": "0.2383,0.6148,6.8829",
+    "bounds": "3.782325336402705,3.524322973792718,3.4099126570793814",
     "leafCount": 39,
-    "modelMeshes": "366",
-    "modelTriangles": "1375194",
-    "artRevision": 24,
+    "modelMeshes": "355",
+    "modelTriangles": "1496766",
+    "artRevision": 25,
     "worldRotation": "0.000000",
     "inView": "true",
     "visibleSurface": "true",
@@ -101,132 +101,132 @@
         "center": [
           -0.152,
           -0.006999999999999999,
-          0.18039329584282784
+          0.2475528990465826
         ],
         "radii": [
-          0.087,
-          0.09,
-          0.06
+          0.042,
+          0.052,
+          0.03
         ],
         "minimumLocalZGap": 0.045,
-        "radialBound": 0.47643712622888396,
-        "glassLowerBound": 0.32539329584282783
+        "radialBound": 0.37493286516393914,
+        "glassLowerBound": 0.36255289904658256
       },
       {
         "material": "seedGold",
         "center": [
           0.03325,
           0.1165,
-          0.20986240440105322
+          0.2659778283147128
         ],
         "radii": [
-          0.078,
-          0.08,
-          0.055
+          0.038,
+          0.046,
+          0.027
         ],
         "minimumLocalZGap": 0.045,
-        "radialBound": 0.41241657535246773,
-        "glassLowerBound": 0.3498624044010532
+        "radialBound": 0.3235780042733207,
+        "glassLowerBound": 0.37797782831471277
       },
       {
         "material": "wine",
         "center": [
           0.1425,
           0.031,
-          0.20452287128580984
+          0.25673580261934725
         ],
         "radii": [
-          0.07,
-          0.078,
-          0.05
+          0.034,
+          0.05,
+          0.026
         ],
         "minimumLocalZGap": 0.045,
-        "radialBound": 0.44060510377759,
-        "glassLowerBound": 0.3395228712858098
+        "radialBound": 0.3584987995200709,
+        "glassLowerBound": 0.36773580261934724
       },
       {
         "material": "amber",
         "center": [
           -0.08549999999999999,
           -0.16849999999999998,
-          0.16347451176467256
+          0.2293997122544185
         ],
         "radii": [
-          0.068,
-          0.08,
-          0.052
+          0.031,
+          0.043,
+          0.025
         ],
         "minimumLocalZGap": 0.045,
-        "radialBound": 0.5338005206967396,
-        "glassLowerBound": 0.30047451176467255
+        "radialBound": 0.44093001012284666,
+        "glassLowerBound": 0.3393997122544185
       },
       {
         "material": "wine",
         "center": [
           0.09974999999999999,
           -0.14,
-          0.17227945794434243
+          0.23769540577846368
         ],
         "radii": [
-          0.075,
-          0.083,
-          0.05
+          0.032,
+          0.047,
+          0.025
         ],
         "minimumLocalZGap": 0.045,
-        "radialBound": 0.5187653994478814,
-        "glassLowerBound": 0.3072794579443424
+        "radialBound": 0.41848173592870025,
+        "glassLowerBound": 0.3476954057784637
       },
       {
         "material": "wine",
         "center": [
           0,
           -0.3015,
-          0.08464815610651974
+          0.14398950892766046
         ],
         "radii": [
-          0.063,
-          0.075,
-          0.046
+          0.03,
+          0.044,
+          0.023
         ],
         "minimumLocalZGap": 0.045,
-        "radialBound": 0.6944160067639239,
-        "glassLowerBound": 0.21564815610651974
+        "radialBound": 0.630633662634101,
+        "glassLowerBound": 0.2519895089276605
       },
       {
         "material": "seedGold",
         "center": [
           -0.22799999999999998,
           -0.1495,
-          0.1050434282442835
+          0.1654946894081102
         ],
         "radii": [
-          0.061,
-          0.064,
-          0.045
+          0.031,
+          0.041,
+          0.022
         ],
         "minimumLocalZGap": 0.045,
-        "radialBound": 0.661141668939905,
-        "glassLowerBound": 0.2350434282442835
+        "radialBound": 0.5916184160535379,
+        "glassLowerBound": 0.2724946894081102
       },
       {
         "material": "wine",
         "center": [
           0.209,
           -0.235,
-          0.06738173542382297
+          0.12722986399347005
         ],
         "radii": [
-          0.059,
-          0.06,
-          0.041
+          0.028,
+          0.038,
+          0.022
         ],
         "minimumLocalZGap": 0.045,
-        "radialBound": 0.7307502748070945,
-        "glassLowerBound": 0.19338173542382298
+        "radialBound": 0.6625709896262103,
+        "glassLowerBound": 0.23422986399347004
       }
     ],
-    "meshCount": 366,
-    "triangleCount": 1375194,
+    "meshCount": 355,
+    "triangleCount": 1496766,
     "detailTargets": {
       "leaves": [
         -0.36,
@@ -235,7 +235,7 @@
       ],
       "linen": [
         -0.17,
-        -0.77,
+        -0.67,
         1.4
       ],
       "glass": [
@@ -244,31 +244,32 @@
         1.54
       ]
     },
-    "structure": "Visible equal-axis botanical body, bright long leaves, cobalt ceramic fragments, fine silver fibre veils, curved oval paper, divided bill, silver cutlery, softly folded sage cloth and a crinkled transparent botanical parcel. All sides retain physical layered seams.",
+    "structure": "Visible equal-axis botanical body with a continuous green and cobalt diagonal. Gathered raw linen, open hanging folds, a small curved label and tucked divided bill connect the leaves and porcelain. Seven layered botanical heads replace the dominant round seeds inside the clear parcel. All sides retain physical seams.",
     "referenceBasis": "The supplied green and cobalt collage guides material relationships; two existing macro material atlases and original procedural studies are applied to individual meshes. No complete reference artwork is projected.",
     "back": "Independent radial roots, moss, reverse foliage, porcelain, layered folios, pressed herbs and cloth continue around the volume.",
-    "visualStatus": "Reference-led revision; six-view assistant review is recorded separately and is not user approval.",
-    "sceneVersion": "0.32.0",
+    "visualStatus": "Composition refinement; six-view assistant review is recorded separately and is not user approval.",
+    "sceneVersion": "0.33.0",
     "silverFilaments": 900,
-    "parcelBotanicals": 5,
+    "parcelBotanicals": 7,
     "dividedBillSlips": 2,
-    "clothBowLoops": 2,
+    "clothBowLoops": 0,
+    "gatheredLinenPanels": 5,
     "rootScale": [
       1,
       1,
       1
     ],
     "dimensions": [
-      3.537343897445691,
-      3.4049784571001394,
-      3.3219634498331136
+      3.782325336402705,
+      3.524322973792718,
+      3.4099126570793814
     ]
   },
   "glbReload": {
-    "meshes": 366,
-    "triangles": 1375194,
+    "meshes": 355,
+    "triangles": 1496766,
     "bad": 0,
-    "version": "0.32.0",
+    "version": "0.33.0",
     "core": {
       "name": "visible closed rough botanical body",
       "solidCore": true,
@@ -288,48 +289,48 @@
   },
   "assets": {
     "cover.webp": {
-      "sha256": "63a2c043c3efa6c3b923eef9201283bf0e7b4d6c69efb61f0edfb6bf730ed3e0",
-      "bytes": 793540
+      "sha256": "72d445afc2874ba73fe3b3a6fd09f76d24f868d5d484f4a6ca518332afee4f8c",
+      "bytes": 813900
     },
     "side.webp": {
-      "sha256": "27a79b239a8909e5820274964c059c708f92704729cdbabf31c4026e4d98651d",
-      "bytes": 609802
+      "sha256": "b8c7f844220bfbe9af70fc7c7f0a4061df7d1830d880f5c637ebf3242bc5cc90",
+      "bytes": 647794
     },
     "back.webp": {
-      "sha256": "6ce434e570436f0a800194e45d14ba0409f271c6afb28f952ab3ed6ea280b12e",
-      "bytes": 880956
+      "sha256": "8bfd6870d8ee038f014f4c5e962d563be719005178c7b5b6c1002f51ec84de59",
+      "bytes": 757238
     },
     "detail-leaves.webp": {
-      "sha256": "60d8bdc3f5963f3322e841cbf35c1997d04b9e70de274fcb33cc693647464aca",
-      "bytes": 1223926
+      "sha256": "916d746ab3723b0cd945a44c7a2683de3fb7e099c2c2dd569801fcec0ad5571d",
+      "bytes": 1247522
     },
     "detail-linen.webp": {
-      "sha256": "a5e9919804e89ec91da44b49bfe0bac575a131a9358bd4a0cd06c0d09b4944ee",
-      "bytes": 1069898
+      "sha256": "a1864ea904b7d87431cda72e7bf3faa7b618c3e84788bf21f9fa57104c23a673",
+      "bytes": 1180818
     },
     "detail-glass.webp": {
-      "sha256": "f37a668a5dfd6872ffb3cc2fb948c966d5e8c8c03ea16af64990e1da338bcf6a",
-      "bytes": 1016576
+      "sha256": "e0e36f92de1a4dacc23bf7f98e31ad4bb9d57327f409089a752e27d208a0f013",
+      "bytes": 1056302
     },
     "poster.png": {
-      "sha256": "660adefc57dbfaca5f9b6ad73ff280b5cf8f36b0dd29b7954f45e4f419d8f06e",
-      "bytes": 6520524
+      "sha256": "8f0157766bd34a74888a5b0605f912c84ac8ac90202dfbfbe42b6b83b97003ab",
+      "bytes": 6664308
     },
     "front.png": {
-      "sha256": "93ff34133858e205c4db1d26bb9addbbabab4b7dcde6ba014851085e6e205ced",
-      "bytes": 4858638
+      "sha256": "8d7e8b239d44dbea5a9796143450a6354277cadab7641cbfe5653d4808bec1c1",
+      "bytes": 4964462
     },
     "jielan.glb": {
-      "sha256": "7363c45d0be741849f1d90909eb9dac7837241774e271cb3de5e5dd687e8c538",
-      "bytes": 50343728
+      "sha256": "f555eed28a53e93aadae2cc611166070cde3d1485386a6db1e0513329b2715fa",
+      "bytes": 53408528
     },
     "cover-768.webp": {
-      "sha256": "a9dbeb3061d88877b61613a0f84c2759a7a4d8ec02a1c7e0155f8be4606a1067",
-      "bytes": 120272
+      "sha256": "2d3f42cb84d3996342efb2b4eb5a1b1faa901ebb2d757baa52dae772211f5146",
+      "bytes": 121994
     },
     "cover-1200.webp": {
-      "sha256": "b3eb63b8c7cd39c8dee152220b7d68d0adda0db310b4e40ed6596c46fb2e43e3",
-      "bytes": 270766
+      "sha256": "36832a8cf38631b4b5205b39ad132e16abb06d2b2667870718042fbddbaa64e0",
+      "bytes": 282408
     }
   },
   "provenance": "All six plates, poster and geometry come from the same hash-frozen real scene. GLB independently reloaded by HTTP. Procedural geometry and material studies; no complete reference artwork or artist credits projected."

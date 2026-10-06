@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {makeJielan} from './model.js?v=0320';
+import {makeJielan} from './model.js?v=0330';
 import {createRenderPerformance} from '../render-performance.js?v=0260';
 
 function studio(renderer){

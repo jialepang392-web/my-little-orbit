@@ -64,7 +64,7 @@ export function makeMaterials(){
     }
     if(kind==='glaze'){
       // Cobalt pooling and kiln scratches; the glaze reads as a blue colour mass.
-      x.fillStyle='#285cc0';x.fillRect(0,0,N,N);
+      x.fillStyle='#3262ae';x.fillRect(0,0,N,N);
       for(let i=0;i<90;i++){const a=rnd()*N,b=rnd()*N,r=12+rnd()*120,g=x.createRadialGradient(a,b,0,a,b,r);g.addColorStop(0,i%3?'#153f8730':'#adcddc46');g.addColorStop(1,'#346bbb00');x.fillStyle=g;x.fillRect(a-r,b-r,r*2,r*2);}
       for(const y of [22,38,475]){x.strokeStyle='#b8cad666';x.lineWidth=1.2;x.beginPath();x.moveTo(0,y);x.bezierCurveTo(180,y+2,340,y-3,N,y);x.stroke();}
       for(let i=0;i<260;i++){x.strokeStyle=i%4?'#bbd6eb20':'#162c6345';x.lineWidth=.5;const a=rnd()*N,b=rnd()*N;x.beginPath();x.moveTo(a,b);x.lineTo(a+3+rnd()*19,b+2+rnd()*4);x.stroke();}
@@ -118,7 +118,7 @@ export function makeMaterials(){
     bud:mat({color:'#843e50',map:maps.grain,roughness:.83}),
     flower:mat({color:'#dbc54b',roughness:.62}),
     seedGold:mat({color:'#ae873b',map:maps.grain,roughness:.51,metalness:.12}),
-    petal:mat({color:'#eed168',roughness:.76}),
+    petal:mat({color:'#e5d298',map:maps.grain,bumpMap:grain,bumpScale:.002,roughness:.91,side:T.DoubleSide}),
     paper:mat({map:maps.paper,roughness:.96,bumpMap:grain,bumpScale:.012}),
     menu:mat({map:maps.menu,roughness:.95,bumpMap:grain,bumpScale:.009}),
     receipt:mat({map:maps.receipt,roughness:.95,bumpMap:grain,bumpScale:.008}),
@@ -128,9 +128,9 @@ export function makeMaterials(){
     // Opaque colored seeds remain visible inside the refractive glass pocket.
     // Mixing alpha blending and transmission for nested shells would erase
     // their depth in the single refraction buffer used by this renderer.
-    wine:mat({color:'#6e263e',bumpMap:grain,bumpScale:.003,roughness:.36,metalness:.03,clearcoat:.38,clearcoatRoughness:.27}),
+    wine:mat({color:'#694650',bumpMap:grain,bumpScale:.007,roughness:.78,metalness:0,clearcoat:.10,clearcoatRoughness:.6}),
     amber:mat({color:'#bd8d38',roughness:.18,metalness:.35,clearcoat:.7,clearcoatRoughness:.14}),
-    violet:mat({color:'#684467',bumpMap:grain,bumpScale:.003,roughness:.39,metalness:.02,clearcoat:.33,clearcoatRoughness:.29}),
+    violet:mat({color:'#786684',map:maps.grain,bumpMap:grain,bumpScale:.003,roughness:.82,metalness:0,side:T.DoubleSide,clearcoat:.06}),
     brass:mat({color:'#a49064',metalness:.79,roughness:.35,bumpMap:grain,bumpScale:.002}),
     warmCore:mat({color:'#edbd63',emissive:'#d99135',emissiveIntensity:.55,roughness:.25,metalness:.08}),
     specimenGlass:mat({side:T.DoubleSide,color:'#e1e9df',transmission:0,opacity:.20,transparent:true,depthWrite:false,forceSinglePass:true,roughness:.10,metalness:.09,envMapIntensity:1.15,clearcoat:1,clearcoatRoughness:.07}),
@@ -162,7 +162,7 @@ export function makeMaterials(){
     const quadrant=(x,y)=>{const t=atlas.clone();t.repeat.set(.499,.499);t.offset.set(x*.5+.0005,y*.5+.0005);t.needsUpdate=true;textures.push(t);return t;};
     materials.silver.bumpMap=quadrant(0,0);materials.silver.bumpScale=.002;materials.silver.color.set('#8b9a93');materials.silver.roughness=.36;materials.silver.needsUpdate=true;
     const amber=quadrant(1,0);
-    for(const key of ['amber','seedGold']){materials[key].map=amber;materials[key].color.set('#ffffff');materials[key].roughness=.21;materials[key].metalness=.24;materials[key].clearcoat=.88;materials[key].clearcoatRoughness=.09;materials[key].emissive.set('#a46b1f');materials[key].emissiveIntensity=.17;materials[key].needsUpdate=true;}
+    for(const key of ['amber','seedGold']){materials[key].map=amber;materials[key].color.set('#d2c598');materials[key].roughness=.66;materials[key].metalness=.06;materials[key].clearcoat=.20;materials[key].clearcoatRoughness=.45;materials[key].emissive.set('#a46b1f');materials[key].emissiveIntensity=.035;materials[key].needsUpdate=true;}
     resolve();
   },undefined,reject));
   for(const [name,material] of Object.entries(materials))material.name=`Jielan / ${name}`;
