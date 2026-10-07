@@ -1,7 +1,7 @@
 {
-  "version": "0.36.0",
+  "version": "0.37.0",
   "date": "2026-10-07",
-  "pageVersions": {"index":"0.36.0","yesterday-today":"0.34.0","crossover":"0.34.0","poem":"0.34.0","rain-finale":"0.34.0","jielan":"0.34.0","falling":"0.34.0","my-view":"0.36.0"},
+  "pageVersions": {"index":"0.37.0","yesterday-today":"0.34.0","crossover":"0.34.0","poem":"0.34.0","rain-finale":"0.34.0","jielan":"0.34.0","falling":"0.34.0","my-view":"0.37.0"},
   "edition": "the-shape-of-what-remains",
   "exhibitionTitle": "留下的形状",
   "worlds": ["yesterday-today","crossover","poem","rain-finale","jielan","falling","my-view"],
@@ -9,7 +9,7 @@
   "archived": ["forest"],
   "sceneVersion": "mixed-see-sceneVersions",
   "contentVersion": "0.12.3",
-  "sceneVersions": {"yesterday-today":"0.12.3","crossover":"0.12.3","poem":"0.22.0","rain-finale":"0.12.3","jielan":"0.33.0","falling":"0.31.0","my-view":"0.36.0"},
+  "sceneVersions": {"yesterday-today":"0.12.3","crossover":"0.12.3","poem":"0.22.0","rain-finale":"0.12.3","jielan":"0.33.0","falling":"0.31.0","my-view":"0.37.0"},
   "homepageEdition": "Seven catalogue entries / The Way I See",
   "scope": "The Way I See is rebuilt toward the supplied composition: a composed paper-stone mass, generous curved folds, restrained brush fragments, a handwritten leaf, cobalt cloth, delicate red cords and soft upper-right mist. The earlier six pages, scene sources and assets retain exact bytes.",
   "runtimeVersion": "0.25.0",

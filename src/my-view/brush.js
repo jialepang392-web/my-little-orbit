@@ -1,18 +1,38 @@
-// Original pressure-varying brush paths; no external fonts or reference pixels.
+// Four original filled brush silhouettes. No font files or cover pixels are used.
+// Broad pressure changes and tapered exits replace uniform tubular strokes.
 const glyphs={
- '之':[[8,[[48,10],[54,7],[58,13]]],[7,[[17,34],[47,27],[73,21],[80,27],[62,44],[37,66],[19,80]]],[11,[[19,80],[37,74],[58,79],[78,86],[95,79]]]],
- '见':[[7,[[25,19],[27,39],[26,62]]],[7,[[25,19],[49,15],[76,13],[73,38],[71,62]]],[7,[[51,31],[51,50],[44,66],[27,85],[13,91]]],[9,[[61,55],[59,75],[61,87],[76,89],[90,82],[94,66]]]],
- '以':[[8,[[28,11],[27,34],[25,56],[39,50]]],[8,[[46,22],[52,25],[56,34]]],[9,[[76,8],[75,31],[64,59],[43,83],[30,94]]],[9,[[64,56],[77,77],[91,89]]]],
- '我':[[7,[[20,26],[41,20],[57,13]]],[8,[[9,44],[41,37],[75,30]]],[9,[[37,21],[40,46],[39,73],[34,88],[24,83]]],[7,[[14,74],[34,63],[53,51]]],[10,[[57,8],[60,33],[64,60],[77,87],[88,84],[96,66]]],[6,[[84,44],[74,57],[62,69],[52,80]]],[7,[[76,13],[83,19],[88,27]]]]
+ '之':[
+  'M43 5 Q52 0 57 8 Q60 13 52 22 L46 20 Q48 12 43 5Z',
+  'M12 30 Q30 27 49 22 L76 18 Q87 18 82 29 Q72 40 55 50 L29 68 Q42 64 59 69 Q79 78 97 68 Q92 82 78 86 Q61 85 46 79 Q26 73 7 83 L3 75 Q21 61 42 46 L67 28 Q42 34 15 38 L5 36Z'
+ ],
+ '见':[
+  'M22 12 L34 17 Q30 39 29 65 L20 69 Q23 42 19 24Z',
+  'M28 16 Q53 11 77 7 L85 15 Q78 30 76 62 L64 68 Q70 40 70 20 Q47 24 29 25Z',
+  'M46 31 Q54 24 59 32 Q55 48 53 58 Q45 81 13 94 L4 91 Q31 75 39 57 Q44 42 46 31Z',
+  'M61 53 L68 49 Q65 67 67 82 Q77 87 91 71 L98 58 Q96 88 88 93 Q69 98 59 88 Q53 80 58 67Z'
+ ],
+ '以':[
+  'M18 12 Q28 7 31 18 L28 51 L43 42 Q42 53 31 66 L18 76 Q14 67 18 51 L20 24Z',
+  'M43 18 Q57 21 59 31 Q57 40 50 43 Q48 30 40 26Z',
+  'M77 3 Q87 3 86 19 Q84 46 73 64 Q61 84 36 95 L28 92 Q52 73 60 56 Q72 33 73 15Z',
+  'M69 57 Q79 66 91 80 L100 87 Q89 92 85 89 Q73 77 65 65Z'
+ ],
+ '我':[
+  'M24 21 Q38 13 51 8 L57 15 Q43 25 19 31 L13 29Z',
+  'M7 40 Q42 32 78 25 L85 30 Q64 39 10 49 L3 46Z',
+  'M34 23 L45 22 Q48 56 42 85 Q39 95 28 94 L16 83 Q31 87 32 78 Q38 48 34 23Z',
+  'M8 68 Q31 59 55 44 L56 50 Q37 69 12 79 L4 76Z',
+  'M59 2 Q68 0 68 13 Q67 48 77 70 Q82 84 89 82 L99 65 Q100 87 92 95 Q84 101 72 87 Q57 67 55 31 L53 11Z',
+  'M82 39 L90 43 Q77 65 50 80 L43 79 Q68 59 76 44Z',
+  'M77 8 Q92 10 91 22 L86 28 Q82 16 73 14Z'
+ ]
 };
-function curve(points,t){const s=t*(points.length-1),i=Math.min(points.length-2,Math.floor(s)),u=s-i,a=points[Math.max(0,i-1)],b=points[i],c=points[i+1],d=points[Math.min(points.length-1,i+2)];return [0,1].map(k=>.5*((2*b[k])+(-a[k]+c[k])*u+(2*a[k]-5*b[k]+4*c[k]-d[k])*u*u+(-a[k]+3*b[k]-3*c[k]+d[k])*u*u*u));}
-export function paintBrush(ctx,glyph,x,y,w,h,colour='#151c19',seed=1){
+export function paintBrush(ctx,glyph,x,y,w,h,colour='#151b18'){
  ctx.save();ctx.translate(x,y);ctx.scale(w/100,h/100);ctx.fillStyle=colour;
- for(const [s,[width,points]] of glyphs[glyph].entries()){
-  const left=[],right=[];
-  for(let j=0;j<=90;j++){const t=j/90,p=curve(points,t),a=curve(points,Math.max(0,t-.003)),b=curve(points,Math.min(1,t+.003)),l=Math.hypot(b[0]-a[0],b[1]-a[1])||1,n=[-(b[1]-a[1])/l,(b[0]-a[0])/l],pressure=(.31+.65*Math.sin(Math.PI*(t*.82+.06))**.65)*(1+.1*Math.sin(j*2.3+s*7+seed)),r=width*pressure*.5;left.push([p[0]+n[0]*r,p[1]+n[1]*r]);right.push([p[0]-n[0]*r,p[1]-n[1]*r]);}
-  ctx.beginPath();[...left,...right.reverse()].forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));ctx.closePath();ctx.fill();
-  ctx.save();ctx.globalCompositeOperation='destination-out';ctx.strokeStyle='#000';ctx.lineWidth=.10;
-  for(let j=0;j<11;j++){ctx.beginPath();for(let k=0;k<13;k++){const t=.1+k*.062,p=curve(points,t),off=(j-5)*width*.053,q=[p[0]+off,p[1]+.23*Math.sin(k*1.7+j)];k?ctx.lineTo(...q):ctx.moveTo(...q);}ctx.stroke();}ctx.restore();
- }ctx.restore();
+ for(const path of glyphs[glyph])ctx.fill(new Path2D(path));
+ // Fine irregular paper grain keeps the silhouette solid without a repeated stripe.
+ ctx.globalCompositeOperation='destination-out';ctx.globalAlpha=.24;
+ let seed=127;const rnd=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
+ for(let i=0;i<2400;i++)ctx.fillRect(rnd()*100,rnd()*100,.06+rnd()*.18,.04+rnd()*.12);
+ ctx.restore();
 }
