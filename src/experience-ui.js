@@ -49,10 +49,10 @@ function initHomepage() {
 }
 
 function initArtwork() {
-  const stage = document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage,#jielan-stage,#falling-stage');
+  const stage = document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage,#jielan-stage,#falling-stage,#my-view-stage');
   const options = document.querySelector('.exhibit-options');
   if (stage && options) stage.before(options);
-  decorate(document.querySelector('.orbit-breadcrumb a'), 'arrow-left', '返回六件作品');
+  decorate(document.querySelector('.orbit-breadcrumb a'), 'arrow-left', '返回七件作品');
   decorate(options?.querySelector('.view-still'), 'image', '查看高清静态图版');
   decorate(options?.querySelector('.view-live'), 'box', '启动原作三维互动');
   decorate(options?.querySelector('.exhibit-inspect'), 'image', '放大高清图版');

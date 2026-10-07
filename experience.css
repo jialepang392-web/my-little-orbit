@@ -91,7 +91,7 @@ summary:focus-visible,
 
 .sleeve-home .collection-route {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 0;
   margin: 0 0 36px;
   border: 1px solid var(--line);
@@ -150,13 +150,15 @@ summary:focus-visible,
   min-height: 560px;
 }
 .sleeve-home .sleeve-surface { display: none; }
-.sleeve-home .world-card.falling {
+.sleeve-home .world-card.falling,
+.sleeve-home .world-card.my-view {
   grid-column: 1 / -1;
   grid-template-columns: minmax(0, 1.15fr) minmax(330px, .85fr);
   grid-template-rows: minmax(490px, 60vh);
   min-height: 530px;
 }
-.sleeve-home .world-card.falling .sleeve-ticket {
+.sleeve-home .world-card.falling .sleeve-ticket,
+.sleeve-home .world-card.my-view .sleeve-ticket {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -167,6 +169,9 @@ summary:focus-visible,
   .sleeve-home .world-card.falling { grid-template-columns: 1fr; grid-template-rows: minmax(320px, 65vw) auto; min-height: 0; }
   .sleeve-home .world-card.falling .sleeve-ticket { padding: 24px; border-left: 0; }
   .sleeve-home .world-card.falling h2 { font-size: 42px; }
+  .sleeve-home .world-card.my-view { grid-template-columns: 1fr; grid-template-rows: minmax(320px, 65vw) auto; min-height: 0; }
+  .sleeve-home .world-card.my-view .sleeve-ticket { padding: 24px; border-left: 0; }
+  .sleeve-home .world-card.my-view h2 { font-size: 42px; }
 }
 .sleeve-home .sleeve-catalogue {
   z-index: 4;

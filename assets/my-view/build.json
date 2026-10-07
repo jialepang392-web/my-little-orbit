@@ -1,0 +1,189 @@
+{
+  "status": "passed",
+  "version": "0.34.0",
+  "sceneVersion": "0.34.0",
+  "title": "以我之见",
+  "exported": true,
+  "created": "2026-10-07T02:23:22.679075+00:00",
+  "buildLabel": "paper-landscape",
+  "sourceHashes": {
+    "my-view.html": "c429c171339cb78d67fa6af8b630be0a11f8af6cf4f67764c8c2070410c8e976",
+    "my-view.css": "0cdca1086c1527ab9279f990633bc53e9c0523310302d3ccc3e30cc2139c5f86",
+    "src/my-view-page.js": "aa278e310452a761d744fa4b9781ad184cba0cd7c3e90a93168a8829a9d79216",
+    "src/my-view/model.js": "28fb9c1d7565c156eec4ec81f3a57c4fdf20fe1744c1e57e77c8a98c14bc26d8",
+    "src/my-view/materials.js": "ea5856a4a23b9551730473cfca9e30e6ebc72d36e902252342c93323bc24c482",
+    "src/my-view/viewer.js": "1b6f397f10b1dee0b066b9339e90aa832b70d541106f88f6043c014f421fa0a0",
+    "src/render-performance.js": "efcb230da5f9b1a333234f773a92e48dbfec0b417e613f769c30ebb4d3d27c0b",
+    "src/exhibition-ui.js": "2c4644516c9a85d989b2b6fee1bcfa2a69078afa6e92882351892870a8fe2e27",
+    "src/experience-ui.js": "87fa7b7578736632c483412e465abfe79e85549297cdf894fc06f97457b62885",
+    "src/visit-ui.js": "0d89a44a399ffb9c9d397f29328c95426470e844cf5f9c17c797d04a012f07b5",
+    "experience.css": "274287ee4449af4e8f5c1f596715026e59dbdad6e55464a6bc478cb5d58b7e32"
+  },
+  "buildScriptSha256": "d740db23cb8f0e4b18d417b0728bd994e43eb1b57c6b434c1737fd1f58b9e3dd",
+  "stats": {
+    "engine": "three.js r180",
+    "renderDpr": "2.000",
+    "renderWidth": "2048",
+    "renderHeight": "2048",
+    "qualityMode": "build",
+    "shadowMode": "continuous",
+    "ready": "true",
+    "title": "以我之见",
+    "version": "0.34.0",
+    "view": "front",
+    "detail": "",
+    "frames": "11",
+    "solidCore": true,
+    "bodyRadius": 1.075,
+    "bodyAxes": [
+      1,
+      1,
+      1
+    ],
+    "layers": [
+      "01 / broken mineral shoulder and river strata",
+      "02 / torn rice paper and inked mountain folds",
+      "03 / silver-grey open gauze and folded cloth",
+      "04 / broken brush gestures and a quiet written leaf",
+      "05 / cobalt violet jade and faded vermilion slips",
+      "06 / mineral fibres, dry stems and loose sewing",
+      "07 / continuous red silk paths, wrapped through the seams",
+      "08 / wind-worn blossoms and moss gathered in cracks",
+      "09 / porous translucent paper mist"
+    ],
+    "drawCalls": "44",
+    "triangles": "616818",
+    "modelMeshes": "44",
+    "modelTriangles": "616818",
+    "patches": "204",
+    "cords": "4",
+    "autoRotate": "false",
+    "separated": "false",
+    "separation": "0.0000",
+    "camera": "0.2749,0.5408,6.5980",
+    "worldRotation": "0.00000",
+    "study": "false",
+    "light": "studio",
+    "suspended": "false",
+    "visibleSurface": "true",
+    "englishTitle": "The Way I See",
+    "sceneVersion": "0.34.0",
+    "artRevision": 1,
+    "bodyCenter": [
+      0,
+      -0.06,
+      0
+    ],
+    "patchCount": 204,
+    "stoneCount": 48,
+    "cordCount": 4,
+    "fiberCount": 3283,
+    "flowerCount": 8,
+    "petalCount": 232,
+    "mistLayers": 6,
+    "meshCount": 44,
+    "triangleCount": 616818,
+    "exportPrimitiveCount": 44,
+    "detailTargets": {
+      "paper": [
+        -0.15,
+        0.65,
+        1.2
+      ],
+      "cords": [
+        -0.01,
+        -0.22,
+        1.51
+      ],
+      "strata": [
+        -0.36,
+        -0.88,
+        1.11
+      ]
+    },
+    "structure": "Independent equal-axis mineral assemblage with rice-paper folds, layered rough stone shelves, broken black brush gestures, four continuous red silk paths, woven fibres, sparse botanical colour and porous upper mist. Side and back are complete sculptural structures.",
+    "referenceBasis": "User supplied The Way I See collage and lyrics; geometry and materials authored specifically for this seventh world, not a recoloured existing artwork or complete image projection.",
+    "visualStatus": "Current revision requires actual six-view inspection; this metadata is not art approval.",
+    "rootScale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "glbReload": {
+    "meshes": 44,
+    "triangles": 616818,
+    "bad": 0,
+    "version": "0.34.0",
+    "core": {
+      "name": "rough equal-axis closed mineral heart",
+      "solidCore": true,
+      "radius": 1.075,
+      "axes": [
+        1,
+        1,
+        1
+      ],
+      "center": [
+        0,
+        -0.06,
+        0
+      ]
+    }
+  },
+  "assets": {
+    "cover.webp": {
+      "sha256": "a5920da3d10ea2e5c736893d5e0d0933c6cfae3c68a5a313bafda40be9bd6bbb",
+      "bytes": 481786
+    },
+    "side.webp": {
+      "sha256": "6997700a10554602a8d6eafb981e395b3220f493ed1a87cf7915016fa20a2fbc",
+      "bytes": 439620
+    },
+    "back.webp": {
+      "sha256": "2be05a6b4da4677a3169b1df80ee01de0b96390aadd6f976f64febb88f655ace",
+      "bytes": 478416
+    },
+    "detail-paper.webp": {
+      "sha256": "6fd4aa5df9112fbd360136e4c8e51616f6d5d3cbea2fa55e3f3dd6da72c9653e",
+      "bytes": 531974
+    },
+    "detail-cords.webp": {
+      "sha256": "9552750ae1caef4acd7ed3a3c46659c5e7a7b838ecb9af33b4d7d608b446d0b0",
+      "bytes": 858598
+    },
+    "detail-strata.webp": {
+      "sha256": "92196b11b04254e74fed59d5b9bd49b3e7599ff9bc3320f99212036e903ed21d",
+      "bytes": 700186
+    },
+    "poster.png": {
+      "sha256": "3f68fba724f4ab31af2821234dfe60faa98faf9e3fc4cc62339d0d40013847aa",
+      "bytes": 5393478
+    },
+    "front.png": {
+      "sha256": "c756cc0bc1494c6f487ff8a668ff64008358801b157d2f0e2c1dd993c33e8da3",
+      "bytes": 4132065
+    },
+    "my-view.glb": {
+      "sha256": "6ebaaf21868cd9873f9d707d750285e47d2c386170e0e01ecd2ce275024bc8c8",
+      "bytes": 19958268
+    },
+    "cover-192.webp": {
+      "sha256": "85e615fb280e1a7e8352b0a527c0ce2fa3f29b52478bc3c6f9cf791b9245effa",
+      "bytes": 9438
+    },
+    "cover-480.webp": {
+      "sha256": "8575a5872ceb3f300ec5d1c3ede34a08505676e7500890f051c31fee678d9cd1",
+      "bytes": 41694
+    },
+    "cover-768.webp": {
+      "sha256": "f5c0e24d302c14d6873feb53cbd06504820deed33ffec85d7f515b101c742ff0",
+      "bytes": 87720
+    },
+    "cover-1200.webp": {
+      "sha256": "a8ecb92ea17d90fce6489e2a3929c5365d244437b1f27f7d83aca3f93827e25e",
+      "bytes": 178634
+    }
+  },
+  "provenance": "Original Three.js sculptural geometry, procedural material studies and local system-font inscriptions. All plates, poster and GLB use the same frozen scene. No whole reference image, artist credits or full lyrics are projected or published."
+}

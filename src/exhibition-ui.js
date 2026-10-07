@@ -3,8 +3,8 @@ import { initialStillView } from './exhibition-state.js?v=0260';
 import { createImageZoom } from './exhibition-zoom.js?v=0130';
 import { showExhibitDialog } from './exhibition-dialog.js?v=0150';
 const world=document.body.dataset.orbitWorld;
-const names={'yesterday-today':'昨天，今天',crossover:'删了一百遍',poem:'思念若是一首诗','rain-finale':'雨终曲',jielan:'芥兰',falling:'在坠落时'};
-const stage=document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage,#jielan-stage,#falling-stage');
+const names={'yesterday-today':'昨天，今天',crossover:'删了一百遍',poem:'思念若是一首诗','rain-finale':'雨终曲',jielan:'芥兰',falling:'在坠落时','my-view':'以我之见'};
+const stage=document.querySelector('#yesterday-stage,#concept-stage,#world-stage,#rain-stage,#jielan-stage,#falling-stage,#my-view-stage');
 const controls=document.querySelector('.time-controls,.model-controls,.world-controls,.rain-controls');
 const edition=(document.querySelector('meta[name="orbit-version"]')?.content||'0.12.0').replaceAll('.','');
 if(world==='poem'){
