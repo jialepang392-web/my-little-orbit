@@ -1,17 +1,17 @@
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {makeMyView} from './model.js?v=0350';
+import {makeMyView} from './model.js?v=0360';
 import {createRenderPerformance} from '../render-performance.js?v=0260';
 
-const PAPER='#eaeae2';
+const PAPER='#f0eee7';
 function environment(renderer){const c=document.createElement('canvas');c.width=1024;c.height=512;const x=c.getContext('2d'),gradient=x.createLinearGradient(0,0,0,512);gradient.addColorStop(0,'#e3e4dc');gradient.addColorStop(.48,'#929c9a');gradient.addColorStop(.57,'#545b5b');gradient.addColorStop(1,'#ccc9be');x.fillStyle=gradient;x.fillRect(0,0,1024,512);for(const [a,b,w,h] of [[130,60,140,250],[635,55,170,130]]){x.fillStyle='#fffdf0';x.fillRect(a,b,w,h);}const map=new T.CanvasTexture(c);map.colorSpace=T.SRGBColorSpace;map.mapping=T.EquirectangularReflectionMapping;const pm=new T.PMREMGenerator(renderer),env=pm.fromEquirectangular(map);map.dispose();pm.dispose();return env;}
 /** Shared exhibition interaction pattern, with this work's own light and cameras. */
 export function createMyViewViewer(canvas,{onReady=()=>{},onError=()=>{}}={}){
   const build=new URLSearchParams(location.search).get('build')==='1',reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,preserveDrawingBuffer:build,powerPreference:'low-power'});renderer.outputColorSpace=T.SRGBColorSpace;renderer.setClearColor(PAPER,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+  const renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,preserveDrawingBuffer:build,powerPreference:'low-power'});renderer.outputColorSpace=T.SRGBColorSpace;renderer.setClearColor(PAPER,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(34,1,.1,70),world=makeMyView();scene.add(world.root);const env=environment(renderer);scene.environment=env.texture;scene.environmentIntensity=.40;
-  scene.add(new T.HemisphereLight('#f6f5ea','#959b98',1.1));
-  const key=new T.DirectionalLight('#fff7eb',2.65);key.position.set(-4.2,6,5.8);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.normalBias=.006;key.shadow.bias=-.00015;key.shadow.radius=3;Object.assign(key.shadow.camera,{left:-3,right:3,top:3,bottom:-3,near:1,far:23});scene.add(key);
+  scene.add(new T.HemisphereLight('#f6f5ea','#8b9190',.90));
+  const key=new T.DirectionalLight('#fffaf3',2.4);key.position.set(-4.2,6,5.8);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.normalBias=.006;key.shadow.bias=-.00015;key.shadow.radius=4;Object.assign(key.shadow.camera,{left:-3,right:3,top:3,bottom:-3,near:1,far:23});scene.add(key);
   const fill=new T.DirectionalLight('#e5e8df',1.0);fill.position.set(5.3,1.4,3);scene.add(fill);const reverseLight=new T.DirectionalLight('#eee9df',1.15);reverseLight.position.set(2.8,3.8,-5.5);scene.add(reverseLight);
   const controls=new OrbitControls(camera,canvas);controls.enablePan=false;controls.enableDamping=!reduced;controls.dampingFactor=.11;controls.rotateSpeed=.60;controls.minDistance=build?.65:1.3;controls.maxDistance=35;
   const clay=new T.MeshStandardMaterial({color:'#bebdb3',roughness:.93,side:T.DoubleSide}),abort=new AbortController(),fitCache=new Map();

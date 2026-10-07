@@ -1,27 +1,28 @@
 {
   "status": "passed",
-  "version": "0.35.0",
-  "sceneVersion": "0.35.0",
+  "version": "0.36.0",
+  "sceneVersion": "0.36.0",
   "title": "以我之见",
   "exported": true,
-  "created": "2026-10-07T02:54:28.497476+00:00",
-  "buildLabel": "reference-published",
+  "created": "2026-10-07T03:40:03.398276+00:00",
+  "buildLabel": "material-final",
   "sourceHashes": {
-    "my-view.html": "014dde56989b352207deec7cea53a72f776647c40528d312215a6f0a4bd0381c",
-    "my-view.css": "0cdca1086c1527ab9279f990633bc53e9c0523310302d3ccc3e30cc2139c5f86",
-    "src/my-view-page.js": "3b6c08f4789990e5113b445727d6891bf2dcdc88c3e63ae9946f5e1dc3486604",
-    "src/my-view/model.js": "3530c631b12814dec15d155cff31da84f13747c1867fefb2f5c5c28add35d3f6",
-    "src/my-view/materials.js": "8a1525a1b88472ce00b0e54a9aadfa2d0af926df140e0ab46317852e8e0b89be",
+    "my-view.html": "62b031796d190a01c79f6eff5defd100f01faa585a8da343b399a9556af32ae8",
+    "my-view.css": "01c93bdfa3889b8e4fe2b1ec0015da38202d685e2d2977e97a236dfbcc69fdbe",
+    "src/my-view-page.js": "d2777bb03f039bd3d11c9d4b0ad26b50087aaff9119fdc84ddb2bd268d27d3ff",
+    "src/my-view/model.js": "941f352b9bac406b1fe03f7c26cd0d3e3105ea0c8642accacb5bab63e8364510",
+    "src/my-view/materials.js": "0adff36f6f9d7a92142cdfa03cfdac5278c3b889323e4712e0c34510704bd3a3",
     "src/my-view/brush.js": "59e0ac8e08b0d4c7a1238d83345f1ebed6768a486f26c5dc4f382b7a4d08ff75",
-    "src/my-view/viewer.js": "7d9dbb2a89d007a0118bf3586807e8a2b37109b8c44e515e4654d4f142300caf",
+    "src/my-view/viewer.js": "003612fcc380619df34d6fed69ed438743c11cd42918676e9178a38b1a267a17",
     "src/render-performance.js": "efcb230da5f9b1a333234f773a92e48dbfec0b417e613f769c30ebb4d3d27c0b",
     "src/exhibition-ui.js": "2c4644516c9a85d989b2b6fee1bcfa2a69078afa6e92882351892870a8fe2e27",
     "src/experience-ui.js": "87fa7b7578736632c483412e465abfe79e85549297cdf894fc06f97457b62885",
     "src/visit-ui.js": "0d89a44a399ffb9c9d397f29328c95426470e844cf5f9c17c797d04a012f07b5",
     "experience.css": "274287ee4449af4e8f5c1f596715026e59dbdad6e55464a6bc478cb5d58b7e32",
-    "assets/my-view/reference-materials-0350.png": "0de82dba684b8545a457564b4259e708508d6ec3108c2c88ed5141da4da9c81c"
+    "assets/my-view/reference-materials-0350.png": "0de82dba684b8545a457564b4259e708508d6ec3108c2c88ed5141da4da9c81c",
+    "assets/my-view/quiet-materials-0360.png": "e9e8bffce533eb7690c1579608df2a8e4246c30f8be81d405755495148a854d6"
   },
-  "buildScriptSha256": "9614adda516bece9c1005f1b3be785eae2c4c599e0ab30d1f4988edd6784f4c6",
+  "buildScriptSha256": "f4e78ae2d814793a3a0295de86726ed4514cce4dea881c597b56cd70aeb4daf2",
   "stats": {
     "engine": "three.js r180",
     "renderDpr": "2.000",
@@ -31,10 +32,10 @@
     "shadowMode": "continuous",
     "ready": "true",
     "title": "以我之见",
-    "version": "0.35.0",
+    "version": "0.36.0",
     "view": "front",
     "detail": "",
-    "frames": "12",
+    "frames": "11",
     "solidCore": true,
     "bodyRadius": 0.86,
     "bodyAxes": [
@@ -54,11 +55,11 @@
       "09 / layered warm mist over the upper shoulder",
       "10 / four original brush silhouettes around the assemblage"
     ],
-    "drawCalls": "53",
-    "triangles": "505052",
-    "modelMeshes": "53",
-    "modelTriangles": "505052",
-    "patches": "198",
+    "drawCalls": "52",
+    "triangles": "369296",
+    "modelMeshes": "52",
+    "modelTriangles": "369296",
+    "patches": "129",
     "cords": "4",
     "autoRotate": "false",
     "separated": "false",
@@ -70,24 +71,24 @@
     "suspended": "false",
     "visibleSurface": "true",
     "englishTitle": "The Way I See",
-    "sceneVersion": "0.35.0",
-    "artRevision": 2,
+    "sceneVersion": "0.36.0",
+    "artRevision": 4,
     "bodyCenter": [
       0,
       -0.06,
       0
     ],
-    "patchCount": 198,
+    "patchCount": 129,
     "stoneCount": 36,
     "cordCount": 4,
-    "fiberCount": 2217,
+    "fiberCount": 877,
     "flowerCount": 8,
     "petalCount": 136,
     "mistLayers": 6,
     "brushGlyphs": 4,
-    "meshCount": 53,
-    "triangleCount": 505052,
-    "exportPrimitiveCount": 53,
+    "meshCount": 52,
+    "triangleCount": 369296,
+    "exportPrimitiveCount": 52,
     "detailTargets": {
       "paper": [
         -0.1,
@@ -105,7 +106,7 @@
         0.99
       ]
     },
-    "structure": "Dense irregular equal-axis assemblage with a continuous diagonal stone band, worn printed paper, upper-left cobalt fabric, translucent warm mist, central handwritten leaf and four original peripheral brush glyphs. Four red silk paths pass through the lower strata. Side and back are authored three-dimensional continuations.",
+    "structure": "Equal-axis assemblage with fine pale paper and silver-grey textiles, a narrow diagonal stone band, upper-left cobalt fabric, restrained warm mist, a central written leaf and four recessed original brush glyphs. Four red silk paths pass through the lower strata. Side and back are authored three-dimensional continuations.",
     "referenceBasis": "User supplied The Way I See cover and lyrics. Original geometry, original brush paths and an AI-generated macro material atlas; no whole reference image is projected or published.",
     "visualStatus": "Render inspection is recorded separately; geometry metadata is not human approval.",
     "rootScale": [
@@ -115,10 +116,10 @@
     ]
   },
   "glbReload": {
-    "meshes": 53,
-    "triangles": 505052,
+    "meshes": 52,
+    "triangles": 369296,
     "bad": 0,
-    "version": "0.35.0",
+    "version": "0.36.0",
     "core": {
       "name": "recessed equal-axis mineral heart",
       "solidCore": true,
@@ -137,56 +138,56 @@
   },
   "assets": {
     "cover.webp": {
-      "sha256": "7275a45e35ec55cc86e1ad3f1b956ae210b7e39a0e246a823928b4fc2c5effac",
-      "bytes": 623572
+      "sha256": "dc083847a958bdf5850692e5095f0d6bca6a6a878db6abe06aa39b492d8982f3",
+      "bytes": 444758
     },
     "side.webp": {
-      "sha256": "cdffcf86cb07eba7bd7e8001b532466f0d746a39b7e42abef8db8b93efc37b70",
-      "bytes": 539066
+      "sha256": "52f0a0d15b6d0de59358014a39b43f85dddf2b3415ac20473a0c75953f4569b2",
+      "bytes": 505704
     },
     "back.webp": {
-      "sha256": "9ef1b39a1ca2a9b6b0d3afcf680b33473e7ca1ac5dfe2cb1aad0b8418e3f2a84",
-      "bytes": 750140
+      "sha256": "73b2ceb83fbea8cea61a0e8bfb394f00f5d2364820a8a9d7ba54ada345f434f0",
+      "bytes": 643374
     },
     "detail-paper.webp": {
-      "sha256": "3df626d4cc00bbe8a33b62e8887f29ae1a9a9d4cac17fe604d8c91db23d9f562",
-      "bytes": 1036248
+      "sha256": "18ed7c3a387fcd71d89228f527f3a35924d2ce04db7c1781069fb442fcbf3217",
+      "bytes": 1091200
     },
     "detail-cords.webp": {
-      "sha256": "b72e94e875f067fff04a1f2eb7254549656f6088f37320b7cf3951613186903b",
-      "bytes": 1608464
+      "sha256": "a41fdb7817fed018057d18d1cd34961c28cf1d4e0d5962756f9f64dae2a286e1",
+      "bytes": 1316612
     },
     "detail-strata.webp": {
-      "sha256": "8b6725bf2d62cb21af11165c886d2584e948c96cf69a459af80404c852ca9272",
-      "bytes": 997936
+      "sha256": "009446d659af0dcf69adfcb9c6d4538fac03e89c87ee621f073b6dda144f4566",
+      "bytes": 818292
     },
     "poster.png": {
-      "sha256": "24570a0bbaadbdde0b331124b3f09f818de99919b4993d81b69591c5a70b2076",
-      "bytes": 5291370
+      "sha256": "b6165405ec9ee67293bc1f1cbc30ab3524d9e9c7441ab2272dc437bfb37ba151",
+      "bytes": 4286593
     },
     "front.png": {
-      "sha256": "9d6a707cd1a6b2d89655cbb82fde4ebad872b38e6099a03386601b94cb775e43",
-      "bytes": 4044057
+      "sha256": "80517cf6e079467ca58a34473ecb323de15aa758d928a6fe2b1cf67b097e8ab3",
+      "bytes": 3291125
     },
     "my-view.glb": {
-      "sha256": "483ebe1dc25f0427379720e0e8d51d8579d41f5e513980e2d503035738c64625",
-      "bytes": 21655352
+      "sha256": "6a16fa33cca5fee7975e7cdea53f2f060cfd16d615b53c38f254a86004f15392",
+      "bytes": 34855944
     },
     "cover-192.webp": {
-      "sha256": "55308486e52607c86b794d1b5a492339f684ac0ad3f91429190ef7d8c1844837",
-      "bytes": 9434
+      "sha256": "40fce24e6fc3b9a69e9950558acc9f7be3853e692f3527e75f73369a55672a47",
+      "bytes": 6574
     },
     "cover-480.webp": {
-      "sha256": "f09d77a863b4c4acfdb59b42ba1eaa035783665aeaa882195c5fa4f4dc6623b8",
-      "bytes": 46076
+      "sha256": "bd51ceddc481422cea90812955adeb9ca1b2aad8783508440b626c3654ecd9c7",
+      "bytes": 29834
     },
     "cover-768.webp": {
-      "sha256": "032a56ab27b08e2ffe740ba031db0ec66d752d29b29befd97e73bb0ecd72359e",
-      "bytes": 105284
+      "sha256": "59c0ad9f6e3f7dcf1683461e7038390c3e51d755756e6bc6b5a279810f504e71",
+      "bytes": 68922
     },
     "cover-1200.webp": {
-      "sha256": "d183b15e40e830c4d5b5851125b4b8f3d116e241f84978a0712e712e422b0a3c",
-      "bytes": 232924
+      "sha256": "59148d75349169f01d19aa30d0e6e304106a6707eefcb7711bee9142dccf48d3",
+      "bytes": 154834
     }
   },
   "provenance": "Original Three.js sculptural geometry, generated macro material swatches and original brush inscriptions. All plates, poster and GLB use the same frozen scene. No whole reference image, artist credits or full lyrics are projected or published."
