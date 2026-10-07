@@ -1,25 +1,27 @@
 {
   "status": "passed",
-  "version": "0.34.0",
-  "sceneVersion": "0.34.0",
+  "version": "0.35.0",
+  "sceneVersion": "0.35.0",
   "title": "以我之见",
   "exported": true,
-  "created": "2026-10-07T02:23:22.679075+00:00",
-  "buildLabel": "paper-landscape",
+  "created": "2026-10-07T02:54:28.497476+00:00",
+  "buildLabel": "reference-published",
   "sourceHashes": {
-    "my-view.html": "c429c171339cb78d67fa6af8b630be0a11f8af6cf4f67764c8c2070410c8e976",
+    "my-view.html": "014dde56989b352207deec7cea53a72f776647c40528d312215a6f0a4bd0381c",
     "my-view.css": "0cdca1086c1527ab9279f990633bc53e9c0523310302d3ccc3e30cc2139c5f86",
-    "src/my-view-page.js": "aa278e310452a761d744fa4b9781ad184cba0cd7c3e90a93168a8829a9d79216",
-    "src/my-view/model.js": "28fb9c1d7565c156eec4ec81f3a57c4fdf20fe1744c1e57e77c8a98c14bc26d8",
-    "src/my-view/materials.js": "ea5856a4a23b9551730473cfca9e30e6ebc72d36e902252342c93323bc24c482",
-    "src/my-view/viewer.js": "1b6f397f10b1dee0b066b9339e90aa832b70d541106f88f6043c014f421fa0a0",
+    "src/my-view-page.js": "3b6c08f4789990e5113b445727d6891bf2dcdc88c3e63ae9946f5e1dc3486604",
+    "src/my-view/model.js": "3530c631b12814dec15d155cff31da84f13747c1867fefb2f5c5c28add35d3f6",
+    "src/my-view/materials.js": "8a1525a1b88472ce00b0e54a9aadfa2d0af926df140e0ab46317852e8e0b89be",
+    "src/my-view/brush.js": "59e0ac8e08b0d4c7a1238d83345f1ebed6768a486f26c5dc4f382b7a4d08ff75",
+    "src/my-view/viewer.js": "7d9dbb2a89d007a0118bf3586807e8a2b37109b8c44e515e4654d4f142300caf",
     "src/render-performance.js": "efcb230da5f9b1a333234f773a92e48dbfec0b417e613f769c30ebb4d3d27c0b",
     "src/exhibition-ui.js": "2c4644516c9a85d989b2b6fee1bcfa2a69078afa6e92882351892870a8fe2e27",
     "src/experience-ui.js": "87fa7b7578736632c483412e465abfe79e85549297cdf894fc06f97457b62885",
     "src/visit-ui.js": "0d89a44a399ffb9c9d397f29328c95426470e844cf5f9c17c797d04a012f07b5",
-    "experience.css": "274287ee4449af4e8f5c1f596715026e59dbdad6e55464a6bc478cb5d58b7e32"
+    "experience.css": "274287ee4449af4e8f5c1f596715026e59dbdad6e55464a6bc478cb5d58b7e32",
+    "assets/my-view/reference-materials-0350.png": "0de82dba684b8545a457564b4259e708508d6ec3108c2c88ed5141da4da9c81c"
   },
-  "buildScriptSha256": "d740db23cb8f0e4b18d417b0728bd994e43eb1b57c6b434c1737fd1f58b9e3dd",
+  "buildScriptSha256": "9614adda516bece9c1005f1b3be785eae2c4c599e0ab30d1f4988edd6784f4c6",
   "stats": {
     "engine": "three.js r180",
     "renderDpr": "2.000",
@@ -29,81 +31,83 @@
     "shadowMode": "continuous",
     "ready": "true",
     "title": "以我之见",
-    "version": "0.34.0",
+    "version": "0.35.0",
     "view": "front",
     "detail": "",
-    "frames": "11",
+    "frames": "12",
     "solidCore": true,
-    "bodyRadius": 1.075,
+    "bodyRadius": 0.86,
     "bodyAxes": [
       1,
       1,
       1
     ],
     "layers": [
-      "01 / broken mineral shoulder and river strata",
-      "02 / torn rice paper and inked mountain folds",
-      "03 / silver-grey open gauze and folded cloth",
-      "04 / broken brush gestures and a quiet written leaf",
-      "05 / cobalt violet jade and faded vermilion slips",
-      "06 / mineral fibres, dry stems and loose sewing",
-      "07 / continuous red silk paths, wrapped through the seams",
-      "08 / wind-worn blossoms and moss gathered in cracks",
-      "09 / porous translucent paper mist"
+      "01 / mineral heart and a long diagonal broken stone band",
+      "02 / irregular overlapping rice paper and ink remnants",
+      "03 / torn linen, folded gauze and crumpled silver",
+      "04 / crooked central written leaf",
+      "05 / upper-left cobalt print and faded pressed petals",
+      "06 / woven edges and loose dry fibres",
+      "07 / vermilion silk passing through the lower folds",
+      "08 / pressed blossoms in the paper seams",
+      "09 / layered warm mist over the upper shoulder",
+      "10 / four original brush silhouettes around the assemblage"
     ],
-    "drawCalls": "44",
-    "triangles": "616818",
-    "modelMeshes": "44",
-    "modelTriangles": "616818",
-    "patches": "204",
+    "drawCalls": "53",
+    "triangles": "505052",
+    "modelMeshes": "53",
+    "modelTriangles": "505052",
+    "patches": "198",
     "cords": "4",
     "autoRotate": "false",
     "separated": "false",
     "separation": "0.0000",
-    "camera": "0.2749,0.5408,6.5980",
+    "camera": "0.0913,0.2114,7.3060",
     "worldRotation": "0.00000",
     "study": "false",
     "light": "studio",
     "suspended": "false",
     "visibleSurface": "true",
     "englishTitle": "The Way I See",
-    "sceneVersion": "0.34.0",
-    "artRevision": 1,
+    "sceneVersion": "0.35.0",
+    "artRevision": 2,
     "bodyCenter": [
       0,
       -0.06,
       0
     ],
-    "patchCount": 204,
-    "stoneCount": 48,
+    "patchCount": 198,
+    "stoneCount": 36,
     "cordCount": 4,
-    "fiberCount": 3283,
+    "fiberCount": 2217,
     "flowerCount": 8,
-    "petalCount": 232,
+    "petalCount": 136,
     "mistLayers": 6,
-    "meshCount": 44,
-    "triangleCount": 616818,
-    "exportPrimitiveCount": 44,
+    "brushGlyphs": 4,
+    "meshCount": 53,
+    "triangleCount": 505052,
+    "exportPrimitiveCount": 53,
     "detailTargets": {
       "paper": [
-        -0.15,
-        0.65,
-        1.2
+        -0.1,
+        0.57,
+        1.19
       ],
       "cords": [
-        -0.01,
-        -0.22,
-        1.51
+        -0.03,
+        -0.33,
+        1.37
       ],
       "strata": [
-        -0.36,
-        -0.88,
-        1.11
+        -0.41,
+        -0.79,
+        0.99
       ]
     },
-    "structure": "Independent equal-axis mineral assemblage with rice-paper folds, layered rough stone shelves, broken black brush gestures, four continuous red silk paths, woven fibres, sparse botanical colour and porous upper mist. Side and back are complete sculptural structures.",
-    "referenceBasis": "User supplied The Way I See collage and lyrics; geometry and materials authored specifically for this seventh world, not a recoloured existing artwork or complete image projection.",
-    "visualStatus": "Current revision requires actual six-view inspection; this metadata is not art approval.",
+    "structure": "Dense irregular equal-axis assemblage with a continuous diagonal stone band, worn printed paper, upper-left cobalt fabric, translucent warm mist, central handwritten leaf and four original peripheral brush glyphs. Four red silk paths pass through the lower strata. Side and back are authored three-dimensional continuations.",
+    "referenceBasis": "User supplied The Way I See cover and lyrics. Original geometry, original brush paths and an AI-generated macro material atlas; no whole reference image is projected or published.",
+    "visualStatus": "Render inspection is recorded separately; geometry metadata is not human approval.",
     "rootScale": [
       1,
       1,
@@ -111,14 +115,14 @@
     ]
   },
   "glbReload": {
-    "meshes": 44,
-    "triangles": 616818,
+    "meshes": 53,
+    "triangles": 505052,
     "bad": 0,
-    "version": "0.34.0",
+    "version": "0.35.0",
     "core": {
-      "name": "rough equal-axis closed mineral heart",
+      "name": "recessed equal-axis mineral heart",
       "solidCore": true,
-      "radius": 1.075,
+      "radius": 0.86,
       "axes": [
         1,
         1,
@@ -133,57 +137,57 @@
   },
   "assets": {
     "cover.webp": {
-      "sha256": "a5920da3d10ea2e5c736893d5e0d0933c6cfae3c68a5a313bafda40be9bd6bbb",
-      "bytes": 481786
+      "sha256": "7275a45e35ec55cc86e1ad3f1b956ae210b7e39a0e246a823928b4fc2c5effac",
+      "bytes": 623572
     },
     "side.webp": {
-      "sha256": "6997700a10554602a8d6eafb981e395b3220f493ed1a87cf7915016fa20a2fbc",
-      "bytes": 439620
+      "sha256": "cdffcf86cb07eba7bd7e8001b532466f0d746a39b7e42abef8db8b93efc37b70",
+      "bytes": 539066
     },
     "back.webp": {
-      "sha256": "2be05a6b4da4677a3169b1df80ee01de0b96390aadd6f976f64febb88f655ace",
-      "bytes": 478416
+      "sha256": "9ef1b39a1ca2a9b6b0d3afcf680b33473e7ca1ac5dfe2cb1aad0b8418e3f2a84",
+      "bytes": 750140
     },
     "detail-paper.webp": {
-      "sha256": "6fd4aa5df9112fbd360136e4c8e51616f6d5d3cbea2fa55e3f3dd6da72c9653e",
-      "bytes": 531974
+      "sha256": "3df626d4cc00bbe8a33b62e8887f29ae1a9a9d4cac17fe604d8c91db23d9f562",
+      "bytes": 1036248
     },
     "detail-cords.webp": {
-      "sha256": "9552750ae1caef4acd7ed3a3c46659c5e7a7b838ecb9af33b4d7d608b446d0b0",
-      "bytes": 858598
+      "sha256": "b72e94e875f067fff04a1f2eb7254549656f6088f37320b7cf3951613186903b",
+      "bytes": 1608464
     },
     "detail-strata.webp": {
-      "sha256": "92196b11b04254e74fed59d5b9bd49b3e7599ff9bc3320f99212036e903ed21d",
-      "bytes": 700186
+      "sha256": "8b6725bf2d62cb21af11165c886d2584e948c96cf69a459af80404c852ca9272",
+      "bytes": 997936
     },
     "poster.png": {
-      "sha256": "3f68fba724f4ab31af2821234dfe60faa98faf9e3fc4cc62339d0d40013847aa",
-      "bytes": 5393478
+      "sha256": "24570a0bbaadbdde0b331124b3f09f818de99919b4993d81b69591c5a70b2076",
+      "bytes": 5291370
     },
     "front.png": {
-      "sha256": "c756cc0bc1494c6f487ff8a668ff64008358801b157d2f0e2c1dd993c33e8da3",
-      "bytes": 4132065
+      "sha256": "9d6a707cd1a6b2d89655cbb82fde4ebad872b38e6099a03386601b94cb775e43",
+      "bytes": 4044057
     },
     "my-view.glb": {
-      "sha256": "6ebaaf21868cd9873f9d707d750285e47d2c386170e0e01ecd2ce275024bc8c8",
-      "bytes": 19958268
+      "sha256": "483ebe1dc25f0427379720e0e8d51d8579d41f5e513980e2d503035738c64625",
+      "bytes": 21655352
     },
     "cover-192.webp": {
-      "sha256": "85e615fb280e1a7e8352b0a527c0ce2fa3f29b52478bc3c6f9cf791b9245effa",
-      "bytes": 9438
+      "sha256": "55308486e52607c86b794d1b5a492339f684ac0ad3f91429190ef7d8c1844837",
+      "bytes": 9434
     },
     "cover-480.webp": {
-      "sha256": "8575a5872ceb3f300ec5d1c3ede34a08505676e7500890f051c31fee678d9cd1",
-      "bytes": 41694
+      "sha256": "f09d77a863b4c4acfdb59b42ba1eaa035783665aeaa882195c5fa4f4dc6623b8",
+      "bytes": 46076
     },
     "cover-768.webp": {
-      "sha256": "f5c0e24d302c14d6873feb53cbd06504820deed33ffec85d7f515b101c742ff0",
-      "bytes": 87720
+      "sha256": "032a56ab27b08e2ffe740ba031db0ec66d752d29b29befd97e73bb0ecd72359e",
+      "bytes": 105284
     },
     "cover-1200.webp": {
-      "sha256": "a8ecb92ea17d90fce6489e2a3929c5365d244437b1f27f7d83aca3f93827e25e",
-      "bytes": 178634
+      "sha256": "d183b15e40e830c4d5b5851125b4b8f3d116e241f84978a0712e712e422b0a3c",
+      "bytes": 232924
     }
   },
-  "provenance": "Original Three.js sculptural geometry, procedural material studies and local system-font inscriptions. All plates, poster and GLB use the same frozen scene. No whole reference image, artist credits or full lyrics are projected or published."
+  "provenance": "Original Three.js sculptural geometry, generated macro material swatches and original brush inscriptions. All plates, poster and GLB use the same frozen scene. No whole reference image, artist credits or full lyrics are projected or published."
 }

@@ -8,7 +8,7 @@ document.addEventListener('orbit:pause',e=>viewer?.suspend(Boolean(e.detail.paus
 await waitForLiveView(stage);stage.setAttribute('aria-busy','true');
 const notice=setTimeout(()=>{if(canvas.dataset.ready!=='true')status.textContent='正在展开纸墨与山河，高清图版可以先看。';},12000);
 try{
-  const {createMyViewViewer}=await import('./my-view/viewer.js?v=0340');
+  const {createMyViewViewer}=await import('./my-view/viewer.js?v=0350');
   viewer=createMyViewViewer(canvas,{onReady(){stage.classList.add('is-ready');stage.setAttribute('aria-busy','false');canvas.dataset.ready='true';buttons.forEach(b=>b.disabled=false);status.textContent='拖动旋转 · 滚轮靠近 · 方向键调整视角';},onError:fail});await viewer.ready;
   document.querySelector('#rotate-toggle').addEventListener('click',()=>{turn=!turn;viewer.setTurn(turn);toggle('#rotate-toggle',turn,'停止转动','缓慢转动');});
   document.querySelector('#layers-toggle').addEventListener('click',()=>{separated=!separated;viewer.setSeparated(separated);toggle('#layers-toggle',separated,'合拢材料','展开材料');});
